@@ -6,8 +6,10 @@ from flask import Flask, render_template, request, send_file, jsonify, redirect,
 import os
 import json
 import secrets
+import uuid
 from datetime import datetime
 from werkzeug.utils import secure_filename
+from werkzeug.security import generate_password_hash, check_password_hash
 import pdfplumber
 import re
 from functools import wraps
@@ -217,25 +219,39 @@ def register():
         company_name = request.form.get('company_name', '')
 
         try:
-            # Register user with Supabase Auth
-            auth_response = supabase.auth.sign_up({
-                "email": email,
-                "password": password,
-                "options": {
-                    "data": {
-                        "full_name": full_name,
-                        "company_name": company_name
-                    }
-                }
-            })
+            # Check if user already exists
+            existing_user = supabase.table('profiles').select('id').eq('email', email).execute()
+            if existing_user.data:
+                flash('An account with this email already exists.', 'danger')
+                return render_template('register.html')
 
-            if auth_response.user:
-                flash('Registration successful! Please check your email to confirm your account.', 'success')
-                return redirect(url_for('login'))
-            else:
-                flash('Registration failed. Please try again.', 'danger')
+            # Generate user ID and hash password
+            user_id = str(uuid.uuid4())
+            password_hash = generate_password_hash(password)
+
+            # Insert user into profiles table
+            supabase.table('profiles').insert({
+                'id': user_id,
+                'email': email,
+                'full_name': full_name,
+                'password_hash': password_hash,
+                'company_name': company_name
+            }).execute()
+
+            # Create subscription record
+            supabase.table('subscriptions').insert({
+                'user_id': user_id,
+                'plan_name': 'free',
+                'status': 'active',
+                'reports_limit': 10,
+                'reports_used': 0
+            }).execute()
+
+            flash('Registration successful! You can now log in.', 'success')
+            return redirect(url_for('login'))
+
         except Exception as e:
-            flash(f'Error: {str(e)}', 'danger')
+            flash(f'Registration error: {str(e)}', 'danger')
 
     return render_template('register.html')
 
@@ -247,39 +263,38 @@ def login():
         password = request.form.get('password')
 
         try:
-            # Sign in with Supabase Auth
-            auth_response = supabase.auth.sign_in_with_password({
-                "email": email,
-                "password": password
-            })
+            # Query user from database
+            user_result = supabase.table('profiles').select('id, email, full_name, password_hash').eq('email', email).execute()
 
-            if auth_response.user:
-                # Store user info in session
-                session['user'] = {
-                    'id': auth_response.user.id,
-                    'email': auth_response.user.email,
-                    'access_token': auth_response.session.access_token
-                }
-                flash('Login successful!', 'success')
-                return redirect(url_for('dashboard'))
+            if user_result.data and len(user_result.data) > 0:
+                user = user_result.data[0]
+
+                # Verify password
+                if check_password_hash(user['password_hash'], password):
+                    # Store user info in session
+                    session['user'] = {
+                        'id': user['id'],
+                        'email': user['email'],
+                        'full_name': user.get('full_name', '')
+                    }
+                    flash('Login successful!', 'success')
+                    return redirect(url_for('dashboard'))
+                else:
+                    flash('Invalid email or password.', 'danger')
             else:
                 flash('Invalid email or password.', 'danger')
+
         except Exception as e:
-            flash(f'Login failed: {str(e)}', 'danger')
+            flash(f'Login error: {str(e)}', 'danger')
 
     return render_template('login.html')
 
 @app.route('/logout')
 def logout():
     """User logout"""
-    try:
-        supabase.auth.sign_out()
-    except:
-        pass
-
     session.pop('user', None)
     flash('You have been logged out.', 'info')
-    return redirect(url_for('login'))
+    return redirect(url_for('landing'))
 
 @app.route('/dashboard')
 @login_required
