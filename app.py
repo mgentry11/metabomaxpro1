@@ -247,6 +247,16 @@ def privacy():
     """Privacy Policy page"""
     return render_template('privacy.html')
 
+@app.route('/sample-report')
+def sample_report():
+    """Sample report page with example data"""
+    return render_template('sample_report.html')
+
+@app.route('/data-guide')
+def data_guide():
+    """Data input guide page"""
+    return render_template('data_guide.html')
+
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     """User registration"""

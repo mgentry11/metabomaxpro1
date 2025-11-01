@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Input Guide - MetaboMax Pro</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            color: #1e293b;
+            line-height: 1.8;
+            background: #f8fafc;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 3rem auto;
+            padding: 0 2rem 4rem;
+        }
+
+        .content-box {
+            background: white;
+            padding: 3rem;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #667eea;
+            font-size: 1.8rem;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #667eea;
+        }
+
+        h2:first-child {
+            margin-top: 0;
+        }
+
+        h3 {
+            color: #334155;
+            font-size: 1.3rem;
+            margin-top: 2rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .info-box {
+            background: #eff6ff;
+            border-left: 4px solid #3b82f6;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+        }
+
+        .info-box p {
+            margin: 0.5rem 0;
+        }
+
+        .warning-box {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+        }
+
+        .warning-box p {
+            margin: 0.5rem 0;
+            color: #92400e;
+        }
+
+        .data-list {
+            margin: 1rem 0 1rem 2rem;
+        }
+
+        .data-list li {
+            margin-bottom: 1rem;
+            padding-left: 0.5rem;
+        }
+
+        .data-list li strong {
+            color: #667eea;
+        }
+
+        table {
+            width: 100%;
+            margin: 1.5rem 0;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #f8fafc;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .example-box {
+            background: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        .cta-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .cta-box h3 {
+            color: white;
+            margin-top: 0;
+        }
+
+        .btn {
+            display: inline-block;
+            background: white;
+            color: #667eea;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 1rem;
+            transition: transform 0.3s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 2rem;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Data Input Guide</h1>
+        <p>What You Need to Create Your Metabolic Report</p>
+    </div>
+
+    <div class="container">
+        <div class="content-box">
+            <h2>Overview</h2>
+            <p>MetaboMax Pro generates comprehensive metabolic reports from your VO2 Max or metabolic testing data. This guide explains what data you need and how to provide it.</p>
+
+            <div class="info-box">
+                <p><strong>✓ Accepted Formats:</strong> PDF files from metabolic testing facilities, VO2 Max test results, or manual data entry</p>
+                <p><strong>✓ Processing Time:</strong> Reports are generated instantly after upload</p>
+                <p><strong>✓ Privacy:</strong> Your data is encrypted and securely stored</p>
+            </div>
+
+            <h2>Required Data Points</h2>
+
+            <h3>Basic Information (Required)</h3>
+            <ul class="data-list">
+                <li><strong>Name:</strong> Your full name or identifier</li>
+                <li><strong>Age:</strong> Your age at time of testing</li>
+                <li><strong>Gender:</strong> Male or Female</li>
+                <li><strong>Weight:</strong> Body weight in pounds or kilograms</li>
+                <li><strong>Height:</strong> Height in feet/inches or centimeters</li>
+                <li><strong>Test Date:</strong> When the metabolic test was performed</li>
+            </ul>
+
+            <h3>Core Metabolic Metrics (Required)</h3>
+            <ul class="data-list">
+                <li><strong>VO2 Max:</strong> Maximum oxygen uptake (ml/kg/min)</li>
+                <li><strong>Resting Metabolic Rate (RMR):</strong> Calories burned at rest (kcal/day)</li>
+                <li><strong>Heart Rate Data:</strong> Resting, max, and target zone heart rates</li>
+            </ul>
+
+            <h3>Advanced Metrics (Optional but Recommended)</h3>
+            <ul class="data-list">
+                <li><strong>Fat Oxidation Rate:</strong> Grams of fat burned per minute</li>
+                <li><strong>Carbohydrate Oxidation Rate:</strong> Grams of carbs burned per minute</li>
+                <li><strong>Respiratory Exchange Ratio (RER):</strong> VCO2/VO2 ratio</li>
+                <li><strong>Lactate Threshold:</strong> Point where lactate accumulates</li>
+                <li><strong>Crossover Point:</strong> Where fat/carb oxidation shifts</li>
+                <li><strong>Peak Fat Oxidation Zone:</strong> Heart rate range for optimal fat burning</li>
+            </ul>
+
+            <h2>How to Upload Your Data</h2>
+
+            <h3>Option 1: Upload PDF Report</h3>
+            <p>If you have a PDF report from a testing facility:</p>
+            <ol style="margin-left: 2rem; margin-top: 1rem;">
+                <li>Log into your MetaboMax Pro dashboard</li>
+                <li>Click "Upload Test Results"</li>
+                <li>Select your PDF file (max 200MB)</li>
+                <li>Our system automatically extracts the data</li>
+                <li>Review and confirm the extracted values</li>
+                <li>Generate your report</li>
+            </ol>
+
+            <h3>Option 2: Manual Data Entry</h3>
+            <p>If you have results but no PDF, you can manually enter the data:</p>
+            <ol style="margin-left: 2rem; margin-top: 1rem;">
+                <li>Log into your dashboard</li>
+                <li>Click "Enter Data Manually"</li>
+                <li>Fill in the form with your test results</li>
+                <li>Submit to generate your report</li>
+            </ol>
+
+            <h2>Supported Testing Facilities</h2>
+            <p>MetaboMax Pro works with reports from all major metabolic testing providers, including:</p>
+            <ul style="margin-left: 2rem; margin-top: 1rem;">
+                <li>PNOE metabolic analyzers</li>
+                <li>KORR CardioCoach</li>
+                <li>ParvoMedics TrueOne 2400</li>
+                <li>COSMED equipment</li>
+                <li>University exercise physiology labs</li>
+                <li>Sports performance centers</li>
+                <li>Any facility providing VO2 Max testing</li>
+            </ul>
+
+            <div class="warning-box">
+                <p><strong>⚠️ Don't Have Test Results Yet?</strong></p>
+                <p>You'll need to get a metabolic test done at a certified facility first. MetaboMax Pro analyzes existing test data - we don't perform the tests ourselves.</p>
+                <p><strong>Find a Testing Facility:</strong> Search for "VO2 Max testing near me" or "metabolic testing" in your area. Prices typically range from $100-$200 for a basic test.</p>
+            </div>
+
+            <h2>Example Data Format</h2>
+            <p>Your PDF or data entry should include values similar to this:</p>
+
+            <div class="example-box">
+Patient: John Doe, Age: 35, Male<br>
+Weight: 180 lbs | Height: 5'11"<br>
+Test Date: 11/01/2025<br>
+<br>
+<strong>Core Metrics:</strong><br>
+VO2 Max: 48.2 ml/kg/min<br>
+RMR: 1,842 kcal/day<br>
+Max Heart Rate: 185 bpm<br>
+Resting Heart Rate: 58 bpm<br>
+<br>
+<strong>Substrate Utilization:</strong><br>
+Fat Oxidation: 0.58 g/min (peak at 138 bpm)<br>
+Carb Oxidation: 2.14 g/min<br>
+RER: 0.85 (at threshold)<br>
+Crossover Point: 72% max HR
+            </div>
+
+            <h2>Data Privacy & Security</h2>
+            <p>Your metabolic data is sensitive information. Here's how we protect it:</p>
+            <ul style="margin-left: 2rem; margin-top: 1rem;">
+                <li><strong>Encryption:</strong> All data transmitted and stored with SSL/TLS encryption</li>
+                <li><strong>Secure Storage:</strong> Data hosted on secure Supabase infrastructure</li>
+                <li><strong>No Sharing:</strong> We never sell or share your data with third parties</li>
+                <li><strong>Your Control:</strong> You can delete your data at any time</li>
+                <li><strong>Compliance:</strong> GDPR and CCPA compliant data handling</li>
+            </ul>
+
+            <h2>Frequently Asked Questions</h2>
+
+            <h3>What if my PDF doesn't extract correctly?</h3>
+            <p>You can always use manual data entry. If extraction fails, our system will automatically prompt you to enter the data manually.</p>
+
+            <h3>Can I upload multiple tests?</h3>
+            <p>Yes! With our $39/month unlimited plan, you can track progress over time by uploading multiple tests and comparing results.</p>
+
+            <h3>How accurate are the reports?</h3>
+            <p>Our reports are as accurate as the data you provide. We use scientifically validated formulas and calculations used by exercise physiologists and sports scientists.</p>
+
+            <h3>Do I need all the optional metrics?</h3>
+            <p>No. We can generate a comprehensive report with just the basic metrics (VO2 Max, RMR, heart rate data). Advanced metrics provide more detailed insights but aren't required.</p>
+
+            <div class="cta-box">
+                <h3>Ready to Create Your Report?</h3>
+                <p>Upload your test results and get your personalized metabolic analysis in minutes.</p>
+                <a href="/register" class="btn">Get Started Now</a>
+                <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.9;">$69 one-time or $39/month for unlimited reports</p>
+            </div>
+
+            <a href="/" class="back-link">← Back to Home</a>
+        </div>
+    </div>
+</body>
+</html>

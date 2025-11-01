@@ -238,12 +238,49 @@
             opacity: 0.9;
         }
 
+        /* Medical Disclaimer Banner */
+        .disclaimer-banner {
+            background: #fef3c7;
+            border-bottom: 3px solid #f59e0b;
+            padding: 1rem 2rem;
+            text-align: center;
+        }
+
+        .disclaimer-banner p {
+            margin: 0;
+            color: #92400e;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .disclaimer-banner a {
+            color: #92400e;
+            text-decoration: underline;
+            font-weight: 600;
+        }
+
         /* Footer */
         .footer {
             padding: 2rem;
             background: #1e293b;
             color: white;
             text-align: center;
+        }
+
+        .footer-links {
+            margin: 1rem 0;
+        }
+
+        .footer-links a {
+            color: #94a3b8;
+            text-decoration: none;
+            margin: 0 1rem;
+            font-size: 0.9rem;
+        }
+
+        .footer-links a:hover {
+            color: white;
+            text-decoration: underline;
         }
 
         @media (max-width: 768px) {
@@ -263,6 +300,11 @@
     </style>
 </head>
 <body>
+    <!-- Medical Disclaimer Banner -->
+    <div class="disclaimer-banner">
+        <p>⚠️ <strong>NOT MEDICAL ADVICE:</strong> Reports are for educational purposes only. Always consult your healthcare provider. <a href="/terms">Read Full Disclaimer</a></p>
+    </div>
+
     <!-- Hero Section -->
     <section class="hero">
         <div class="hero-content">
@@ -273,6 +315,7 @@
             </div>
             <div class="cta-buttons">
                 <a href="{{ url_for('register') }}" class="btn btn-primary">Start Your Report Now</a>
+                <a href="/sample-report" class="btn btn-secondary">View Sample Report</a>
                 <a href="{{ url_for('pricing') }}" class="btn btn-secondary">See Pricing</a>
             </div>
         </div>
@@ -390,11 +433,16 @@
 
     <!-- Footer -->
     <footer class="footer">
-        <p>&copy; 2025 MetaboMax Pro. All rights reserved.</p>
-        <p style="margin-top: 0.5rem; opacity: 0.8;">
-            <a href="{{ url_for('pricing') }}" style="color: white; margin: 0 1rem;">Pricing</a>
-            <a href="{{ url_for('login') }}" style="color: white; margin: 0 1rem;">Login</a>
-        </p>
+        <div class="footer-links">
+            <a href="{{ url_for('pricing') }}">Pricing</a>
+            <a href="/sample-report">Sample Report</a>
+            <a href="/data-guide">Data Guide</a>
+            <a href="{{ url_for('terms') }}">Terms of Service</a>
+            <a href="{{ url_for('privacy') }}">Privacy Policy</a>
+            <a href="{{ url_for('login') }}">Login</a>
+        </div>
+        <p style="margin-top: 1rem;">&copy; 2025 MetaboMax Pro. All rights reserved.</p>
+        <p style="margin-top: 0.5rem; opacity: 0.7; font-size: 0.85rem;">Educational reports only. Not medical advice.</p>
     </footer>
 </body>
 </html>
