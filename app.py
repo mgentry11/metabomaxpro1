@@ -35,17 +35,23 @@ SUPABASE_REST_URL = f"{SUPABASE_URL}/rest/v1"
 
 # Create a requests session that forces HTTP/1.1
 from requests.adapters import HTTPAdapter
-from urllib3.util.retry import Retry
+from urllib3.poolmanager import PoolManager
+from urllib3.util.ssl_ import create_urllib3_context
+import ssl
 
-# Force HTTP/1.1 by disabling HTTP/2
+# Force HTTP/1.1 by completely disabling HTTP/2 ALPN
 class HTTP11Adapter(HTTPAdapter):
     def init_poolmanager(self, *args, **kwargs):
-        kwargs['ssl_version'] = getattr(__import__('ssl'), 'PROTOCOL_TLS', None)
+        # Create SSL context that explicitly excludes HTTP/2
+        context = create_urllib3_context()
+        context.set_alpn_protocols(['http/1.1'])  # Only allow HTTP/1.1
+        kwargs['ssl_context'] = context
         return super().init_poolmanager(*args, **kwargs)
 
-# Create session with HTTP/1.1
+# Create session with HTTP/1.1 only
 http_session = requests.Session()
 http_session.mount('https://', HTTP11Adapter())
+http_session.mount('http://', HTTP11Adapter())
 
 # HTTP headers for Supabase REST API
 def get_supabase_headers():
