@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metabolic Report Generator - Upload</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>📊 Metabolic Report Generator</h1>
+            <p class="subtitle">Works with ANY metabolic testing system - Upload PDF or Enter Data Manually</p>
+        </div>
+
+        <!-- Input Method Selection -->
+        <div class="card" id="uploadSection">
+            <div class="tabs">
+                <button class="tab-button active" onclick="switchTab('pdf')">📄 Upload PDF</button>
+                <button class="tab-button" onclick="switchTab('manual')">✍️ Enter Data Manually</button>
+            </div>
+
+            <!-- PDF Upload Tab -->
+            <div id="pdfTab" class="tab-content active">
+                <h2>📄 Upload Your Metabolic Test PDF</h2>
+                <p style="color: #64748b; margin-bottom: 1.5rem;">Works with PNOE, Korr, COSMED, and other testing systems</p>
+                <div class="upload-area" id="uploadArea">
+                <div class="upload-icon">📁</div>
+                <p>Drag & drop your metabolic test PDF here</p>
+                <p class="upload-hint">or click to browse</p>
+                <input type="file" id="fileInput" accept=".pdf" hidden>
+                <button class="btn btn-primary" onclick="document.getElementById('fileInput').click()">
+                    Choose File
+                </button>
+            </div>
+            <div class="file-info" id="fileInfo" style="display: none;">
+                <p>Selected: <span id="fileName"></span></p>
+                <button class="btn btn-success" id="uploadBtn">Upload & Extract Data</button>
+            </div>
+            <div class="progress-bar" id="progressBar" style="display: none;">
+                <div class="progress-fill"></div>
+                <p class="progress-text">Uploading and extracting data...</p>
+            </div>
+            </div>
+
+            <!-- Manual Entry Tab -->
+            <div id="manualTab" class="tab-content" style="display: none;">
+                <h2>✍️ Enter Your Basic Test Results</h2>
+                <p style="color: #64748b; margin-bottom: 1.5rem;">Just enter the key numbers from your test report - we'll handle the rest!</p>
+
+                <div class="manual-entry-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="manual_name">Your Name *</label>
+                            <input type="text" id="manual_name" class="form-control" placeholder="John Doe" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="manual_age">Your Age *</label>
+                            <input type="number" id="manual_age" class="form-control" placeholder="35" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="manual_gender">Gender *</label>
+                            <select id="manual_gender" class="form-control" required>
+                                <option value="">Select...</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="manual_weight">Weight (kg) *</label>
+                            <input type="number" step="0.1" id="manual_weight" class="form-control" placeholder="75" required>
+                            <small style="color: #64748b;">1 kg = 2.2 lbs</small>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="manual_vo2max_rel">VO2 Max Score (ml/kg/min) *</label>
+                            <input type="number" step="0.1" id="manual_vo2max_rel" class="form-control" placeholder="42.5" required>
+                            <small style="color: #64748b;">This is the main number on your test results</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="manual_rmr">Resting Metabolic Rate (optional)</label>
+                            <input type="number" id="manual_rmr" class="form-control" placeholder="1850">
+                            <small style="color: #64748b;">Leave blank if not shown on your report</small>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="manual_test_date">Test Date (optional)</label>
+                        <input type="date" id="manual_test_date" class="form-control">
+                    </div>
+
+                    <div style="background: #f0f9ff; border-left: 4px solid #3b82f6; padding: 1rem; border-radius: 8px; margin-top: 1.5rem;">
+                        <p style="margin: 0; color: #1e40af; font-size: 0.95rem;">
+                            💡 <strong>Tip:</strong> You only need your VO2 Max score from your basic test results. We'll calculate everything else automatically to give you a comprehensive metabolic report!
+                        </p>
+                    </div>
+
+                    <button class="btn btn-success btn-large" onclick="submitManualData()" style="margin-top: 2rem;">
+                        Continue to Customize Report →
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Data Preview Section -->
+        <div class="card" id="previewSection" style="display: none;">
+            <h2>🔍 Step 2: Review Extracted Data</h2>
+            <div class="data-preview" id="dataPreview"></div>
+        </div>
+
+        <!-- Customization Section -->
+        <div class="card" id="customizeSection" style="display: none;">
+            <h2>✏️ Step 3: Customize Your Report</h2>
+
+            <div class="form-group">
+                <label for="reportType">Report Type</label>
+                <select id="reportType" class="form-control">
+                    <option value="performance">Performance Report</option>
+                    <option value="longevity">Longevity Report</option>
+                    <option value="weight_loss">Weight Loss Report</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="chronologicalAge">Your Current Age</label>
+                <input type="number" id="chronologicalAge" class="form-control" placeholder="35" required>
+                <small style="color: #64748b; margin-top: 0.5rem; display: block;">Your biological age will be calculated automatically from your test data</small>
+            </div>
+
+            <div class="form-group" style="background: #E0F2FE; padding: 20px; border-radius: 12px; border: 2px solid #0EA5E9; margin-top: 1.5rem;">
+                <label for="biologicalAgeOverride" style="font-weight: 600; color: #075985; font-size: 16px;">
+                    📋 Biological Age Override (Optional)
+                </label>
+                <input type="number" id="biologicalAgeOverride" class="form-control" placeholder="Leave blank to auto-calculate" style="margin-top: 10px;">
+                <small style="color: #075985; font-weight: 500; margin-top: 0.75rem; display: block;">
+                    💡 Optional: If you know your biological age from your PDF report, you can enter it here to override the automatic calculation.
+                </small>
+            </div>
+
+            <div class="form-group">
+                <label for="goals">Goals & Objectives</label>
+                <div class="goals-input">
+                    <input type="text" id="goalInput" class="form-control" placeholder="Add a goal...">
+                    <button class="btn btn-secondary" onclick="addGoal()">Add Goal</button>
+                </div>
+                <ul id="goalsList" class="goals-list"></ul>
+            </div>
+
+            <div class="form-group">
+                <label for="customNotes">Custom Notes</label>
+                <textarea id="customNotes" class="form-control" rows="6" placeholder="Add any custom notes, observations, or comments here...
+
+Example:
+- Currently training 4x per week
+- Focus on improving cardiovascular endurance
+- Recent dietary changes to high-protein diet"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Additional Metrics (Optional)</label>
+                <div id="additionalMetrics">
+                    <div class="metric-input">
+                        <input type="text" class="form-control" placeholder="Metric name" data-type="name">
+                        <input type="text" class="form-control" placeholder="Value" data-type="value">
+                        <button class="btn btn-icon" onclick="addMetricRow()">+</button>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn btn-success btn-large" id="generateBtn" onclick="generateReport()">
+                🎉 Generate Report
+            </button>
+        </div>
+
+        <!-- Download Section -->
+        <div class="card success-card" id="downloadSection" style="display: none;">
+            <h2>✅ Report Generated Successfully!</h2>
+            <p>Your personalized metabolic report is ready to download.</p>
+            <a class="btn btn-success btn-large" id="downloadLink" download>
+                📥 Download Report
+            </a>
+            <button class="btn btn-secondary" onclick="resetForm()">Generate Another Report</button>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

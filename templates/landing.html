@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MetaboMax Pro - Professional Metabolic Reports for 60% Less</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            color: #1e293b;
+            line-height: 1.6;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero-content {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .hero .subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+        }
+
+        .hero .price-highlight {
+            font-size: 1.2rem;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            display: inline-block;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: white;
+            color: #667eea;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-secondary:hover {
+            background: white;
+            color: #667eea;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 6rem 2rem;
+            background: #f8fafc;
+        }
+
+        .features h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #1e293b;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .feature-card .icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #667eea;
+        }
+
+        /* Comparison Section */
+        .comparison {
+            padding: 6rem 2rem;
+            background: white;
+        }
+
+        .comparison h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .comparison-table {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .comparison-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            padding: 1.5rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .comparison-row:nth-child(even) {
+            background: #f8fafc;
+        }
+
+        .comparison-row.header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: 600;
+        }
+
+        .highlight {
+            color: #10b981;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        /* Social Proof */
+        .social-proof {
+            padding: 4rem 2rem;
+            background: #f8fafc;
+            text-align: center;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 4rem;
+            flex-wrap: wrap;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat .number {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #667eea;
+        }
+
+        .stat .label {
+            color: #64748b;
+            font-size: 1rem;
+        }
+
+        /* CTA Section */
+        .final-cta {
+            padding: 6rem 2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+        }
+
+        .final-cta h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .final-cta p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        /* Footer */
+        .footer {
+            padding: 2rem;
+            background: #1e293b;
+            color: white;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero .subtitle {
+                font-size: 1.1rem;
+            }
+
+            .comparison-row {
+                grid-template-columns: 2fr 1fr 1fr;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Get Professional Metabolic Reports<br>for 60% Less</h1>
+            <p class="subtitle">Turn your basic VO2 Max test into a comprehensive metabolic analysis</p>
+            <div class="price-highlight">
+                Just $69 one-time or $39/month • Save $100+ vs testing centers
+            </div>
+            <div class="cta-buttons">
+                <a href="{{ url_for('register') }}" class="btn btn-primary">Start Your Report Now</a>
+                <a href="{{ url_for('pricing') }}" class="btn btn-secondary">See Pricing</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <h2>Everything You Need, Nothing You Don't</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="icon">🎯</div>
+                <h3>Works With Any Test</h3>
+                <p>PNOE, Korr, COSMED, or any VO2 Max system. Just enter your numbers and we handle the rest.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="icon">🧬</div>
+                <h3>Biological Age Analysis</h3>
+                <p>Discover your true biological age based on your metabolic markers. See how you compare to your chronological age.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="icon">📊</div>
+                <h3>Beautiful Reports</h3>
+                <p>Professional, comprehensive reports with charts, insights, and personalized recommendations.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="icon">☁️</div>
+                <h3>Cloud Storage</h3>
+                <p>Keep all your reports in one place. Track your progress over time with our dashboard.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="icon">📈</div>
+                <h3>Progress Tracking</h3>
+                <p>Compare multiple tests and see your improvement over time. Perfect for athletes and fitness enthusiasts.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="icon">⚡</div>
+                <h3>Instant Results</h3>
+                <p>Get your report in minutes. No waiting weeks like traditional testing centers.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Comparison Section -->
+    <section class="comparison">
+        <h2>Why Pay More Elsewhere?</h2>
+        <div class="comparison-table">
+            <div class="comparison-row header">
+                <div></div>
+                <div>Testing Centers</div>
+                <div>MetaboMax Pro</div>
+            </div>
+            <div class="comparison-row">
+                <div>Premium Report</div>
+                <div>$175-250</div>
+                <div class="highlight">$69</div>
+            </div>
+            <div class="comparison-row">
+                <div>Unlimited Reports</div>
+                <div>N/A</div>
+                <div class="highlight">$39/mo</div>
+            </div>
+            <div class="comparison-row">
+                <div>Cloud Storage</div>
+                <div>❌</div>
+                <div class="highlight">✅</div>
+            </div>
+            <div class="comparison-row">
+                <div>Progress Tracking</div>
+                <div>❌</div>
+                <div class="highlight">✅</div>
+            </div>
+            <div class="comparison-row">
+                <div>Instant Delivery</div>
+                <div>1-2 weeks</div>
+                <div class="highlight">Minutes</div>
+            </div>
+            <div class="comparison-row">
+                <div>Works with Any System</div>
+                <div>❌</div>
+                <div class="highlight">✅</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Social Proof -->
+    <section class="social-proof">
+        <h2 style="margin-bottom: 3rem;">Join Thousands of Athletes & Fitness Enthusiasts</h2>
+        <div class="stats">
+            <div class="stat">
+                <div class="number">$780M</div>
+                <div class="label">Global Market Size</div>
+            </div>
+            <div class="stat">
+                <div class="number">60%</div>
+                <div class="label">Cost Savings</div>
+            </div>
+            <div class="stat">
+                <div class="number">2 min</div>
+                <div class="label">To Get Your Report</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="final-cta">
+        <h2>Ready to Unlock Your Metabolic Insights?</h2>
+        <p>Get started in minutes. No credit card required to sign up.</p>
+        <a href="{{ url_for('register') }}" class="btn btn-primary" style="font-size: 1.2rem; padding: 1.2rem 3rem;">Create Your First Report</a>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2025 MetaboMax Pro. All rights reserved.</p>
+        <p style="margin-top: 0.5rem; opacity: 0.8;">
+            <a href="{{ url_for('pricing') }}" style="color: white; margin: 0 1rem;">Pricing</a>
+            <a href="{{ url_for('login') }}" style="color: white; margin: 0 1rem;">Login</a>
+        </p>
+    </footer>
+</body>
+</html>

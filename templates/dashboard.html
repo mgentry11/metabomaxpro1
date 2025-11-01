@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Metabolic Report Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 1rem 2rem;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .navbar h1 {
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .navbar-right {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .user-info {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .btn-secondary:hover {
+            background: #f8fafc;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .stat-card h3 {
+            color: #64748b;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-card .subtitle {
+            color: #94a3b8;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .card h2 {
+            color: #1e293b;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .reports-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .reports-table th {
+            text-align: left;
+            padding: 1rem;
+            color: #64748b;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .reports-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .reports-table tr:hover {
+            background: #f8fafc;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .badge-success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .badge-warning {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .badge-danger {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #64748b;
+        }
+
+        .empty-state svg {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+        }
+
+        .alert-success {
+            background: #d1fae5;
+            color: #065f46;
+            border-left: 4px solid #10b981;
+        }
+
+        .alert-danger {
+            background: #fee2e2;
+            color: #991b1b;
+            border-left: 4px solid #ef4444;
+        }
+
+        .alert-info {
+            background: #dbeafe;
+            color: #1e40af;
+            border-left: 4px solid #3b82f6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar">
+            <h1>Metabolic Reports</h1>
+            <div class="navbar-right">
+                <span class="user-info">{{ profile.email if profile else 'User' }}</span>
+                <a href="{{ url_for('index') }}" class="btn">New Report</a>
+                <a href="{{ url_for('logout') }}" class="btn btn-secondary">Logout</a>
+            </div>
+        </nav>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Subscription Plan</h3>
+                <div class="value">{{ subscription.plan_name|upper if subscription else 'FREE' }}</div>
+                <div class="subtitle">
+                    {% if subscription %}
+                        <span class="badge badge-{{ 'success' if subscription.status == 'active' else 'warning' }}">
+                            {{ subscription.status }}
+                        </span>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <h3>Reports This Month</h3>
+                <div class="value">{{ subscription.reports_used if subscription else 0 }}/{{ subscription.reports_limit if subscription else 10 }}</div>
+                <div class="subtitle">
+                    {{ subscription.reports_limit - subscription.reports_used if subscription else 10 }} remaining
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <h3>Total Reports</h3>
+                <div class="value">{{ reports|length if reports else 0 }}</div>
+                <div class="subtitle">All time</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Recent Reports</h2>
+
+            {% if reports and reports|length > 0 %}
+            <table class="reports-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Patient</th>
+                        <th>Type</th>
+                        <th>Bio Age</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for report in reports %}
+                    <tr>
+                        <td>{{ report.created_at[:10] if report.created_at else 'N/A' }}</td>
+                        <td>
+                            {% if report.metabolic_tests %}
+                                {{ report.metabolic_tests.patient_name or 'Unknown' }}
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </td>
+                        <td>
+                            <span class="badge badge-success">{{ report.report_type|upper if report.report_type else 'N/A' }}</span>
+                        </td>
+                        <td>
+                            {% if report.biological_age %}
+                                <strong>{{ report.biological_age }}</strong>
+                                {% if report.chronological_age %}
+                                    <span style="color: #10b981; font-size: 0.85rem;">
+                                        ({{ report.chronological_age - report.biological_age }}y younger)
+                                    </span>
+                                {% endif %}
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if report.html_storage_path %}
+                                <a href="/download/{{ report.html_storage_path.split('/')[-1].replace('_report.html', '') }}"
+                                   class="btn" style="padding: 0.5rem 1rem; font-size: 0.8rem;">
+                                    Download
+                                </a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <div class="empty-state">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                <h3>No reports yet</h3>
+                <p>Create your first metabolic report to get started!</p>
+                <br>
+                <a href="{{ url_for('index') }}" class="btn">Create New Report</a>
+            </div>
+            {% endif %}
+        </div>
+
+        {% if profile %}
+        <div class="card">
+            <h2>Account Information</h2>
+            <table style="width: 100%;">
+                <tr>
+                    <td style="padding: 0.75rem; font-weight: 600; color: #64748b;">Full Name:</td>
+                    <td style="padding: 0.75rem;">{{ profile.full_name or 'Not set' }}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 0.75rem; font-weight: 600; color: #64748b;">Email:</td>
+                    <td style="padding: 0.75rem;">{{ profile.email }}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 0.75rem; font-weight: 600; color: #64748b;">Company:</td>
+                    <td style="padding: 0.75rem;">{{ profile.company_name or 'Not set' }}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 0.75rem; font-weight: 600; color: #64748b;">Member Since:</td>
+                    <td style="padding: 0.75rem;">{{ profile.created_at[:10] if profile.created_at else 'N/A' }}</td>
+                </tr>
+            </table>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
