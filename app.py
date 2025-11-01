@@ -248,10 +248,12 @@ def register():
 
         try:
             # Check if user already exists
+            print(f"DEBUG: Checking if user exists for {email}")
             response = http_session.get(
                 f"{SUPABASE_REST_URL}/profiles?email=eq.{email}&select=id",
                 headers=get_supabase_headers()
             )
+            print(f"DEBUG: Check user response status: {response.status_code}")
             if response.ok and response.json():
                 flash('An account with this email already exists.', 'danger')
                 return render_template('register.html')
@@ -261,6 +263,7 @@ def register():
             password_hash = generate_password_hash(password)
 
             # Insert user into profiles table
+            print(f"DEBUG: Creating profile for {email}")
             profile_response = http_session.post(
                 f"{SUPABASE_REST_URL}/profiles",
                 headers=get_supabase_headers(),
@@ -272,8 +275,10 @@ def register():
                     'company_name': company_name
                 }
             )
+            print(f"DEBUG: Profile creation status: {profile_response.status_code}")
 
             if not profile_response.ok:
+                print(f"DEBUG: Profile creation failed: {profile_response.text}")
                 raise Exception(f"Failed to create profile: {profile_response.text}")
 
             # Create subscription record
@@ -296,6 +301,9 @@ def register():
             return redirect(url_for('login'))
 
         except Exception as e:
+            print(f"DEBUG: Registration exception: {type(e).__name__}: {str(e)}")
+            import traceback
+            traceback.print_exc()
             flash(f'Registration error: {str(e)}', 'danger')
 
     return render_template('register.html')
