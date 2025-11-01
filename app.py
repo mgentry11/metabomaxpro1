@@ -14,6 +14,7 @@ from functools import wraps
 from dotenv import load_dotenv
 from supabase import create_client, Client
 import stripe
+import httpx
 from utils.beautiful_report import generate_beautiful_report
 
 # Load environment variables
@@ -26,11 +27,18 @@ app.config['REPORTS_FOLDER'] = 'reports'
 app.config['MAX_CONTENT_LENGTH'] = 200 * 1024 * 1024  # 200MB max file size
 ALLOWED_EXTENSIONS = {'pdf'}
 
-# Initialize Supabase client
+# Initialize Supabase client with HTTP/1.1 only
+http_client = httpx.Client(http2=False)
 supabase: Client = create_client(
     os.getenv('SUPABASE_URL'),
-    os.getenv('SUPABASE_KEY')
+    os.getenv('SUPABASE_KEY'),
+    options={
+        'postgrest_client_timeout': 30,
+        'storage_client_timeout': 30,
+    }
 )
+# Replace the default client with HTTP/1.1 client
+supabase.auth._client = http_client
 
 # Initialize Stripe
 stripe.api_key = os.getenv('STRIPE_SECRET_KEY')
