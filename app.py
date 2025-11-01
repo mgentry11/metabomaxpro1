@@ -33,6 +33,20 @@ SUPABASE_URL = os.getenv('SUPABASE_URL')
 SUPABASE_KEY = os.getenv('SUPABASE_KEY')
 SUPABASE_REST_URL = f"{SUPABASE_URL}/rest/v1"
 
+# Create a requests session that forces HTTP/1.1
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
+
+# Force HTTP/1.1 by disabling HTTP/2
+class HTTP11Adapter(HTTPAdapter):
+    def init_poolmanager(self, *args, **kwargs):
+        kwargs['ssl_version'] = getattr(__import__('ssl'), 'PROTOCOL_TLS', None)
+        return super().init_poolmanager(*args, **kwargs)
+
+# Create session with HTTP/1.1
+http_session = requests.Session()
+http_session.mount('https://', HTTP11Adapter())
+
 # HTTP headers for Supabase REST API
 def get_supabase_headers():
     return {
@@ -228,7 +242,7 @@ def register():
 
         try:
             # Check if user already exists
-            response = requests.get(
+            response = http_session.get(
                 f"{SUPABASE_REST_URL}/profiles?email=eq.{email}&select=id",
                 headers=get_supabase_headers()
             )
@@ -241,7 +255,7 @@ def register():
             password_hash = generate_password_hash(password)
 
             # Insert user into profiles table
-            profile_response = requests.post(
+            profile_response = http_session.post(
                 f"{SUPABASE_REST_URL}/profiles",
                 headers=get_supabase_headers(),
                 json={
@@ -257,7 +271,7 @@ def register():
                 raise Exception(f"Failed to create profile: {profile_response.text}")
 
             # Create subscription record
-            sub_response = requests.post(
+            sub_response = http_session.post(
                 f"{SUPABASE_REST_URL}/subscriptions",
                 headers=get_supabase_headers(),
                 json={
@@ -289,7 +303,7 @@ def login():
 
         try:
             # Query user from database
-            response = requests.get(
+            response = http_session.get(
                 f"{SUPABASE_REST_URL}/profiles?email=eq.{email}&select=id,email,full_name,password_hash",
                 headers=get_supabase_headers()
             )
@@ -336,21 +350,21 @@ def dashboard():
 
     try:
         # Get user's profile
-        profile_response = requests.get(
+        profile_response = http_session.get(
             f"{SUPABASE_REST_URL}/profiles?id=eq.{user_id}",
             headers=get_supabase_headers()
         )
         profile = profile_response.json()[0] if profile_response.ok and profile_response.json() else None
 
         # Get user's reports (simplified - without nested joins)
-        reports_response = requests.get(
+        reports_response = http_session.get(
             f"{SUPABASE_REST_URL}/reports?user_id=eq.{user_id}&order=created_at.desc",
             headers=get_supabase_headers()
         )
         reports = reports_response.json() if reports_response.ok else []
 
         # Get user's subscription
-        sub_response = requests.get(
+        sub_response = http_session.get(
             f"{SUPABASE_REST_URL}/subscriptions?user_id=eq.{user_id}",
             headers=get_supabase_headers()
         )
@@ -411,7 +425,7 @@ def submit_manual():
                 'patient_weight_kg': patient_info.get('weight_kg')
             }
 
-            test_response = requests.post(
+            test_response = http_session.post(
                 f"{SUPABASE_REST_URL}/metabolic_tests",
                 headers=get_supabase_headers(),
                 json=test_data
@@ -479,7 +493,7 @@ def upload_file():
             'patient_weight_kg': patient_info.get('weight_kg')
         }
 
-        test_response = requests.post(
+        test_response = http_session.post(
             f"{SUPABASE_REST_URL}/metabolic_tests",
             headers=get_supabase_headers(),
             json=test_data
@@ -720,7 +734,7 @@ def generate_report():
             'html_storage_path': report_path
         }
 
-        report_response = requests.post(
+        report_response = http_session.post(
             f"{SUPABASE_REST_URL}/reports",
             headers=get_supabase_headers(),
             json=report_data
@@ -728,14 +742,14 @@ def generate_report():
         db_report_id = report_response.json()[0]['id'] if report_response.ok and report_response.json() else None
 
         # Update subscription reports_used counter
-        subscription_response = requests.get(
+        subscription_response = http_session.get(
             f"{SUPABASE_REST_URL}/subscriptions?user_id=eq.{user_id}&select=reports_used",
             headers=get_supabase_headers()
         )
         if subscription_response.ok and subscription_response.json():
             subscription_data = subscription_response.json()[0]
             new_count = subscription_data['reports_used'] + 1
-            requests.patch(
+            http_session.patch(
                 f"{SUPABASE_REST_URL}/subscriptions?user_id=eq.{user_id}",
                 headers=get_supabase_headers(),
                 json={'reports_used': new_count}
@@ -1088,7 +1102,7 @@ def create_checkout_session():
 
         # Get or create Stripe customer
         try:
-            subscription_response = requests.get(
+            subscription_response = http_session.get(
                 f"{SUPABASE_REST_URL}/subscriptions?user_id=eq.{user_id}&select=stripe_customer_id",
                 headers=get_supabase_headers()
             )
@@ -1106,7 +1120,7 @@ def create_checkout_session():
                 stripe_customer_id = customer.id
 
                 # Update subscription record with customer ID
-                requests.patch(
+                http_session.patch(
                     f"{SUPABASE_REST_URL}/subscriptions?user_id=eq.{user_id}",
                     headers=get_supabase_headers(),
                     json={'stripe_customer_id': stripe_customer_id}
@@ -1208,14 +1222,14 @@ def stripe_webhook():
         try:
             if plan_type == 'one_time':
                 # Add 1 credit for one-time payment
-                subscription_response = requests.get(
+                subscription_response = http_session.get(
                     f"{SUPABASE_REST_URL}/subscriptions?user_id=eq.{user_id}&select=reports_limit",
                     headers=get_supabase_headers()
                 )
                 if subscription_response.ok and subscription_response.json():
                     subscription_data = subscription_response.json()[0]
                     new_limit = subscription_data['reports_limit'] + 1
-                    requests.patch(
+                    http_session.patch(
                         f"{SUPABASE_REST_URL}/subscriptions?user_id=eq.{user_id}",
                         headers=get_supabase_headers(),
                         json={
@@ -1227,7 +1241,7 @@ def stripe_webhook():
             elif plan_type == 'subscription':
                 # Update subscription to unlimited
                 stripe_subscription_id = session_data.get('subscription')
-                requests.patch(
+                http_session.patch(
                     f"{SUPABASE_REST_URL}/subscriptions?user_id=eq.{user_id}",
                     headers=get_supabase_headers(),
                     json={
@@ -1249,12 +1263,12 @@ def stripe_webhook():
 
         try:
             # Find user by customer ID and downgrade
-            sub_response = requests.get(
+            sub_response = http_session.get(
                 f"{SUPABASE_REST_URL}/subscriptions?stripe_customer_id=eq.{customer_id}&select=user_id",
                 headers=get_supabase_headers()
             )
             if sub_response.ok and sub_response.json():
-                requests.patch(
+                http_session.patch(
                     f"{SUPABASE_REST_URL}/subscriptions?stripe_customer_id=eq.{customer_id}",
                     headers=get_supabase_headers(),
                     json={
