@@ -14,7 +14,7 @@ import pdfplumber
 import re
 from functools import wraps
 from dotenv import load_dotenv
-from supabase import create_client, Client
+import requests
 import stripe
 from utils.beautiful_report import generate_beautiful_report
 
@@ -28,11 +28,19 @@ app.config['REPORTS_FOLDER'] = 'reports'
 app.config['MAX_CONTENT_LENGTH'] = 200 * 1024 * 1024  # 200MB max file size
 ALLOWED_EXTENSIONS = {'pdf'}
 
-# Initialize Supabase client
-supabase: Client = create_client(
-    os.getenv('SUPABASE_URL'),
-    os.getenv('SUPABASE_KEY')
-)
+# Supabase configuration
+SUPABASE_URL = os.getenv('SUPABASE_URL')
+SUPABASE_KEY = os.getenv('SUPABASE_KEY')
+SUPABASE_REST_URL = f"{SUPABASE_URL}/rest/v1"
+
+# HTTP headers for Supabase REST API
+def get_supabase_headers():
+    return {
+        'apikey': SUPABASE_KEY,
+        'Authorization': f'Bearer {SUPABASE_KEY}',
+        'Content-Type': 'application/json',
+        'Prefer': 'return=representation'
+    }
 
 # Initialize Stripe
 stripe.api_key = os.getenv('STRIPE_SECRET_KEY')
@@ -220,8 +228,11 @@ def register():
 
         try:
             # Check if user already exists
-            existing_user = supabase.table('profiles').select('id').eq('email', email).execute()
-            if existing_user.data:
+            response = requests.get(
+                f"{SUPABASE_REST_URL}/profiles?email=eq.{email}&select=id",
+                headers=get_supabase_headers()
+            )
+            if response.ok and response.json():
                 flash('An account with this email already exists.', 'danger')
                 return render_template('register.html')
 
@@ -230,22 +241,36 @@ def register():
             password_hash = generate_password_hash(password)
 
             # Insert user into profiles table
-            supabase.table('profiles').insert({
-                'id': user_id,
-                'email': email,
-                'full_name': full_name,
-                'password_hash': password_hash,
-                'company_name': company_name
-            }).execute()
+            profile_response = requests.post(
+                f"{SUPABASE_REST_URL}/profiles",
+                headers=get_supabase_headers(),
+                json={
+                    'id': user_id,
+                    'email': email,
+                    'full_name': full_name,
+                    'password_hash': password_hash,
+                    'company_name': company_name
+                }
+            )
+
+            if not profile_response.ok:
+                raise Exception(f"Failed to create profile: {profile_response.text}")
 
             # Create subscription record
-            supabase.table('subscriptions').insert({
-                'user_id': user_id,
-                'plan_name': 'free',
-                'status': 'active',
-                'reports_limit': 10,
-                'reports_used': 0
-            }).execute()
+            sub_response = requests.post(
+                f"{SUPABASE_REST_URL}/subscriptions",
+                headers=get_supabase_headers(),
+                json={
+                    'user_id': user_id,
+                    'plan_name': 'free',
+                    'status': 'active',
+                    'reports_limit': 10,
+                    'reports_used': 0
+                }
+            )
+
+            if not sub_response.ok:
+                print(f"Warning: Failed to create subscription: {sub_response.text}")
 
             flash('Registration successful! You can now log in.', 'success')
             return redirect(url_for('login'))
@@ -264,21 +289,28 @@ def login():
 
         try:
             # Query user from database
-            user_result = supabase.table('profiles').select('id, email, full_name, password_hash').eq('email', email).execute()
+            response = requests.get(
+                f"{SUPABASE_REST_URL}/profiles?email=eq.{email}&select=id,email,full_name,password_hash",
+                headers=get_supabase_headers()
+            )
 
-            if user_result.data and len(user_result.data) > 0:
-                user = user_result.data[0]
+            if response.ok and response.json():
+                users = response.json()
+                if users and len(users) > 0:
+                    user = users[0]
 
-                # Verify password
-                if check_password_hash(user['password_hash'], password):
-                    # Store user info in session
-                    session['user'] = {
-                        'id': user['id'],
-                        'email': user['email'],
-                        'full_name': user.get('full_name', '')
-                    }
-                    flash('Login successful!', 'success')
-                    return redirect(url_for('dashboard'))
+                    # Verify password
+                    if check_password_hash(user['password_hash'], password):
+                        # Store user info in session
+                        session['user'] = {
+                            'id': user['id'],
+                            'email': user['email'],
+                            'full_name': user.get('full_name', '')
+                        }
+                        flash('Login successful!', 'success')
+                        return redirect(url_for('dashboard'))
+                    else:
+                        flash('Invalid email or password.', 'danger')
                 else:
                     flash('Invalid email or password.', 'danger')
             else:
@@ -304,18 +336,30 @@ def dashboard():
 
     try:
         # Get user's profile
-        profile = supabase.table('profiles').select('*').eq('id', user_id).single().execute()
+        profile_response = requests.get(
+            f"{SUPABASE_REST_URL}/profiles?id=eq.{user_id}",
+            headers=get_supabase_headers()
+        )
+        profile = profile_response.json()[0] if profile_response.ok and profile_response.json() else None
 
-        # Get user's reports
-        reports = supabase.table('reports').select('*, metabolic_tests(*)').eq('user_id', user_id).order('created_at', desc=True).execute()
+        # Get user's reports (simplified - without nested joins)
+        reports_response = requests.get(
+            f"{SUPABASE_REST_URL}/reports?user_id=eq.{user_id}&order=created_at.desc",
+            headers=get_supabase_headers()
+        )
+        reports = reports_response.json() if reports_response.ok else []
 
         # Get user's subscription
-        subscription = supabase.table('subscriptions').select('*').eq('user_id', user_id).single().execute()
+        sub_response = requests.get(
+            f"{SUPABASE_REST_URL}/subscriptions?user_id=eq.{user_id}",
+            headers=get_supabase_headers()
+        )
+        subscription = sub_response.json()[0] if sub_response.ok and sub_response.json() else None
 
         return render_template('dashboard.html',
-                             profile=profile.data,
-                             reports=reports.data,
-                             subscription=subscription.data)
+                             profile=profile,
+                             reports=reports,
+                             subscription=subscription)
     except Exception as e:
         flash(f'Error loading dashboard: {str(e)}', 'danger')
         return render_template('dashboard.html', profile=None, reports=[], subscription=None)
@@ -367,8 +411,12 @@ def submit_manual():
                 'patient_weight_kg': patient_info.get('weight_kg')
             }
 
-            test_response = supabase.table('metabolic_tests').insert(test_data).execute()
-            test_id = test_response.data[0]['id'] if test_response.data else None
+            test_response = requests.post(
+                f"{SUPABASE_REST_URL}/metabolic_tests",
+                headers=get_supabase_headers(),
+                json=test_data
+            )
+            test_id = test_response.json()[0]['id'] if test_response.ok and test_response.json() else None
         except Exception as e:
             print(f"Error saving manual data to database: {str(e)}")
             test_id = None
@@ -431,8 +479,12 @@ def upload_file():
             'patient_weight_kg': patient_info.get('weight_kg')
         }
 
-        test_response = supabase.table('metabolic_tests').insert(test_data).execute()
-        test_id = test_response.data[0]['id'] if test_response.data else None
+        test_response = requests.post(
+            f"{SUPABASE_REST_URL}/metabolic_tests",
+            headers=get_supabase_headers(),
+            json=test_data
+        )
+        test_id = test_response.json()[0]['id'] if test_response.ok and test_response.json() else None
     except Exception as e:
         print(f"Error saving to database: {str(e)}")
         test_id = None
@@ -668,14 +720,26 @@ def generate_report():
             'html_storage_path': report_path
         }
 
-        report_response = supabase.table('reports').insert(report_data).execute()
-        db_report_id = report_response.data[0]['id'] if report_response.data else None
+        report_response = requests.post(
+            f"{SUPABASE_REST_URL}/reports",
+            headers=get_supabase_headers(),
+            json=report_data
+        )
+        db_report_id = report_response.json()[0]['id'] if report_response.ok and report_response.json() else None
 
         # Update subscription reports_used counter
-        subscription = supabase.table('subscriptions').select('reports_used').eq('user_id', user_id).single().execute()
-        if subscription.data:
-            new_count = subscription.data['reports_used'] + 1
-            supabase.table('subscriptions').update({'reports_used': new_count}).eq('user_id', user_id).execute()
+        subscription_response = requests.get(
+            f"{SUPABASE_REST_URL}/subscriptions?user_id=eq.{user_id}&select=reports_used",
+            headers=get_supabase_headers()
+        )
+        if subscription_response.ok and subscription_response.json():
+            subscription_data = subscription_response.json()[0]
+            new_count = subscription_data['reports_used'] + 1
+            requests.patch(
+                f"{SUPABASE_REST_URL}/subscriptions?user_id=eq.{user_id}",
+                headers=get_supabase_headers(),
+                json={'reports_used': new_count}
+            )
     except Exception as e:
         print(f"Error saving report to database: {str(e)}")
         db_report_id = None
@@ -1024,8 +1088,14 @@ def create_checkout_session():
 
         # Get or create Stripe customer
         try:
-            subscription_data = supabase.table('subscriptions').select('stripe_customer_id').eq('user_id', user_id).single().execute()
-            stripe_customer_id = subscription_data.data.get('stripe_customer_id') if subscription_data.data else None
+            subscription_response = requests.get(
+                f"{SUPABASE_REST_URL}/subscriptions?user_id=eq.{user_id}&select=stripe_customer_id",
+                headers=get_supabase_headers()
+            )
+            stripe_customer_id = None
+            if subscription_response.ok and subscription_response.json():
+                subscription_data = subscription_response.json()[0]
+                stripe_customer_id = subscription_data.get('stripe_customer_id')
 
             if not stripe_customer_id:
                 # Create new Stripe customer
@@ -1036,9 +1106,11 @@ def create_checkout_session():
                 stripe_customer_id = customer.id
 
                 # Update subscription record with customer ID
-                supabase.table('subscriptions').update({
-                    'stripe_customer_id': stripe_customer_id
-                }).eq('user_id', user_id).execute()
+                requests.patch(
+                    f"{SUPABASE_REST_URL}/subscriptions?user_id=eq.{user_id}",
+                    headers=get_supabase_headers(),
+                    json={'stripe_customer_id': stripe_customer_id}
+                )
         except Exception as e:
             print(f"Error creating/getting customer: {e}")
             # Create customer if error
@@ -1136,24 +1208,36 @@ def stripe_webhook():
         try:
             if plan_type == 'one_time':
                 # Add 1 credit for one-time payment
-                subscription = supabase.table('subscriptions').select('reports_limit').eq('user_id', user_id).single().execute()
-                if subscription.data:
-                    new_limit = subscription.data['reports_limit'] + 1
-                    supabase.table('subscriptions').update({
-                        'reports_limit': new_limit,
-                        'plan_name': 'one_time'
-                    }).eq('user_id', user_id).execute()
+                subscription_response = requests.get(
+                    f"{SUPABASE_REST_URL}/subscriptions?user_id=eq.{user_id}&select=reports_limit",
+                    headers=get_supabase_headers()
+                )
+                if subscription_response.ok and subscription_response.json():
+                    subscription_data = subscription_response.json()[0]
+                    new_limit = subscription_data['reports_limit'] + 1
+                    requests.patch(
+                        f"{SUPABASE_REST_URL}/subscriptions?user_id=eq.{user_id}",
+                        headers=get_supabase_headers(),
+                        json={
+                            'reports_limit': new_limit,
+                            'plan_name': 'one_time'
+                        }
+                    )
 
             elif plan_type == 'subscription':
                 # Update subscription to unlimited
                 stripe_subscription_id = session_data.get('subscription')
-                supabase.table('subscriptions').update({
-                    'stripe_subscription_id': stripe_subscription_id,
-                    'plan_name': 'monthly',
-                    'status': 'active',
-                    'reports_limit': 999999,  # Unlimited
-                    'period_start': datetime.utcnow().isoformat(),
-                }).eq('user_id', user_id).execute()
+                requests.patch(
+                    f"{SUPABASE_REST_URL}/subscriptions?user_id=eq.{user_id}",
+                    headers=get_supabase_headers(),
+                    json={
+                        'stripe_subscription_id': stripe_subscription_id,
+                        'plan_name': 'monthly',
+                        'status': 'active',
+                        'reports_limit': 999999,  # Unlimited
+                        'period_start': datetime.utcnow().isoformat(),
+                    }
+                )
 
         except Exception as e:
             print(f"Error updating subscription: {e}")
@@ -1165,14 +1249,21 @@ def stripe_webhook():
 
         try:
             # Find user by customer ID and downgrade
-            sub = supabase.table('subscriptions').select('user_id').eq('stripe_customer_id', customer_id).single().execute()
-            if sub.data:
-                supabase.table('subscriptions').update({
-                    'plan_name': 'free',
-                    'status': 'inactive',
-                    'reports_limit': 10,
-                    'stripe_subscription_id': None
-                }).eq('stripe_customer_id', customer_id).execute()
+            sub_response = requests.get(
+                f"{SUPABASE_REST_URL}/subscriptions?stripe_customer_id=eq.{customer_id}&select=user_id",
+                headers=get_supabase_headers()
+            )
+            if sub_response.ok and sub_response.json():
+                requests.patch(
+                    f"{SUPABASE_REST_URL}/subscriptions?stripe_customer_id=eq.{customer_id}",
+                    headers=get_supabase_headers(),
+                    json={
+                        'plan_name': 'free',
+                        'status': 'inactive',
+                        'reports_limit': 10,
+                        'stripe_subscription_id': None
+                    }
+                )
         except Exception as e:
             print(f"Error handling subscription deletion: {e}")
 
