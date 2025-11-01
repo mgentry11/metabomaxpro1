@@ -33,6 +33,14 @@ SUPABASE_URL = os.getenv('SUPABASE_URL')
 SUPABASE_KEY = os.getenv('SUPABASE_KEY', '').replace('\n', '').replace(' ', '')  # Strip newlines and spaces
 SUPABASE_REST_URL = f"{SUPABASE_URL}/rest/v1"
 
+# Stripe configuration
+stripe.api_key = os.getenv('STRIPE_SECRET_KEY')
+STRIPE_PUBLISHABLE_KEY = os.getenv('STRIPE_PUBLISHABLE_KEY')
+
+# Stripe Price IDs
+STRIPE_PRICE_ONE_TIME = 'price_1SOnZGC5St4DyD5vE5EzwQBx'  # $69 Single Report
+STRIPE_PRICE_SUBSCRIPTION = 'price_1SOo8NC5St4DyD5vBPXDJrzy'  # $39/month Unlimited
+
 # Create a requests session that forces HTTP/1.1
 from requests.adapters import HTTPAdapter
 from urllib3.poolmanager import PoolManager
@@ -256,6 +264,88 @@ def sample_report():
 def data_guide():
     """Data input guide page"""
     return render_template('data_guide.html')
+
+@app.route('/create-checkout-session', methods=['POST'])
+@login_required
+def create_checkout_session():
+    """Create a Stripe Checkout Session"""
+    try:
+        # Get plan type from request
+        data = request.get_json()
+        plan_type = data.get('plan_type')
+
+        # Determine which price to use
+        if plan_type == 'one_time':
+            price_id = STRIPE_PRICE_ONE_TIME
+        elif plan_type == 'subscription':
+            price_id = STRIPE_PRICE_SUBSCRIPTION
+        else:
+            return jsonify({'error': 'Invalid plan type'}), 400
+
+        # Get user email from session
+        user_email = session.get('user', {}).get('email', '')
+
+        # Create Stripe Checkout Session
+        checkout_session = stripe.checkout.Session.create(
+            payment_method_types=['card'],
+            line_items=[{
+                'price': price_id,
+                'quantity': 1,
+            }],
+            mode='subscription' if plan_type == 'subscription' else 'payment',
+            success_url=url_for('payment_success', _external=True) + '?session_id={CHECKOUT_SESSION_ID}',
+            cancel_url=url_for('pricing', _external=True),
+            customer_email=user_email,
+            metadata={
+                'user_id': session.get('user', {}).get('id', ''),
+                'plan_type': plan_type
+            }
+        )
+
+        return jsonify({'checkout_url': checkout_session.url})
+
+    except Exception as e:
+        print(f"Error creating checkout session: {e}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/payment-success')
+@login_required
+def payment_success():
+    """Payment success page"""
+    session_id = request.args.get('session_id')
+
+    if session_id:
+        try:
+            # Retrieve the session to verify payment
+            checkout_session = stripe.checkout.Session.retrieve(session_id)
+
+            if checkout_session.payment_status == 'paid':
+                # Update user's subscription status in database
+                user_id = session.get('user', {}).get('id')
+                plan_type = checkout_session.metadata.get('plan_type')
+
+                # Update user record with subscription info
+                update_data = {
+                    'subscription_status': 'active' if plan_type == 'subscription' else 'one_time',
+                    'stripe_customer_id': checkout_session.customer,
+                    'stripe_session_id': session_id
+                }
+
+                headers = get_supabase_headers()
+                response = http_session.patch(
+                    f"{SUPABASE_REST_URL}/users?id=eq.{user_id}",
+                    headers=headers,
+                    json=update_data
+                )
+
+                flash('Payment successful! Your subscription is now active.', 'success')
+                return redirect(url_for('dashboard'))
+
+        except Exception as e:
+            print(f"Error verifying payment: {e}")
+            flash('Payment verification failed. Please contact support.', 'error')
+
+    return redirect(url_for('dashboard'))
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
