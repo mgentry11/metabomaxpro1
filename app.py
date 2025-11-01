@@ -30,7 +30,7 @@ ALLOWED_EXTENSIONS = {'pdf'}
 
 # Supabase configuration
 SUPABASE_URL = os.getenv('SUPABASE_URL')
-SUPABASE_KEY = os.getenv('SUPABASE_KEY')
+SUPABASE_KEY = os.getenv('SUPABASE_KEY', '').replace('\n', '').replace(' ', '')  # Strip newlines and spaces
 SUPABASE_REST_URL = f"{SUPABASE_URL}/rest/v1"
 
 # Create a requests session that forces HTTP/1.1
