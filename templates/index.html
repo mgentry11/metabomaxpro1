@@ -744,6 +744,33 @@ Example:
                             minute: '2-digit'
                         });
 
+                        // Build action buttons HTML
+                        let buttonsHtml = '';
+
+                        // Only show View/Download if file_id exists
+                        if (report.file_id) {
+                            buttonsHtml += `
+                                <a href="/view/${report.file_id}" target="_blank" class="btn btn-success" style="text-decoration: none; padding: 0.5rem 1rem;">
+                                    👁️ View
+                                </a>
+                                <a href="/download/${report.file_id}" class="btn btn-secondary" style="text-decoration: none; background: #3b82f6; padding: 0.5rem 1rem;">
+                                    📥 Download
+                                </a>
+                            `;
+                        } else {
+                            // If no file_id, show a note that files are missing
+                            buttonsHtml += `
+                                <span style="color: #94a3b8; font-size: 0.85rem; margin-right: 0.5rem;">Files not found</span>
+                            `;
+                        }
+
+                        // Always show delete button
+                        buttonsHtml += `
+                            <button class="btn btn-secondary" onclick="deleteReport(${report.id})" style="background: #ef4444; border: none; padding: 0.5rem 1rem;">
+                                🗑️ Delete
+                            </button>
+                        `;
+
                         html += `
                             <div style="background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 1.5rem; display: flex; justify-content: space-between; align-items: center;">
                                 <div>
@@ -756,15 +783,7 @@ Example:
                                     ${report.chronological_age ? `<p style="color: #64748b; font-size: 0.9rem;">Age: ${report.chronological_age} years old (Bio Age: ${report.biological_age})</p>` : ''}
                                 </div>
                                 <div style="display: flex; gap: 0.75rem; align-items: center;">
-                                    <a href="/view/${report.file_id}" target="_blank" class="btn btn-success" style="text-decoration: none; padding: 0.5rem 1rem;">
-                                        👁️ View
-                                    </a>
-                                    <a href="/download/${report.file_id}" class="btn btn-secondary" style="text-decoration: none; background: #3b82f6; padding: 0.5rem 1rem;">
-                                        📥 Download
-                                    </a>
-                                    <button class="btn btn-secondary" onclick="deleteReport(${report.id})" style="background: #ef4444; border: none; padding: 0.5rem 1rem;">
-                                        🗑️ Delete
-                                    </button>
+                                    ${buttonsHtml}
                                 </div>
                             </div>
                         `;
