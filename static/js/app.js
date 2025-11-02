@@ -417,16 +417,12 @@ async function generateReport() {
             // Also expose it globally for the AI download button
             window.currentFileId = currentFileId;
 
-            // Show AI section so user can optionally add recommendations
+            // Show download section so user can choose
             document.getElementById('customizeSection').style.display = 'none';
-            document.getElementById('aiSection').style.display = 'block';
             document.getElementById('downloadSection').style.display = 'block';
 
-            const downloadLink = document.getElementById('downloadLink');
-            downloadLink.href = data.download_url;
-
-            // Scroll to AI section
-            document.getElementById('aiSection').scrollIntoView({ behavior: 'smooth' });
+            // Scroll to download section
+            document.getElementById('downloadSection').scrollIntoView({ behavior: 'smooth' });
         } else {
             alert('Error generating report: ' + data.error);
         }
