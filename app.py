@@ -270,49 +270,6 @@ def sample_data():
     """Visual display of sample PNOE metabolic test data"""
     return render_template('sample_data.html')
 
-@app.route('/create-checkout-session', methods=['POST'])
-@login_required
-def create_checkout_session():
-    """Create a Stripe Checkout Session"""
-    try:
-        # Get plan type from request
-        data = request.get_json()
-        plan_type = data.get('plan_type')
-
-        # Determine which price to use
-        if plan_type == 'one_time':
-            price_id = STRIPE_PRICE_ONE_TIME
-        elif plan_type == 'subscription':
-            price_id = STRIPE_PRICE_SUBSCRIPTION
-        else:
-            return jsonify({'error': 'Invalid plan type'}), 400
-
-        # Get user email from session
-        user_email = session.get('user', {}).get('email', '')
-
-        # Create Stripe Checkout Session
-        checkout_session = stripe.checkout.Session.create(
-            payment_method_types=['card'],
-            line_items=[{
-                'price': price_id,
-                'quantity': 1,
-            }],
-            mode='subscription' if plan_type == 'subscription' else 'payment',
-            success_url=url_for('payment_success', _external=True) + '?session_id={CHECKOUT_SESSION_ID}',
-            cancel_url=url_for('pricing', _external=True),
-            customer_email=user_email,
-            metadata={
-                'user_id': session.get('user', {}).get('id', ''),
-                'plan_type': plan_type
-            }
-        )
-
-        return jsonify({'checkout_url': checkout_session.url})
-
-    except Exception as e:
-        print(f"Error creating checkout session: {e}")
-        return jsonify({'error': str(e)}), 500
-
 @app.route('/payment-success')
 @login_required
 def payment_success():
