@@ -3,373 +3,835 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Metabolic Report Generator</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 2rem;
-        }
-
-        .navbar {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 1rem 2rem;
-            margin-bottom: 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        }
-
-        .navbar h1 {
-            font-size: 1.5rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .navbar-right {
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-        }
-
-        .user-info {
-            color: #64748b;
-            font-size: 0.9rem;
-        }
-
-        .btn {
-            padding: 0.75rem 1.5rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
-        }
-
-        .btn-secondary {
-            background: white;
-            color: #667eea;
-            border: 2px solid #667eea;
-        }
-
-        .btn-secondary:hover {
-            background: #f8fafc;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .stat-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 2rem;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        }
-
-        .stat-card h3 {
-            color: #64748b;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-card .value {
-            font-size: 2.5rem;
-            font-weight: bold;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .stat-card .subtitle {
-            color: #94a3b8;
-            font-size: 0.85rem;
-            margin-top: 0.5rem;
-        }
-
-        .card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        }
-
-        .card h2 {
-            color: #1e293b;
-            margin-bottom: 1.5rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 3px solid #667eea;
-        }
-
-        .reports-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .reports-table th {
-            text-align: left;
-            padding: 1rem;
-            color: #64748b;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            border-bottom: 2px solid #e2e8f0;
-        }
-
-        .reports-table td {
-            padding: 1rem;
-            border-bottom: 1px solid #f1f5f9;
-        }
-
-        .reports-table tr:hover {
-            background: #f8fafc;
-        }
-
-        .badge {
-            display: inline-block;
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-
-        .badge-success {
-            background: #d1fae5;
-            color: #065f46;
-        }
-
-        .badge-warning {
-            background: #fef3c7;
-            color: #92400e;
-        }
-
-        .badge-danger {
-            background: #fee2e2;
-            color: #991b1b;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 3rem;
-            color: #64748b;
-        }
-
-        .empty-state svg {
-            width: 80px;
-            height: 80px;
-            margin-bottom: 1rem;
-            opacity: 0.5;
-        }
-
-        .alert {
-            padding: 1rem;
-            border-radius: 10px;
-            margin-bottom: 1.5rem;
-        }
-
-        .alert-success {
-            background: #d1fae5;
-            color: #065f46;
-            border-left: 4px solid #10b981;
-        }
-
-        .alert-danger {
-            background: #fee2e2;
-            color: #991b1b;
-            border-left: 4px solid #ef4444;
-        }
-
-        .alert-info {
-            background: #dbeafe;
-            color: #1e40af;
-            border-left: 4px solid #3b82f6;
-        }
-    </style>
+    <title>Metabolic Report Generator - Upload</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
     <div class="container">
-        <nav class="navbar">
-            <h1>Metabolic Reports</h1>
-            <div class="navbar-right">
-                <span class="user-info">{{ profile.email if profile else 'User' }}</span>
-                <a href="{{ url_for('index') }}" class="btn">New Report</a>
-                <a href="{{ url_for('ai_recommendations_page') }}" class="btn" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">🤖 AI Recommendations</a>
-                <a href="{{ url_for('logout') }}" class="btn btn-secondary">Logout</a>
-            </div>
-        </nav>
+        <!-- Header -->
+        <div class="header">
+            <h1>📊 Metabolic Report Generator</h1>
+            <p class="subtitle">Works with ANY metabolic testing system - Upload PDF or Enter Data Manually</p>
+        </div>
 
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ category }}">
-                        {{ message }}
+        <!-- AI Feature Callout -->
+        <div class="card ai-callout-card" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; margin-bottom: 2rem;">
+            <div class="ai-callout-content" style="display: flex; align-items: center; gap: 2rem;">
+                <div class="ai-callout-emoji" style="font-size: 4rem;">🤖</div>
+                <div style="flex: 1;">
+                    <h2 style="color: white; margin-bottom: 0.5rem; font-size: 1.8rem;">✨ NEW: AI-Powered Recommendations Available!</h2>
+                    <p style="color: white; opacity: 0.95; margin-bottom: 1rem; font-size: 1.1rem; line-height: 1.6;">
+                        After generating your metabolic report, you can get personalized AI recommendations for <strong>Peptides, Supplements, Training, Nutrition, Recovery</strong>, and more - all based on YOUR metabolic data!
+                    </p>
+                    <p style="color: white; opacity: 0.9; font-size: 0.95rem; margin: 0;">
+                        📊 Upload your test → Generate report → Get unlimited AI recommendations
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <style>
+            /* Responsive AI Callout */
+            @media (max-width: 768px) {
+                .ai-callout-content {
+                    flex-direction: column !important;
+                    text-align: center !important;
+                    gap: 1rem !important;
+                }
+                .ai-callout-emoji {
+                    font-size: 3rem !important;
+                }
+                .ai-callout-card h2 {
+                    font-size: 1.4rem !important;
+                }
+                .ai-callout-card p {
+                    font-size: 1rem !important;
+                }
+            }
+        </style>
+
+        <!-- My Reports Section -->
+        <div class="card" id="myReportsSection" style="margin-bottom: 2rem;">
+            <h2>📋 My Reports</h2>
+            <p style="color: #64748b; margin-bottom: 1.5rem;">View and manage your previous metabolic reports</p>
+
+            <div id="reportsList" style="display: none;">
+                <!-- Reports will be loaded here -->
+            </div>
+
+            <div id="noReports" style="text-align: center; padding: 2rem; color: #94a3b8;">
+                <p>You haven't generated any reports yet. Upload a PDF or enter data manually to create your first report!</p>
+            </div>
+
+            <button class="btn btn-secondary" onclick="loadMyReports()" style="margin-top: 1rem;">
+                🔄 Refresh Reports List
+            </button>
+        </div>
+
+        <!-- Input Method Selection -->
+        <div class="card" id="uploadSection">
+            <div class="tabs">
+                <button class="tab-button active" onclick="switchTab('pdf')">📄 Upload PDF</button>
+                <button class="tab-button" onclick="switchTab('manual')">✍️ Enter Data Manually</button>
+            </div>
+
+            <!-- PDF Upload Tab -->
+            <div id="pdfTab" class="tab-content active">
+                <h2>📄 Upload Your Metabolic Test PDF</h2>
+                <p style="color: #64748b; margin-bottom: 1.5rem;">Works with Korr, COSMED, and other VO2 Max testing systems</p>
+                <div class="upload-area" id="uploadArea">
+                <div class="upload-icon">📁</div>
+                <p>Drag & drop your metabolic test PDF here</p>
+                <p class="upload-hint">or click to browse</p>
+                <input type="file" id="fileInput" accept=".pdf" hidden>
+                <button class="btn btn-primary" onclick="document.getElementById('fileInput').click()">
+                    Choose File
+                </button>
+            </div>
+            <div class="file-info" id="fileInfo" style="display: none;">
+                <p>Selected: <span id="fileName"></span></p>
+                <button class="btn btn-success" id="uploadBtn">Upload & Extract Data</button>
+            </div>
+            <div class="progress-bar" id="progressBar" style="display: none;">
+                <div class="progress-fill"></div>
+                <p class="progress-text">Uploading and extracting data...</p>
+            </div>
+            </div>
+
+            <!-- Manual Entry Tab -->
+            <div id="manualTab" class="tab-content" style="display: none;">
+                <h2>✍️ Enter Your Basic Test Results</h2>
+                <p style="color: #64748b; margin-bottom: 1.5rem;">Just enter the key numbers from your test report - we'll handle the rest!</p>
+
+                <div class="manual-entry-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="manual_name">Your Name *</label>
+                            <input type="text" id="manual_name" class="form-control" placeholder="John Doe" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="manual_age">Your Age *</label>
+                            <input type="number" id="manual_age" class="form-control" placeholder="35" required>
+                        </div>
                     </div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
 
-        <div class="stats-grid">
-            <div class="stat-card">
-                <h3>Subscription Plan</h3>
-                <div class="value">{{ subscription.plan_name|upper if subscription else 'FREE' }}</div>
-                <div class="subtitle">
-                    {% if subscription %}
-                        <span class="badge badge-{{ 'success' if subscription.status == 'active' else 'warning' }}">
-                            {{ subscription.status }}
-                        </span>
-                    {% endif %}
-                </div>
-            </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="manual_gender">Gender *</label>
+                            <select id="manual_gender" class="form-control" required>
+                                <option value="">Select...</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="manual_weight">Weight (kg) *</label>
+                            <input type="number" step="0.1" id="manual_weight" class="form-control" placeholder="75" required>
+                            <small style="color: #64748b;">1 kg = 2.2 lbs</small>
+                        </div>
+                    </div>
 
-            <div class="stat-card">
-                <h3>Reports This Month</h3>
-                <div class="value">{{ subscription.reports_used if subscription else 0 }}/{{ subscription.reports_limit if subscription else 10 }}</div>
-                <div class="subtitle">
-                    {{ subscription.reports_limit - subscription.reports_used if subscription else 10 }} remaining
-                </div>
-            </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="manual_vo2max_rel">VO2 Max Score (ml/kg/min) *</label>
+                            <input type="number" step="0.1" id="manual_vo2max_rel" class="form-control" placeholder="42.5" required>
+                            <small style="color: #64748b;">This is the main number on your test results</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="manual_rmr">Resting Metabolic Rate (optional)</label>
+                            <input type="number" id="manual_rmr" class="form-control" placeholder="1850">
+                            <small style="color: #64748b;">Leave blank if not shown on your report</small>
+                        </div>
+                    </div>
 
-            <div class="stat-card">
-                <h3>Total Reports</h3>
-                <div class="value">{{ reports|length if reports else 0 }}</div>
-                <div class="subtitle">All time</div>
-            </div>
+                    <div class="form-group">
+                        <label for="manual_test_date">Test Date (optional)</label>
+                        <input type="date" id="manual_test_date" class="form-control">
+                    </div>
 
-            <div class="stat-card" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white;">
-                <h3 style="color: white;">🤖 AI Recommendations</h3>
-                <div class="value" style="color: white; font-size: 1.1rem;">Get Personalized Protocols</div>
-                <div class="subtitle" style="color: rgba(255,255,255,0.9);">
-                    <a href="{{ url_for('ai_recommendations_page') }}" style="color: white; text-decoration: underline; font-weight: 600;">Try It Now →</a>
+                    <div style="background: #f0f9ff; border-left: 4px solid #3b82f6; padding: 1rem; border-radius: 8px; margin-top: 1.5rem;">
+                        <p style="margin: 0; color: #1e40af; font-size: 0.95rem;">
+                            💡 <strong>Tip:</strong> You only need your VO2 Max score from your basic test results. We'll calculate everything else automatically to give you a comprehensive metabolic report!
+                        </p>
+                    </div>
+
+                    <button class="btn btn-success btn-large" onclick="submitManualData()" style="margin-top: 2rem;">
+                        Continue to Customize Report →
+                    </button>
                 </div>
             </div>
         </div>
 
-        <div class="card">
-            <h2>Recent Reports</h2>
+        <!-- Data Preview Section -->
+        <div class="card" id="previewSection" style="display: none;">
+            <h2>🔍 Step 2: Review Extracted Data</h2>
+            <div class="data-preview" id="dataPreview"></div>
+        </div>
 
-            {% if reports and reports|length > 0 %}
-            <table class="reports-table">
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Patient</th>
-                        <th>Type</th>
-                        <th>Bio Age</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for report in reports %}
-                    <tr>
-                        <td>{{ report.created_at[:10] if report.created_at else 'N/A' }}</td>
-                        <td>
-                            {% if report.metabolic_tests %}
-                                {{ report.metabolic_tests.patient_name or 'Unknown' }}
-                            {% else %}
-                                N/A
-                            {% endif %}
-                        </td>
-                        <td>
-                            <span class="badge badge-success">{{ report.report_type|upper if report.report_type else 'N/A' }}</span>
-                        </td>
-                        <td>
-                            {% if report.biological_age %}
-                                <strong>{{ report.biological_age }}</strong>
-                                {% if report.chronological_age %}
-                                    <span style="color: #10b981; font-size: 0.85rem;">
-                                        ({{ report.chronological_age - report.biological_age }}y younger)
-                                    </span>
-                                {% endif %}
-                            {% else %}
-                                N/A
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if report.html_storage_path %}
-                                <a href="/download/{{ report.html_storage_path.split('/')[-1].replace('_report.html', '') }}"
-                                   class="btn" style="padding: 0.5rem 1rem; font-size: 0.8rem;">
-                                    Download
-                                </a>
-                            {% endif %}
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-            {% else %}
-            <div class="empty-state">
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                </svg>
-                <h3>No reports yet</h3>
-                <p>Create your first metabolic report to get started!</p>
-                <br>
-                <a href="{{ url_for('index') }}" class="btn">Create New Report</a>
+        <!-- Customization Section -->
+        <div class="card" id="customizeSection" style="display: none;">
+            <h2>✏️ Step 3: Customize Your Report</h2>
+
+            <div class="form-group">
+                <label for="reportType">Report Type</label>
+                <select id="reportType" class="form-control">
+                    <option value="performance">Performance Report</option>
+                    <option value="longevity">Longevity Report</option>
+                    <option value="weight_loss">Weight Loss Report</option>
+                </select>
             </div>
-            {% endif %}
+
+            <div class="form-group">
+                <label for="chronologicalAge">Your Current Age</label>
+                <input type="number" id="chronologicalAge" class="form-control" placeholder="35" required>
+                <small style="color: #64748b; margin-top: 0.5rem; display: block;">Your biological age will be calculated automatically from your test data</small>
+            </div>
+
+            <div class="form-group" style="background: #E0F2FE; padding: 20px; border-radius: 12px; border: 2px solid #0EA5E9; margin-top: 1.5rem;">
+                <label for="biologicalAgeOverride" style="font-weight: 600; color: #075985; font-size: 16px;">
+                    📋 Biological Age Override (Optional)
+                </label>
+                <input type="number" id="biologicalAgeOverride" class="form-control" placeholder="Leave blank to auto-calculate" style="margin-top: 10px;">
+                <small style="color: #075985; font-weight: 500; margin-top: 0.75rem; display: block;">
+                    💡 Optional: If you know your biological age from your PDF report, you can enter it here to override the automatic calculation.
+                </small>
+            </div>
+
+            <div class="form-group">
+                <label for="goals">Goals & Objectives</label>
+                <div class="goals-input">
+                    <input type="text" id="goalInput" class="form-control" placeholder="Add a goal...">
+                    <button class="btn btn-secondary" onclick="addGoal()">Add Goal</button>
+                </div>
+                <ul id="goalsList" class="goals-list"></ul>
+            </div>
+
+            <div class="form-group">
+                <label for="customNotes">Custom Notes</label>
+                <textarea id="customNotes" class="form-control" rows="6" placeholder="Add any custom notes, observations, or comments here...
+
+Example:
+- Currently training 4x per week
+- Focus on improving cardiovascular endurance
+- Recent dietary changes to high-protein diet"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Additional Metrics (Optional)</label>
+                <div id="additionalMetrics">
+                    <div class="metric-input">
+                        <input type="text" class="form-control" placeholder="Metric name" data-type="name">
+                        <input type="text" class="form-control" placeholder="Value" data-type="value">
+                        <button class="btn btn-icon" onclick="addMetricRow()">+</button>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn btn-success btn-large" id="generateBtn" onclick="generateReport()">
+                🎉 Generate Report
+            </button>
         </div>
 
-        {% if profile %}
-        <div class="card">
-            <h2>Account Information</h2>
-            <table style="width: 100%;">
-                <tr>
-                    <td style="padding: 0.75rem; font-weight: 600; color: #64748b;">Full Name:</td>
-                    <td style="padding: 0.75rem;">{{ profile.full_name or 'Not set' }}</td>
-                </tr>
-                <tr>
-                    <td style="padding: 0.75rem; font-weight: 600; color: #64748b;">Email:</td>
-                    <td style="padding: 0.75rem;">{{ profile.email }}</td>
-                </tr>
-                <tr>
-                    <td style="padding: 0.75rem; font-weight: 600; color: #64748b;">Company:</td>
-                    <td style="padding: 0.75rem;">{{ profile.company_name or 'Not set' }}</td>
-                </tr>
-                <tr>
-                    <td style="padding: 0.75rem; font-weight: 600; color: #64748b;">Member Since:</td>
-                    <td style="padding: 0.75rem;">{{ profile.created_at[:10] if profile.created_at else 'N/A' }}</td>
-                </tr>
-            </table>
+        <!-- Download Section -->
+        <div class="card success-card" id="downloadSection" style="display: none;">
+            <h2>✅ Report Generated Successfully!</h2>
+            <p style="color: #64748b; margin-bottom: 2rem;">Your metabolic data has been processed. Now you can download your report or add AI recommendations.</p>
+
+            <!-- Option 1: View Basic Report -->
+            <div style="background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 15px; padding: 2rem; margin-bottom: 1.5rem;">
+                <h3 style="font-size: 1.3rem; margin-bottom: 0.75rem;">👁️ Option 1: View Basic Report</h3>
+                <p style="color: #64748b; margin-bottom: 1rem;">View and download your basic metabolic report (without AI recommendations)</p>
+                <button class="btn btn-success" onclick="viewBasicReport()" style="margin: 0;">
+                    View Basic Report
+                </button>
+            </div>
+
+            <!-- Option 2: Add AI Recommendations -->
+            <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); border-radius: 15px; padding: 2.5rem; margin-bottom: 1.5rem; color: white;">
+                <h3 style="color: white; font-size: 1.5rem; margin-bottom: 1rem;">🤖 Option 2: Add AI Recommendations (Recommended)</h3>
+                <p style="margin-bottom: 1.5rem; line-height: 1.7; font-size: 1.05rem;">
+                    Get personalized protocols for peptides, supplements, training, or nutrition - all based on YOUR metabolic data!
+                </p>
+                <button class="btn btn-large" onclick="showAISection()" style="background: white; color: #10b981; font-weight: 700; font-size: 1.1rem;">
+                    ✨ Add AI Recommendations to Report
+                </button>
+            </div>
+
+            <button class="btn btn-secondary" onclick="resetForm()">Start Over</button>
         </div>
-        {% endif %}
+
+        <!-- AI Recommendations Section (Hidden initially) -->
+        <div class="card" id="aiSection" style="display: none;">
+            <button class="btn btn-secondary" onclick="hideAISection()" style="float: right;">← Back</button>
+            <h2>🤖 Add AI Recommendations to Your Report</h2>
+            <p style="color: #64748b; margin-bottom: 2rem;">Select a subject and we'll generate personalized protocols based on your metabolic data</p>
+
+            <div style="background: #eff6ff; border-left: 4px solid #3b82f6; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem;">
+                <p style="color: #1e40af; margin: 0;">
+                    <strong>💡 Pro Tip:</strong> You can add AI recommendations for multiple subjects! Each one will be added to your report.
+                </p>
+            </div>
+
+            <!-- Subject Selection -->
+            <div style="margin-bottom: 2rem;">
+                <h3 style="margin-bottom: 1rem;">Choose a Subject:</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem;">
+                    <button class="subject-choice-btn" onclick="selectSubject('peptides')">💉 Peptides</button>
+                    <button class="subject-choice-btn" onclick="selectSubject('supplements')">💊 Supplements</button>
+                    <button class="subject-choice-btn" onclick="selectSubject('training')">🏋️ Training</button>
+                    <button class="subject-choice-btn" onclick="selectSubject('nutrition')">🥗 Nutrition</button>
+                    <button class="subject-choice-btn" onclick="selectSubject('recovery')">🧘 Recovery</button>
+                    <button class="subject-choice-btn" onclick="selectSubject('longevity')">⏳ Longevity</button>
+                </div>
+            </div>
+
+            <!-- Goals (Optional) -->
+            <div style="margin-bottom: 2rem;">
+                <h3 style="margin-bottom: 1rem;">Select Goals (Optional):</h3>
+                <div style="display: flex; flex-wrap: wrap; gap: 0.75rem;" id="goalsContainer">
+                    <button class="goal-choice-btn" onclick="toggleGoal(this, 'Fat Loss')">Fat Loss</button>
+                    <button class="goal-choice-btn" onclick="toggleGoal(this, 'Muscle Gain')">Muscle Gain</button>
+                    <button class="goal-choice-btn" onclick="toggleGoal(this, 'Performance')">Performance</button>
+                    <button class="goal-choice-btn" onclick="toggleGoal(this, 'Recovery')">Recovery</button>
+                    <button class="goal-choice-btn" onclick="toggleGoal(this, 'Energy')">Energy</button>
+                    <button class="goal-choice-btn" onclick="toggleGoal(this, 'Longevity')">Longevity</button>
+                </div>
+            </div>
+
+            <!-- Generate Button -->
+            <div style="text-align: center; margin-top: 2rem;">
+                <button class="btn btn-success btn-large" onclick="generateAIRecommendations()" id="generateAIBtn" disabled>
+                    Generate AI Recommendations
+                </button>
+                <p style="color: #64748b; margin-top: 1rem; font-size: 0.9rem;">This will take 15-30 seconds</p>
+            </div>
+
+            <!-- Download Preparation Progress (BIG and OBVIOUS) -->
+            <div id="downloadProgressCard" style="display: none; margin-top: 2rem;">
+                <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); border-radius: 20px; padding: 3rem; box-shadow: 0 15px 40px rgba(16, 185, 129, 0.4); color: white; text-align: center;">
+                    <h2 style="color: white; margin-bottom: 1.5rem; font-size: 2rem; font-weight: bold;">
+                        🚀 Preparing Your Download
+                    </h2>
+                    <div style="background: rgba(255,255,255,0.25); border-radius: 15px; padding: 2rem; max-width: 500px; margin: 0 auto;">
+                        <div style="background: rgba(255,255,255,0.3); height: 30px; border-radius: 15px; overflow: hidden; margin-bottom: 1.5rem; box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);">
+                            <div id="mainProgressBar" style="width: 0%; height: 100%; background: white; border-radius: 15px; transition: width 0.5s ease; box-shadow: 0 0 20px rgba(255,255,255,0.8);"></div>
+                        </div>
+                        <div id="mainProgressText" style="font-size: 1.3rem; font-weight: 700; text-shadow: 0 2px 6px rgba(0,0,0,0.3); letter-spacing: 0.5px;">
+                            Starting...
+                        </div>
+                        <div id="mainProgressPercent" style="font-size: 3rem; font-weight: 900; margin-top: 1rem; text-shadow: 0 3px 8px rgba(0,0,0,0.3);">
+                            0%
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Results -->
+            <div id="aiResults" style="display: none; margin-top: 2rem;">
+                <h3 style="color: #10b981; margin-bottom: 1rem;">✅ AI Recommendations Generated!</h3>
+                <div style="background: #f8fafc; border: 2px solid #10b981; border-radius: 12px; padding: 2rem; margin-bottom: 1.5rem;">
+                    <div id="aiResultsContent" style="white-space: pre-wrap; line-height: 1.8;"></div>
+                </div>
+                <div style="text-align: center;">
+                    <button class="btn btn-success btn-large" id="downloadWithAIBtn" onclick="downloadAIReport()">
+                        👁️ View Report with AI Recommendations
+                    </button>
+                    <button class="btn btn-secondary" onclick="addAnotherRecommendation()">
+                        + Add Another Subject
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <style>
+        .subject-choice-btn, .goal-choice-btn {
+            padding: 1rem;
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .subject-choice-btn:hover, .goal-choice-btn:hover {
+            border-color: #10b981;
+            background: #ecfdf5;
+            transform: translateY(-2px);
+        }
+
+        .subject-choice-btn.active {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border-color: #10b981;
+        }
+
+        .goal-choice-btn.selected {
+            background: #10b981;
+            color: white;
+            border-color: #10b981;
+        }
+    </style>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    <script>
+        let selectedSubjects = [];
+        let selectedGoals = [];
+        let allRecommendations = {};
+
+        function showAISection() {
+            document.getElementById('downloadSection').style.display = 'none';
+            document.getElementById('aiSection').style.display = 'block';
+            window.scrollTo({ top: document.getElementById('aiSection').offsetTop - 100, behavior: 'smooth' });
+        }
+
+        function hideAISection() {
+            document.getElementById('aiSection').style.display = 'none';
+            document.getElementById('downloadSection').style.display = 'block';
+            window.scrollTo({ top: document.getElementById('downloadSection').offsetTop - 100, behavior: 'smooth' });
+        }
+
+        function selectSubject(subject) {
+            const btn = event.target;
+
+            // Toggle subject selection
+            if (selectedSubjects.includes(subject)) {
+                // Deselect
+                selectedSubjects = selectedSubjects.filter(s => s !== subject);
+                btn.classList.remove('active');
+            } else {
+                // Select
+                selectedSubjects.push(subject);
+                btn.classList.add('active');
+            }
+
+            // Enable generate button if at least one subject is selected
+            document.getElementById('generateAIBtn').disabled = selectedSubjects.length === 0;
+
+            // Update button text to show count
+            const btnText = selectedSubjects.length > 0
+                ? `Generate AI Recommendations (${selectedSubjects.length} subject${selectedSubjects.length > 1 ? 's' : ''})`
+                : 'Generate AI Recommendations';
+            document.getElementById('generateAIBtn').textContent = btnText;
+        }
+
+        function toggleGoal(btn, goal) {
+            if (selectedGoals.includes(goal)) {
+                selectedGoals = selectedGoals.filter(g => g !== goal);
+                btn.classList.remove('selected');
+            } else {
+                selectedGoals.push(goal);
+                btn.classList.add('selected');
+            }
+        }
+
+        async function generateAIRecommendations() {
+            if (selectedSubjects.length === 0) {
+                alert('Please select at least one subject');
+                return;
+            }
+
+            const btn = document.getElementById('generateAIBtn');
+            btn.disabled = true;
+
+            const resultsContainer = document.getElementById('aiResultsContent');
+            resultsContainer.innerHTML = '';
+            document.getElementById('aiResults').style.display = 'block';
+
+            // Generate recommendations for each selected subject
+            for (let i = 0; i < selectedSubjects.length; i++) {
+                const subject = selectedSubjects[i];
+                btn.textContent = `Generating ${subject}... (${i + 1}/${selectedSubjects.length})`;
+
+                try {
+                    const response = await fetch('/api/ai-recommend', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            subject: subject,
+                            goals: selectedGoals,
+                            custom_context: ''
+                        })
+                    });
+
+                    const data = await response.json();
+
+                    // Check if there's an error (either error string or error: true flag)
+                    if (data.error === true || (typeof data.error === 'string' && data.error.length > 0)) {
+                        // Show user-friendly error message
+                        const errorMsg = typeof data.error === 'string' ? data.error : data.recommendations || 'An error occurred';
+
+                        // Display error in a more visible way
+                        resultsContainer.innerHTML = `
+                            <div style="background: #fef2f2; border-left: 4px solid #ef4444; padding: 1.5rem; border-radius: 8px; margin: 1rem 0;">
+                                <h3 style="color: #991b1b; margin-bottom: 0.5rem;">⚠️ AI Recommendations Unavailable</h3>
+                                <p style="color: #991b1b; line-height: 1.6;">${errorMsg}</p>
+                                <div style="margin-top: 1rem; padding-top: 1rem; border-top: 2px solid #fca5a5;">
+                                    <p style="color: #991b1b; font-weight: 600; margin-bottom: 0.5rem;">To enable AI recommendations:</p>
+                                    <ol style="margin-left: 1.5rem; line-height: 1.8; color: #991b1b;">
+                                        <li>Add your <strong>OPENAI_API_KEY</strong> environment variable on Render</li>
+                                        <li>Get an API key from <a href="https://platform.openai.com/api-keys" target="_blank" style="color: #dc2626; text-decoration: underline;">OpenAI Platform</a></li>
+                                        <li>Restart your Render service after adding the key</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        `;
+                        btn.disabled = false;
+                        btn.textContent = 'Generate AI Recommendations';
+                        return;
+                    }
+
+                    // Store recommendations
+                    allRecommendations[subject] = data.recommendations;
+
+                    // Add to results display
+                    const subjectDiv = document.createElement('div');
+                    subjectDiv.style.cssText = 'background: #f8fafc; padding: 2rem; border-radius: 12px; border-left: 4px solid #10b981; margin-bottom: 2rem;';
+                    subjectDiv.innerHTML = `
+                        <h3 style="color: #10b981; font-size: 1.5rem; margin-bottom: 1rem; text-transform: capitalize;">
+                            ${subject} Recommendations
+                        </h3>
+                        <div style="white-space: pre-wrap; line-height: 1.8; color: #334155;">
+                            ${data.recommendations}
+                        </div>
+                    `;
+                    resultsContainer.appendChild(subjectDiv);
+
+                } catch (error) {
+                    console.error(`Error generating ${subject} recommendations:`, error);
+                    const errorDiv = document.createElement('div');
+                    errorDiv.style.cssText = 'background: #fef2f2; padding: 1rem; border-radius: 8px; border-left: 4px solid #ef4444; margin-bottom: 1rem;';
+                    errorDiv.innerHTML = `<p style="color: #991b1b;">Failed to generate ${subject} recommendations. Please try again.</p>`;
+                    resultsContainer.appendChild(errorDiv);
+                }
+            }
+
+            // All done - now generate downloadable report with AI
+            btn.disabled = false;
+            btn.textContent = `✅ Generated ${selectedSubjects.length} Recommendation${selectedSubjects.length > 1 ? 's' : ''}!`;
+
+            // Show progress bar for download preparation
+            showDownloadProgress();
+
+            // Generate downloadable report with AI recommendations
+            const success = await generateDownloadableAIReport();
+
+            // Hide progress bar
+            hideDownloadProgress();
+
+            // Update download button based on success
+            const downloadBtn = document.getElementById('downloadWithAIBtn');
+            if (success) {
+                downloadBtn.disabled = false;
+                downloadBtn.innerHTML = '👁️ View Report with AI Recommendations';
+                // Auto-open the report!
+                const viewUrl = aiReportDownloadUrl.replace('/download-ai/', '/view-ai/');
+                window.open(viewUrl, '_blank');
+            } else {
+                // Likely no basic report was generated - don't show scary error
+                downloadBtn.disabled = true;
+                downloadBtn.innerHTML = '⚠️ Generate Basic Report First';
+                downloadBtn.style.opacity = '0.6';
+            }
+
+            // Scroll to results
+            window.scrollTo({ top: document.getElementById('aiResults').offsetTop - 100, behavior: 'smooth' });
+        }
+
+        function showDownloadProgress() {
+            // Show the BIG progress card
+            const progressCard = document.getElementById('downloadProgressCard');
+
+            if (!progressCard) {
+                console.error('ERROR: downloadProgressCard element not found!');
+                return;
+            }
+
+            progressCard.style.display = 'block';
+
+            // Scroll to it so it's visible
+            progressCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+            // Disable download button
+            const downloadBtn = document.getElementById('downloadWithAIBtn');
+            downloadBtn.disabled = true;
+            downloadBtn.textContent = '⏳ Preparing...';
+
+            // Animate the progress
+            let progress = 0;
+            const progressBar = document.getElementById('mainProgressBar');
+            const progressText = document.getElementById('mainProgressText');
+            const progressPercent = document.getElementById('mainProgressPercent');
+
+            window.downloadProgressInterval = setInterval(() => {
+                progress += Math.random() * 12;
+                if (progress > 90) progress = 90; // Cap at 90% until actually done
+
+                progressBar.style.width = progress + '%';
+                progressPercent.textContent = Math.round(progress) + '%';
+
+                if (progress < 25) {
+                    progressText.textContent = 'Loading report data...';
+                } else if (progress < 50) {
+                    progressText.textContent = 'Adding AI recommendations...';
+                } else if (progress < 75) {
+                    progressText.textContent = 'Formatting document...';
+                } else if (progress < 90) {
+                    progressText.textContent = 'Finalizing...';
+                } else {
+                    progressText.textContent = 'Almost ready...';
+                }
+            }, 400);
+        }
+
+        function hideDownloadProgress() {
+            if (window.downloadProgressInterval) {
+                clearInterval(window.downloadProgressInterval);
+            }
+
+            // Complete the progress bar
+            const progressBar = document.getElementById('mainProgressBar');
+            const progressText = document.getElementById('mainProgressText');
+            const progressPercent = document.getElementById('mainProgressPercent');
+
+            if (progressBar && progressText) {
+                progressBar.style.width = '100%';
+                progressText.textContent = 'Complete!';
+                progressPercent.textContent = '100%';
+            }
+
+            // Hide the progress card after a moment
+            setTimeout(() => {
+                const progressCard = document.getElementById('downloadProgressCard');
+                if (progressCard) {
+                    progressCard.style.display = 'none';
+                }
+            }, 1500);
+        }
+
+        let aiReportDownloadUrl = null;
+
+        async function generateDownloadableAIReport() {
+            try {
+                // Get the file_id from the global variable (set when report is generated)
+                const fileId = window.currentFileId;
+
+                console.log('[DEBUG] generateDownloadableAIReport called');
+                console.log('[DEBUG] fileId:', fileId);
+                console.log('[DEBUG] allRecommendations:', allRecommendations);
+
+                if (!fileId) {
+                    console.error('No file_id found - cannot generate AI report. Make sure you generated a basic report first.');
+                    alert('ERROR: No basic report found!\n\nYou must generate a basic metabolic report FIRST before you can download with AI recommendations.\n\nSteps:\n1. Upload PDF and generate basic report\n2. Then add AI recommendations\n3. Then download combined report');
+                    return false;
+                }
+
+                if (Object.keys(allRecommendations).length === 0) {
+                    console.error('No AI recommendations found');
+                    return false;
+                }
+
+                console.log('[DEBUG] Calling /generate-with-ai...');
+
+                // Call backend to generate report with AI
+                const response = await fetch('/generate-with-ai', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        file_id: fileId,
+                        ai_recommendations: allRecommendations
+                    })
+                });
+
+                console.log('[DEBUG] Response status:', response.status);
+                const data = await response.json();
+                console.log('[DEBUG] Response data:', data);
+
+                if (data.success) {
+                    // Store the download URL globally
+                    aiReportDownloadUrl = data.download_url;
+                    console.log('[SUCCESS] AI report download URL stored:', aiReportDownloadUrl);
+                    return true;
+                } else {
+                    console.error('Failed to generate AI report:', data.error);
+                    alert('Failed to prepare download: ' + (data.error || 'Unknown error'));
+                    return false;
+                }
+            } catch (error) {
+                console.error('Error generating downloadable AI report:', error);
+                alert('Error preparing download: ' + error.message);
+                return false;
+            }
+        }
+
+        function downloadAIReport() {
+            console.log('[DEBUG] downloadAIReport clicked');
+            console.log('[DEBUG] aiReportDownloadUrl:', aiReportDownloadUrl);
+
+            if (!aiReportDownloadUrl) {
+                // If clicked too early, retry the generation
+                const downloadBtn = document.getElementById('downloadWithAIBtn');
+                downloadBtn.innerHTML = '⏳ Preparing Your Report...';
+                downloadBtn.disabled = true;
+
+                // Try generating again
+                showDownloadProgress();
+                generateDownloadableAIReport().then(success => {
+                    hideDownloadProgress();
+                    if (success) {
+                        downloadBtn.disabled = false;
+                        downloadBtn.innerHTML = '👁️ View Report with AI Recommendations';
+                        // OPEN report in new tab so user can SEE it!
+                        const viewUrl = aiReportDownloadUrl.replace('/download-ai/', '/view-ai/');
+                        window.open(viewUrl, '_blank');
+                    } else {
+                        downloadBtn.disabled = false;
+                        downloadBtn.innerHTML = '⚠️ Failed - Please Try Again';
+                    }
+                });
+                return;
+            }
+
+            // OPEN report in new tab instead of downloading
+            const viewUrl = aiReportDownloadUrl.replace('/download-ai/', '/view-ai/');
+            window.open(viewUrl, '_blank');
+        }
+
+        function viewBasicReport() {
+            // Open the basic report in a new tab
+            const viewUrl = window.basicReportUrl.replace('/download/', '/view/');
+            window.open(viewUrl, '_blank');
+        }
+
+        function addAnotherRecommendation() {
+            // Reset form
+            selectedSubjects = [];
+            selectedGoals = [];
+            allRecommendations = {};
+            document.querySelectorAll('.subject-choice-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.goal-choice-btn').forEach(btn => btn.classList.remove('selected'));
+            document.getElementById('aiResults').style.display = 'none';
+            document.getElementById('generateAIBtn').disabled = true;
+            document.getElementById('generateAIBtn').textContent = 'Generate AI Recommendations';
+            window.scrollTo({ top: document.getElementById('aiSection').offsetTop - 100, behavior: 'smooth' });
+        }
+
+        // Load user's reports
+        async function loadMyReports() {
+            try {
+                const response = await fetch('/api/my-reports');
+                const data = await response.json();
+
+                const reportsList = document.getElementById('reportsList');
+                const noReports = document.getElementById('noReports');
+
+                if (data.success && data.reports && data.reports.length > 0) {
+                    // Show reports list
+                    reportsList.style.display = 'block';
+                    noReports.style.display = 'none';
+
+                    // Build reports HTML
+                    let html = '<div style="display: grid; gap: 1rem;">';
+
+                    data.reports.forEach(report => {
+                        const date = new Date(report.created_at).toLocaleDateString('en-US', {
+                            month: 'short',
+                            day: 'numeric',
+                            year: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        });
+
+                        // Build action buttons HTML
+                        let buttonsHtml = '';
+
+                        // Only show View/Download if file_id exists
+                        if (report.file_id) {
+                            buttonsHtml += `
+                                <a href="/view/${report.file_id}" target="_blank" class="btn btn-success" style="text-decoration: none; padding: 0.5rem 1rem;">
+                                    👁️ View
+                                </a>
+                                <a href="/download/${report.file_id}" class="btn btn-secondary" style="text-decoration: none; background: #3b82f6; padding: 0.5rem 1rem;">
+                                    📥 Download
+                                </a>
+                            `;
+                        } else {
+                            // If no file_id, show a note that files are missing
+                            buttonsHtml += `
+                                <span style="color: #94a3b8; font-size: 0.85rem; margin-right: 0.5rem;">Files not found</span>
+                            `;
+                        }
+
+                        // Always show delete button
+                        buttonsHtml += `
+                            <button class="btn btn-secondary" onclick="deleteReport(${report.id})" style="background: #ef4444; border: none; padding: 0.5rem 1rem;">
+                                🗑️ Delete
+                            </button>
+                        `;
+
+                        html += `
+                            <div style="background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 1.5rem; display: flex; justify-content: space-between; align-items: center;">
+                                <div>
+                                    <h3 style="margin-bottom: 0.5rem; color: #1e293b;">
+                                        ${report.report_type ? report.report_type.charAt(0).toUpperCase() + report.report_type.slice(1) : 'Metabolic'} Report
+                                    </h3>
+                                    <p style="color: #64748b; font-size: 0.9rem; margin-bottom: 0.5rem;">
+                                        Created: ${date}
+                                    </p>
+                                    ${report.chronological_age ? `<p style="color: #64748b; font-size: 0.9rem;">Age: ${report.chronological_age} years old (Bio Age: ${report.biological_age})</p>` : ''}
+                                </div>
+                                <div style="display: flex; gap: 0.75rem; align-items: center;">
+                                    ${buttonsHtml}
+                                </div>
+                            </div>
+                        `;
+                    });
+
+                    html += '</div>';
+                    reportsList.innerHTML = html;
+                } else {
+                    // No reports
+                    reportsList.style.display = 'none';
+                    noReports.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Error loading reports:', error);
+                alert('Failed to load reports: ' + error.message);
+            }
+        }
+
+        // Delete a report
+        async function deleteReport(reportId) {
+            if (!confirm('Are you sure you want to delete this report? This action cannot be undone.')) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/delete-report/${reportId}`, {
+                    method: 'DELETE'
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alert('Report deleted successfully!');
+                    // Reload the reports list
+                    loadMyReports();
+                } else {
+                    alert('Failed to delete report: ' + (data.error || 'Unknown error'));
+                }
+            } catch (error) {
+                console.error('Error deleting report:', error);
+                alert('Failed to delete report: ' + error.message);
+            }
+        }
+
+        // Load reports when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            loadMyReports();
+        });
+    </script>
 </body>
 </html>
