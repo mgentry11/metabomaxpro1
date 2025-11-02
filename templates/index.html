@@ -339,8 +339,9 @@ Example:
 
     <script src="{{ url_for('static', filename='js/app.js') }}"></script>
     <script>
-        let selectedSubject = null;
+        let selectedSubjects = [];
         let selectedGoals = [];
+        let allRecommendations = {};
 
         function showAISection() {
             document.getElementById('downloadSection').style.display = 'none';
@@ -355,16 +356,27 @@ Example:
         }
 
         function selectSubject(subject) {
-            selectedSubject = subject;
+            const btn = event.target;
 
-            // Update button styles
-            document.querySelectorAll('.subject-choice-btn').forEach(btn => {
+            // Toggle subject selection
+            if (selectedSubjects.includes(subject)) {
+                // Deselect
+                selectedSubjects = selectedSubjects.filter(s => s !== subject);
                 btn.classList.remove('active');
-            });
-            event.target.classList.add('active');
+            } else {
+                // Select
+                selectedSubjects.push(subject);
+                btn.classList.add('active');
+            }
 
-            // Enable generate button
-            document.getElementById('generateAIBtn').disabled = false;
+            // Enable generate button if at least one subject is selected
+            document.getElementById('generateAIBtn').disabled = selectedSubjects.length === 0;
+
+            // Update button text to show count
+            const btnText = selectedSubjects.length > 0
+                ? `Generate AI Recommendations (${selectedSubjects.length} subject${selectedSubjects.length > 1 ? 's' : ''})`
+                : 'Generate AI Recommendations';
+            document.getElementById('generateAIBtn').textContent = btnText;
         }
 
         function toggleGoal(btn, goal) {
@@ -378,80 +390,104 @@ Example:
         }
 
         async function generateAIRecommendations() {
-            if (!selectedSubject) {
-                alert('Please select a subject first');
+            if (selectedSubjects.length === 0) {
+                alert('Please select at least one subject');
                 return;
             }
 
             const btn = document.getElementById('generateAIBtn');
             btn.disabled = true;
-            btn.textContent = 'Generating AI Recommendations...';
 
-            try {
-                const response = await fetch('/api/ai-recommend', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        subject: selectedSubject,
-                        goals: selectedGoals,
-                        custom_context: ''
-                    })
-                });
+            const resultsContainer = document.getElementById('aiResultsContent');
+            resultsContainer.innerHTML = '';
+            document.getElementById('aiResults').style.display = 'block';
 
-                const data = await response.json();
+            // Generate recommendations for each selected subject
+            for (let i = 0; i < selectedSubjects.length; i++) {
+                const subject = selectedSubjects[i];
+                btn.textContent = `Generating ${subject}... (${i + 1}/${selectedSubjects.length})`;
 
-                // Check if there's an error (either error string or error: true flag)
-                if (data.error === true || (typeof data.error === 'string' && data.error.length > 0)) {
-                    // Show user-friendly error message
-                    const errorMsg = typeof data.error === 'string' ? data.error : data.recommendations || 'An error occurred';
+                try {
+                    const response = await fetch('/api/ai-recommend', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            subject: subject,
+                            goals: selectedGoals,
+                            custom_context: ''
+                        })
+                    });
 
-                    // Display error in a more visible way
-                    document.getElementById('aiResultsContent').innerHTML = `
-                        <div style="background: #fef2f2; border-left: 4px solid #ef4444; padding: 1.5rem; border-radius: 8px; margin: 1rem 0;">
-                            <h3 style="color: #991b1b; margin-bottom: 0.5rem;">⚠️ AI Recommendations Unavailable</h3>
-                            <p style="color: #991b1b; line-height: 1.6;">${errorMsg}</p>
-                            <div style="margin-top: 1rem; padding-top: 1rem; border-top: 2px solid #fca5a5;">
-                                <p style="color: #991b1b; font-weight: 600; margin-bottom: 0.5rem;">To enable AI recommendations:</p>
-                                <ol style="margin-left: 1.5rem; line-height: 1.8; color: #991b1b;">
-                                    <li>Add your <strong>OPENAI_API_KEY</strong> environment variable on Render</li>
-                                    <li>Get an API key from <a href="https://platform.openai.com/api-keys" target="_blank" style="color: #dc2626; text-decoration: underline;">OpenAI Platform</a></li>
-                                    <li>Restart your Render service after adding the key</li>
-                                </ol>
+                    const data = await response.json();
+
+                    // Check if there's an error (either error string or error: true flag)
+                    if (data.error === true || (typeof data.error === 'string' && data.error.length > 0)) {
+                        // Show user-friendly error message
+                        const errorMsg = typeof data.error === 'string' ? data.error : data.recommendations || 'An error occurred';
+
+                        // Display error in a more visible way
+                        resultsContainer.innerHTML = `
+                            <div style="background: #fef2f2; border-left: 4px solid #ef4444; padding: 1.5rem; border-radius: 8px; margin: 1rem 0;">
+                                <h3 style="color: #991b1b; margin-bottom: 0.5rem;">⚠️ AI Recommendations Unavailable</h3>
+                                <p style="color: #991b1b; line-height: 1.6;">${errorMsg}</p>
+                                <div style="margin-top: 1rem; padding-top: 1rem; border-top: 2px solid #fca5a5;">
+                                    <p style="color: #991b1b; font-weight: 600; margin-bottom: 0.5rem;">To enable AI recommendations:</p>
+                                    <ol style="margin-left: 1.5rem; line-height: 1.8; color: #991b1b;">
+                                        <li>Add your <strong>OPENAI_API_KEY</strong> environment variable on Render</li>
+                                        <li>Get an API key from <a href="https://platform.openai.com/api-keys" target="_blank" style="color: #dc2626; text-decoration: underline;">OpenAI Platform</a></li>
+                                        <li>Restart your Render service after adding the key</li>
+                                    </ol>
+                                </div>
                             </div>
+                        `;
+                        btn.disabled = false;
+                        btn.textContent = 'Generate AI Recommendations';
+                        return;
+                    }
+
+                    // Store recommendations
+                    allRecommendations[subject] = data.recommendations;
+
+                    // Add to results display
+                    const subjectDiv = document.createElement('div');
+                    subjectDiv.style.cssText = 'background: #f8fafc; padding: 2rem; border-radius: 12px; border-left: 4px solid #10b981; margin-bottom: 2rem;';
+                    subjectDiv.innerHTML = `
+                        <h3 style="color: #10b981; font-size: 1.5rem; margin-bottom: 1rem; text-transform: capitalize;">
+                            ${subject} Recommendations
+                        </h3>
+                        <div style="white-space: pre-wrap; line-height: 1.8; color: #334155;">
+                            ${data.recommendations}
                         </div>
                     `;
-                    document.getElementById('aiResults').style.display = 'block';
-                    btn.disabled = false;
-                    btn.textContent = 'Generate AI Recommendations';
-                    return;
+                    resultsContainer.appendChild(subjectDiv);
+
+                } catch (error) {
+                    console.error(`Error generating ${subject} recommendations:`, error);
+                    const errorDiv = document.createElement('div');
+                    errorDiv.style.cssText = 'background: #fef2f2; padding: 1rem; border-radius: 8px; border-left: 4px solid #ef4444; margin-bottom: 1rem;';
+                    errorDiv.innerHTML = `<p style="color: #991b1b;">Failed to generate ${subject} recommendations. Please try again.</p>`;
+                    resultsContainer.appendChild(errorDiv);
                 }
-
-                // Show results
-                document.getElementById('aiResultsContent').textContent = data.recommendations;
-                document.getElementById('aiResults').style.display = 'block';
-
-                // TODO: Update download link to include AI recommendations
-                // For now, just show success
-
-                btn.disabled = false;
-                btn.textContent = 'Generate AI Recommendations';
-
-            } catch (error) {
-                console.error('Error:', error);
-                alert('Failed to generate AI recommendations. Please try again.');
-                btn.disabled = false;
-                btn.textContent = 'Generate AI Recommendations';
             }
+
+            // All done
+            btn.disabled = false;
+            btn.textContent = `✅ Generated ${selectedSubjects.length} Recommendation${selectedSubjects.length > 1 ? 's' : ''}!`;
+
+            // Scroll to results
+            window.scrollTo({ top: document.getElementById('aiResults').offsetTop - 100, behavior: 'smooth' });
         }
 
         function addAnotherRecommendation() {
             // Reset form
-            selectedSubject = null;
+            selectedSubjects = [];
             selectedGoals = [];
+            allRecommendations = {};
             document.querySelectorAll('.subject-choice-btn').forEach(btn => btn.classList.remove('active'));
             document.querySelectorAll('.goal-choice-btn').forEach(btn => btn.classList.remove('selected'));
             document.getElementById('aiResults').style.display = 'none';
             document.getElementById('generateAIBtn').disabled = true;
+            document.getElementById('generateAIBtn').textContent = 'Generate AI Recommendations';
             window.scrollTo({ top: document.getElementById('aiSection').offsetTop - 100, behavior: 'smooth' });
         }
     </script>
