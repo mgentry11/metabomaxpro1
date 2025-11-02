@@ -400,8 +400,27 @@ Example:
 
                 const data = await response.json();
 
-                if (data.error) {
-                    alert('Error: ' + data.error);
+                // Check if there's an error (either error string or error: true flag)
+                if (data.error === true || (typeof data.error === 'string' && data.error.length > 0)) {
+                    // Show user-friendly error message
+                    const errorMsg = typeof data.error === 'string' ? data.error : data.recommendations || 'An error occurred';
+
+                    // Display error in a more visible way
+                    document.getElementById('aiResultsContent').innerHTML = `
+                        <div style="background: #fef2f2; border-left: 4px solid #ef4444; padding: 1.5rem; border-radius: 8px; margin: 1rem 0;">
+                            <h3 style="color: #991b1b; margin-bottom: 0.5rem;">⚠️ AI Recommendations Unavailable</h3>
+                            <p style="color: #991b1b; line-height: 1.6;">${errorMsg}</p>
+                            <div style="margin-top: 1rem; padding-top: 1rem; border-top: 2px solid #fca5a5;">
+                                <p style="color: #991b1b; font-weight: 600; margin-bottom: 0.5rem;">To enable AI recommendations:</p>
+                                <ol style="margin-left: 1.5rem; line-height: 1.8; color: #991b1b;">
+                                    <li>Add your <strong>OPENAI_API_KEY</strong> environment variable on Render</li>
+                                    <li>Get an API key from <a href="https://platform.openai.com/api-keys" target="_blank" style="color: #dc2626; text-decoration: underline;">OpenAI Platform</a></li>
+                                    <li>Restart your Render service after adding the key</li>
+                                </ol>
+                            </div>
+                        </div>
+                    `;
+                    document.getElementById('aiResults').style.display = 'block';
                     btn.disabled = false;
                     btn.textContent = 'Generate AI Recommendations';
                     return;

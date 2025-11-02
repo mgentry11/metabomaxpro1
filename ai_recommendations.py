@@ -170,7 +170,14 @@ class UniversalRecommendationAI:
         if not self.client:
             return {
                 'subject': subject,
-                'recommendations': 'AI recommendations are currently unavailable. Please contact support to enable this feature.',
+                'recommendations': '''AI recommendations are currently unavailable because the OpenAI API key is not configured.
+
+To enable AI recommendations:
+1. Add the OPENAI_API_KEY environment variable to your Render service
+2. Get an API key from https://platform.openai.com/api-keys
+3. Restart your service after adding the key
+
+Once configured, you'll be able to generate unlimited personalized recommendations for peptides, supplements, training, nutrition, and more!''',
                 'timestamp': datetime.now().isoformat(),
                 'metabolic_summary': self._summarize_metabolic_data(metabolic_data),
                 'error': True
