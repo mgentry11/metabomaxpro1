@@ -784,12 +784,20 @@ def generate_report():
             'html_storage_path': report_path
         }
 
+        print(f"[SAVE REPORT] Saving report with data: {report_data.keys()}")
+        print(f"[SAVE REPORT] file_id={file_id}, user_id={user_id}")
+
         report_response = http_session.post(
             f"{SUPABASE_REST_URL}/reports",
             headers=get_supabase_headers(),
             json=report_data
         )
+
+        print(f"[SAVE REPORT] Response status: {report_response.status_code}")
+        print(f"[SAVE REPORT] Response: {report_response.text[:500]}")
+
         db_report_id = report_response.json()[0]['id'] if report_response.ok and report_response.json() else None
+        print(f"[SAVE REPORT] Saved report with DB ID: {db_report_id}")
 
         # Update subscription reports_used counter
         subscription_response = http_session.get(
@@ -974,21 +982,31 @@ def view_ai_report(file_id):
 def get_my_reports():
     """Get all reports for the current user"""
     user_id = session['user']['id']
+    print(f"[MY REPORTS] Fetching reports for user_id: {user_id}")
 
     try:
         # Fetch reports from Supabase
-        response = http_session.get(
-            f"{SUPABASE_REST_URL}/reports?user_id=eq.{user_id}&order=created_at.desc&select=id,created_at,report_type,chronological_age,biological_age,file_id",
-            headers=get_supabase_headers()
-        )
+        url = f"{SUPABASE_REST_URL}/reports?user_id=eq.{user_id}&order=created_at.desc&select=id,created_at,report_type,chronological_age,biological_age,file_id"
+        print(f"[MY REPORTS] Request URL: {url}")
+
+        response = http_session.get(url, headers=get_supabase_headers())
+
+        print(f"[MY REPORTS] Response status: {response.status_code}")
+        print(f"[MY REPORTS] Response body: {response.text[:500]}")
 
         if response.ok:
             reports = response.json()
+            print(f"[MY REPORTS] Found {len(reports)} reports")
+            for report in reports:
+                print(f"[MY REPORTS] Report ID: {report.get('id')}, file_id: {report.get('file_id')}, created: {report.get('created_at')}")
             return jsonify({'success': True, 'reports': reports})
         else:
+            print(f"[MY REPORTS] ERROR - Status: {response.status_code}, Body: {response.text}")
             return jsonify({'success': False, 'error': 'Failed to fetch reports'}), 500
     except Exception as e:
-        print(f"Error fetching reports: {str(e)}")
+        print(f"[MY REPORTS] EXCEPTION: {str(e)}")
+        import traceback
+        traceback.print_exc()
         return jsonify({'success': False, 'error': str(e)}), 500
 
 @app.route('/api/delete-report/<int:report_id>', methods=['DELETE'])
