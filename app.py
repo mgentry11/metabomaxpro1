@@ -1363,25 +1363,42 @@ def ai_examples():
 
 @app.route('/api/check-ai-status')
 def check_ai_status():
-    """Check if OpenAI API key is configured"""
-    api_key = os.getenv('OPENAI_API_KEY')
+    """Check if AI API keys are configured"""
+    openai_key = os.getenv('OPENAI_API_KEY')
+    anthropic_key = os.getenv('ANTHROPIC_API_KEY')
 
-    # Test OpenAI connectivity
-    connection_test = "not tested"
-    if api_key:
+    # Determine which provider will be used
+    active_provider = None
+    if anthropic_key:
+        active_provider = 'claude'
+    elif openai_key:
+        active_provider = 'openai'
+
+    # Test OpenAI connectivity if that's what will be used
+    openai_test = "not tested"
+    if openai_key:
         try:
             import socket
             socket.setdefaulttimeout(5)
             socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect(("api.openai.com", 443))
-            connection_test = "success"
+            openai_test = "success"
         except Exception as e:
-            connection_test = f"failed: {str(e)}"
+            openai_test = f"failed: {str(e)}"
 
     return jsonify({
-        'api_key_configured': bool(api_key),
-        'api_key_length': len(api_key) if api_key else 0,
-        'api_key_prefix': api_key[:7] + '...' if api_key else None,
-        'openai_connectivity': connection_test
+        'ai_configured': bool(anthropic_key or openai_key),
+        'active_provider': active_provider,
+        'anthropic_api_key': {
+            'configured': bool(anthropic_key),
+            'length': len(anthropic_key) if anthropic_key else 0,
+            'prefix': anthropic_key[:10] + '...' if anthropic_key else None
+        },
+        'openai_api_key': {
+            'configured': bool(openai_key),
+            'length': len(openai_key) if openai_key else 0,
+            'prefix': openai_key[:7] + '...' if openai_key else None
+        },
+        'openai_connectivity': openai_test
     })
 
 @app.route('/api/ai-recommend', methods=['POST'])
