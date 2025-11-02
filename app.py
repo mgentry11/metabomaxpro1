@@ -257,7 +257,12 @@ def privacy():
 
 @app.route('/sample-report')
 def sample_report():
-    """Sample report page with example data"""
+    """Complete sample report page with charts and graphs"""
+    return render_template('sample_report_full.html')
+
+@app.route('/sample-report-simple')
+def sample_report_simple():
+    """Simple sample report page with example data"""
     return render_template('sample_report.html')
 
 @app.route('/data-guide')
