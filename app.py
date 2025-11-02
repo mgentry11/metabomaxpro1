@@ -994,10 +994,16 @@ def delete_report(report_id):
             headers=get_supabase_headers()
         )
 
-        if not check_response.ok or not check_response.json():
+        if not check_response.ok:
+            print(f"Check failed with status {check_response.status_code}: {check_response.text}")
             return jsonify({'success': False, 'error': 'Report not found or unauthorized'}), 404
 
-        report_data = check_response.json()[0]
+        reports = check_response.json()
+        if not reports or len(reports) == 0:
+            print(f"No report found with id={report_id} for user_id={user_id}")
+            return jsonify({'success': False, 'error': 'Report not found or unauthorized'}), 404
+
+        report_data = reports[0]
 
         # Delete the HTML files from disk if they exist
         file_id_pattern = report_data.get('html_storage_path', '')
@@ -1017,15 +1023,19 @@ def delete_report(report_id):
                     os.remove(ai_report)
 
         # Delete from database
+        delete_headers = get_supabase_headers()
+        delete_headers['Prefer'] = 'return=minimal'  # Required for DELETE operations
+
         delete_response = http_session.delete(
             f"{SUPABASE_REST_URL}/reports?id=eq.{report_id}",
-            headers=get_supabase_headers()
+            headers=delete_headers
         )
 
-        if delete_response.ok:
+        if delete_response.ok or delete_response.status_code == 204:
             return jsonify({'success': True})
         else:
-            return jsonify({'success': False, 'error': 'Failed to delete report'}), 500
+            print(f"Delete failed with status {delete_response.status_code}: {delete_response.text}")
+            return jsonify({'success': False, 'error': f'Failed to delete report: {delete_response.text}'}), 500
     except Exception as e:
         print(f"Error deleting report: {str(e)}")
         return jsonify({'success': False, 'error': str(e)}), 500
