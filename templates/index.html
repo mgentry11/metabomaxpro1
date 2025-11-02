@@ -50,6 +50,24 @@
             }
         </style>
 
+        <!-- My Reports Section -->
+        <div class="card" id="myReportsSection" style="margin-bottom: 2rem;">
+            <h2>📋 My Reports</h2>
+            <p style="color: #64748b; margin-bottom: 1.5rem;">View and manage your previous metabolic reports</p>
+
+            <div id="reportsList" style="display: none;">
+                <!-- Reports will be loaded here -->
+            </div>
+
+            <div id="noReports" style="text-align: center; padding: 2rem; color: #94a3b8;">
+                <p>You haven't generated any reports yet. Upload a PDF or enter data manually to create your first report!</p>
+            </div>
+
+            <button class="btn btn-secondary" onclick="loadMyReports()" style="margin-top: 1rem;">
+                🔄 Refresh Reports List
+            </button>
+        </div>
+
         <!-- Input Method Selection -->
         <div class="card" id="uploadSection">
             <div class="tabs">
@@ -699,6 +717,96 @@ Example:
             document.getElementById('generateAIBtn').textContent = 'Generate AI Recommendations';
             window.scrollTo({ top: document.getElementById('aiSection').offsetTop - 100, behavior: 'smooth' });
         }
+
+        // Load user's reports
+        async function loadMyReports() {
+            try {
+                const response = await fetch('/api/my-reports');
+                const data = await response.json();
+
+                const reportsList = document.getElementById('reportsList');
+                const noReports = document.getElementById('noReports');
+
+                if (data.success && data.reports && data.reports.length > 0) {
+                    // Show reports list
+                    reportsList.style.display = 'block';
+                    noReports.style.display = 'none';
+
+                    // Build reports HTML
+                    let html = '<div style="display: grid; gap: 1rem;">';
+
+                    data.reports.forEach(report => {
+                        const date = new Date(report.created_at).toLocaleDateString('en-US', {
+                            month: 'short',
+                            day: 'numeric',
+                            year: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        });
+
+                        html += `
+                            <div style="background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 1.5rem; display: flex; justify-content: space-between; align-items: center;">
+                                <div>
+                                    <h3 style="margin-bottom: 0.5rem; color: #1e293b;">
+                                        ${report.report_type ? report.report_type.charAt(0).toUpperCase() + report.report_type.slice(1) : 'Metabolic'} Report
+                                    </h3>
+                                    <p style="color: #64748b; font-size: 0.9rem; margin-bottom: 0.5rem;">
+                                        Created: ${date}
+                                    </p>
+                                    ${report.chronological_age ? `<p style="color: #64748b; font-size: 0.9rem;">Age: ${report.chronological_age} years old (Bio Age: ${report.biological_age})</p>` : ''}
+                                </div>
+                                <div style="display: flex; gap: 0.75rem;">
+                                    <button class="btn btn-secondary" onclick="deleteReport(${report.id})" style="background: #ef4444; border: none; padding: 0.5rem 1rem;">
+                                        🗑️ Delete
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                    });
+
+                    html += '</div>';
+                    reportsList.innerHTML = html;
+                } else {
+                    // No reports
+                    reportsList.style.display = 'none';
+                    noReports.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Error loading reports:', error);
+                alert('Failed to load reports: ' + error.message);
+            }
+        }
+
+        // Delete a report
+        async function deleteReport(reportId) {
+            if (!confirm('Are you sure you want to delete this report? This action cannot be undone.')) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/delete-report/${reportId}`, {
+                    method: 'DELETE'
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alert('Report deleted successfully!');
+                    // Reload the reports list
+                    loadMyReports();
+                } else {
+                    alert('Failed to delete report: ' + (data.error || 'Unknown error'));
+                }
+            } catch (error) {
+                console.error('Error deleting report:', error);
+                alert('Failed to delete report: ' + error.message);
+            }
+        }
+
+        // Load reports when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            loadMyReports();
+        });
     </script>
 </body>
 </html>

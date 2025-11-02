@@ -959,6 +959,77 @@ def view_ai_report(file_id):
 
     return report_with_download
 
+@app.route('/api/my-reports', methods=['GET'])
+@login_required
+def get_my_reports():
+    """Get all reports for the current user"""
+    user_id = session['user']['id']
+
+    try:
+        # Fetch reports from Supabase
+        response = http_session.get(
+            f"{SUPABASE_REST_URL}/reports?user_id=eq.{user_id}&order=created_at.desc&select=id,created_at,report_type,chronological_age,biological_age",
+            headers=get_supabase_headers()
+        )
+
+        if response.ok:
+            reports = response.json()
+            return jsonify({'success': True, 'reports': reports})
+        else:
+            return jsonify({'success': False, 'error': 'Failed to fetch reports'}), 500
+    except Exception as e:
+        print(f"Error fetching reports: {str(e)}")
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+@app.route('/api/delete-report/<int:report_id>', methods=['DELETE'])
+@login_required
+def delete_report(report_id):
+    """Delete a specific report"""
+    user_id = session['user']['id']
+
+    try:
+        # First, verify the report belongs to this user
+        check_response = http_session.get(
+            f"{SUPABASE_REST_URL}/reports?id=eq.{report_id}&user_id=eq.{user_id}&select=id,html_storage_path",
+            headers=get_supabase_headers()
+        )
+
+        if not check_response.ok or not check_response.json():
+            return jsonify({'success': False, 'error': 'Report not found or unauthorized'}), 404
+
+        report_data = check_response.json()[0]
+
+        # Delete the HTML files from disk if they exist
+        file_id_pattern = report_data.get('html_storage_path', '')
+        if file_id_pattern:
+            # Extract file_id from path
+            import re
+            match = re.search(r'/([a-f0-9\-]+)_report\.html', file_id_pattern)
+            if match:
+                file_id = match.group(1)
+                basic_report = os.path.join(app.config['REPORTS_FOLDER'], f"{file_id}_report.html")
+                ai_report = os.path.join(app.config['REPORTS_FOLDER'], f"{file_id}_report_with_ai.html")
+
+                # Delete files if they exist
+                if os.path.exists(basic_report):
+                    os.remove(basic_report)
+                if os.path.exists(ai_report):
+                    os.remove(ai_report)
+
+        # Delete from database
+        delete_response = http_session.delete(
+            f"{SUPABASE_REST_URL}/reports?id=eq.{report_id}",
+            headers=get_supabase_headers()
+        )
+
+        if delete_response.ok:
+            return jsonify({'success': True})
+        else:
+            return jsonify({'success': False, 'error': 'Failed to delete report'}), 500
+    except Exception as e:
+        print(f"Error deleting report: {str(e)}")
+        return jsonify({'success': False, 'error': str(e)}), 500
+
 def generate_html_report(extracted_data, custom_data):
     """Generate HTML report from extracted and custom data"""
     patient_name = extracted_data.get('patient_info', {}).get('name', 'Patient')
