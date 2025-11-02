@@ -604,6 +604,7 @@ Example:
 
                 if (!fileId) {
                     console.error('No file_id found - cannot generate AI report. Make sure you generated a basic report first.');
+                    alert('ERROR: No basic report found!\n\nYou must generate a basic metabolic report FIRST before you can download with AI recommendations.\n\nSteps:\n1. Upload PDF and generate basic report\n2. Then add AI recommendations\n3. Then download combined report');
                     return false;
                 }
 
