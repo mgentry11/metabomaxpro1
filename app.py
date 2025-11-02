@@ -1361,6 +1361,16 @@ def ai_examples():
     """AI recommendations examples and tutorial page"""
     return render_template('ai_examples.html')
 
+@app.route('/api/check-ai-status')
+def check_ai_status():
+    """Check if OpenAI API key is configured"""
+    api_key = os.getenv('OPENAI_API_KEY')
+    return jsonify({
+        'api_key_configured': bool(api_key),
+        'api_key_length': len(api_key) if api_key else 0,
+        'api_key_prefix': api_key[:7] + '...' if api_key else None
+    })
+
 @app.route('/api/ai-recommend', methods=['POST'])
 @login_required
 def generate_ai_recommendation():
