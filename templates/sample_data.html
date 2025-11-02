@@ -41,10 +41,8 @@
         }
 
         .content-wrapper {
-            display: grid;
-            grid-template-columns: 1fr 400px;
-            gap: 2rem;
-            margin-bottom: 2rem;
+            max-width: 1000px;
+            margin: 0 auto 2rem;
         }
 
         .pdf-viewer {
@@ -52,6 +50,7 @@
             border-radius: 15px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             overflow: hidden;
+            position: relative;
         }
 
         .pdf-viewer iframe {
@@ -60,9 +59,23 @@
             border: none;
         }
 
+        /* Blur overlays to hide PNOE branding in PDF */
+        .pdf-viewer::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 80px;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0) 100%);
+            backdrop-filter: blur(8px);
+            z-index: 10;
+            pointer-events: none;
+        }
+
         .data-highlights {
-            display: flex;
-            flex-direction: column;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 1.5rem;
         }
 
@@ -240,11 +253,6 @@
         </div>
 
         <div class="content-wrapper">
-            <!-- PDF Viewer -->
-            <div class="pdf-viewer">
-                <iframe src="/static/samples/Sample_Metabolic_Test_Data.pdf" title="Sample PNOE Test Data PDF"></iframe>
-            </div>
-
             <!-- Data Highlights -->
             <div class="data-highlights">
                 <!-- Subject Information -->
