@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sample PNOE Test Data - MetaboMax Pro</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #1e293b;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.95;
+        }
+
+        .content-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .pdf-viewer {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .pdf-viewer iframe {
+            width: 100%;
+            height: 900px;
+            border: none;
+        }
+
+        .data-highlights {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .highlight-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .highlight-card h3 {
+            color: #667eea;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .highlight-card .icon {
+            font-size: 1.5rem;
+        }
+
+        .data-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .data-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .data-label {
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-bottom: 0.25rem;
+        }
+
+        .data-value {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .info-box {
+            background: #eff6ff;
+            border-left: 4px solid #667eea;
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 8px;
+        }
+
+        .info-box p {
+            font-size: 0.9rem;
+            color: #475569;
+            line-height: 1.6;
+        }
+
+        .chart-list {
+            list-style: none;
+            margin-top: 1rem;
+        }
+
+        .chart-list li {
+            padding: 0.5rem 0;
+            color: #475569;
+            font-size: 0.95rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .chart-list li:before {
+            content: "📊 ";
+            margin-right: 0.5rem;
+        }
+
+        .chart-list li:last-child {
+            border-bottom: none;
+        }
+
+        .cta-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 2.5rem;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            margin-top: 2rem;
+        }
+
+        .cta-section h2 {
+            color: #1e293b;
+            margin-bottom: 1rem;
+        }
+
+        .cta-section p {
+            color: #64748b;
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            margin: 0.5rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .btn-secondary:hover {
+            background: #f8fafc;
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .back-link a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.1rem;
+        }
+
+        .back-link a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 1024px) {
+            .content-wrapper {
+                grid-template-columns: 1fr;
+            }
+
+            .data-highlights {
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                display: grid;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .data-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 Sample PNOE Metabolic Test Data</h1>
+            <p>This is exactly the type of data you upload to generate your comprehensive report</p>
+        </div>
+
+        <div class="content-wrapper">
+            <!-- PDF Viewer -->
+            <div class="pdf-viewer">
+                <iframe src="/static/samples/Sample_Metabolic_Test_Data.pdf" title="Sample PNOE Test Data PDF"></iframe>
+            </div>
+
+            <!-- Data Highlights -->
+            <div class="data-highlights">
+                <!-- Subject Information -->
+                <div class="highlight-card">
+                    <h3><span class="icon">👤</span> Subject Information</h3>
+                    <div class="data-grid">
+                        <div class="data-item">
+                            <div class="data-label">Name</div>
+                            <div class="data-value">Mark Gentry</div>
+                        </div>
+                        <div class="data-item">
+                            <div class="data-label">Gender</div>
+                            <div class="data-value">Male (63)</div>
+                        </div>
+                        <div class="data-item">
+                            <div class="data-label">Weight</div>
+                            <div class="data-value">71 kg</div>
+                        </div>
+                        <div class="data-item">
+                            <div class="data-label">Height</div>
+                            <div class="data-value">188 cm</div>
+                        </div>
+                        <div class="data-item">
+                            <div class="data-label">Exercise Frequency</div>
+                            <div class="data-value">3x/week</div>
+                        </div>
+                        <div class="data-item">
+                            <div class="data-label">Goal</div>
+                            <div class="data-value">Strength</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Test Details -->
+                <div class="highlight-card">
+                    <h3><span class="icon">🔬</span> Test Details</h3>
+                    <div class="data-grid">
+                        <div class="data-item">
+                            <div class="data-label">Test Type</div>
+                            <div class="data-value">RMR</div>
+                        </div>
+                        <div class="data-item">
+                            <div class="data-label">Date</div>
+                            <div class="data-value">09/25/2025</div>
+                        </div>
+                        <div class="data-item">
+                            <div class="data-label">Duration</div>
+                            <div class="data-value">12 min</div>
+                        </div>
+                        <div class="data-item">
+                            <div class="data-label">Breaths</div>
+                            <div class="data-value">58</div>
+                        </div>
+                        <div class="data-item">
+                            <div class="data-label">Device</div>
+                            <div class="data-value">PNOE 2516-338</div>
+                        </div>
+                        <div class="data-item">
+                            <div class="data-label">Protocol</div>
+                            <div class="data-value">Grow - RMR</div>
+                        </div>
+                    </div>
+                    <div class="info-box">
+                        <p><strong>Note:</strong> This is a Resting Metabolic Rate (RMR) test, which measures your metabolism at rest to determine daily calorie needs and metabolic efficiency.</p>
+                    </div>
+                </div>
+
+                <!-- Charts Included -->
+                <div class="highlight-card">
+                    <h3><span class="icon">📈</span> Charts & Graphs</h3>
+                    <p style="color: #64748b; margin-bottom: 0.5rem;">This PNOE report includes:</p>
+                    <ul class="chart-list">
+                        <li>VO2 & VCO2 (Oxygen & CO2)</li>
+                        <li>Heart Rate Over Time</li>
+                        <li>RER (Respiratory Exchange Ratio)</li>
+                        <li>VE/VO2 & VE/VCO2 Ventilatory Efficiency</li>
+                        <li>Fat vs Carb Utilization</li>
+                        <li>Total Calories & Fat Oxidation</li>
+                        <li>Substrate Breakdown (CHO/FAT)</li>
+                        <li>Multiple Correlation Charts</li>
+                    </ul>
+                    <div class="info-box">
+                        <p>Our system analyzes all these data points to generate your personalized metabolic report with training zones, nutrition recommendations, and biological age.</p>
+                    </div>
+                </div>
+
+                <!-- Download CTA -->
+                <div class="highlight-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                    <h3 style="color: white;"><span class="icon">💾</span> Download Sample</h3>
+                    <p style="color: rgba(255,255,255,0.9); margin-bottom: 1rem;">Get the PDF file to see the exact format we accept from PNOE, COSMED, Korr, or any VO2 Max device.</p>
+                    <a href="/static/samples/Sample_Metabolic_Test_Data.pdf" download class="btn btn-secondary" style="width: 100%; text-align: center;">Download PDF Sample</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- CTA Section -->
+        <div class="cta-section">
+            <h2>Ready to Generate Your Own Report?</h2>
+            <p>Upload your PNOE or VO2 Max test data and get a comprehensive metabolic analysis in minutes</p>
+            <div>
+                <a href="{{ url_for('register') }}" class="btn">Create Your Report Now</a>
+                <a href="/sample-report" class="btn btn-secondary">View Sample Report</a>
+                <a href="{{ url_for('pricing') }}" class="btn btn-secondary">See Pricing</a>
+            </div>
+        </div>
+
+        <div class="back-link">
+            <a href="{{ url_for('landing') }}">← Back to Home</a>
+        </div>
+    </div>
+</body>
+</html>

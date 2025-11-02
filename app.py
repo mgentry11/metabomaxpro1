@@ -265,6 +265,11 @@ def data_guide():
     """Data input guide page"""
     return render_template('data_guide.html')
 
+@app.route('/sample-data')
+def sample_data():
+    """Visual display of sample PNOE metabolic test data"""
+    return render_template('sample_data.html')
+
 @app.route('/create-checkout-session', methods=['POST'])
 @login_required
 def create_checkout_session():
