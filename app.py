@@ -805,6 +805,69 @@ def generate_report():
         'download_url': f'/download/{file_id}'
     })
 
+@app.route('/generate-with-ai', methods=['POST'])
+@login_required
+def generate_report_with_ai():
+    """Generate report with AI recommendations appended"""
+    data = request.json
+    file_id = data.get('file_id')
+    ai_recommendations = data.get('ai_recommendations', {})  # {subject: recommendation_text}
+
+    if not file_id:
+        return jsonify({'error': 'No file ID provided'}), 400
+
+    # Get the basic report first
+    basic_report_path = os.path.join(app.config['REPORTS_FOLDER'], f"{file_id}_report.html")
+
+    if not os.path.exists(basic_report_path):
+        return jsonify({'error': 'Basic report not found. Please generate basic report first.'}), 404
+
+    # Read the basic report
+    with open(basic_report_path, 'r') as f:
+        report_html = f.read()
+
+    # Build AI recommendations HTML section
+    ai_section_html = """
+    <div class="container" style="margin-top: 3rem; padding: 2rem; background: linear-gradient(135deg, #10b981 0%, #059669 100%); border-radius: 20px;">
+        <h2 style="color: white; text-align: center; margin-bottom: 2rem; font-size: 2.5rem;">
+            🤖 AI-Powered Personalized Recommendations
+        </h2>
+        <p style="color: rgba(255,255,255,0.9); text-align: center; margin-bottom: 3rem; font-size: 1.1rem;">
+            Based on your metabolic data and health goals
+        </p>
+    """
+
+    # Add each subject's recommendations
+    for subject, recommendation_text in ai_recommendations.items():
+        ai_section_html += f"""
+        <div style="background: white; padding: 2.5rem; border-radius: 16px; margin-bottom: 2rem; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+            <h3 style="color: #10b981; font-size: 2rem; margin-bottom: 1.5rem; text-transform: capitalize; border-bottom: 3px solid #10b981; padding-bottom: 1rem;">
+                {subject} Recommendations
+            </h3>
+            <div style="white-space: pre-wrap; line-height: 1.8; color: #334155; font-size: 1.05rem;">
+                {recommendation_text}
+            </div>
+        </div>
+        """
+
+    ai_section_html += """
+    </div>
+    """
+
+    # Insert AI section before closing body tag
+    report_with_ai = report_html.replace('</body>', f'{ai_section_html}</body>')
+
+    # Save new report with AI
+    ai_report_filename = f"{file_id}_report_with_ai.html"
+    ai_report_path = os.path.join(app.config['REPORTS_FOLDER'], ai_report_filename)
+    with open(ai_report_path, 'w') as f:
+        f.write(report_with_ai)
+
+    return jsonify({
+        'success': True,
+        'download_url': f'/download-ai/{file_id}'
+    })
+
 @app.route('/download/<file_id>')
 def download_report(file_id):
     """Download generated report"""
@@ -814,6 +877,16 @@ def download_report(file_id):
         return "Report not found", 404
 
     return send_file(report_path, as_attachment=True, download_name='pnoe_report.html')
+
+@app.route('/download-ai/<file_id>')
+def download_ai_report(file_id):
+    """Download report with AI recommendations"""
+    report_path = os.path.join(app.config['REPORTS_FOLDER'], f"{file_id}_report_with_ai.html")
+
+    if not os.path.exists(report_path):
+        return "Report with AI not found", 404
+
+    return send_file(report_path, as_attachment=True, download_name='pnoe_report_with_ai.html')
 
 def generate_html_report(extracted_data, custom_data):
     """Generate HTML report from extracted and custom data"""
