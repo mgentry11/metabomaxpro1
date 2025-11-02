@@ -212,9 +212,9 @@ Once configured, you'll be able to generate unlimited personalized recommendatio
 
         try:
             if self.api_provider == 'claude':
-                # Use Claude API - using Claude 3 Opus (most capable model)
+                # Use Claude API - using Claude 3 Haiku (most accessible model)
                 response = self.client.messages.create(
-                    model="claude-3-opus-20240229",
+                    model="claude-3-haiku-20240307",
                     max_tokens=4000,
                     system=self._get_system_prompt(template),
                     messages=[
