@@ -275,8 +275,68 @@
             line-height: 1.6;
         }
 
+        .workflow-card {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            margin-bottom: 2rem;
+            color: white;
+        }
+
+        .workflow-card h2 {
+            color: white;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            text-align: center;
+        }
+
+        .workflow-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .workflow-step {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .workflow-step .step-number {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            background: white;
+            color: #10b981;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            font-weight: 800;
+            line-height: 40px;
+            margin-bottom: 1rem;
+        }
+
+        .workflow-step h3 {
+            color: white;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .workflow-step p {
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
         @media (max-width: 1024px) {
             .example-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .workflow-steps {
                 grid-template-columns: 1fr;
             }
         }
@@ -301,6 +361,33 @@
         <div class="header">
             <h1>🎯 AI Recommendations Examples</h1>
             <p>See how our AI analyzes your metabolic data to create personalized protocols</p>
+        </div>
+
+        <!-- Workflow Steps -->
+        <div class="workflow-card">
+            <h2>📋 The Complete Workflow</h2>
+            <div class="workflow-steps">
+                <div class="workflow-step">
+                    <div class="step-number">1</div>
+                    <h3>Upload Test Data</h3>
+                    <p>Upload your metabolic test PDF and click "Create Report"</p>
+                </div>
+                <div class="workflow-step">
+                    <div class="step-number">2</div>
+                    <h3>Data Loaded</h3>
+                    <p>Your VO2 Max, RMR, heart rate zones, and fat oxidation data are automatically saved</p>
+                </div>
+                <div class="workflow-step">
+                    <div class="step-number">3</div>
+                    <h3>Choose AI Subject</h3>
+                    <p>Click the green "AI Recommendations" button on your dashboard</p>
+                </div>
+                <div class="workflow-step">
+                    <div class="step-number">4</div>
+                    <h3>Get Protocol</h3>
+                    <p>AI analyzes YOUR data and generates a personalized protocol in 15-30 seconds</p>
+                </div>
+            </div>
         </div>
 
         <div class="intro-card">
