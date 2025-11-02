@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Recommendations Examples - MetaboMax Pro</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.95;
+        }
+
+        .intro-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            margin-bottom: 2rem;
+        }
+
+        .intro-card h2 {
+            color: #667eea;
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+
+        .intro-card p {
+            color: #475569;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+            font-size: 1.05rem;
+        }
+
+        .example-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .example-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .example-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .example-icon {
+            font-size: 2.5rem;
+        }
+
+        .example-header h3 {
+            color: #667eea;
+            font-size: 1.5rem;
+        }
+
+        .example-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .example-section h4 {
+            color: #334155;
+            font-size: 1.1rem;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+        }
+
+        .input-box {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .input-label {
+            color: #64748b;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .input-value {
+            color: #1e293b;
+            font-size: 1.05rem;
+            font-weight: 500;
+        }
+
+        .goal-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .goal-tag {
+            background: #667eea;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .output-preview {
+            background: linear-gradient(135deg, #f8fafc 0%, #eff6ff 100%);
+            border-left: 4px solid #667eea;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-top: 1rem;
+        }
+
+        .output-preview h5 {
+            color: #667eea;
+            font-size: 1rem;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+        }
+
+        .output-preview ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .output-preview li {
+            color: #475569;
+            margin-bottom: 0.5rem;
+            padding-left: 1.5rem;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        .output-preview li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #10b981;
+            font-weight: bold;
+        }
+
+        .cta-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            padding: 2.5rem;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            color: white;
+            margin-top: 2rem;
+        }
+
+        .cta-box h2 {
+            margin-bottom: 1rem;
+            font-size: 2rem;
+        }
+
+        .cta-box p {
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+            opacity: 0.95;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: white;
+            color: #667eea;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            margin: 0.5rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .back-link a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.1rem;
+        }
+
+        .back-link a:hover {
+            text-decoration: underline;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .feature-box {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .feature-box .icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-box h4 {
+            color: white;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .feature-box p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 1024px) {
+            .example-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .intro-card, .example-card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 AI Recommendations Examples</h1>
+            <p>See how our AI analyzes your metabolic data to create personalized protocols</p>
+        </div>
+
+        <div class="intro-card">
+            <h2>How It Works</h2>
+            <p>
+                Our AI-powered recommendation system analyzes your unique metabolic profile (VO2 Max, RMR, substrate utilization, heart rate zones, etc.)
+                and combines it with your specific goals to create evidence-based, personalized protocols.
+            </p>
+            <p>
+                <strong>You can request recommendations for ANY subject:</strong> peptides, supplements, training plans, nutrition strategies,
+                recovery protocols, longevity interventions, or even custom topics like "cold therapy" or "breathwork."
+            </p>
+
+            <div class="features-grid">
+                <div class="feature-box">
+                    <div class="icon">🧬</div>
+                    <h4>Personalized</h4>
+                    <p>Based on YOUR metabolic data, not generic advice</p>
+                </div>
+                <div class="feature-box">
+                    <div class="icon">🔬</div>
+                    <h4>Evidence-Based</h4>
+                    <p>Scientifically validated protocols and dosing</p>
+                </div>
+                <div class="feature-box">
+                    <div class="icon">⚡</div>
+                    <h4>Actionable</h4>
+                    <p>Specific protocols you can implement immediately</p>
+                </div>
+                <div class="feature-box">
+                    <div class="icon">🎯</div>
+                    <h4>Goal-Oriented</h4>
+                    <p>Tailored to your specific health and fitness goals</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="example-grid">
+            <!-- Example 1: Peptides -->
+            <div class="example-card">
+                <div class="example-header">
+                    <div class="example-icon">💉</div>
+                    <h3>Peptide Therapy</h3>
+                </div>
+
+                <div class="example-section">
+                    <h4>Input Example:</h4>
+                    <div class="input-box">
+                        <span class="input-label">Subject</span>
+                        <div class="input-value">Peptides</div>
+                    </div>
+                    <div class="input-box">
+                        <span class="input-label">Goals</span>
+                        <div class="goal-tags">
+                            <span class="goal-tag">Fat Loss</span>
+                            <span class="goal-tag">Recovery</span>
+                            <span class="goal-tag">Anti-Aging</span>
+                        </div>
+                    </div>
+                    <div class="input-box">
+                        <span class="input-label">Additional Context</span>
+                        <div class="input-value">Training for marathon, history of knee injuries, looking for natural recovery support</div>
+                    </div>
+                </div>
+
+                <div class="example-section">
+                    <h4>What You'll Get:</h4>
+                    <div class="output-preview">
+                        <h5>AI-Generated Protocol Includes:</h5>
+                        <ul>
+                            <li>Primary peptide recommendations (BPC-157, TB-500, CJC-1295/Ipamorelin)</li>
+                            <li>Specific dosing protocols based on your metabolic rate</li>
+                            <li>Scientific rationale for each peptide</li>
+                            <li>Expected benefits and timeline (4-8 weeks)</li>
+                            <li>Synergistic stacking recommendations</li>
+                            <li>Safety considerations and contraindications</li>
+                            <li>Lifestyle optimization tips (nutrition, sleep, training)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Example 2: Supplements -->
+            <div class="example-card">
+                <div class="example-header">
+                    <div class="example-icon">💊</div>
+                    <h3>Supplement Stack</h3>
+                </div>
+
+                <div class="example-section">
+                    <h4>Input Example:</h4>
+                    <div class="input-box">
+                        <span class="input-label">Subject</span>
+                        <div class="input-value">Supplements</div>
+                    </div>
+                    <div class="input-box">
+                        <span class="input-label">Goals</span>
+                        <div class="goal-tags">
+                            <span class="goal-tag">Energy & Vitality</span>
+                            <span class="goal-tag">Longevity</span>
+                            <span class="goal-tag">Performance</span>
+                        </div>
+                    </div>
+                    <div class="input-box">
+                        <span class="input-label">Additional Context</span>
+                        <div class="input-value">Busy professional, 40s, want natural energy without stimulants, budget-conscious</div>
+                    </div>
+                </div>
+
+                <div class="example-section">
+                    <h4>What You'll Get:</h4>
+                    <div class="output-preview">
+                        <h5>AI-Generated Protocol Includes:</h5>
+                        <ul>
+                            <li>Personalized supplement stack (4-6 core supplements)</li>
+                            <li>Dosing schedule optimized for your RMR and metabolic efficiency</li>
+                            <li>Scientific rationale and research backing</li>
+                            <li>Expected benefits (energy, recovery, longevity markers)</li>
+                            <li>Synergistic combinations for enhanced effects</li>
+                            <li>Quality sourcing recommendations and brands</li>
+                            <li>Dietary optimization to maximize supplement effectiveness</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Example 3: Training Plan -->
+            <div class="example-card">
+                <div class="example-header">
+                    <div class="example-icon">🏋️</div>
+                    <h3>Training Protocol</h3>
+                </div>
+
+                <div class="example-section">
+                    <h4>Input Example:</h4>
+                    <div class="input-box">
+                        <span class="input-label">Subject</span>
+                        <div class="input-value">Training</div>
+                    </div>
+                    <div class="input-box">
+                        <span class="input-label">Goals</span>
+                        <div class="goal-tags">
+                            <span class="goal-tag">Muscle Gain</span>
+                            <span class="goal-tag">Athletic Performance</span>
+                        </div>
+                    </div>
+                    <div class="input-box">
+                        <span class="input-label">Additional Context</span>
+                        <div class="input-value">Can train 4-5 days/week, intermediate lifter, want to optimize for hypertrophy while maintaining cardio fitness</div>
+                    </div>
+                </div>
+
+                <div class="example-section">
+                    <h4>What You'll Get:</h4>
+                    <div class="output-preview">
+                        <h5>AI-Generated Protocol Includes:</h5>
+                        <ul>
+                            <li>Weekly training schedule based on your heart rate zones</li>
+                            <li>Specific workout protocols (sets, reps, intensity)</li>
+                            <li>Personalized intensity zones from your VO2 max data</li>
+                            <li>Progressive overload strategy for continued gains</li>
+                            <li>Recovery protocols matched to your metabolic capacity</li>
+                            <li>12-week periodization plan</li>
+                            <li>Performance metrics to track progress</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Example 4: Nutrition Plan -->
+            <div class="example-card">
+                <div class="example-header">
+                    <div class="example-icon">🥗</div>
+                    <h3>Nutrition Strategy</h3>
+                </div>
+
+                <div class="example-section">
+                    <h4>Input Example:</h4>
+                    <div class="input-box">
+                        <span class="input-label">Subject</span>
+                        <div class="input-value">Nutrition</div>
+                    </div>
+                    <div class="input-box">
+                        <span class="input-label">Goals</span>
+                        <div class="goal-tags">
+                            <span class="goal-tag">Fat Loss</span>
+                            <span class="goal-tag">Energy</span>
+                        </div>
+                    </div>
+                    <div class="input-box">
+                        <span class="input-label">Additional Context</span>
+                        <div class="input-value">Want sustainable fat loss, prefer higher fat/lower carb, training fasted in mornings</div>
+                    </div>
+                </div>
+
+                <div class="example-section">
+                    <h4>What You'll Get:</h4>
+                    <div class="output-preview">
+                        <h5>AI-Generated Protocol Includes:</h5>
+                        <ul>
+                            <li>Personalized macro targets based on your RMR and substrate utilization</li>
+                            <li>Daily meal plan structure optimized for fat oxidation</li>
+                            <li>Nutrient timing strategy for fasted training</li>
+                            <li>Food quality recommendations and meal ideas</li>
+                            <li>Hydration protocol matched to your metabolic rate</li>
+                            <li>Metabolic flexibility strategies (fat adaptation, carb cycling)</li>
+                            <li>Supplement recommendations to complement your diet</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Example 5: Recovery Protocol -->
+            <div class="example-card">
+                <div class="example-header">
+                    <div class="example-icon">🧘</div>
+                    <h3>Recovery Optimization</h3>
+                </div>
+
+                <div class="example-section">
+                    <h4>Input Example:</h4>
+                    <div class="input-box">
+                        <span class="input-label">Subject</span>
+                        <div class="input-value">Recovery</div>
+                    </div>
+                    <div class="input-box">
+                        <span class="input-label">Goals</span>
+                        <div class="goal-tags">
+                            <span class="goal-tag">Sleep Quality</span>
+                            <span class="goal-tag">Recovery</span>
+                            <span class="goal-tag">Performance</span>
+                        </div>
+                    </div>
+                    <div class="input-box">
+                        <span class="input-label">Additional Context</span>
+                        <div class="input-value">High-stress job, training hard, sleep quality has declined, feeling overtrained</div>
+                    </div>
+                </div>
+
+                <div class="example-section">
+                    <h4>What You'll Get:</h4>
+                    <div class="output-preview">
+                        <h5>AI-Generated Protocol Includes:</h5>
+                        <ul>
+                            <li>Comprehensive sleep optimization protocol</li>
+                            <li>Daily recovery routine (morning and evening)</li>
+                            <li>Weekly recovery schedule integrated with training</li>
+                            <li>Stress reduction strategies based on HRV and resting heart rate</li>
+                            <li>Recovery modalities (cold therapy, heat therapy, etc.)</li>
+                            <li>Tracking and monitoring recommendations</li>
+                            <li>Red flags to watch for (overtraining indicators)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Example 6: Custom Subject -->
+            <div class="example-card">
+                <div class="example-header">
+                    <div class="example-icon">❄️</div>
+                    <h3>Custom: Cold Therapy</h3>
+                </div>
+
+                <div class="example-section">
+                    <h4>Input Example:</h4>
+                    <div class="input-box">
+                        <span class="input-label">Subject</span>
+                        <div class="input-value">Cold Therapy (Custom)</div>
+                    </div>
+                    <div class="input-box">
+                        <span class="input-label">Goals</span>
+                        <div class="goal-tags">
+                            <span class="goal-tag">Fat Loss</span>
+                            <span class="goal-tag">Recovery</span>
+                            <span class="goal-tag">Longevity</span>
+                        </div>
+                    </div>
+                    <div class="input-box">
+                        <span class="input-label">Additional Context</span>
+                        <div class="input-value">Beginner to cold exposure, have access to cold plunge, interested in metabolic benefits</div>
+                    </div>
+                </div>
+
+                <div class="example-section">
+                    <h4>What You'll Get:</h4>
+                    <div class="output-preview">
+                        <h5>AI-Generated Protocol Includes:</h5>
+                        <ul>
+                            <li>Progressive cold exposure protocol (beginner to advanced)</li>
+                            <li>Optimal timing based on your training schedule and metabolic rate</li>
+                            <li>Scientific rationale (brown fat activation, metabolic boost, recovery)</li>
+                            <li>Expected metabolic benefits (increased RMR, enhanced fat oxidation)</li>
+                            <li>Safety guidelines and contraindications</li>
+                            <li>Integration with your existing routine</li>
+                            <li>Metrics to track progress (temperature, duration, recovery markers)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="cta-box">
+            <h2>Ready to Get Your Personalized AI Recommendations?</h2>
+            <p>Upload your metabolic test data and unlock unlimited AI-powered protocols customized to your unique physiology</p>
+            <div>
+                <a href="{{ url_for('ai_recommendations_page') }}" class="btn">Try AI Recommendations</a>
+                <a href="{{ url_for('register') }}" class="btn btn-secondary">Create Account</a>
+            </div>
+        </div>
+
+        <div class="back-link">
+            <a href="{{ url_for('landing') }}">← Back to Home</a>
+        </div>
+    </div>
+</body>
+</html>

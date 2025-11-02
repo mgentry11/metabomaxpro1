@@ -1351,6 +1351,11 @@ def ai_recommendations_page():
     return render_template('ai_recommendations.html',
                          subjects=available_subjects)
 
+@app.route('/ai-examples')
+def ai_examples():
+    """AI recommendations examples and tutorial page"""
+    return render_template('ai_examples.html')
+
 @app.route('/api/ai-recommend', methods=['POST'])
 @login_required
 def generate_ai_recommendation():
