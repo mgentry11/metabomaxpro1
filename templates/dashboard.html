@@ -747,7 +747,7 @@ Example:
                         // Build action buttons HTML
                         let buttonsHtml = '';
 
-                        // Only show View/Download if file_id exists
+                        // Only show View/Download/AI if file_id exists
                         if (report.file_id) {
                             buttonsHtml += `
                                 <a href="/view/${report.file_id}" target="_blank" class="btn btn-success" style="text-decoration: none; padding: 0.5rem 1rem;">
@@ -756,6 +756,9 @@ Example:
                                 <a href="/download/${report.file_id}" class="btn btn-secondary" style="text-decoration: none; background: #3b82f6; padding: 0.5rem 1rem;">
                                     📥 Download
                                 </a>
+                                <button class="btn btn-secondary" onclick="addAIToReport('${report.file_id}')" style="background: #10b981; border: none; padding: 0.5rem 1rem;">
+                                    🤖 Add AI
+                                </button>
                             `;
                         } else {
                             // If no file_id, show a note that files are missing
@@ -826,6 +829,16 @@ Example:
                 console.error('Error deleting report:', error);
                 alert('Failed to delete report: ' + error.message);
             }
+        }
+
+        // Add AI recommendations to an existing report
+        function addAIToReport(fileId) {
+            // Set the current file ID
+            window.currentFileId = fileId;
+
+            // Scroll to AI section and show it
+            document.getElementById('aiSection').style.display = 'block';
+            document.getElementById('aiSection').scrollIntoView({ behavior: 'smooth' });
         }
 
         // Load reports when page loads
