@@ -474,15 +474,17 @@ Example:
             btn.disabled = false;
             btn.textContent = `✅ Generated ${selectedSubjects.length} Recommendation${selectedSubjects.length > 1 ? 's' : ''}!`;
 
-            // Show status that downloadable report is being prepared
-            const downloadBtn = document.getElementById('downloadWithAIBtn');
-            downloadBtn.disabled = true;
-            downloadBtn.innerHTML = '⏳ Preparing Download...';
+            // Show progress bar for download preparation
+            showDownloadProgress();
 
             // Generate downloadable report with AI recommendations
             const success = await generateDownloadableAIReport();
 
+            // Hide progress bar
+            hideDownloadProgress();
+
             // Update download button based on success
+            const downloadBtn = document.getElementById('downloadWithAIBtn');
             if (success) {
                 downloadBtn.disabled = false;
                 downloadBtn.innerHTML = '📥 Download Report with AI Recommendations';
@@ -493,6 +495,56 @@ Example:
 
             // Scroll to results
             window.scrollTo({ top: document.getElementById('aiResults').offsetTop - 100, behavior: 'smooth' });
+        }
+
+        function showDownloadProgress() {
+            const downloadBtn = document.getElementById('downloadWithAIBtn');
+            downloadBtn.disabled = true;
+            downloadBtn.innerHTML = `
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
+                    <div style="font-weight: 600;">Preparing Your Download</div>
+                    <div style="width: 200px; height: 8px; background: rgba(255,255,255,0.3); border-radius: 4px; overflow: hidden;">
+                        <div id="progressBar" style="width: 0%; height: 100%; background: linear-gradient(90deg, #10b981, #059669); border-radius: 4px; transition: width 0.3s ease;"></div>
+                    </div>
+                    <div id="progressText" style="font-size: 0.85rem; opacity: 0.9;">Starting...</div>
+                </div>
+            `;
+
+            // Simulate progress
+            let progress = 0;
+            const progressBar = document.getElementById('progressBar');
+            const progressText = document.getElementById('progressText');
+
+            window.downloadProgressInterval = setInterval(() => {
+                progress += Math.random() * 15;
+                if (progress > 90) progress = 90; // Cap at 90% until actually done
+
+                progressBar.style.width = progress + '%';
+
+                if (progress < 30) {
+                    progressText.textContent = 'Loading report data...';
+                } else if (progress < 60) {
+                    progressText.textContent = 'Adding AI recommendations...';
+                } else if (progress < 90) {
+                    progressText.textContent = 'Finalizing document...';
+                } else {
+                    progressText.textContent = 'Almost ready...';
+                }
+            }, 500);
+        }
+
+        function hideDownloadProgress() {
+            if (window.downloadProgressInterval) {
+                clearInterval(window.downloadProgressInterval);
+            }
+
+            // Complete the progress bar
+            const progressBar = document.getElementById('progressBar');
+            const progressText = document.getElementById('progressText');
+            if (progressBar && progressText) {
+                progressBar.style.width = '100%';
+                progressText.textContent = 'Complete!';
+            }
         }
 
         let aiReportDownloadUrl = null;
