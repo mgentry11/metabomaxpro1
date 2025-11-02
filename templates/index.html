@@ -288,6 +288,26 @@ Example:
                 <p style="color: #64748b; margin-top: 1rem; font-size: 0.9rem;">This will take 15-30 seconds</p>
             </div>
 
+            <!-- Download Preparation Progress (BIG and OBVIOUS) -->
+            <div id="downloadProgressCard" style="display: none; margin-top: 2rem;">
+                <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); border-radius: 20px; padding: 3rem; box-shadow: 0 15px 40px rgba(16, 185, 129, 0.4); color: white; text-align: center;">
+                    <h2 style="color: white; margin-bottom: 1.5rem; font-size: 2rem; font-weight: bold;">
+                        🚀 Preparing Your Download
+                    </h2>
+                    <div style="background: rgba(255,255,255,0.25); border-radius: 15px; padding: 2rem; max-width: 500px; margin: 0 auto;">
+                        <div style="background: rgba(255,255,255,0.3); height: 30px; border-radius: 15px; overflow: hidden; margin-bottom: 1.5rem; box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);">
+                            <div id="mainProgressBar" style="width: 0%; height: 100%; background: white; border-radius: 15px; transition: width 0.5s ease; box-shadow: 0 0 20px rgba(255,255,255,0.8);"></div>
+                        </div>
+                        <div id="mainProgressText" style="font-size: 1.3rem; font-weight: 700; text-shadow: 0 2px 6px rgba(0,0,0,0.3); letter-spacing: 0.5px;">
+                            Starting...
+                        </div>
+                        <div id="mainProgressPercent" style="font-size: 3rem; font-weight: 900; margin-top: 1rem; text-shadow: 0 3px 8px rgba(0,0,0,0.3);">
+                            0%
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- AI Results -->
             <div id="aiResults" style="display: none; margin-top: 2rem;">
                 <h3 style="color: #10b981; margin-bottom: 1rem;">✅ AI Recommendations Generated!</h3>
@@ -498,39 +518,43 @@ Example:
         }
 
         function showDownloadProgress() {
+            // Show the BIG progress card
+            const progressCard = document.getElementById('downloadProgressCard');
+            progressCard.style.display = 'block';
+
+            // Scroll to it so it's visible
+            progressCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+            // Disable download button
             const downloadBtn = document.getElementById('downloadWithAIBtn');
             downloadBtn.disabled = true;
-            downloadBtn.innerHTML = `
-                <div style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
-                    <div style="font-weight: 600;">Preparing Your Download</div>
-                    <div style="width: 200px; height: 8px; background: rgba(255,255,255,0.3); border-radius: 4px; overflow: hidden;">
-                        <div id="progressBar" style="width: 0%; height: 100%; background: linear-gradient(90deg, #10b981, #059669); border-radius: 4px; transition: width 0.3s ease;"></div>
-                    </div>
-                    <div id="progressText" style="font-size: 0.85rem; opacity: 0.9;">Starting...</div>
-                </div>
-            `;
+            downloadBtn.textContent = '⏳ Preparing...';
 
-            // Simulate progress
+            // Animate the progress
             let progress = 0;
-            const progressBar = document.getElementById('progressBar');
-            const progressText = document.getElementById('progressText');
+            const progressBar = document.getElementById('mainProgressBar');
+            const progressText = document.getElementById('mainProgressText');
+            const progressPercent = document.getElementById('mainProgressPercent');
 
             window.downloadProgressInterval = setInterval(() => {
-                progress += Math.random() * 15;
+                progress += Math.random() * 12;
                 if (progress > 90) progress = 90; // Cap at 90% until actually done
 
                 progressBar.style.width = progress + '%';
+                progressPercent.textContent = Math.round(progress) + '%';
 
-                if (progress < 30) {
+                if (progress < 25) {
                     progressText.textContent = 'Loading report data...';
-                } else if (progress < 60) {
+                } else if (progress < 50) {
                     progressText.textContent = 'Adding AI recommendations...';
+                } else if (progress < 75) {
+                    progressText.textContent = 'Formatting document...';
                 } else if (progress < 90) {
-                    progressText.textContent = 'Finalizing document...';
+                    progressText.textContent = 'Finalizing...';
                 } else {
                     progressText.textContent = 'Almost ready...';
                 }
-            }, 500);
+            }, 400);
         }
 
         function hideDownloadProgress() {
@@ -539,12 +563,23 @@ Example:
             }
 
             // Complete the progress bar
-            const progressBar = document.getElementById('progressBar');
-            const progressText = document.getElementById('progressText');
+            const progressBar = document.getElementById('mainProgressBar');
+            const progressText = document.getElementById('mainProgressText');
+            const progressPercent = document.getElementById('mainProgressPercent');
+
             if (progressBar && progressText) {
                 progressBar.style.width = '100%';
                 progressText.textContent = 'Complete!';
+                progressPercent.textContent = '100%';
             }
+
+            // Hide the progress card after a moment
+            setTimeout(() => {
+                const progressCard = document.getElementById('downloadProgressCard');
+                if (progressCard) {
+                    progressCard.style.display = 'none';
+                }
+            }, 1500);
         }
 
         let aiReportDownloadUrl = null;
