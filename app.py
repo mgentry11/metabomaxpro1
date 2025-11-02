@@ -241,6 +241,15 @@ def landing():
         return redirect(url_for('dashboard'))
     return render_template('landing.html')
 
+@app.route('/version')
+def version():
+    """Check deployed version"""
+    return jsonify({
+        'version': '2024-11-02-v3',
+        'features': ['my_reports', 'delete_reports', 'view_download_buttons'],
+        'last_commit': '810ee30'
+    })
+
 @app.route('/pricing')
 def pricing():
     """Pricing page"""
