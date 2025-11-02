@@ -59,7 +59,7 @@
             border: none;
         }
 
-        /* Blur overlays to hide PNOE branding in PDF */
+        /* Blur overlays for privacy protection */
         .pdf-viewer::before {
             content: "";
             position: absolute;
@@ -354,7 +354,7 @@
         <!-- CTA Section -->
         <div class="cta-section">
             <h2>Ready to Generate Your Own Report?</h2>
-            <p>Upload your PNOE or VO2 Max test data and get a comprehensive metabolic analysis in minutes</p>
+            <p>Upload your VO2 Max or metabolic test data and get a comprehensive analysis in minutes</p>
             <div>
                 <a href="{{ url_for('register') }}" class="btn">Create Your Report Now</a>
                 <a href="/sample-report" class="btn btn-secondary">View Sample Report</a>
