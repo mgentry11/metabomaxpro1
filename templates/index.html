@@ -606,7 +606,25 @@ Example:
             console.log('[DEBUG] aiReportDownloadUrl:', aiReportDownloadUrl);
 
             if (!aiReportDownloadUrl) {
-                alert('⏳ The AI report is still being generated. Please wait a moment and try again.\n\nIf you just generated AI recommendations, the report should be ready in a few seconds.');
+                // If clicked too early, retry the generation
+                const downloadBtn = document.getElementById('downloadWithAIBtn');
+                downloadBtn.innerHTML = '⏳ Retrying...';
+                downloadBtn.disabled = true;
+
+                // Try generating again
+                showDownloadProgress();
+                generateDownloadableAIReport().then(success => {
+                    hideDownloadProgress();
+                    if (success) {
+                        downloadBtn.disabled = false;
+                        downloadBtn.innerHTML = '📥 Download Report with AI Recommendations';
+                        // Auto-trigger download
+                        window.location.href = aiReportDownloadUrl;
+                    } else {
+                        downloadBtn.disabled = false;
+                        downloadBtn.innerHTML = '⚠️ Failed - Please Try Again';
+                    }
+                });
                 return;
             }
 
