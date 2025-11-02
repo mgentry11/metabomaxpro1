@@ -3,22 +3,44 @@ Universal AI-Powered Recommendation System
 Works with ANY subject: Peptides, Supplements, Training, Nutrition, Recovery, etc.
 """
 import os
-from openai import OpenAI
 from datetime import datetime
 
 class UniversalRecommendationAI:
     def __init__(self):
-        api_key = os.getenv('OPENAI_API_KEY')
-        if not api_key:
-            print("Warning: OPENAI_API_KEY not found in environment variables")
-            self.client = None
-        else:
-            # Configure OpenAI client with timeout and retry settings
-            self.client = OpenAI(
-                api_key=api_key,
-                timeout=60.0,  # Increase timeout to 60 seconds
-                max_retries=3   # Retry up to 3 times on connection errors
-            )
+        # Try Claude first, fall back to OpenAI
+        self.api_provider = None
+        self.client = None
+
+        # Check for Anthropic API key
+        anthropic_key = os.getenv('ANTHROPIC_API_KEY')
+        if anthropic_key:
+            try:
+                from anthropic import Anthropic
+                self.client = Anthropic(api_key=anthropic_key)
+                self.api_provider = 'claude'
+                print("Using Claude API")
+            except ImportError:
+                print("anthropic package not installed")
+
+        # Fall back to OpenAI if Claude not available
+        if not self.client:
+            openai_key = os.getenv('OPENAI_API_KEY')
+            if openai_key:
+                try:
+                    from openai import OpenAI
+                    self.client = OpenAI(
+                        api_key=openai_key,
+                        timeout=60.0,
+                        max_retries=3
+                    )
+                    self.api_provider = 'openai'
+                    print("Using OpenAI API")
+                except ImportError:
+                    print("openai package not installed")
+
+        if not self.client:
+            print("Warning: No AI API key found in environment variables")
+            self.api_provider = None
 
         # Knowledge base for different subjects
         self.subject_templates = {
@@ -189,23 +211,39 @@ Once configured, you'll be able to generate unlimited personalized recommendatio
             }
 
         try:
-            response = self.client.chat.completions.create(
-                model="gpt-4",
-                messages=[
-                    {"role": "system", "content": self._get_system_prompt(template)},
-                    {"role": "user", "content": prompt}
-                ],
-                temperature=0.7,
-                max_tokens=2500
-            )
+            if self.api_provider == 'claude':
+                # Use Claude API
+                response = self.client.messages.create(
+                    model="claude-3-5-sonnet-20241022",
+                    max_tokens=4000,
+                    system=self._get_system_prompt(template),
+                    messages=[
+                        {"role": "user", "content": prompt}
+                    ]
+                )
+                recommendation_text = response.content[0].text
 
-            recommendation_text = response.choices[0].message.content
+            elif self.api_provider == 'openai':
+                # Use OpenAI API
+                response = self.client.chat.completions.create(
+                    model="gpt-4",
+                    messages=[
+                        {"role": "system", "content": self._get_system_prompt(template)},
+                        {"role": "user", "content": prompt}
+                    ],
+                    temperature=0.7,
+                    max_tokens=2500
+                )
+                recommendation_text = response.choices[0].message.content
+            else:
+                raise Exception("No API provider configured")
 
             return {
                 'subject': subject,
                 'recommendations': recommendation_text,
                 'timestamp': datetime.now().isoformat(),
-                'metabolic_summary': self._summarize_metabolic_data(metabolic_data)
+                'metabolic_summary': self._summarize_metabolic_data(metabolic_data),
+                'ai_provider': self.api_provider
             }
 
         except Exception as e:
