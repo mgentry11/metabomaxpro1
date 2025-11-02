@@ -189,15 +189,22 @@ Example:
                 </a>
             </div>
 
-            <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); padding: 2rem; border-radius: 15px; margin: 2rem 0; color: white;">
-                <h3 style="color: white; margin-bottom: 1rem; font-size: 1.5rem;">🤖 Get AI-Powered Recommendations</h3>
-                <p style="margin-bottom: 1.5rem; line-height: 1.6;">Your metabolic data has been saved! Now get personalized protocols for peptides, supplements, training, nutrition, and more based on YOUR unique profile.</p>
-                <a href="{{ url_for('ai_recommendations_page') }}" class="btn btn-large" style="background: white; color: #10b981; font-weight: 700; display: inline-block; margin: 0.5rem;">
-                    🎯 Get AI Recommendations
+            <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); padding: 2.5rem; border-radius: 15px; margin: 2rem 0; color: white;">
+                <h3 style="color: white; margin-bottom: 1rem; font-size: 1.8rem;">🎯 NEXT STEP: Get AI Recommendations</h3>
+                <p style="margin-bottom: 1rem; line-height: 1.8; font-size: 1.15rem;">
+                    <strong>✅ Your metabolic data is saved!</strong>
+                </p>
+                <p style="margin-bottom: 1.5rem; line-height: 1.6; font-size: 1.05rem;">
+                    Now click below to get personalized protocols for peptides, supplements, training, nutrition, and more - all based on YOUR data.
+                </p>
+                <a href="{{ url_for('ai_recommendations_page') }}" class="btn btn-large" style="background: white; color: #10b981; font-weight: 700; font-size: 1.2rem; display: inline-block; margin: 0.5rem; padding: 1.25rem 2.5rem;">
+                    🤖 Get AI Recommendations Now →
                 </a>
-                <a href="/ai-examples" class="btn btn-secondary btn-large" style="background: rgba(255,255,255,0.2); color: white; border: 2px solid white; display: inline-block; margin: 0.5rem;">
-                    📖 See Examples
-                </a>
+                <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.3);">
+                    <a href="/ai-examples" style="color: white; text-decoration: underline; font-size: 1rem;">
+                        See examples of what you'll get
+                    </a>
+                </div>
             </div>
 
             <button class="btn btn-secondary" onclick="resetForm()">Generate Another Report</button>

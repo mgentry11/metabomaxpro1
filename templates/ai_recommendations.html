@@ -288,16 +288,30 @@
         </div>
 
         <div class="main-card">
-            <div class="info-box" style="background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); border-left: 4px solid #3b82f6;">
-                <p style="margin-bottom: 1rem;"><strong>📋 How This Works:</strong></p>
-                <ol style="margin-left: 1.5rem; line-height: 1.8;">
-                    <li><strong>First:</strong> Upload your metabolic test data and create your report (if you haven't already)</li>
-                    <li><strong>Then:</strong> Your data (VO2 Max, RMR, heart rate zones, fat oxidation, etc.) is automatically loaded</li>
-                    <li><strong>Now:</strong> Select any subject below (peptides, supplements, training, nutrition, etc.)</li>
-                    <li><strong>Finally:</strong> Our AI analyzes YOUR specific metabolic profile and creates a personalized protocol</li>
+            <div class="info-box" style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-left: 4px solid #f59e0b; padding: 1.5rem;">
+                <h3 style="color: #92400e; margin-bottom: 1rem; font-size: 1.3rem;">⚠️ IMPORTANT: Do This FIRST</h3>
+                <p style="color: #92400e; font-size: 1.1rem; line-height: 1.8; margin-bottom: 1rem;">
+                    <strong>Before using AI recommendations, you MUST upload your metabolic test data:</strong>
+                </p>
+                <ol style="margin-left: 1.5rem; line-height: 2; color: #92400e; font-size: 1.05rem;">
+                    <li><strong>Go to the upload page</strong> and upload your metabolic test PDF</li>
+                    <li><strong>Click "Generate Report"</strong> to process your data</li>
+                    <li><strong>Then come back here</strong> to get AI recommendations</li>
                 </ol>
-                <p style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #93c5fd;">
-                    <strong>💡 Tip:</strong> You can generate unlimited recommendations for different subjects - try peptides for recovery, supplements for energy, training plans for performance, etc.
+                <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 2px solid #f59e0b;">
+                    <a href="{{ url_for('index') }}" class="btn btn-large" style="background: #f59e0b; color: white; font-weight: 700; font-size: 1.1rem;">
+                        📤 Upload Your Test Data First
+                    </a>
+                </div>
+            </div>
+
+            <div class="info-box" style="background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); border-left: 4px solid #10b981; margin-top: 2rem;">
+                <h3 style="color: #065f46; margin-bottom: 1rem; font-size: 1.2rem;">✅ Already Uploaded Your Data?</h3>
+                <p style="color: #065f46; line-height: 1.8; margin-bottom: 0.5rem;">
+                    Great! Now just pick a subject below and we'll create a personalized protocol based on your metabolic profile.
+                </p>
+                <p style="color: #065f46; line-height: 1.8; font-size: 0.95rem;">
+                    <strong>You can generate unlimited recommendations</strong> - try peptides, supplements, training, nutrition, etc.
                 </p>
             </div>
 
