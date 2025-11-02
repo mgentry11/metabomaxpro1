@@ -8,7 +8,12 @@ from datetime import datetime
 
 class UniversalRecommendationAI:
     def __init__(self):
-        self.client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
+        api_key = os.getenv('OPENAI_API_KEY')
+        if not api_key:
+            print("Warning: OPENAI_API_KEY not found in environment variables")
+            self.client = None
+        else:
+            self.client = OpenAI(api_key=api_key)
 
         # Knowledge base for different subjects
         self.subject_templates = {
@@ -160,6 +165,16 @@ class UniversalRecommendationAI:
 
         # Build the prompt
         prompt = self._build_prompt(subject, template, metabolic_data, user_goals, custom_context)
+
+        # Check if API client is available
+        if not self.client:
+            return {
+                'subject': subject,
+                'recommendations': 'AI recommendations are currently unavailable. Please contact support to enable this feature.',
+                'timestamp': datetime.now().isoformat(),
+                'metabolic_summary': self._summarize_metabolic_data(metabolic_data),
+                'error': True
+            }
 
         try:
             response = self.client.chat.completions.create(

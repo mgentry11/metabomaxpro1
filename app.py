@@ -1344,9 +1344,14 @@ def payment_cancel():
 @login_required
 def ai_recommendations_page():
     """AI-powered recommendations page"""
-    # Initialize AI system
-    ai = UniversalRecommendationAI()
-    available_subjects = ai.get_available_subjects()
+    try:
+        # Initialize AI system
+        ai = UniversalRecommendationAI()
+        available_subjects = ai.get_available_subjects()
+    except Exception as e:
+        # If AI system fails to initialize (e.g., missing API key), use defaults
+        print(f"AI system initialization error: {e}")
+        available_subjects = ['peptides', 'supplements', 'training', 'nutrition', 'recovery', 'longevity']
 
     return render_template('ai_recommendations.html',
                          subjects=available_subjects)
