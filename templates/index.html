@@ -295,7 +295,7 @@ Example:
                     <div id="aiResultsContent" style="white-space: pre-wrap; line-height: 1.8;"></div>
                 </div>
                 <div style="text-align: center;">
-                    <a class="btn btn-success btn-large" id="downloadWithAILink" download>
+                    <a class="btn btn-success btn-large" id="downloadWithAILink" download onclick="if(!this.href) { alert('Download link not ready yet. Please wait a moment after generating AI recommendations.'); return false; }">
                         📥 Download Report with AI Recommendations
                     </a>
                     <button class="btn btn-secondary" onclick="addAnotherRecommendation()">
