@@ -474,8 +474,17 @@ Example:
             btn.disabled = false;
             btn.textContent = `✅ Generated ${selectedSubjects.length} Recommendation${selectedSubjects.length > 1 ? 's' : ''}!`;
 
+            // Show status that downloadable report is being prepared
+            const downloadBtn = document.getElementById('downloadWithAIBtn');
+            downloadBtn.disabled = true;
+            downloadBtn.innerHTML = '⏳ Preparing Download...';
+
             // Generate downloadable report with AI recommendations
             await generateDownloadableAIReport();
+
+            // Update download button to ready state
+            downloadBtn.disabled = false;
+            downloadBtn.innerHTML = '📥 Download Report with AI Recommendations';
 
             // Scroll to results
             window.scrollTo({ top: document.getElementById('aiResults').offsetTop - 100, behavior: 'smooth' });
@@ -494,7 +503,6 @@ Example:
 
                 if (!fileId) {
                     console.error('No file_id found - cannot generate AI report. Make sure you generated a basic report first.');
-                    alert('Error: Please generate your basic report first before adding AI recommendations.');
                     return;
                 }
 
@@ -525,11 +533,14 @@ Example:
                     console.log('[SUCCESS] AI report download URL stored:', aiReportDownloadUrl);
                 } else {
                     console.error('Failed to generate AI report:', data.error);
-                    alert('Error generating AI report: ' + (data.error || 'Unknown error'));
+                    // Don't show alert - just log the error
                 }
             } catch (error) {
                 console.error('Error generating downloadable AI report:', error);
-                alert('Error: ' + error.message);
+                // Only show alert for actual network errors
+                if (error.message && !error.message.includes('JSON')) {
+                    alert('Error preparing download: ' + error.message);
+                }
             }
         }
 
