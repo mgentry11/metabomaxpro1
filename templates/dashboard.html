@@ -230,6 +230,7 @@
             <div class="navbar-right">
                 <span class="user-info">{{ profile.email if profile else 'User' }}</span>
                 <a href="{{ url_for('index') }}" class="btn">New Report</a>
+                <a href="{{ url_for('ai_recommendations_page') }}" class="btn" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">🤖 AI Recommendations</a>
                 <a href="{{ url_for('logout') }}" class="btn btn-secondary">Logout</a>
             </div>
         </nav>
@@ -269,6 +270,14 @@
                 <h3>Total Reports</h3>
                 <div class="value">{{ reports|length if reports else 0 }}</div>
                 <div class="subtitle">All time</div>
+            </div>
+
+            <div class="stat-card" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white;">
+                <h3 style="color: white;">🤖 AI Recommendations</h3>
+                <div class="value" style="color: white; font-size: 1.1rem;">Get Personalized Protocols</div>
+                <div class="subtitle" style="color: rgba(255,255,255,0.9);">
+                    <a href="{{ url_for('ai_recommendations_page') }}" style="color: white; text-decoration: underline; font-weight: 600;">Try It Now →</a>
+                </div>
             </div>
         </div>
 
