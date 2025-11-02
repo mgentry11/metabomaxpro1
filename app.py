@@ -51,10 +51,16 @@ import ssl
 # Force HTTP/1.1 by completely disabling HTTP/2 ALPN
 class HTTP11Adapter(HTTPAdapter):
     def init_poolmanager(self, *args, **kwargs):
-        # Create SSL context that explicitly excludes HTTP/2
-        context = create_urllib3_context()
-        context.set_alpn_protocols(['http/1.1'])  # Only allow HTTP/1.1
-        kwargs['ssl_context'] = context
+        try:
+            # Create SSL context that explicitly excludes HTTP/2
+            context = create_urllib3_context()
+            # Try to set ALPN protocols, but don't fail if not supported
+            if hasattr(context, 'set_alpn_protocols'):
+                context.set_alpn_protocols(['http/1.1'])  # Only allow HTTP/1.1
+            kwargs['ssl_context'] = context
+        except Exception as e:
+            print(f"Warning: Could not configure SSL ALPN: {e}")
+            # Continue without custom SSL context
         return super().init_poolmanager(*args, **kwargs)
 
 # Create session with HTTP/1.1 only
