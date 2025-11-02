@@ -518,8 +518,17 @@ Example:
         }
 
         function showDownloadProgress() {
+            alert('DEBUG: showDownloadProgress() called!');
+
             // Show the BIG progress card
             const progressCard = document.getElementById('downloadProgressCard');
+
+            if (!progressCard) {
+                alert('ERROR: downloadProgressCard element not found!');
+                return;
+            }
+
+            alert('DEBUG: Setting progressCard to display block');
             progressCard.style.display = 'block';
 
             // Scroll to it so it's visible
