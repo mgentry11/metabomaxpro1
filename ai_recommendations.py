@@ -204,8 +204,29 @@ Once configured, you'll be able to generate unlimited personalized recommendatio
             }
 
         except Exception as e:
-            print(f"Error generating {subject} recommendations: {e}")
-            return self._get_fallback(subject, metabolic_data)
+            error_msg = str(e)
+            print(f"Error generating {subject} recommendations: {error_msg}")
+            return {
+                'subject': subject,
+                'recommendations': f"""## Error Generating {subject.title()} Recommendations
+
+**Error Details:** {error_msg}
+
+This error occurred while trying to generate AI recommendations. Common causes:
+- OpenAI API quota exceeded or billing issue
+- Invalid API key
+- Rate limiting
+- Network connectivity issue
+
+Please check your OpenAI account at https://platform.openai.com/account/usage to verify:
+1. Your API key is valid
+2. You have available credits
+3. Your usage limits haven't been exceeded""",
+                'timestamp': datetime.now().isoformat(),
+                'metabolic_summary': self._summarize_metabolic_data(metabolic_data),
+                'error': True,
+                'error_message': error_msg
+            }
 
     def _create_custom_template(self, subject):
         """Create a template for custom subjects"""
