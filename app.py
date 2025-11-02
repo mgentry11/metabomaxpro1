@@ -968,7 +968,7 @@ def get_my_reports():
     try:
         # Fetch reports from Supabase
         response = http_session.get(
-            f"{SUPABASE_REST_URL}/reports?user_id=eq.{user_id}&order=created_at.desc&select=id,created_at,report_type,chronological_age,biological_age",
+            f"{SUPABASE_REST_URL}/reports?user_id=eq.{user_id}&order=created_at.desc&select=id,created_at,report_type,chronological_age,biological_age,file_id",
             headers=get_supabase_headers()
         )
 
