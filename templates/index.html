@@ -295,9 +295,9 @@ Example:
                     <div id="aiResultsContent" style="white-space: pre-wrap; line-height: 1.8;"></div>
                 </div>
                 <div style="text-align: center;">
-                    <a class="btn btn-success btn-large" id="downloadWithAILink" download onclick="if(!this.href) { alert('Download link not ready yet. Please wait a moment after generating AI recommendations.'); return false; }">
+                    <button class="btn btn-success btn-large" id="downloadWithAIBtn" onclick="downloadAIReport()">
                         📥 Download Report with AI Recommendations
-                    </a>
+                    </button>
                     <button class="btn btn-secondary" onclick="addAnotherRecommendation()">
                         + Add Another Subject
                     </button>
@@ -481,6 +481,8 @@ Example:
             window.scrollTo({ top: document.getElementById('aiResults').offsetTop - 100, behavior: 'smooth' });
         }
 
+        let aiReportDownloadUrl = null;
+
         async function generateDownloadableAIReport() {
             try {
                 // Get the file_id from the global variable (set when report is generated)
@@ -518,15 +520,9 @@ Example:
                 console.log('[DEBUG] Response data:', data);
 
                 if (data.success) {
-                    // Set the download link
-                    const downloadLink = document.getElementById('downloadWithAILink');
-                    downloadLink.href = data.download_url;
-                    console.log('[SUCCESS] AI report download link set to:', data.download_url);
-
-                    // Also make the button visible and enabled
-                    downloadLink.style.display = 'inline-block';
-                    downloadLink.style.pointerEvents = 'auto';
-                    downloadLink.style.opacity = '1';
+                    // Store the download URL globally
+                    aiReportDownloadUrl = data.download_url;
+                    console.log('[SUCCESS] AI report download URL stored:', aiReportDownloadUrl);
                 } else {
                     console.error('Failed to generate AI report:', data.error);
                     alert('Error generating AI report: ' + (data.error || 'Unknown error'));
@@ -535,6 +531,19 @@ Example:
                 console.error('Error generating downloadable AI report:', error);
                 alert('Error: ' + error.message);
             }
+        }
+
+        function downloadAIReport() {
+            console.log('[DEBUG] downloadAIReport clicked');
+            console.log('[DEBUG] aiReportDownloadUrl:', aiReportDownloadUrl);
+
+            if (!aiReportDownloadUrl) {
+                alert('⏳ The AI report is still being generated. Please wait a moment and try again.\n\nIf you just generated AI recommendations, the report should be ready in a few seconds.');
+                return;
+            }
+
+            // Navigate to the download URL
+            window.location.href = aiReportDownloadUrl;
         }
 
         function addAnotherRecommendation() {
