@@ -486,10 +486,22 @@ Example:
                 // Get the file_id from the global variable (set when report is generated)
                 const fileId = window.currentFileId;
 
+                console.log('[DEBUG] generateDownloadableAIReport called');
+                console.log('[DEBUG] fileId:', fileId);
+                console.log('[DEBUG] allRecommendations:', allRecommendations);
+
                 if (!fileId) {
                     console.error('No file_id found - cannot generate AI report. Make sure you generated a basic report first.');
+                    alert('Error: Please generate your basic report first before adding AI recommendations.');
                     return;
                 }
+
+                if (Object.keys(allRecommendations).length === 0) {
+                    console.error('No AI recommendations found');
+                    return;
+                }
+
+                console.log('[DEBUG] Calling /generate-with-ai...');
 
                 // Call backend to generate report with AI
                 const response = await fetch('/generate-with-ai', {
@@ -501,18 +513,27 @@ Example:
                     })
                 });
 
+                console.log('[DEBUG] Response status:', response.status);
                 const data = await response.json();
+                console.log('[DEBUG] Response data:', data);
 
                 if (data.success) {
                     // Set the download link
                     const downloadLink = document.getElementById('downloadWithAILink');
                     downloadLink.href = data.download_url;
-                    console.log('AI report download link set to:', data.download_url);
+                    console.log('[SUCCESS] AI report download link set to:', data.download_url);
+
+                    // Also make the button visible and enabled
+                    downloadLink.style.display = 'inline-block';
+                    downloadLink.style.pointerEvents = 'auto';
+                    downloadLink.style.opacity = '1';
                 } else {
                     console.error('Failed to generate AI report:', data.error);
+                    alert('Error generating AI report: ' + (data.error || 'Unknown error'));
                 }
             } catch (error) {
                 console.error('Error generating downloadable AI report:', error);
+                alert('Error: ' + error.message);
             }
         }
 

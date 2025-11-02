@@ -813,13 +813,21 @@ def generate_report_with_ai():
     file_id = data.get('file_id')
     ai_recommendations = data.get('ai_recommendations', {})  # {subject: recommendation_text}
 
+    print(f"[DEBUG /generate-with-ai] Received request")
+    print(f"[DEBUG] file_id: {file_id}")
+    print(f"[DEBUG] ai_recommendations keys: {list(ai_recommendations.keys())}")
+
     if not file_id:
+        print("[ERROR] No file_id provided")
         return jsonify({'error': 'No file ID provided'}), 400
 
     # Get the basic report first
     basic_report_path = os.path.join(app.config['REPORTS_FOLDER'], f"{file_id}_report.html")
+    print(f"[DEBUG] Looking for basic report at: {basic_report_path}")
+    print(f"[DEBUG] Basic report exists: {os.path.exists(basic_report_path)}")
 
     if not os.path.exists(basic_report_path):
+        print("[ERROR] Basic report not found")
         return jsonify({'error': 'Basic report not found. Please generate basic report first.'}), 404
 
     # Read the basic report
@@ -862,6 +870,9 @@ def generate_report_with_ai():
     ai_report_path = os.path.join(app.config['REPORTS_FOLDER'], ai_report_filename)
     with open(ai_report_path, 'w') as f:
         f.write(report_with_ai)
+
+    print(f"[SUCCESS] AI report saved to: {ai_report_path}")
+    print(f"[SUCCESS] Returning download URL: /download-ai/{file_id}")
 
     return jsonify({
         'success': True,
