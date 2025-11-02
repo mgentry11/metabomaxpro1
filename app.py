@@ -17,6 +17,7 @@ from dotenv import load_dotenv
 import requests
 import stripe
 from utils.beautiful_report import generate_beautiful_report
+from ai_recommendations import UniversalRecommendationAI
 
 # Load environment variables
 load_dotenv()
@@ -1334,6 +1335,169 @@ def payment_success():
 def payment_cancel():
     """Payment cancelled page"""
     return render_template('payment_cancel.html')
+
+# ========================================
+# AI RECOMMENDATIONS SYSTEM
+# ========================================
+
+@app.route('/ai-recommendations')
+@login_required
+def ai_recommendations_page():
+    """AI-powered recommendations page"""
+    # Initialize AI system
+    ai = UniversalRecommendationAI()
+    available_subjects = ai.get_available_subjects()
+
+    return render_template('ai_recommendations.html',
+                         subjects=available_subjects)
+
+@app.route('/api/ai-recommend', methods=['POST'])
+@login_required
+def generate_ai_recommendation():
+    """Generate AI-powered recommendations for any subject"""
+    try:
+        data = request.get_json()
+        subject = data.get('subject', 'peptides')
+        user_goals = data.get('goals', [])
+        custom_context = data.get('custom_context', '')
+
+        # Get user's metabolic data from their latest report
+        user_email = session.get('email')
+        metabolic_data = get_user_metabolic_data(user_email)
+
+        if not metabolic_data:
+            return jsonify({
+                'error': 'No metabolic data found. Please upload a test first.'
+            }), 400
+
+        # Initialize AI system
+        ai = UniversalRecommendationAI()
+
+        # Generate recommendations
+        recommendations = ai.get_recommendations(
+            subject=subject,
+            metabolic_data=metabolic_data,
+            user_goals=user_goals,
+            custom_context=custom_context
+        )
+
+        # Store recommendation in database
+        save_recommendation_to_db(user_email, subject, recommendations)
+
+        return jsonify(recommendations)
+
+    except Exception as e:
+        print(f"Error generating AI recommendations: {e}")
+        return jsonify({'error': str(e)}), 500
+
+def get_user_metabolic_data(email):
+    """Extract metabolic data from user's latest report"""
+    try:
+        # Connect to Supabase
+        supabase_url = os.getenv('SUPABASE_URL')
+        supabase_key = os.getenv('SUPABASE_KEY')
+
+        if not supabase_url or not supabase_key:
+            print("Warning: Supabase credentials not found, using sample data")
+            return get_sample_metabolic_data()
+
+        # Fetch user's latest report from Supabase
+        response = requests.get(
+            f"{supabase_url}/rest/v1/reports",
+            headers={
+                "apikey": supabase_key,
+                "Authorization": f"Bearer {supabase_key}",
+                "Content-Type": "application/json"
+            },
+            params={
+                "user_email": f"eq.{email}",
+                "select": "*",
+                "order": "created_at.desc",
+                "limit": "1"
+            }
+        )
+
+        if response.status_code == 200 and response.json():
+            report = response.json()[0]
+            # Extract metabolic metrics from report
+            return extract_metabolic_metrics(report)
+        else:
+            print(f"No report found for user {email}, using sample data")
+            return get_sample_metabolic_data()
+
+    except Exception as e:
+        print(f"Error fetching metabolic data: {e}")
+        return get_sample_metabolic_data()
+
+def extract_metabolic_metrics(report):
+    """Extract key metrics from report data"""
+    # Parse report data (adjust based on your actual data structure)
+    return {
+        'vo2_max': report.get('vo2_max', 45),
+        'rmr': report.get('rmr', 1800),
+        'max_hr': report.get('max_hr', 180),
+        'resting_hr': report.get('resting_hr', 60),
+        'fat_oxidation': report.get('fat_oxidation', 0.5),
+        'carb_oxidation': report.get('carb_oxidation', 2.0),
+        'rer': report.get('rer', 0.85),
+        'age': report.get('age', 35),
+        'gender': report.get('gender', 'Male'),
+        'weight': report.get('weight', 75),
+        'height': report.get('height', 180),
+        'biological_age': report.get('biological_age', 33),
+        'metabolic_score': report.get('metabolic_score', 75)
+    }
+
+def get_sample_metabolic_data():
+    """Sample data for testing"""
+    return {
+        'vo2_max': 45,
+        'rmr': 1800,
+        'max_hr': 180,
+        'resting_hr': 60,
+        'fat_oxidation': 0.5,
+        'carb_oxidation': 2.0,
+        'rer': 0.85,
+        'age': 35,
+        'gender': 'Male',
+        'weight': 75,
+        'height': 180,
+        'biological_age': 33,
+        'metabolic_score': 75
+    }
+
+def save_recommendation_to_db(email, subject, recommendations):
+    """Save AI recommendation to database"""
+    try:
+        supabase_url = os.getenv('SUPABASE_URL')
+        supabase_key = os.getenv('SUPABASE_KEY')
+
+        if not supabase_url or not supabase_key:
+            print("Supabase credentials not found, skipping save")
+            return
+
+        # Save to database
+        response = requests.post(
+            f"{supabase_url}/rest/v1/ai_recommendations",
+            headers={
+                "apikey": supabase_key,
+                "Authorization": f"Bearer {supabase_key}",
+                "Content-Type": "application/json",
+                "Prefer": "return=minimal"
+            },
+            json={
+                "user_email": email,
+                "subject": subject,
+                "recommendations": recommendations['recommendations'],
+                "created_at": datetime.now().isoformat()
+            }
+        )
+
+        if response.status_code != 201:
+            print(f"Warning: Failed to save recommendation: {response.text}")
+
+    except Exception as e:
+        print(f"Error saving recommendation: {e}")
 
 if __name__ == '__main__':
     print("🚀 Starting Metabolic Report Generator Web App")
