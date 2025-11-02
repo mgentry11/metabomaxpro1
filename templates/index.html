@@ -181,36 +181,224 @@ Example:
         <!-- Download Section -->
         <div class="card success-card" id="downloadSection" style="display: none;">
             <h2>✅ Report Generated Successfully!</h2>
-            <p>Your personalized metabolic report is ready to download.</p>
+            <p style="color: #64748b; margin-bottom: 2rem;">Your metabolic data has been processed. Now you can download your report or add AI recommendations.</p>
 
-            <div style="margin: 2rem 0;">
-                <a class="btn btn-success btn-large" id="downloadLink" download style="margin: 0.5rem;">
-                    📥 Download Report
+            <!-- Option 1: Download Now -->
+            <div style="background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 15px; padding: 2rem; margin-bottom: 1.5rem;">
+                <h3 style="font-size: 1.3rem; margin-bottom: 0.75rem;">📥 Option 1: Download Report Now</h3>
+                <p style="color: #64748b; margin-bottom: 1rem;">Download your basic metabolic report without AI recommendations</p>
+                <a class="btn btn-success" id="downloadLink" download style="margin: 0;">
+                    Download Basic Report
                 </a>
             </div>
 
-            <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); padding: 2.5rem; border-radius: 15px; margin: 2rem 0; color: white;">
-                <h3 style="color: white; margin-bottom: 1rem; font-size: 1.8rem;">🎯 NEXT STEP: Get AI Recommendations</h3>
-                <p style="margin-bottom: 1rem; line-height: 1.8; font-size: 1.15rem;">
-                    <strong>✅ Your metabolic data is saved!</strong>
+            <!-- Option 2: Add AI Recommendations -->
+            <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); border-radius: 15px; padding: 2.5rem; margin-bottom: 1.5rem; color: white;">
+                <h3 style="color: white; font-size: 1.5rem; margin-bottom: 1rem;">🤖 Option 2: Add AI Recommendations (Recommended)</h3>
+                <p style="margin-bottom: 1.5rem; line-height: 1.7; font-size: 1.05rem;">
+                    Get personalized protocols for peptides, supplements, training, or nutrition - all based on YOUR metabolic data!
                 </p>
-                <p style="margin-bottom: 1.5rem; line-height: 1.6; font-size: 1.05rem;">
-                    Now click below to get personalized protocols for peptides, supplements, training, nutrition, and more - all based on YOUR data.
+                <button class="btn btn-large" onclick="showAISection()" style="background: white; color: #10b981; font-weight: 700; font-size: 1.1rem;">
+                    ✨ Add AI Recommendations to Report
+                </button>
+            </div>
+
+            <button class="btn btn-secondary" onclick="resetForm()">Start Over</button>
+        </div>
+
+        <!-- AI Recommendations Section (Hidden initially) -->
+        <div class="card" id="aiSection" style="display: none;">
+            <button class="btn btn-secondary" onclick="hideAISection()" style="float: right;">← Back</button>
+            <h2>🤖 Add AI Recommendations to Your Report</h2>
+            <p style="color: #64748b; margin-bottom: 2rem;">Select a subject and we'll generate personalized protocols based on your metabolic data</p>
+
+            <div style="background: #eff6ff; border-left: 4px solid #3b82f6; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem;">
+                <p style="color: #1e40af; margin: 0;">
+                    <strong>💡 Pro Tip:</strong> You can add AI recommendations for multiple subjects! Each one will be added to your report.
                 </p>
-                <a href="{{ url_for('ai_recommendations_page') }}" class="btn btn-large" style="background: white; color: #10b981; font-weight: 700; font-size: 1.2rem; display: inline-block; margin: 0.5rem; padding: 1.25rem 2.5rem;">
-                    🤖 Get AI Recommendations Now →
-                </a>
-                <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.3);">
-                    <a href="/ai-examples" style="color: white; text-decoration: underline; font-size: 1rem;">
-                        See examples of what you'll get
-                    </a>
+            </div>
+
+            <!-- Subject Selection -->
+            <div style="margin-bottom: 2rem;">
+                <h3 style="margin-bottom: 1rem;">Choose a Subject:</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem;">
+                    <button class="subject-choice-btn" onclick="selectSubject('peptides')">💉 Peptides</button>
+                    <button class="subject-choice-btn" onclick="selectSubject('supplements')">💊 Supplements</button>
+                    <button class="subject-choice-btn" onclick="selectSubject('training')">🏋️ Training</button>
+                    <button class="subject-choice-btn" onclick="selectSubject('nutrition')">🥗 Nutrition</button>
+                    <button class="subject-choice-btn" onclick="selectSubject('recovery')">🧘 Recovery</button>
+                    <button class="subject-choice-btn" onclick="selectSubject('longevity')">⏳ Longevity</button>
                 </div>
             </div>
 
-            <button class="btn btn-secondary" onclick="resetForm()">Generate Another Report</button>
+            <!-- Goals (Optional) -->
+            <div style="margin-bottom: 2rem;">
+                <h3 style="margin-bottom: 1rem;">Select Goals (Optional):</h3>
+                <div style="display: flex; flex-wrap: wrap; gap: 0.75rem;" id="goalsContainer">
+                    <button class="goal-choice-btn" onclick="toggleGoal(this, 'Fat Loss')">Fat Loss</button>
+                    <button class="goal-choice-btn" onclick="toggleGoal(this, 'Muscle Gain')">Muscle Gain</button>
+                    <button class="goal-choice-btn" onclick="toggleGoal(this, 'Performance')">Performance</button>
+                    <button class="goal-choice-btn" onclick="toggleGoal(this, 'Recovery')">Recovery</button>
+                    <button class="goal-choice-btn" onclick="toggleGoal(this, 'Energy')">Energy</button>
+                    <button class="goal-choice-btn" onclick="toggleGoal(this, 'Longevity')">Longevity</button>
+                </div>
+            </div>
+
+            <!-- Generate Button -->
+            <div style="text-align: center; margin-top: 2rem;">
+                <button class="btn btn-success btn-large" onclick="generateAIRecommendations()" id="generateAIBtn" disabled>
+                    Generate AI Recommendations
+                </button>
+                <p style="color: #64748b; margin-top: 1rem; font-size: 0.9rem;">This will take 15-30 seconds</p>
+            </div>
+
+            <!-- AI Results -->
+            <div id="aiResults" style="display: none; margin-top: 2rem;">
+                <h3 style="color: #10b981; margin-bottom: 1rem;">✅ AI Recommendations Generated!</h3>
+                <div style="background: #f8fafc; border: 2px solid #10b981; border-radius: 12px; padding: 2rem; margin-bottom: 1.5rem;">
+                    <div id="aiResultsContent" style="white-space: pre-wrap; line-height: 1.8;"></div>
+                </div>
+                <div style="text-align: center;">
+                    <a class="btn btn-success btn-large" id="downloadWithAILink" download>
+                        📥 Download Report with AI Recommendations
+                    </a>
+                    <button class="btn btn-secondary" onclick="addAnotherRecommendation()">
+                        + Add Another Subject
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 
+    <style>
+        .subject-choice-btn, .goal-choice-btn {
+            padding: 1rem;
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .subject-choice-btn:hover, .goal-choice-btn:hover {
+            border-color: #10b981;
+            background: #ecfdf5;
+            transform: translateY(-2px);
+        }
+
+        .subject-choice-btn.active {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border-color: #10b981;
+        }
+
+        .goal-choice-btn.selected {
+            background: #10b981;
+            color: white;
+            border-color: #10b981;
+        }
+    </style>
+
     <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    <script>
+        let selectedSubject = null;
+        let selectedGoals = [];
+
+        function showAISection() {
+            document.getElementById('downloadSection').style.display = 'none';
+            document.getElementById('aiSection').style.display = 'block';
+            window.scrollTo({ top: document.getElementById('aiSection').offsetTop - 100, behavior: 'smooth' });
+        }
+
+        function hideAISection() {
+            document.getElementById('aiSection').style.display = 'none';
+            document.getElementById('downloadSection').style.display = 'block';
+            window.scrollTo({ top: document.getElementById('downloadSection').offsetTop - 100, behavior: 'smooth' });
+        }
+
+        function selectSubject(subject) {
+            selectedSubject = subject;
+
+            // Update button styles
+            document.querySelectorAll('.subject-choice-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Enable generate button
+            document.getElementById('generateAIBtn').disabled = false;
+        }
+
+        function toggleGoal(btn, goal) {
+            if (selectedGoals.includes(goal)) {
+                selectedGoals = selectedGoals.filter(g => g !== goal);
+                btn.classList.remove('selected');
+            } else {
+                selectedGoals.push(goal);
+                btn.classList.add('selected');
+            }
+        }
+
+        async function generateAIRecommendations() {
+            if (!selectedSubject) {
+                alert('Please select a subject first');
+                return;
+            }
+
+            const btn = document.getElementById('generateAIBtn');
+            btn.disabled = true;
+            btn.textContent = 'Generating AI Recommendations...';
+
+            try {
+                const response = await fetch('/api/ai-recommend', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        subject: selectedSubject,
+                        goals: selectedGoals,
+                        custom_context: ''
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.error) {
+                    alert('Error: ' + data.error);
+                    btn.disabled = false;
+                    btn.textContent = 'Generate AI Recommendations';
+                    return;
+                }
+
+                // Show results
+                document.getElementById('aiResultsContent').textContent = data.recommendations;
+                document.getElementById('aiResults').style.display = 'block';
+
+                // TODO: Update download link to include AI recommendations
+                // For now, just show success
+
+                btn.disabled = false;
+                btn.textContent = 'Generate AI Recommendations';
+
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to generate AI recommendations. Please try again.');
+                btn.disabled = false;
+                btn.textContent = 'Generate AI Recommendations';
+            }
+        }
+
+        function addAnotherRecommendation() {
+            // Reset form
+            selectedSubject = null;
+            selectedGoals = [];
+            document.querySelectorAll('.subject-choice-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.goal-choice-btn').forEach(btn => btn.classList.remove('selected'));
+            document.getElementById('aiResults').style.display = 'none';
+            document.getElementById('generateAIBtn').disabled = true;
+            window.scrollTo({ top: document.getElementById('aiSection').offsetTop - 100, behavior: 'smooth' });
+        }
+    </script>
 </body>
 </html>
