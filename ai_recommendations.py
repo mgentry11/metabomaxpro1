@@ -214,7 +214,7 @@ Once configured, you'll be able to generate unlimited personalized recommendatio
             if self.api_provider == 'claude':
                 # Use Claude API
                 response = self.client.messages.create(
-                    model="claude-3-5-sonnet-20241022",
+                    model="claude-3-5-sonnet-20240620",  # Latest stable Claude 3.5 Sonnet
                     max_tokens=4000,
                     system=self._get_system_prompt(template),
                     messages=[
