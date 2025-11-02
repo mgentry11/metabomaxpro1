@@ -270,45 +270,6 @@ def sample_data():
     """Visual display of sample PNOE metabolic test data"""
     return render_template('sample_data.html')
 
-@app.route('/payment-success')
-@login_required
-def payment_success():
-    """Payment success page"""
-    session_id = request.args.get('session_id')
-
-    if session_id:
-        try:
-            # Retrieve the session to verify payment
-            checkout_session = stripe.checkout.Session.retrieve(session_id)
-
-            if checkout_session.payment_status == 'paid':
-                # Update user's subscription status in database
-                user_id = session.get('user', {}).get('id')
-                plan_type = checkout_session.metadata.get('plan_type')
-
-                # Update user record with subscription info
-                update_data = {
-                    'subscription_status': 'active' if plan_type == 'subscription' else 'one_time',
-                    'stripe_customer_id': checkout_session.customer,
-                    'stripe_session_id': session_id
-                }
-
-                headers = get_supabase_headers()
-                response = http_session.patch(
-                    f"{SUPABASE_REST_URL}/users?id=eq.{user_id}",
-                    headers=headers,
-                    json=update_data
-                )
-
-                flash('Payment successful! Your subscription is now active.', 'success')
-                return redirect(url_for('dashboard'))
-
-        except Exception as e:
-            print(f"Error verifying payment: {e}")
-            flash('Payment verification failed. Please contact support.', 'error')
-
-    return redirect(url_for('dashboard'))
-
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     """User registration"""
