@@ -13,7 +13,12 @@ class UniversalRecommendationAI:
             print("Warning: OPENAI_API_KEY not found in environment variables")
             self.client = None
         else:
-            self.client = OpenAI(api_key=api_key)
+            # Configure OpenAI client with timeout and retry settings
+            self.client = OpenAI(
+                api_key=api_key,
+                timeout=60.0,  # Increase timeout to 60 seconds
+                max_retries=3   # Retry up to 3 times on connection errors
+            )
 
         # Knowledge base for different subjects
         self.subject_templates = {
