@@ -773,6 +773,7 @@ def generate_report():
         report_data = {
             'user_id': user_id,
             'test_id': test_id,
+            'file_id': file_id,  # IMPORTANT: Save file_id for My Reports feature
             'report_type': custom_data['report_type'],
             'chronological_age': chronological_age,
             'biological_age': biological_age,
