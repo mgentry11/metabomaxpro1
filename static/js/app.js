@@ -410,6 +410,13 @@ async function generateReport() {
         const data = await response.json();
 
         if (data.success) {
+            // IMMEDIATELY open report in new tab so user can see it!
+            const viewUrl = data.download_url.replace('/download/', '/view/');
+            window.open(viewUrl, '_blank');
+
+            // Also expose it globally for the AI download button
+            window.currentFileId = currentFileId;
+
             // Show download section
             document.getElementById('customizeSection').style.display = 'none';
             document.getElementById('downloadSection').style.display = 'block';

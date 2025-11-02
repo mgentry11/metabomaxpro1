@@ -316,7 +316,7 @@ Example:
                 </div>
                 <div style="text-align: center;">
                     <button class="btn btn-success btn-large" id="downloadWithAIBtn" onclick="downloadAIReport()">
-                        📥 Download Report with AI Recommendations
+                        👁️ View Report with AI Recommendations
                     </button>
                     <button class="btn btn-secondary" onclick="addAnotherRecommendation()">
                         + Add Another Subject
@@ -653,7 +653,7 @@ Example:
             if (!aiReportDownloadUrl) {
                 // If clicked too early, retry the generation
                 const downloadBtn = document.getElementById('downloadWithAIBtn');
-                downloadBtn.innerHTML = '⏳ Retrying...';
+                downloadBtn.innerHTML = '⏳ Preparing Your Report...';
                 downloadBtn.disabled = true;
 
                 // Try generating again
@@ -662,9 +662,10 @@ Example:
                     hideDownloadProgress();
                     if (success) {
                         downloadBtn.disabled = false;
-                        downloadBtn.innerHTML = '📥 Download Report with AI Recommendations';
-                        // Auto-trigger download
-                        window.location.href = aiReportDownloadUrl;
+                        downloadBtn.innerHTML = '👁️ View Report with AI Recommendations';
+                        // OPEN report in new tab so user can SEE it!
+                        const viewUrl = aiReportDownloadUrl.replace('/download-ai/', '/view-ai/');
+                        window.open(viewUrl, '_blank');
                     } else {
                         downloadBtn.disabled = false;
                         downloadBtn.innerHTML = '⚠️ Failed - Please Try Again';
@@ -673,8 +674,9 @@ Example:
                 return;
             }
 
-            // Navigate to the download URL
-            window.location.href = aiReportDownloadUrl;
+            // OPEN report in new tab instead of downloading
+            const viewUrl = aiReportDownloadUrl.replace('/download-ai/', '/view-ai/');
+            window.open(viewUrl, '_blank');
         }
 
         function addAnotherRecommendation() {

@@ -899,6 +899,66 @@ def download_ai_report(file_id):
 
     return send_file(report_path, as_attachment=True, download_name='pnoe_report_with_ai.html')
 
+@app.route('/view/<file_id>')
+def view_report(file_id):
+    """View generated report in browser with download button"""
+    report_path = os.path.join(app.config['REPORTS_FOLDER'], f"{file_id}_report.html")
+
+    if not os.path.exists(report_path):
+        return "Report not found", 404
+
+    # Read the report HTML
+    with open(report_path, 'r') as f:
+        report_html = f.read()
+
+    # Add download button at the top of the report
+    download_button = f'''
+    <div style="position: fixed; top: 20px; right: 20px; z-index: 10000;">
+        <a href="/download/{file_id}"
+           style="display: inline-block; background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+                  color: white; padding: 15px 30px; border-radius: 12px; text-decoration: none;
+                  font-weight: bold; font-size: 1.1rem; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+                  transition: all 0.3s ease;">
+            📥 Download This Report
+        </a>
+    </div>
+    '''
+
+    # Insert download button after body tag
+    report_with_download = report_html.replace('<body>', f'<body>{download_button}')
+
+    return report_with_download
+
+@app.route('/view-ai/<file_id>')
+def view_ai_report(file_id):
+    """View report with AI recommendations in browser with download button"""
+    report_path = os.path.join(app.config['REPORTS_FOLDER'], f"{file_id}_report_with_ai.html")
+
+    if not os.path.exists(report_path):
+        return "Report with AI not found", 404
+
+    # Read the report HTML
+    with open(report_path, 'r') as f:
+        report_html = f.read()
+
+    # Add download button at the top of the report
+    download_button = f'''
+    <div style="position: fixed; top: 20px; right: 20px; z-index: 10000;">
+        <a href="/download-ai/{file_id}"
+           style="display: inline-block; background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+                  color: white; padding: 15px 30px; border-radius: 12px; text-decoration: none;
+                  font-weight: bold; font-size: 1.1rem; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+                  transition: all 0.3s ease;">
+            📥 Download This Report (with AI)
+        </a>
+    </div>
+    '''
+
+    # Insert download button after body tag
+    report_with_download = report_html.replace('<body>', f'<body>{download_button}')
+
+    return report_with_download
+
 def generate_html_report(extracted_data, custom_data):
     """Generate HTML report from extracted and custom data"""
     patient_name = extracted_data.get('patient_info', {}).get('name', 'Patient')
