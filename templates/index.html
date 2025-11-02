@@ -480,11 +480,16 @@ Example:
             downloadBtn.innerHTML = '⏳ Preparing Download...';
 
             // Generate downloadable report with AI recommendations
-            await generateDownloadableAIReport();
+            const success = await generateDownloadableAIReport();
 
-            // Update download button to ready state
-            downloadBtn.disabled = false;
-            downloadBtn.innerHTML = '📥 Download Report with AI Recommendations';
+            // Update download button based on success
+            if (success) {
+                downloadBtn.disabled = false;
+                downloadBtn.innerHTML = '📥 Download Report with AI Recommendations';
+            } else {
+                downloadBtn.disabled = false;
+                downloadBtn.innerHTML = '⚠️ Download Preparation Failed - Click to Retry';
+            }
 
             // Scroll to results
             window.scrollTo({ top: document.getElementById('aiResults').offsetTop - 100, behavior: 'smooth' });
@@ -503,12 +508,12 @@ Example:
 
                 if (!fileId) {
                     console.error('No file_id found - cannot generate AI report. Make sure you generated a basic report first.');
-                    return;
+                    return false;
                 }
 
                 if (Object.keys(allRecommendations).length === 0) {
                     console.error('No AI recommendations found');
-                    return;
+                    return false;
                 }
 
                 console.log('[DEBUG] Calling /generate-with-ai...');
@@ -531,16 +536,16 @@ Example:
                     // Store the download URL globally
                     aiReportDownloadUrl = data.download_url;
                     console.log('[SUCCESS] AI report download URL stored:', aiReportDownloadUrl);
+                    return true;
                 } else {
                     console.error('Failed to generate AI report:', data.error);
-                    // Don't show alert - just log the error
+                    alert('Failed to prepare download: ' + (data.error || 'Unknown error'));
+                    return false;
                 }
             } catch (error) {
                 console.error('Error generating downloadable AI report:', error);
-                // Only show alert for actual network errors
-                if (error.message && !error.message.includes('JSON')) {
-                    alert('Error preparing download: ' + error.message);
-                }
+                alert('Error preparing download: ' + error.message);
+                return false;
             }
         }
 
