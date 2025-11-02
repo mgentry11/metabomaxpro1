@@ -483,12 +483,11 @@ Example:
 
         async function generateDownloadableAIReport() {
             try {
-                // Get the file_id from the page (set when basic report is generated)
-                const urlParams = new URLSearchParams(window.location.search);
-                const fileId = urlParams.get('file_id');
+                // Get the file_id from the global variable (set when report is generated)
+                const fileId = window.currentFileId;
 
                 if (!fileId) {
-                    console.error('No file_id found - cannot generate AI report');
+                    console.error('No file_id found - cannot generate AI report. Make sure you generated a basic report first.');
                     return;
                 }
 
