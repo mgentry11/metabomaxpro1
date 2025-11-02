@@ -410,22 +410,23 @@ async function generateReport() {
         const data = await response.json();
 
         if (data.success) {
-            // IMMEDIATELY open report in new tab so user can see it!
-            const viewUrl = data.download_url.replace('/download/', '/view/');
-            window.open(viewUrl, '_blank');
+            // DON'T open report yet - let user add AI recommendations first!
+            // Store the download URL for later
+            window.basicReportUrl = data.download_url;
 
             // Also expose it globally for the AI download button
             window.currentFileId = currentFileId;
 
-            // Show download section
+            // Show AI section so user can optionally add recommendations
             document.getElementById('customizeSection').style.display = 'none';
+            document.getElementById('aiSection').style.display = 'block';
             document.getElementById('downloadSection').style.display = 'block';
 
             const downloadLink = document.getElementById('downloadLink');
             downloadLink.href = data.download_url;
 
-            // Scroll to download section
-            document.getElementById('downloadSection').scrollIntoView({ behavior: 'smooth' });
+            // Scroll to AI section
+            document.getElementById('aiSection').scrollIntoView({ behavior: 'smooth' });
         } else {
             alert('Error generating report: ' + data.error);
         }

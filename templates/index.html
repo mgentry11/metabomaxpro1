@@ -219,13 +219,13 @@ Example:
             <h2>✅ Report Generated Successfully!</h2>
             <p style="color: #64748b; margin-bottom: 2rem;">Your metabolic data has been processed. Now you can download your report or add AI recommendations.</p>
 
-            <!-- Option 1: Download Now -->
+            <!-- Option 1: View Basic Report -->
             <div style="background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 15px; padding: 2rem; margin-bottom: 1.5rem;">
-                <h3 style="font-size: 1.3rem; margin-bottom: 0.75rem;">📥 Option 1: Download Report Now</h3>
-                <p style="color: #64748b; margin-bottom: 1rem;">Download your basic metabolic report without AI recommendations</p>
-                <a class="btn btn-success" id="downloadLink" download style="margin: 0;">
-                    Download Basic Report
-                </a>
+                <h3 style="font-size: 1.3rem; margin-bottom: 0.75rem;">👁️ Option 1: View Basic Report</h3>
+                <p style="color: #64748b; margin-bottom: 1rem;">View and download your basic metabolic report (without AI recommendations)</p>
+                <button class="btn btn-success" onclick="viewBasicReport()" style="margin: 0;">
+                    View Basic Report
+                </button>
             </div>
 
             <!-- Option 2: Add AI Recommendations -->
@@ -678,6 +678,12 @@ Example:
 
             // OPEN report in new tab instead of downloading
             const viewUrl = aiReportDownloadUrl.replace('/download-ai/', '/view-ai/');
+            window.open(viewUrl, '_blank');
+        }
+
+        function viewBasicReport() {
+            // Open the basic report in a new tab
+            const viewUrl = window.basicReportUrl.replace('/download/', '/view/');
             window.open(viewUrl, '_blank');
         }
 
