@@ -507,10 +507,15 @@ Example:
             const downloadBtn = document.getElementById('downloadWithAIBtn');
             if (success) {
                 downloadBtn.disabled = false;
-                downloadBtn.innerHTML = '📥 Download Report with AI Recommendations';
+                downloadBtn.innerHTML = '👁️ View Report with AI Recommendations';
+                // Auto-open the report!
+                const viewUrl = aiReportDownloadUrl.replace('/download-ai/', '/view-ai/');
+                window.open(viewUrl, '_blank');
             } else {
-                downloadBtn.disabled = false;
-                downloadBtn.innerHTML = '⚠️ Download Preparation Failed - Click to Retry';
+                // Likely no basic report was generated - don't show scary error
+                downloadBtn.disabled = true;
+                downloadBtn.innerHTML = '⚠️ Generate Basic Report First';
+                downloadBtn.style.opacity = '0.6';
             }
 
             // Scroll to results
@@ -518,17 +523,14 @@ Example:
         }
 
         function showDownloadProgress() {
-            alert('DEBUG: showDownloadProgress() called!');
-
             // Show the BIG progress card
             const progressCard = document.getElementById('downloadProgressCard');
 
             if (!progressCard) {
-                alert('ERROR: downloadProgressCard element not found!');
+                console.error('ERROR: downloadProgressCard element not found!');
                 return;
             }
 
-            alert('DEBUG: Setting progressCard to display block');
             progressCard.style.display = 'block';
 
             // Scroll to it so it's visible
