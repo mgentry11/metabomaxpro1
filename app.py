@@ -1110,7 +1110,7 @@ def delete_old_reports():
         traceback.print_exc()
         return jsonify({'success': False, 'error': str(e)}), 500
 
-@app.route('/api/delete-report/<int:report_id>', methods=['DELETE'])
+@app.route('/api/delete-report/<report_id>', methods=['DELETE'])
 @login_required
 def delete_report(report_id):
     """Delete a specific report"""
