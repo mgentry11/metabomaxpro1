@@ -84,6 +84,15 @@ stripe.api_key = os.getenv('STRIPE_SECRET_KEY')
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 os.makedirs(app.config['REPORTS_FOLDER'], exist_ok=True)
 
+# Startup logging
+print("=" * 60)
+print("🚀 PNOE WEBAPP STARTING UP")
+print(f"📂 Upload folder: {app.config['UPLOAD_FOLDER']}")
+print(f"📂 Reports folder: {app.config['REPORTS_FOLDER']}")
+print(f"🔑 Supabase configured: {'Yes' if SUPABASE_URL and SUPABASE_KEY else 'No'}")
+print(f"💳 Stripe configured: {'Yes' if stripe.api_key else 'No'}")
+print("=" * 60)
+
 def allowed_file(filename):
     """Check if file extension is allowed"""
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -247,11 +256,16 @@ def landing():
         return redirect(url_for('dashboard'))
     return render_template('landing.html')
 
+@app.route('/health')
+def health():
+    """Health check endpoint for Render"""
+    return jsonify({'status': 'ok', 'message': 'App is running'}), 200
+
 @app.route('/version')
 def version():
     """Check deployed version"""
     return jsonify({
-        'version': '2024-11-02-v3',
+        'version': '2024-11-02-v4',
         'features': ['my_reports', 'delete_reports', 'view_download_buttons'],
         'last_commit': '810ee30'
     })
