@@ -31,8 +31,17 @@ ALLOWED_EXTENSIONS = {'pdf'}
 
 # Supabase configuration
 SUPABASE_URL = os.getenv('SUPABASE_URL')
-SUPABASE_KEY = os.getenv('SUPABASE_KEY', '').replace('\n', '').replace(' ', '')  # Strip newlines and spaces
+# Strip all whitespace characters (newlines, tabs, spaces, etc.)
+SUPABASE_KEY = os.getenv('SUPABASE_KEY', '').strip().replace('\n', '').replace('\r', '').replace('\t', '').replace(' ', '')
 SUPABASE_REST_URL = f"{SUPABASE_URL}/rest/v1"
+
+# Debug: Check key format (only show first/last 10 chars for security)
+if SUPABASE_KEY:
+    key_preview = f"{SUPABASE_KEY[:10]}...{SUPABASE_KEY[-10:]}"
+    key_length = len(SUPABASE_KEY)
+    print(f"[SUPABASE] API Key loaded: {key_preview} (length: {key_length})")
+else:
+    print("[SUPABASE] WARNING: No API key found!")
 
 # Stripe configuration
 stripe.api_key = os.getenv('STRIPE_SECRET_KEY')
