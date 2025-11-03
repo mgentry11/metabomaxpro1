@@ -7,9 +7,17 @@ from datetime import datetime
 
 class UniversalRecommendationAI:
     def __init__(self):
-        # Try Claude first, fall back to OpenAI
+        # Lazy initialization - don't create clients until needed
         self.api_provider = None
         self.client = None
+        self._initialized = False
+
+    def _ensure_client(self):
+        """Initialize API client only when first needed"""
+        if self._initialized:
+            return
+
+        self._initialized = True
 
         # Check for Anthropic API key
         anthropic_key = os.getenv('ANTHROPIC_API_KEY')
@@ -21,6 +29,8 @@ class UniversalRecommendationAI:
                 print("Using Claude API")
             except ImportError:
                 print("anthropic package not installed")
+            except Exception as e:
+                print(f"Failed to initialize Claude: {e}")
 
         # Fall back to OpenAI if Claude not available
         if not self.client:
@@ -37,6 +47,8 @@ class UniversalRecommendationAI:
                     print("Using OpenAI API")
                 except ImportError:
                     print("openai package not installed")
+                except Exception as e:
+                    print(f"Failed to initialize OpenAI: {e}")
 
         if not self.client:
             print("Warning: No AI API key found in environment variables")
@@ -179,6 +191,8 @@ class UniversalRecommendationAI:
         Returns:
             dict: Comprehensive recommendations
         """
+        # Initialize client on first use
+        self._ensure_client()
 
         # Normalize subject
         subject = subject.lower()
