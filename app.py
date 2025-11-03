@@ -1115,58 +1115,80 @@ def delete_old_reports():
 def delete_report(report_id):
     """Delete a specific report"""
     user_id = session['user']['id']
+    print(f"[DELETE REPORT] Starting delete for report_id={report_id}, user_id={user_id}")
 
     try:
         # First, verify the report belongs to this user
-        check_response = http_session.get(
-            f"{SUPABASE_REST_URL}/reports?id=eq.{report_id}&user_id=eq.{user_id}&select=id,html_storage_path",
-            headers=get_supabase_headers()
-        )
+        url = f"{SUPABASE_REST_URL}/reports?id=eq.{report_id}&user_id=eq.{user_id}&select=id,html_storage_path,file_id"
+        print(f"[DELETE REPORT] Check URL: {url}")
+
+        check_response = http_session.get(url, headers=get_supabase_headers())
+
+        print(f"[DELETE REPORT] Check response status: {check_response.status_code}")
+        print(f"[DELETE REPORT] Check response body: {check_response.text[:500]}")
 
         if not check_response.ok:
-            print(f"Check failed with status {check_response.status_code}: {check_response.text}")
+            print(f"[DELETE REPORT] Check failed with status {check_response.status_code}: {check_response.text}")
             return jsonify({'success': False, 'error': 'Report not found or unauthorized'}), 404
 
         reports = check_response.json()
         if not reports or len(reports) == 0:
-            print(f"No report found with id={report_id} for user_id={user_id}")
+            print(f"[DELETE REPORT] No report found with id={report_id} for user_id={user_id}")
             return jsonify({'success': False, 'error': 'Report not found or unauthorized'}), 404
 
         report_data = reports[0]
+        print(f"[DELETE REPORT] Found report: {report_data}")
 
         # Delete the HTML files from disk if they exist
-        file_id_pattern = report_data.get('html_storage_path', '')
-        if file_id_pattern:
-            # Extract file_id from path
-            import re
-            match = re.search(r'/([a-f0-9\-]+)_report\.html', file_id_pattern)
-            if match:
-                file_id = match.group(1)
-                basic_report = os.path.join(app.config['REPORTS_FOLDER'], f"{file_id}_report.html")
-                ai_report = os.path.join(app.config['REPORTS_FOLDER'], f"{file_id}_report_with_ai.html")
+        # Try using file_id field first (new reports), then fall back to parsing html_storage_path (old reports)
+        file_id = report_data.get('file_id')
 
-                # Delete files if they exist
-                if os.path.exists(basic_report):
-                    os.remove(basic_report)
-                if os.path.exists(ai_report):
-                    os.remove(ai_report)
+        if not file_id:
+            # Fall back to extracting from html_storage_path for old reports
+            file_id_pattern = report_data.get('html_storage_path', '')
+            if file_id_pattern:
+                import re
+                match = re.search(r'/([a-f0-9\-]+)_report\.html', file_id_pattern)
+                if match:
+                    file_id = match.group(1)
+
+        if file_id:
+            print(f"[DELETE REPORT] Deleting files for file_id={file_id}")
+            basic_report = os.path.join(app.config['REPORTS_FOLDER'], f"{file_id}_report.html")
+            ai_report = os.path.join(app.config['REPORTS_FOLDER'], f"{file_id}_report_with_ai.html")
+
+            # Delete files if they exist
+            if os.path.exists(basic_report):
+                print(f"[DELETE REPORT] Deleting {basic_report}")
+                os.remove(basic_report)
+            if os.path.exists(ai_report):
+                print(f"[DELETE REPORT] Deleting {ai_report}")
+                os.remove(ai_report)
+        else:
+            print(f"[DELETE REPORT] No file_id found, skipping file deletion")
 
         # Delete from database
         delete_headers = get_supabase_headers()
         delete_headers['Prefer'] = 'return=minimal'  # Required for DELETE operations
 
-        delete_response = http_session.delete(
-            f"{SUPABASE_REST_URL}/reports?id=eq.{report_id}",
-            headers=delete_headers
-        )
+        delete_url = f"{SUPABASE_REST_URL}/reports?id=eq.{report_id}"
+        print(f"[DELETE REPORT] Deleting from database: {delete_url}")
+
+        delete_response = http_session.delete(delete_url, headers=delete_headers)
+
+        print(f"[DELETE REPORT] Delete response status: {delete_response.status_code}")
+        print(f"[DELETE REPORT] Delete response body: {delete_response.text[:200] if delete_response.text else 'empty'}")
 
         if delete_response.ok or delete_response.status_code == 204:
+            print(f"[DELETE REPORT] Successfully deleted report_id={report_id}")
             return jsonify({'success': True})
         else:
-            print(f"Delete failed with status {delete_response.status_code}: {delete_response.text}")
+            print(f"[DELETE REPORT] Delete failed with status {delete_response.status_code}: {delete_response.text}")
             return jsonify({'success': False, 'error': f'Failed to delete report: {delete_response.text}'}), 500
     except Exception as e:
-        print(f"Error deleting report: {str(e)}")
+        print(f"[DELETE REPORT] EXCEPTION: {str(e)}")
+        import traceback
+        traceback.print_exc()
         return jsonify({'success': False, 'error': str(e)}), 500
 
 def generate_html_report(extracted_data, custom_data):
