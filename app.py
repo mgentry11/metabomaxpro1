@@ -1063,6 +1063,53 @@ def get_my_reports():
         traceback.print_exc()
         return jsonify({'success': False, 'error': str(e)}), 500
 
+@app.route('/api/delete-old-reports', methods=['POST'])
+@login_required
+def delete_old_reports():
+    """Delete all reports without file_id (old reports that don't have HTML files)"""
+    user_id = session['user']['id']
+    print(f"[DELETE OLD] Starting bulk delete for user_id: {user_id}")
+
+    try:
+        # Get all reports without file_id for this user
+        url = f"{SUPABASE_REST_URL}/reports?user_id=eq.{user_id}&file_id=is.null&select=id"
+        print(f"[DELETE OLD] Request URL: {url}")
+
+        response = http_session.get(url, headers=get_supabase_headers())
+
+        if not response.ok:
+            print(f"[DELETE OLD] Failed to fetch reports: {response.text}")
+            return jsonify({'success': False, 'error': 'Failed to fetch old reports'}), 500
+
+        old_reports = response.json()
+        count = len(old_reports)
+        print(f"[DELETE OLD] Found {count} old reports to delete")
+
+        if count == 0:
+            return jsonify({'success': True, 'deleted_count': 0, 'message': 'No old reports found'})
+
+        # Delete all old reports
+        delete_headers = get_supabase_headers()
+        delete_headers['Prefer'] = 'return=minimal'
+
+        delete_response = http_session.delete(
+            f"{SUPABASE_REST_URL}/reports?user_id=eq.{user_id}&file_id=is.null",
+            headers=delete_headers
+        )
+
+        if delete_response.ok or delete_response.status_code == 204:
+            print(f"[DELETE OLD] Successfully deleted {count} reports")
+            return jsonify({'success': True, 'deleted_count': count})
+        else:
+            print(f"[DELETE OLD] Delete failed: {delete_response.status_code} - {delete_response.text}")
+            return jsonify({'success': False, 'error': f'Failed to delete reports: {delete_response.text}'}), 500
+
+    except Exception as e:
+        print(f"[DELETE OLD] EXCEPTION: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({'success': False, 'error': str(e)}), 500
+
 @app.route('/api/delete-report/<int:report_id>', methods=['DELETE'])
 @login_required
 def delete_report(report_id):

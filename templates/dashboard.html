@@ -63,9 +63,14 @@
                 <p>You haven't generated any reports yet. Upload a PDF or enter data manually to create your first report!</p>
             </div>
 
-            <button class="btn btn-secondary" onclick="loadMyReports()" style="margin-top: 1rem;">
-                🔄 Refresh Reports List
-            </button>
+            <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                <button class="btn btn-secondary" onclick="loadMyReports()">
+                    🔄 Refresh Reports List
+                </button>
+                <button class="btn btn-secondary" onclick="deleteOldReports()" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);">
+                    🗑️ Delete All Old Reports
+                </button>
+            </div>
         </div>
 
         <!-- Input Method Selection -->
@@ -839,6 +844,37 @@ Example:
             // Scroll to AI section and show it
             document.getElementById('aiSection').style.display = 'block';
             document.getElementById('aiSection').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        async function deleteOldReports() {
+            // Confirm before deleting
+            const confirmDelete = confirm('This will permanently delete all reports that don\'t have associated files (typically old reports created before the file storage system). Are you sure you want to continue?');
+
+            if (!confirmDelete) {
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/delete-old-reports', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alert(`Successfully deleted ${data.deleted_count} old report(s)!`);
+                    // Reload the reports list
+                    loadMyReports();
+                } else {
+                    alert('Error deleting old reports: ' + (data.error || 'Unknown error'));
+                }
+            } catch (error) {
+                console.error('Error deleting old reports:', error);
+                alert('Failed to delete old reports: ' + error.message);
+            }
         }
 
         // Load reports when page loads
