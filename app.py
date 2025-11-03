@@ -310,11 +310,15 @@ def register():
         company_name = request.form.get('company_name', '')
 
         try:
+            print(f"[REGISTER] Attempting registration for email: {email}")
+
             # Check if user already exists
             response = http_session.get(
                 f"{SUPABASE_REST_URL}/profiles?email=eq.{email}&select=id",
                 headers=get_supabase_headers()
             )
+            print(f"[REGISTER] Check existing user status: {response.status_code}")
+
             if response.ok and response.json():
                 flash('An account with this email already exists.', 'danger')
                 return render_template('register.html')
@@ -322,19 +326,26 @@ def register():
             # Generate user ID and hash password
             user_id = str(uuid.uuid4())
             password_hash = generate_password_hash(password)
+            print(f"[REGISTER] Generated user_id: {user_id}")
 
             # Insert user into profiles table
+            profile_data = {
+                'id': user_id,
+                'email': email,
+                'full_name': full_name,
+                'password_hash': password_hash,
+                'company_name': company_name
+            }
+            print(f"[REGISTER] Creating profile with data: {list(profile_data.keys())}")
+
             profile_response = http_session.post(
                 f"{SUPABASE_REST_URL}/profiles",
                 headers=get_supabase_headers(),
-                json={
-                    'id': user_id,
-                    'email': email,
-                    'full_name': full_name,
-                    'password_hash': password_hash,
-                    'company_name': company_name
-                }
+                json=profile_data
             )
+
+            print(f"[REGISTER] Profile creation status: {profile_response.status_code}")
+            print(f"[REGISTER] Profile response: {profile_response.text[:500]}")
 
             if not profile_response.ok:
                 raise Exception(f"Failed to create profile: {profile_response.text}")
