@@ -969,9 +969,16 @@ def view_report(file_id):
     with open(report_path, 'r') as f:
         report_html = f.read()
 
-    # Add download button at the top of the report
-    download_button = f'''
-    <div style="position: fixed; top: 20px; right: 20px; z-index: 10000;">
+    # Add navigation buttons at the top of the report
+    nav_buttons = f'''
+    <div style="position: fixed; top: 20px; right: 20px; z-index: 10000; display: flex; gap: 10px;">
+        <a href="/dashboard"
+           style="display: inline-block; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                  color: white; padding: 15px 30px; border-radius: 12px; text-decoration: none;
+                  font-weight: bold; font-size: 1.1rem; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+                  transition: all 0.3s ease;">
+            ← Back to Dashboard
+        </a>
         <a href="/download/{file_id}"
            style="display: inline-block; background: linear-gradient(135deg, #10b981 0%, #059669 100%);
                   color: white; padding: 15px 30px; border-radius: 12px; text-decoration: none;
@@ -982,10 +989,10 @@ def view_report(file_id):
     </div>
     '''
 
-    # Insert download button after body tag
-    report_with_download = report_html.replace('<body>', f'<body>{download_button}')
+    # Insert navigation buttons after body tag
+    report_with_nav = report_html.replace('<body>', f'<body>{nav_buttons}')
 
-    return report_with_download
+    return report_with_nav
 
 @app.route('/view-ai/<file_id>')
 def view_ai_report(file_id):
@@ -999,9 +1006,16 @@ def view_ai_report(file_id):
     with open(report_path, 'r') as f:
         report_html = f.read()
 
-    # Add download button at the top of the report
-    download_button = f'''
-    <div style="position: fixed; top: 20px; right: 20px; z-index: 10000;">
+    # Add navigation buttons at the top of the report
+    nav_buttons = f'''
+    <div style="position: fixed; top: 20px; right: 20px; z-index: 10000; display: flex; gap: 10px;">
+        <a href="/dashboard"
+           style="display: inline-block; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                  color: white; padding: 15px 30px; border-radius: 12px; text-decoration: none;
+                  font-weight: bold; font-size: 1.1rem; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+                  transition: all 0.3s ease;">
+            ← Back to Dashboard
+        </a>
         <a href="/download-ai/{file_id}"
            style="display: inline-block; background: linear-gradient(135deg, #10b981 0%, #059669 100%);
                   color: white; padding: 15px 30px; border-radius: 12px; text-decoration: none;
@@ -1012,10 +1026,10 @@ def view_ai_report(file_id):
     </div>
     '''
 
-    # Insert download button after body tag
-    report_with_download = report_html.replace('<body>', f'<body>{download_button}')
+    # Insert navigation buttons after body tag
+    report_with_nav = report_html.replace('<body>', f'<body>{nav_buttons}')
 
-    return report_with_download
+    return report_with_nav
 
 @app.route('/api/my-reports', methods=['GET'])
 @login_required
