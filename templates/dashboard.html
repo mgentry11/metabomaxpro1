@@ -310,6 +310,30 @@ Example:
                     <button class="subject-choice-btn" onclick="selectSubject('recovery')">🧘 Recovery</button>
                     <button class="subject-choice-btn" onclick="selectSubject('longevity')">⏳ Longevity</button>
                 </div>
+
+                <!-- Custom Subject Input -->
+                <div style="margin-top: 1.5rem; padding: 1.5rem; background: #f8fafc; border-radius: 8px; border: 2px dashed #cbd5e1;">
+                    <h4 style="margin-bottom: 1rem; color: #475569;">✨ Or Create Your Own Custom Subject:</h4>
+                    <div style="display: flex; gap: 0.75rem; align-items: stretch;">
+                        <input
+                            type="text"
+                            id="customSubjectInput"
+                            class="form-control"
+                            placeholder="e.g., Sleep Optimization, Stress Management, Hormone Balance..."
+                            style="flex: 1; padding: 0.75rem 1rem; font-size: 1rem;"
+                            onkeypress="if(event.key === 'Enter') addCustomSubject()"
+                        >
+                        <button
+                            class="btn btn-secondary"
+                            onclick="addCustomSubject()"
+                            style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); white-space: nowrap; padding: 0.75rem 1.5rem; font-weight: 600;">
+                            ➕ Add Custom
+                        </button>
+                    </div>
+                    <p style="color: #64748b; font-size: 0.85rem; margin-top: 0.75rem; margin-bottom: 0;">
+                        💡 The AI can generate recommendations for ANY health/fitness topic based on your metabolic data!
+                    </p>
+                </div>
             </div>
 
             <!-- Goals (Optional) -->
@@ -434,10 +458,53 @@ Example:
                 btn.classList.add('active');
             }
 
-            // Enable generate button if at least one subject is selected
-            document.getElementById('generateAIBtn').disabled = selectedSubjects.length === 0;
+            // Update button
+            updateGenerateButton();
+        }
 
-            // Update button text to show count
+        function addCustomSubject() {
+            const input = document.getElementById('customSubjectInput');
+            const customSubject = input.value.trim();
+
+            if (!customSubject) {
+                alert('Please enter a custom subject');
+                return;
+            }
+
+            // Check if already selected
+            if (selectedSubjects.includes(customSubject.toLowerCase())) {
+                alert('This subject is already selected!');
+                return;
+            }
+
+            // Add to selected subjects
+            selectedSubjects.push(customSubject.toLowerCase());
+
+            // Create a visual tag to show it's been added
+            const subjectGrid = document.querySelector('.subject-choice-btn').parentElement;
+            const customBtn = document.createElement('button');
+            customBtn.className = 'subject-choice-btn active';
+            customBtn.innerHTML = `✨ ${customSubject}`;
+            customBtn.onclick = function() {
+                // Allow deselecting custom subjects
+                selectedSubjects = selectedSubjects.filter(s => s !== customSubject.toLowerCase());
+                customBtn.remove();
+                updateGenerateButton();
+            };
+            subjectGrid.appendChild(customBtn);
+
+            // Clear input
+            input.value = '';
+
+            // Update button
+            updateGenerateButton();
+
+            // Scroll to show the new button
+            customBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function updateGenerateButton() {
+            document.getElementById('generateAIBtn').disabled = selectedSubjects.length === 0;
             const btnText = selectedSubjects.length > 0
                 ? `Generate AI Recommendations (${selectedSubjects.length} subject${selectedSubjects.length > 1 ? 's' : ''})`
                 : 'Generate AI Recommendations';
