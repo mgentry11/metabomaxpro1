@@ -898,9 +898,44 @@ def generate_report_with_ai():
         <h2 style="color: white; text-align: center; margin-bottom: 2rem; font-size: 2.5rem;">
             🤖 AI-Powered Personalized Recommendations
         </h2>
-        <p style="color: rgba(255,255,255,0.9); text-align: center; margin-bottom: 3rem; font-size: 1.1rem;">
+        <p style="color: rgba(255,255,255,0.9); text-align: center; margin-bottom: 2rem; font-size: 1.1rem;">
             Based on your metabolic data and health goals
         </p>
+
+        <!-- AI Disclaimer -->
+        <div style="background: rgba(255,255,255,0.15); border-radius: 15px; padding: 2rem; backdrop-filter: blur(10px); margin-bottom: 2rem; border: 2px solid rgba(255,255,255,0.3);">
+            <div style="background: rgba(255,255,255,0.15); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem;">
+                <p style="margin: 0 0 0.5rem 0; font-weight: 600; font-size: 1.1rem; color: white;">
+                    ✅ First, the good news:
+                </p>
+                <p style="margin: 0; line-height: 1.7; color: rgba(255,255,255,0.95);">
+                    Your core metabolic data (VO2 max, RMR, heart rate zones, substrate utilization) uses <strong>well-established, medically-approved algorithms</strong>—the same ones testing facilities use. No AI. No guesswork. Just proven math.
+                </p>
+            </div>
+
+            <p style="font-size: 1.05rem; line-height: 1.7; margin-bottom: 1.5rem; color: rgba(255,255,255,0.95);">
+                <strong>The recommendations below?</strong> That's where AI comes in. AI is incredibly smart, but it's also an overachiever that really wants you to like it.
+            </p>
+
+            <div style="background: rgba(255,255,255,0.1); border-radius: 12px; padding: 1.5rem; margin: 1.5rem 0;">
+                <p style="margin: 0 0 1rem 0; font-weight: 600; color: white;">AI has a few quirks you should know about:</p>
+                <ul style="margin: 0; padding-left: 1.5rem; line-height: 2; color: rgba(255,255,255,0.95);">
+                    <li><strong>It can hallucinate</strong> - occasionally making up facts with complete confidence</li>
+                    <li><strong>It's a people-pleaser</strong> - wants to tell you what you want to hear</li>
+                    <li><strong>It lacks clinical context</strong> - doesn't know your complete medical history</li>
+                </ul>
+            </div>
+
+            <div style="background: rgba(255,255,255,0.2); border-left: 4px solid white; padding: 1.25rem; border-radius: 8px; margin: 1.5rem 0;">
+                <p style="margin: 0; font-size: 1.05rem; line-height: 1.7; color: white;">
+                    💡 <strong>That's why every recommendation below should be reviewed with a healthcare professional</strong>—specifically one experienced with VO2 max testing, metabolic optimization, and performance physiology.
+                </p>
+            </div>
+
+            <p style="margin: 0; font-size: 1rem; text-align: center; opacity: 0.95; color: white; font-weight: 600;">
+                Think of these as homework to bring to your doctor, not medical advice to follow blindly.
+            </p>
+        </div>
     """
 
     # Add each subject's recommendations
