@@ -116,6 +116,80 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
+def get_user_subscription(user_id):
+    """Get user's subscription details"""
+    try:
+        response = http_session.get(
+            f"{SUPABASE_REST_URL}/subscriptions?user_id=eq.{user_id}",
+            headers=get_supabase_headers()
+        )
+        if response.ok and response.json():
+            return response.json()[0]
+        return None
+    except Exception as e:
+        print(f"Error getting subscription: {e}")
+        return None
+
+def can_generate_basic_report(user_id):
+    """Check if user can generate a basic report"""
+    subscription = get_user_subscription(user_id)
+    if not subscription:
+        return False, "No subscription found"
+
+    reports_used = subscription.get('reports_used', 0)
+    reports_limit = subscription.get('reports_limit', 0)
+
+    if reports_used >= reports_limit:
+        return False, f"You've used all {reports_limit} of your free reports. Please upgrade to continue."
+
+    return True, f"Report {reports_used + 1} of {reports_limit}"
+
+def can_use_ai_recommendations(user_id):
+    """Check if user has AI credits available"""
+    subscription = get_user_subscription(user_id)
+    if not subscription:
+        return False, "No subscription found"
+
+    plan_name = subscription.get('plan_name', 'free')
+    ai_credits = subscription.get('ai_credits', 0)
+
+    # Subscription users get unlimited AI
+    if plan_name == 'subscription':
+        return True, "Unlimited AI (subscription)"
+
+    # AI package or one-time purchases
+    if ai_credits > 0:
+        return True, f"{ai_credits} AI credits remaining"
+
+    return False, "No AI credits available. Please upgrade to add AI recommendations."
+
+def use_ai_credit(user_id):
+    """Decrement user's AI credits by 1"""
+    subscription = get_user_subscription(user_id)
+    if not subscription:
+        return False
+
+    plan_name = subscription.get('plan_name', 'free')
+
+    # Subscription users have unlimited, don't decrement
+    if plan_name == 'subscription':
+        return True
+
+    ai_credits = subscription.get('ai_credits', 0)
+    if ai_credits > 0:
+        try:
+            http_session.patch(
+                f"{SUPABASE_REST_URL}/subscriptions?user_id=eq.{user_id}",
+                headers=get_supabase_headers(),
+                json={'ai_credits': ai_credits - 1}
+            )
+            return True
+        except Exception as e:
+            print(f"Error using AI credit: {e}")
+            return False
+
+    return False
+
 def extract_pnoe_data(pdf_path):
     """Extract data from metabolic test PDF - simplified version"""
     data = {
@@ -750,6 +824,15 @@ def generate_report():
         return jsonify({'error': 'No file ID provided'}), 400
 
     user_id = session['user']['id']
+
+    # CHECK REPORT LIMIT
+    can_generate, message = can_generate_basic_report(user_id)
+    if not can_generate:
+        return jsonify({
+            'error': message,
+            'upgrade_required': True,
+            'pricing_url': '/pricing'
+        }), 403
 
     # Load extracted data
     data_path = os.path.join(app.config['UPLOAD_FOLDER'], f"{file_id}_data.json")
@@ -1822,8 +1905,19 @@ def generate_ai_recommendation():
         user_goals = data.get('goals', [])
         custom_context = data.get('custom_context', '')
 
-        # Get user's metabolic data from their latest report
+        user_id = session['user']['id']
         user_email = session.get('email')
+
+        # CHECK AI CREDITS
+        can_use_ai, message = can_use_ai_recommendations(user_id)
+        if not can_use_ai:
+            return jsonify({
+                'error': message,
+                'upgrade_required': True,
+                'pricing_url': '/pricing'
+            }), 403
+
+        # Get user's metabolic data from their latest report
         metabolic_data = get_user_metabolic_data(user_email)
 
         if not metabolic_data:
@@ -1841,6 +1935,9 @@ def generate_ai_recommendation():
             user_goals=user_goals,
             custom_context=custom_context
         )
+
+        # USE AI CREDIT (decrement counter)
+        use_ai_credit(user_id)
 
         # Store recommendation in database
         save_recommendation_to_db(user_email, subject, recommendations)
