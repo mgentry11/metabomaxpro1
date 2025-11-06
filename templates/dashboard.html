@@ -79,16 +79,17 @@
             <h2 style="color: white; margin-bottom: 1.5rem;">📊 Your Plan</h2>
 
             {% if subscription.plan_name == 'free' %}
+                {% set remaining = [0, subscription.reports_limit - subscription.reports_used]|max %}
                 <div style="background: rgba(255,255,255,0.15); padding: 1.5rem; border-radius: 12px; margin-bottom: 1rem;">
                     <div style="font-size: 1.3rem; margin-bottom: 1rem; font-weight: 600;">
                         🎁 Free Tier - Try 2 FREE Reports
                     </div>
                     <div style="background: rgba(255,255,255,0.2); padding: 1.25rem; border-radius: 8px; margin-bottom: 1rem;">
                         <p style="margin: 0; font-size: 1.2rem; font-weight: 600;">
-                            ✅ Reports remaining: <strong style="font-size: 1.5rem;">{{ subscription.reports_limit - subscription.reports_used }}</strong> of {{ subscription.reports_limit }}
+                            ✅ Reports remaining: <strong style="font-size: 1.5rem;">{{ remaining }}</strong> of {{ subscription.reports_limit }}
                         </p>
                         <p style="margin: 0.75rem 0 0 0; font-size: 0.95rem; opacity: 0.9;">
-                            Value: ${{ (subscription.reports_limit - subscription.reports_used) * 175 }}-{{ (subscription.reports_limit - subscription.reports_used) * 250 }} (what facilities charge)
+                            Value: ${{ remaining * 175 }}-{{ remaining * 250 }} (what facilities charge)
                         </p>
                     </div>
                     <p style="margin: 0; font-size: 0.95rem; opacity: 0.9;">
