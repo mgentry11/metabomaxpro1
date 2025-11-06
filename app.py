@@ -396,21 +396,26 @@ def register():
         try:
             print(f"[REGISTER] Attempting registration for email: {email}")
 
-            # Check if user already exists
-            response = http_session.get(
-                f"{SUPABASE_REST_URL}/profiles?email=eq.{email}&select=id",
-                headers=get_supabase_headers()
-            )
-            print(f"[REGISTER] Check existing user status: {response.status_code}")
-
-            if response.ok and response.json():
-                flash('An account with this email already exists.', 'danger')
-                return render_template('register.html')
-
-            # Generate user ID and hash password
+            # Generate user ID and hash password first (before any DB calls)
             user_id = str(uuid.uuid4())
             password_hash = generate_password_hash(password)
             print(f"[REGISTER] Generated user_id: {user_id}")
+
+            # Check if user already exists
+            try:
+                response = http_session.get(
+                    f"{SUPABASE_REST_URL}/profiles?email=eq.{email}&select=id",
+                    headers=get_supabase_headers(),
+                    timeout=10
+                )
+                print(f"[REGISTER] Check existing user status: {response.status_code}")
+
+                if response.ok and response.json():
+                    flash('An account with this email already exists.', 'danger')
+                    return render_template('register.html')
+            except Exception as check_error:
+                print(f"[REGISTER] Warning: Could not check existing user: {check_error}")
+                # Continue with registration anyway
 
             # Insert user into profiles table
             profile_data = {
@@ -422,29 +427,33 @@ def register():
             }
             print(f"[REGISTER] Creating profile with data: {list(profile_data.keys())}")
 
-            profile_response = http_session.post(
+            # Use a fresh session for the POST request
+            profile_response = requests.post(
                 f"{SUPABASE_REST_URL}/profiles",
                 headers=get_supabase_headers(),
-                json=profile_data
+                json=profile_data,
+                timeout=15
             )
 
             print(f"[REGISTER] Profile creation status: {profile_response.status_code}")
-            print(f"[REGISTER] Profile response: {profile_response.text[:500]}")
+            print(f"[REGISTER] Profile response: {profile_response.text[:500] if profile_response.text else 'empty'}")
 
             if not profile_response.ok:
                 raise Exception(f"Failed to create profile: {profile_response.text}")
 
-            # Create subscription record
-            sub_response = http_session.post(
+            # Create subscription record with new free tier (2 reports)
+            sub_response = requests.post(
                 f"{SUPABASE_REST_URL}/subscriptions",
                 headers=get_supabase_headers(),
                 json={
                     'user_id': user_id,
                     'plan_name': 'free',
                     'status': 'active',
-                    'reports_limit': 10,
-                    'reports_used': 0
-                }
+                    'reports_limit': 2,
+                    'reports_used': 0,
+                    'ai_credits': 0
+                },
+                timeout=15
             )
 
             if not sub_response.ok:
@@ -453,8 +462,15 @@ def register():
             flash('Registration successful! You can now log in.', 'success')
             return redirect(url_for('login'))
 
+        except requests.exceptions.ConnectionError as conn_error:
+            print(f"[REGISTER] Connection error: {conn_error}")
+            flash('Network error. Please try again.', 'danger')
+        except requests.exceptions.Timeout:
+            print(f"[REGISTER] Request timeout")
+            flash('Request timeout. Please try again.', 'danger')
         except Exception as e:
-            flash(f'Registration error: {str(e)}', 'danger')
+            print(f"[REGISTER] Error: {type(e).__name__}: {str(e)}")
+            flash(f'Registration error. Please try again.', 'danger')
 
     return render_template('register.html')
 
