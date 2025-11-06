@@ -409,6 +409,9 @@
         document.querySelectorAll('.subject-btn').forEach(btn => {
             btn.addEventListener('click', function(e) {
                 e.preventDefault(); // Prevent any default behavior
+                e.stopPropagation(); // Stop event from bubbling
+
+                console.log('Button clicked:', this.textContent.trim()); // Debug
 
                 // Remove active from all buttons
                 document.querySelectorAll('.subject-btn').forEach(b => b.classList.remove('active'));
@@ -419,20 +422,42 @@
                 const subject = this.dataset.subject;
                 selectedSubject = subject;
 
+                console.log('Selected subject:', subject);
+                console.log('Button count after click:', document.querySelectorAll('.subject-btn').length);
+
                 const customInput = document.getElementById('customSubjectInput');
                 if (subject === 'custom') {
                     customInput.classList.add('show');
+                    console.log('Custom input shown');
                     // Focus on the input field
                     setTimeout(() => {
                         document.getElementById('customSubject').focus();
+                        console.log('Button still exists?', this.parentElement !== null);
                     }, 100);
                 } else {
                     customInput.classList.remove('show');
                 }
-
-                console.log('Selected subject:', subject); // Debug log
             });
         });
+
+        // Monitor for button removal
+        const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.type === 'childList' && mutation.removedNodes.length > 0) {
+                    mutation.removedNodes.forEach(node => {
+                        if (node.classList && node.classList.contains('subject-btn')) {
+                            console.error('BUTTON REMOVED FROM DOM!', node);
+                            console.trace();
+                        }
+                    });
+                }
+            });
+        });
+
+        const subjectGrid = document.querySelector('.subject-grid');
+        if (subjectGrid) {
+            observer.observe(subjectGrid, { childList: true, subtree: true });
+        }
 
         // Goals selection
         document.querySelectorAll('.goal-tag').forEach(tag => {
