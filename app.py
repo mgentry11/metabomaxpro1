@@ -1724,8 +1724,18 @@ def create_checkout_session():
 
         return jsonify({'checkout_url': checkout_session.url})
 
+    except stripe.error.InvalidRequestError as e:
+        print(f"Stripe Invalid Request Error: {e}")
+        print(f"  - Plan type: {plan_type}")
+        print(f"  - Price IDs configured:")
+        print(f"    UNLIMITED_BASIC: {STRIPE_PRICE_UNLIMITED_BASIC}")
+        print(f"    AI_PACKAGE: {STRIPE_PRICE_AI_PACKAGE}")
+        print(f"    SUBSCRIPTION: {STRIPE_PRICE_SUBSCRIPTION}")
+        return jsonify({'error': f'Stripe error: {str(e)}'}), 400
     except Exception as e:
-        print(f"Error creating checkout session: {e}")
+        print(f"Error creating checkout session: {type(e).__name__}: {e}")
+        import traceback
+        traceback.print_exc()
         return jsonify({'error': str(e)}), 500
 
 @app.route('/stripe-webhook', methods=['POST'])
