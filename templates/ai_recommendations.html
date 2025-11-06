@@ -400,8 +400,13 @@
 
         // Subject selection
         document.querySelectorAll('.subject-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault(); // Prevent any default behavior
+
+                // Remove active from all buttons
                 document.querySelectorAll('.subject-btn').forEach(b => b.classList.remove('active'));
+
+                // Add active to clicked button
                 this.classList.add('active');
 
                 const subject = this.dataset.subject;
@@ -410,9 +415,15 @@
                 const customInput = document.getElementById('customSubjectInput');
                 if (subject === 'custom') {
                     customInput.classList.add('show');
+                    // Focus on the input field
+                    setTimeout(() => {
+                        document.getElementById('customSubject').focus();
+                    }, 100);
                 } else {
                     customInput.classList.remove('show');
                 }
+
+                console.log('Selected subject:', subject); // Debug log
             });
         });
 
