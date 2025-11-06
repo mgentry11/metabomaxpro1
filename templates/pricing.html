@@ -290,67 +290,97 @@
             </div>
         </div>
 
-        <div class="pricing-grid">
-            <!-- One-Time Plan -->
-            <div class="pricing-card">
-                <div class="plan-name">Single Report</div>
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-bottom: 3rem;">
+            <!-- FREE Tier -->
+            <div class="pricing-card" style="background: rgba(255, 255, 255, 0.95); border: 2px solid #10b981;">
+                <div style="background: #10b981; color: white; padding: 0.5rem; text-align: center; font-weight: 600; font-size: 0.9rem; margin: -1rem -1rem 1rem -1rem;">
+                    TRY IT FREE
+                </div>
+                <div class="plan-name">Free Tier</div>
+                <div class="plan-price">
+                    $0
+                    <small>forever</small>
+                </div>
+                <div class="plan-description">Try 2 professional reports - $350-500 value</div>
+                <ul class="features-list">
+                    <li><strong>2 FREE basic reports</strong></li>
+                    <li>Upload unlimited PDFs</li>
+                    <li>Cloud storage</li>
+                    <li>VO2 Max analysis</li>
+                    <li>RMR calculations</li>
+                    <li>Training zones</li>
+                    <li>PDF export</li>
+                    <li>❌ No AI</li>
+                </ul>
+                <a href="{{ url_for('register') }}" class="btn" style="background: #10b981;">Start Free</a>
+            </div>
+
+            <!-- $69 Unlimited Basic -->
+            <div class="pricing-card popular">
+                <div class="popular-badge">MOST POPULAR</div>
+                <div class="plan-name">Unlimited Basic</div>
                 <div class="plan-price">
                     $69
                     <small>one-time</small>
                 </div>
-                <div class="plan-description">Perfect for trying out the service or occasional use</div>
+                <div class="plan-description">Unlimited reports, no AI - 73% savings</div>
                 <ul class="features-list">
-                    <li>1 comprehensive metabolic report</li>
-                    <li>Biological age analysis</li>
-                    <li>Beautiful PDF export</li>
-                    <li>Instant delivery</li>
-                    <li>Works with any VO2 Max test</li>
+                    <li><strong>Unlimited basic reports</strong></li>
+                    <li>Everything in Free tier</li>
+                    <li>Generate reports forever</li>
+                    <li>Perfect for quarterly testing</li>
+                    <li>Cloud storage</li>
+                    <li>PDF export</li>
+                    <li>❌ No AI</li>
                 </ul>
-                <button class="btn" onclick="handlePurchase('one_time')">Buy Now - $69</button>
+                <button class="btn" onclick="handlePurchase('unlimited_basic')">Buy Now - $69</button>
+                <p style="text-align: center; margin-top: 1rem; font-size: 0.9rem; color: #64748b;">vs $175-250 per report at facilities</p>
             </div>
 
-            <!-- Monthly Subscription -->
-            <div class="pricing-card popular">
-                <div class="popular-badge">MOST POPULAR</div>
+            <!-- $99 AI-Enhanced -->
+            <div class="pricing-card" style="border: 2px solid #8b5cf6;">
+                <div style="background: #8b5cf6; color: white; padding: 0.5rem; text-align: center; font-weight: 600; font-size: 0.9rem; margin: -1rem -1rem 1rem -1rem;">
+                    BEST FOR OPTIMIZATION
+                </div>
+                <div class="plan-name">AI-Enhanced</div>
+                <div class="plan-price">
+                    $99
+                    <small>one-time</small>
+                </div>
+                <div class="plan-description">Unlimited basic + 10 AI enhancements</div>
+                <ul class="features-list">
+                    <li><strong>Unlimited basic reports</strong></li>
+                    <li><strong>10 AI recommendation credits</strong></li>
+                    <li>Supplement suggestions</li>
+                    <li>Peptide protocols</li>
+                    <li>Training plans</li>
+                    <li>Nutrition strategies</li>
+                    <li>Recovery optimization</li>
+                </ul>
+                <button class="btn" onclick="handlePurchase('ai_package')" style="background: #8b5cf6;">Buy Now - $99</button>
+            </div>
+
+            <!-- $39/month Subscription -->
+            <div class="pricing-card" style="border: 2px solid #3b82f6;">
+                <div style="background: #3b82f6; color: white; padding: 0.5rem; text-align: center; font-weight: 600; font-size: 0.9rem; margin: -1rem -1rem 1rem -1rem;">
+                    UNLIMITED EVERYTHING
+                </div>
                 <div class="plan-name">Monthly Subscription</div>
                 <div class="plan-price">
                     $39
                     <small>/month</small>
                 </div>
-                <div class="plan-description">Best value for tracking your metabolic progress and improvements</div>
+                <div class="plan-description">Best value for monthly testing</div>
                 <ul class="features-list">
-                    <li><strong>Unlimited</strong> metabolic reports</li>
-                    <li><strong>Progress Analysis Reports</strong> - Compare tests over weeks, months, or years</li>
-                    <li>Cloud storage for all reports</li>
-                    <li>Track VO2 Max improvements</li>
-                    <li>Monitor fat oxidation changes</li>
-                    <li>Biological age trends over time</li>
-                    <li>Custom date range comparisons</li>
-                    <li>Export all reports to PDF</li>
+                    <li><strong>Unlimited basic reports</strong></li>
+                    <li><strong>Unlimited AI recommendations</strong></li>
+                    <li>Progress tracking</li>
+                    <li>Trend analysis</li>
+                    <li>Compare any tests</li>
                     <li>Priority support</li>
                     <li>Cancel anytime</li>
                 </ul>
                 <button class="btn" onclick="handlePurchase('subscription')">Subscribe - $39/month</button>
-            </div>
-
-            <!-- Enterprise (Future) -->
-            <div class="pricing-card">
-                <div class="plan-name">Teams & Gyms</div>
-                <div class="plan-price">
-                    Custom
-                    <small>pricing</small>
-                </div>
-                <div class="plan-description">For fitness centers, trainers, and businesses</div>
-                <ul class="features-list">
-                    <li>Everything in Monthly</li>
-                    <li>Multiple user accounts</li>
-                    <li>White-label reports</li>
-                    <li>API access</li>
-                    <li>Dedicated support</li>
-                    <li>Custom branding</li>
-                    <li>Volume discounts</li>
-                </ul>
-                <a href="mailto:support@metabomaxpro.com" class="btn btn-secondary">Contact Us</a>
             </div>
         </div>
 

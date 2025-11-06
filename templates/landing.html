@@ -316,18 +316,59 @@
     <section class="hero">
         <div class="hero-content">
             <img src="{{ url_for('static', filename='images/logo.jpg') }}" alt="MetaboMaxPro Logo" style="max-width: 500px; width: 100%; margin-bottom: 2rem; filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.3));">
-            <h1>Get Professional Metabolic Reports<br>for 60% Less</h1>
-            <p class="subtitle">Turn your basic VO2 Max test into a comprehensive metabolic analysis</p>
+            <h1>Try 2 FREE Professional Reports<br>Facilities Charge $175-250 Each</h1>
+            <p class="subtitle">Get $350-500 worth of metabolic analysis - completely free. No credit card required.</p>
             <div class="price-highlight">
-                Just $69 one-time or $39/month • Save $100+ vs testing centers
+                2 FREE Reports to Start • Then $69 for Unlimited Basic or $99 with AI
             </div>
             <div class="cta-buttons">
-                <a href="{{ url_for('register') }}" class="btn btn-primary">Start Your Report Now</a>
+                <a href="{{ url_for('register') }}" class="btn btn-primary">Get Your 2 FREE Reports</a>
                 <a href="/sample-report" class="btn btn-secondary">View Sample Report</a>
                 <a href="/sample-data" class="btn btn-secondary">View Sample Data</a>
                 <a href="/ai-examples" class="btn btn-secondary">AI Recommendations</a>
                 <a href="{{ url_for('pricing') }}" class="btn btn-secondary">See Pricing</a>
             </div>
+        </div>
+    </section>
+
+    <!-- Value Proposition: 2 Free Reports -->
+    <section style="background: white; padding: 3rem 2rem;">
+        <div style="max-width: 1100px; margin: 0 auto; text-align: center;">
+            <h2 style="color: #1e293b; margin-bottom: 1rem; font-size: 2.5rem;">🎁 Start With 2 FREE Reports</h2>
+            <p style="color: #64748b; font-size: 1.2rem; margin-bottom: 3rem;">Each report includes everything facilities charge $175-250 for</p>
+
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-bottom: 2rem;">
+                <div style="background: #f0fdf4; padding: 2rem; border-radius: 12px; border: 2px solid #10b981;">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">🎁</div>
+                    <h3 style="color: #065f46; font-size: 1.5rem; margin-bottom: 0.5rem;">FREE Tier</h3>
+                    <p style="font-size: 2.5rem; font-weight: 800; color: #10b981; margin: 0.5rem 0;">$0</p>
+                    <p style="color: #64748b; margin-bottom: 1rem;">2 free basic reports</p>
+                    <p style="color: #10b981; font-weight: 600; font-size: 0.9rem;">Value: $350-500</p>
+                </div>
+
+                <div style="background: #eff6ff; padding: 2rem; border-radius: 12px; border: 3px solid #3b82f6; position: relative;">
+                    <div style="position: absolute; top: -15px; left: 50%; transform: translateX(-50%); background: #3b82f6; color: white; padding: 0.5rem 1.5rem; border-radius: 20px; font-weight: 600; font-size: 0.85rem;">
+                        MOST POPULAR
+                    </div>
+                    <div style="font-size: 3rem; margin-bottom: 1rem; margin-top: 0.5rem;">⭐</div>
+                    <h3 style="color: #1e40af; font-size: 1.5rem; margin-bottom: 0.5rem;">Unlimited Basic</h3>
+                    <p style="font-size: 2.5rem; font-weight: 800; color: #3b82f6; margin: 0.5rem 0;">$69</p>
+                    <p style="color: #64748b; margin-bottom: 1rem;">Unlimited reports<br>No AI</p>
+                    <p style="color: #3b82f6; font-weight: 600; font-size: 0.9rem;">73% savings vs facilities</p>
+                </div>
+
+                <div style="background: #f5f3ff; padding: 2rem; border-radius: 12px; border: 2px solid #8b5cf6;">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">🤖</div>
+                    <h3 style="color: #6d28d9; font-size: 1.5rem; margin-bottom: 0.5rem;">AI-Enhanced</h3>
+                    <p style="font-size: 2.5rem; font-weight: 800; color: #8b5cf6; margin: 0.5rem 0;">$99</p>
+                    <p style="color: #64748b; margin-bottom: 1rem;">Unlimited + 10 AI credits</p>
+                    <p style="color: #8b5cf6; font-weight: 600; font-size: 0.9rem;">Best for optimization</p>
+                </div>
+            </div>
+
+            <a href="{{ url_for('register') }}" class="btn btn-primary" style="font-size: 1.2rem; padding: 1.25rem 3rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; text-decoration: none; border-radius: 50px; display: inline-block; box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);">
+                Get Your 2 FREE Reports Now
+            </a>
         </div>
     </section>
 
