@@ -73,6 +73,105 @@
             }
         </style>
 
+        <!-- Subscription Status Card -->
+        {% if subscription %}
+        <div class="card" style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; margin-bottom: 2rem;">
+            <h2 style="color: white; margin-bottom: 1.5rem;">📊 Your Plan</h2>
+
+            {% if subscription.plan_name == 'free' %}
+                <div style="background: rgba(255,255,255,0.15); padding: 1.5rem; border-radius: 12px; margin-bottom: 1rem;">
+                    <div style="font-size: 1.3rem; margin-bottom: 1rem; font-weight: 600;">
+                        🎁 Free Tier - Try 2 FREE Reports
+                    </div>
+                    <div style="background: rgba(255,255,255,0.2); padding: 1.25rem; border-radius: 8px; margin-bottom: 1rem;">
+                        <p style="margin: 0; font-size: 1.2rem; font-weight: 600;">
+                            ✅ Reports remaining: <strong style="font-size: 1.5rem;">{{ subscription.reports_limit - subscription.reports_used }}</strong> of {{ subscription.reports_limit }}
+                        </p>
+                        <p style="margin: 0.75rem 0 0 0; font-size: 0.95rem; opacity: 0.9;">
+                            Value: ${{ (subscription.reports_limit - subscription.reports_used) * 175 }}-{{ (subscription.reports_limit - subscription.reports_used) * 250 }} (what facilities charge)
+                        </p>
+                    </div>
+                    <p style="margin: 0; font-size: 0.95rem; opacity: 0.9;">
+                        ❌ AI recommendations not included (upgrade to add)
+                    </p>
+                </div>
+
+                {% if subscription.reports_used >= subscription.reports_limit %}
+                <div style="background: rgba(239, 68, 68, 0.3); padding: 1.5rem; border-radius: 12px; border-left: 4px solid #ef4444;">
+                    <p style="margin: 0 0 1rem 0; font-size: 1.2rem; font-weight: 600;">
+                        ⚠️ You've used all your free reports
+                    </p>
+                    <p style="margin: 0 0 1.25rem 0; opacity: 0.95;">
+                        Unlock unlimited reports for just $69 (facilities charge $175-250 each!)
+                    </p>
+                    <a href="{{ url_for('pricing') }}" style="background: white; color: #3b82f6; padding: 0.875rem 1.75rem; border-radius: 8px; text-decoration: none; font-weight: 600; display: inline-block; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                        Upgrade Now
+                    </a>
+                </div>
+                {% else %}
+                <div style="text-align: center; margin-top: 1rem;">
+                    <p style="margin: 0 0 0.75rem 0; font-size: 0.95rem; opacity: 0.9;">
+                        Want unlimited reports or AI recommendations?
+                    </p>
+                    <a href="{{ url_for('pricing') }}" style="background: rgba(255,255,255,0.2); color: white; padding: 0.75rem 1.5rem; border-radius: 8px; text-decoration: none; font-weight: 600; display: inline-block; border: 2px solid white;">
+                        View Pricing
+                    </a>
+                </div>
+                {% endif %}
+
+            {% elif subscription.plan_name == 'unlimited_basic' %}
+                <div style="background: rgba(255,255,255,0.15); padding: 1.5rem; border-radius: 12px;">
+                    <div style="font-size: 1.3rem; margin-bottom: 1rem; font-weight: 600;">
+                        ⭐ Unlimited Basic - $69 one-time
+                    </div>
+                    <p style="margin: 0; font-size: 1.1rem;">✅ <strong>Unlimited basic reports</strong></p>
+                    <p style="margin: 0.5rem 0 0 0; opacity: 0.9;">❌ No AI recommendations</p>
+                    <div style="margin-top: 1.25rem; padding-top: 1.25rem; border-top: 1px solid rgba(255,255,255,0.2);">
+                        <p style="margin: 0 0 0.75rem 0; font-size: 0.95rem;">Want AI-powered supplement and peptide recommendations?</p>
+                        <a href="{{ url_for('pricing') }}" style="background: rgba(255,255,255,0.2); color: white; padding: 0.75rem 1.5rem; border-radius: 8px; text-decoration: none; font-weight: 600; display: inline-block; border: 2px solid white;">
+                            Upgrade to AI Package ($99)
+                        </a>
+                    </div>
+                </div>
+
+            {% elif subscription.plan_name == 'ai_package' %}
+                <div style="background: rgba(255,255,255,0.15); padding: 1.5rem; border-radius: 12px;">
+                    <div style="font-size: 1.3rem; margin-bottom: 1rem; font-weight: 600;">
+                        🤖 AI-Enhanced Package - $99 one-time
+                    </div>
+                    <p style="margin: 0; font-size: 1.1rem;">✅ <strong>Unlimited basic reports</strong></p>
+                    <div style="background: rgba(255,255,255,0.2); padding: 1rem; border-radius: 8px; margin: 1rem 0;">
+                        <p style="margin: 0; font-size: 1.2rem; font-weight: 600;">
+                            🎯 AI Credits: <strong style="font-size: 1.5rem;">{{ subscription.ai_credits }}</strong> remaining
+                        </p>
+                    </div>
+                    {% if subscription.ai_credits == 0 %}
+                    <div style="background: rgba(239, 68, 68, 0.3); padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+                        <p style="margin: 0; font-size: 0.95rem;">
+                            ⚠️ No AI credits left. Upgrade to monthly for unlimited AI!
+                        </p>
+                    </div>
+                    {% endif %}
+                </div>
+
+            {% elif subscription.plan_name == 'subscription' %}
+                <div style="background: rgba(255,255,255,0.15); padding: 1.5rem; border-radius: 12px;">
+                    <div style="font-size: 1.3rem; margin-bottom: 1rem; font-weight: 600;">
+                        🚀 Monthly Subscription - $39/month
+                    </div>
+                    <p style="margin: 0; font-size: 1.1rem;">✅ <strong>Unlimited basic reports</strong></p>
+                    <p style="margin: 0.5rem 0; font-size: 1.1rem;">✅ <strong>Unlimited AI recommendations</strong></p>
+                    <p style="margin: 0.5rem 0 0 0; opacity: 0.9;">✅ Progress tracking & comparisons</p>
+                    <div style="background: rgba(16, 185, 129, 0.2); padding: 1rem; border-radius: 8px; margin-top: 1.25rem; border-left: 4px solid #10b981;">
+                        <p style="margin: 0; font-size: 0.95rem;">
+                            💚 You're getting the best value! Everything unlimited.
+                        </p>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+        {% endif %}
+
         <!-- My Reports Section -->
         <div class="card" id="myReportsSection" style="margin-bottom: 2rem;">
             <h2>📋 My Reports</h2>
