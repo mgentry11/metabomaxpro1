@@ -48,8 +48,9 @@ stripe.api_key = os.getenv('STRIPE_SECRET_KEY')
 STRIPE_PUBLISHABLE_KEY = os.getenv('STRIPE_PUBLISHABLE_KEY')
 
 # Stripe Price IDs
-STRIPE_PRICE_ONE_TIME = 'price_1SOnZGC5St4DyD5vE5EzwQBx'  # $69 Single Report
-STRIPE_PRICE_SUBSCRIPTION = 'price_1SOo8NC5St4DyD5vBPXDJrzy'  # $39/month Unlimited
+STRIPE_PRICE_UNLIMITED_BASIC = 'price_1SQKHOC5St4DyD5v1QFSrM0j'  # $69 Unlimited Basic Reports
+STRIPE_PRICE_AI_PACKAGE = 'price_1SQKPBC5St4DyD5vnRp1NXK2'  # $99 AI-Enhanced Package
+STRIPE_PRICE_SUBSCRIPTION = 'price_1SOo8NC5St4DyD5vBPXDJrzy'  # $39/month Unlimited Everything
 
 # Create a requests session that forces HTTP/1.1
 from requests.adapters import HTTPAdapter
@@ -1669,56 +1670,38 @@ def create_checkout_session():
             stripe_customer_id = customer.id
 
         # Create checkout session based on plan type
-        if plan_type == 'one_time':
-            # One-time payment for $69
+        if plan_type == 'unlimited_basic':
+            # Unlimited Basic - $69 one-time
             checkout_session = stripe.checkout.Session.create(
                 customer=stripe_customer_id,
                 payment_method_types=['card'],
-                line_items=[{
-                    'price_data': {
-                        'currency': 'usd',
-                        'unit_amount': 6900,  # $69.00 in cents
-                        'product_data': {
-                            'name': 'Single Metabolic Report',
-                            'description': '1 comprehensive metabolic report with biological age analysis',
-                        },
-                    },
-                    'quantity': 1,
-                }],
+                line_items=[{'price': STRIPE_PRICE_UNLIMITED_BASIC, 'quantity': 1}],
                 mode='payment',
                 success_url=url_for('payment_success', _external=True) + '?session_id={CHECKOUT_SESSION_ID}',
                 cancel_url=url_for('payment_cancel', _external=True),
-                metadata={
-                    'user_id': user_id,
-                    'plan_type': 'one_time'
-                }
+                metadata={'user_id': user_id}
             )
-        elif plan_type == 'subscription':
-            # Monthly subscription for $39/month
+        elif plan_type == 'ai_package':
+            # AI-Enhanced Package - $99 one-time
             checkout_session = stripe.checkout.Session.create(
                 customer=stripe_customer_id,
                 payment_method_types=['card'],
-                line_items=[{
-                    'price_data': {
-                        'currency': 'usd',
-                        'unit_amount': 3900,  # $39.00 in cents
-                        'recurring': {
-                            'interval': 'month'
-                        },
-                        'product_data': {
-                            'name': 'Monthly Subscription - Unlimited Reports',
-                            'description': 'Unlimited metabolic reports, cloud storage, and progress tracking',
-                        },
-                    },
-                    'quantity': 1,
-                }],
+                line_items=[{'price': STRIPE_PRICE_AI_PACKAGE, 'quantity': 1}],
+                mode='payment',
+                success_url=url_for('payment_success', _external=True) + '?session_id={CHECKOUT_SESSION_ID}',
+                cancel_url=url_for('payment_cancel', _external=True),
+                metadata={'user_id': user_id}
+            )
+        elif plan_type == 'subscription':
+            # Monthly Subscription - $39/month
+            checkout_session = stripe.checkout.Session.create(
+                customer=stripe_customer_id,
+                payment_method_types=['card'],
+                line_items=[{'price': STRIPE_PRICE_SUBSCRIPTION, 'quantity': 1}],
                 mode='subscription',
                 success_url=url_for('payment_success', _external=True) + '?session_id={CHECKOUT_SESSION_ID}',
                 cancel_url=url_for('payment_cancel', _external=True),
-                metadata={
-                    'user_id': user_id,
-                    'plan_type': 'subscription'
-                }
+                metadata={'user_id': user_id}
             )
         else:
             return jsonify({'error': 'Invalid plan type'}), 400
@@ -1750,53 +1733,79 @@ def stripe_webhook():
     # Handle the event
     if event['type'] == 'checkout.session.completed':
         session_data = event['data']['object']
-        user_id = session_data['metadata']['user_id']
-        plan_type = session_data['metadata']['plan_type']
+        user_id = session_data['metadata'].get('user_id')
+
+        if not user_id:
+            print("Error: No user_id in session metadata")
+            return jsonify({'error': 'No user_id'}), 400
 
         try:
-            if plan_type == 'one_time':
-                # Add 1 credit for one-time payment
-                subscription_response = http_session.get(
-                    f"{SUPABASE_REST_URL}/subscriptions?user_id=eq.{user_id}&select=reports_limit",
-                    headers=get_supabase_headers()
-                )
-                if subscription_response.ok and subscription_response.json():
-                    subscription_data = subscription_response.json()[0]
-                    new_limit = subscription_data['reports_limit'] + 1
+            # Get the line items to determine which product was purchased
+            session_id = session_data['id']
+            session = stripe.checkout.Session.retrieve(session_id, expand=['line_items'])
+
+            if session.line_items and len(session.line_items.data) > 0:
+                price_id = session.line_items.data[0].price.id
+
+                # Determine which plan based on price ID
+                if price_id == STRIPE_PRICE_UNLIMITED_BASIC:
+                    # Unlimited Basic ($69) - unlimited reports, no AI
                     http_session.patch(
                         f"{SUPABASE_REST_URL}/subscriptions?user_id=eq.{user_id}",
                         headers=get_supabase_headers(),
                         json={
-                            'reports_limit': new_limit,
-                            'plan_name': 'one_time'
+                            'plan_name': 'unlimited_basic',
+                            'status': 'active',
+                            'reports_limit': 9999,
+                            'ai_credits': 0
                         }
                     )
+                    print(f"✅ User {user_id} upgraded to Unlimited Basic")
 
-            elif plan_type == 'subscription':
-                # Update subscription to unlimited
-                stripe_subscription_id = session_data.get('subscription')
-                http_session.patch(
-                    f"{SUPABASE_REST_URL}/subscriptions?user_id=eq.{user_id}",
-                    headers=get_supabase_headers(),
-                    json={
-                        'stripe_subscription_id': stripe_subscription_id,
-                        'plan_name': 'monthly',
-                        'status': 'active',
-                        'reports_limit': 999999,  # Unlimited
-                        'period_start': datetime.utcnow().isoformat(),
-                    }
-                )
+                elif price_id == STRIPE_PRICE_AI_PACKAGE:
+                    # AI-Enhanced Package ($99) - unlimited reports + 10 AI credits
+                    http_session.patch(
+                        f"{SUPABASE_REST_URL}/subscriptions?user_id=eq.{user_id}",
+                        headers=get_supabase_headers(),
+                        json={
+                            'plan_name': 'ai_package',
+                            'status': 'active',
+                            'reports_limit': 9999,
+                            'ai_credits': 10
+                        }
+                    )
+                    print(f"✅ User {user_id} upgraded to AI-Enhanced Package")
+
+                elif price_id == STRIPE_PRICE_SUBSCRIPTION:
+                    # Monthly Subscription ($39/mo) - unlimited everything
+                    stripe_subscription_id = session_data.get('subscription')
+                    http_session.patch(
+                        f"{SUPABASE_REST_URL}/subscriptions?user_id=eq.{user_id}",
+                        headers=get_supabase_headers(),
+                        json={
+                            'stripe_subscription_id': stripe_subscription_id,
+                            'plan_name': 'subscription',
+                            'status': 'active',
+                            'reports_limit': 9999,
+                            'ai_credits': 9999,
+                            'period_start': datetime.utcnow().isoformat(),
+                        }
+                    )
+                    print(f"✅ User {user_id} subscribed to Monthly plan")
+
+                else:
+                    print(f"⚠️ Unknown price ID: {price_id}")
 
         except Exception as e:
-            print(f"Error updating subscription: {e}")
+            print(f"❌ Error updating subscription: {e}")
 
     elif event['type'] == 'customer.subscription.deleted':
-        # Subscription cancelled
+        # Subscription cancelled - downgrade to free tier
         subscription_data = event['data']['object']
         customer_id = subscription_data['customer']
 
         try:
-            # Find user by customer ID and downgrade
+            # Find user by customer ID and downgrade to free tier
             sub_response = http_session.get(
                 f"{SUPABASE_REST_URL}/subscriptions?stripe_customer_id=eq.{customer_id}&select=user_id",
                 headers=get_supabase_headers()
@@ -1807,13 +1816,15 @@ def stripe_webhook():
                     headers=get_supabase_headers(),
                     json={
                         'plan_name': 'free',
-                        'status': 'inactive',
-                        'reports_limit': 10,
+                        'status': 'active',
+                        'reports_limit': 2,  # New free tier limit
+                        'ai_credits': 0,
                         'stripe_subscription_id': None
                     }
                 )
+                print(f"✅ Subscription cancelled - user downgraded to free tier (2 reports)")
         except Exception as e:
-            print(f"Error handling subscription deletion: {e}")
+            print(f"❌ Error handling subscription deletion: {e}")
 
     return jsonify({'status': 'success'}), 200
 
