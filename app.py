@@ -19,8 +19,8 @@ import stripe
 from utils.beautiful_report import generate_beautiful_report
 from ai_recommendations import UniversalRecommendationAI
 
-# Load environment variables
-load_dotenv()
+# Load environment variables (override=True ensures .env file takes precedence over shell variables)
+load_dotenv(override=True)
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('FLASK_SECRET_KEY', secrets.token_hex(16))
@@ -112,6 +112,10 @@ def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if 'user' not in session:
+            # If this is an AJAX/JSON request, return JSON error instead of redirect
+            if request.is_json or request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return jsonify({'error': 'Please log in to access this feature', 'login_required': True}), 401
+            # Otherwise, redirect to login page
             flash('Please log in to access this page.', 'warning')
             return redirect(url_for('login'))
         return f(*args, **kwargs)
@@ -979,6 +983,20 @@ def generate_report_with_ai():
         print("[ERROR] No file_id provided")
         return jsonify({'error': 'No file ID provided'}), 400
 
+    # Check if user has AI access
+    user_id = session['user']['id']
+    has_access, message = can_use_ai_recommendations(user_id)
+
+    if not has_access:
+        print(f"[ERROR] User {user_id} does not have AI access: {message}")
+        return jsonify({
+            'error': message,
+            'upgrade_required': True,
+            'upgrade_url': '/pricing'
+        }), 403
+
+    print(f"[DEBUG] User has AI access: {message}")
+
     # Get the basic report first
     basic_report_path = os.path.join(app.config['REPORTS_FOLDER'], f"{file_id}_report.html")
     print(f"[DEBUG] Looking for basic report at: {basic_report_path}")
@@ -1065,6 +1083,11 @@ def generate_report_with_ai():
         f.write(report_with_ai)
 
     print(f"[SUCCESS] AI report saved to: {ai_report_path}")
+
+    # Decrement AI credit if user has limited credits
+    use_ai_credit(user_id)
+    print(f"[DEBUG] AI credit decremented for user {user_id}")
+
     print(f"[SUCCESS] Returning download URL: /download-ai/{file_id}")
 
     return jsonify({
@@ -1857,8 +1880,72 @@ def stripe_webhook():
 @app.route('/payment-success')
 @login_required
 def payment_success():
-    """Payment success page"""
+    """Payment success page - also handles subscription update for localhost testing"""
     session_id = request.args.get('session_id')
+    user_id = session['user']['id']
+
+    print(f"[PAYMENT SUCCESS] Starting - session_id={session_id}, user_id={user_id}")
+
+    try:
+        if session_id:
+            print(f"[PAYMENT SUCCESS] Retrieving Stripe session: {session_id}")
+            # Retrieve the checkout session from Stripe
+            checkout_session = stripe.checkout.Session.retrieve(session_id)
+            print(f"[PAYMENT SUCCESS] Checkout session mode: {checkout_session.mode}")
+
+            # Get the price ID to determine what was purchased
+            if checkout_session.mode == 'payment':
+                print(f"[PAYMENT SUCCESS] Processing one-time payment")
+                # One-time payment
+                line_items = stripe.checkout.Session.list_line_items(session_id, limit=1)
+                if line_items.data:
+                    price_id = line_items.data[0].price.id
+
+                    # Update subscription based on price
+                    if price_id == STRIPE_PRICE_UNLIMITED_BASIC:
+                        # $69 Unlimited Basic - Set unlimited reports
+                        print(f"[PAYMENT SUCCESS] Granting unlimited reports to user {user_id}")
+                        http_session.patch(
+                            f"{SUPABASE_REST_URL}/subscriptions?user_id=eq.{user_id}",
+                            headers=get_supabase_headers(),
+                            json={
+                                'plan_name': 'unlimited_basic',
+                                'reports_limit': 999999,
+                                'ai_credits': 0
+                            }
+                        )
+                    elif price_id == STRIPE_PRICE_AI_PACKAGE:
+                        # $99 AI Package - Add 10 AI credits
+                        print(f"[PAYMENT SUCCESS] Granting 10 AI credits to user {user_id}")
+                        http_session.patch(
+                            f"{SUPABASE_REST_URL}/subscriptions?user_id=eq.{user_id}",
+                            headers=get_supabase_headers(),
+                            json={
+                                'plan_name': 'ai_package',
+                                'reports_limit': 999999,
+                                'ai_credits': 10
+                            }
+                        )
+            elif checkout_session.mode == 'subscription':
+                # Monthly subscription - $39/month unlimited
+                print(f"[PAYMENT SUCCESS] Activating subscription for user {user_id}")
+                http_session.patch(
+                    f"{SUPABASE_REST_URL}/subscriptions?user_id=eq.{user_id}",
+                    headers=get_supabase_headers(),
+                    json={
+                        'plan_name': 'subscription',
+                        'reports_limit': 999999,
+                        'ai_credits': 999999,
+                        'stripe_subscription_id': checkout_session.subscription
+                    }
+                )
+
+            print(f"[PAYMENT SUCCESS] Subscription updated successfully for user {user_id}")
+    except Exception as e:
+        print(f"[PAYMENT SUCCESS] Error updating subscription: {e}")
+        import traceback
+        traceback.print_exc()
+
     return render_template('payment_success.html', session_id=session_id)
 
 @app.route('/payment-cancel')
@@ -1983,6 +2070,8 @@ def generate_ai_recommendation():
 
     except Exception as e:
         print(f"Error generating AI recommendations: {e}")
+        import traceback
+        traceback.print_exc()
         return jsonify({'error': str(e)}), 500
 
 def get_user_metabolic_data(email):
@@ -2093,6 +2182,33 @@ def save_recommendation_to_db(email, subject, recommendations):
 
     except Exception as e:
         print(f"Error saving recommendation: {e}")
+
+# Global error handlers for AJAX requests
+@app.errorhandler(404)
+def not_found_error(error):
+    if request.is_json or request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        return jsonify({'error': 'Resource not found'}), 404
+    return render_template('404.html'), 404
+
+@app.errorhandler(500)
+def internal_error(error):
+    if request.is_json or request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        return jsonify({'error': 'Internal server error. Please try again.'}), 500
+    return render_template('500.html'), 500
+
+@app.errorhandler(Exception)
+def handle_exception(error):
+    # Log the error
+    print(f"Unhandled exception: {error}")
+    import traceback
+    traceback.print_exc()
+
+    # Return JSON for AJAX requests
+    if request.is_json or request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        return jsonify({'error': f'An error occurred: {str(error)}'}), 500
+
+    # Otherwise return HTML error page
+    return render_template('500.html'), 500
 
 if __name__ == '__main__':
     print("🚀 Starting Metabolic Report Generator Web App")

@@ -22,15 +22,21 @@ class UniversalRecommendationAI:
         # Check for Anthropic API key
         anthropic_key = os.getenv('ANTHROPIC_API_KEY')
         if anthropic_key:
+            print(f"[AI DEBUG] Anthropic API Key loaded: {anthropic_key[:20]}... (length: {len(anthropic_key)})")
+        else:
+            print("[AI DEBUG] No Anthropic API Key found")
+        if anthropic_key:
             try:
                 from anthropic import Anthropic
                 self.client = Anthropic(api_key=anthropic_key)
                 self.api_provider = 'claude'
-                print("Using Claude API")
+                print("[AI DEBUG] Using Claude API - Client initialized successfully")
             except ImportError:
-                print("anthropic package not installed")
+                print("[AI DEBUG] anthropic package not installed")
             except Exception as e:
-                print(f"Failed to initialize Claude: {e}")
+                print(f"[AI DEBUG] Failed to initialize Claude: {e}")
+                import traceback
+                traceback.print_exc()
 
         # Fall back to OpenAI if Claude not available
         if not self.client:
@@ -211,22 +217,23 @@ class UniversalRecommendationAI:
         if not self.client:
             return {
                 'subject': subject,
-                'recommendations': '''AI recommendations are currently unavailable because the OpenAI API key is not configured.
+                'recommendations': '''AI recommendations are temporarily unavailable.
 
-To enable AI recommendations:
-1. Add the OPENAI_API_KEY environment variable to your Render service
-2. Get an API key from https://platform.openai.com/api-keys
-3. Restart your service after adding the key
+We're experiencing a technical issue with our AI service. Please try again later, or contact support if this issue persists.
 
-Once configured, you'll be able to generate unlimited personalized recommendations for peptides, supplements, training, nutrition, and more!''',
+In the meantime, your basic metabolic report with all your core performance metrics is still available!''',
                 'timestamp': datetime.now().isoformat(),
                 'metabolic_summary': self._summarize_metabolic_data(metabolic_data),
                 'error': True
             }
 
         try:
+            print(f"[AI DEBUG] API provider: {self.api_provider}")
+            print(f"[AI DEBUG] Client object: {self.client}")
+
             if self.api_provider == 'claude':
                 # Use Claude API - using Claude 3 Haiku (most accessible model)
+                print("[AI DEBUG] Making Anthropic API call...")
                 response = self.client.messages.create(
                     model="claude-3-haiku-20240307",
                     max_tokens=4000,
@@ -235,6 +242,7 @@ Once configured, you'll be able to generate unlimited personalized recommendatio
                         {"role": "user", "content": prompt}
                     ]
                 )
+                print("[AI DEBUG] Anthropic API call succeeded!")
                 recommendation_text = response.content[0].text
 
             elif self.api_provider == 'openai':
@@ -262,7 +270,10 @@ Once configured, you'll be able to generate unlimited personalized recommendatio
 
         except Exception as e:
             error_msg = str(e)
-            print(f"Error generating {subject} recommendations: {error_msg}")
+            print(f"[AI DEBUG] Error generating {subject} recommendations: {error_msg}")
+            print(f"[AI DEBUG] Exception type: {type(e).__name__}")
+            import traceback
+            traceback.print_exc()
             return {
                 'subject': subject,
                 'recommendations': f"""## Error Generating {subject.title()} Recommendations
