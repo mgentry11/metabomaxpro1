@@ -18,6 +18,7 @@ import requests
 import stripe
 from utils.beautiful_report import generate_beautiful_report
 from ai_recommendations import UniversalRecommendationAI
+from blog_posts import get_all_posts, get_post_by_slug, get_recent_posts
 
 # Load environment variables (override=True ensures .env file takes precedence over shell variables)
 load_dotenv(override=True)
@@ -362,6 +363,61 @@ def version():
 def pricing():
     """Pricing page"""
     return render_template('pricing.html')
+
+# Blog routes
+@app.route('/blog')
+def blog():
+    """Blog listing page"""
+    posts = get_all_posts()
+    return render_template('blog/index.html', posts=posts)
+
+@app.route('/blog/<slug>')
+def blog_post(slug):
+    """Individual blog post page"""
+    post = get_post_by_slug(slug)
+    if not post:
+        return "Blog post not found", 404
+    recent_posts = get_recent_posts(limit=3)
+    return render_template('blog/post.html', post=post, recent_posts=recent_posts)
+
+@app.route('/sitemap.xml')
+def sitemap():
+    """Generate XML sitemap for SEO"""
+    posts = get_all_posts()
+    sitemap_xml = f'''<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+        <loc>https://metabomaxpro.com/</loc>
+        <lastmod>{datetime.now().strftime('%Y-%m-%d')}</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>1.0</priority>
+    </url>
+    <url>
+        <loc>https://metabomaxpro.com/pricing</loc>
+        <lastmod>{datetime.now().strftime('%Y-%m-%d')}</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://metabomaxpro.com/blog</loc>
+        <lastmod>{datetime.now().strftime('%Y-%m-%d')}</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
+    </url>'''
+
+    for post in posts:
+        sitemap_xml += f'''
+    <url>
+        <loc>https://metabomaxpro.com/blog/{post['slug']}</loc>
+        <lastmod>{post['date'].strftime('%Y-%m-%d')}</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>'''
+
+    sitemap_xml += '\n</urlset>'
+
+    from flask import Response
+    return Response(sitemap_xml, mimetype='text/xml')
 
 @app.route('/terms')
 def terms():
