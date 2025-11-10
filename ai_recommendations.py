@@ -12,54 +12,11 @@ class UniversalRecommendationAI:
         self.client = None
         self._initialized = False
 
-    def _ensure_client(self):
-        """Initialize API client only when first needed"""
-        if self._initialized:
-            return
+        # Initialize subject templates immediately (needed for get_available_subjects)
+        self._init_subject_templates()
 
-        self._initialized = True
-
-        # Check for Anthropic API key
-        anthropic_key = os.getenv('ANTHROPIC_API_KEY')
-        if anthropic_key:
-            print(f"[AI DEBUG] Anthropic API Key loaded: {anthropic_key[:20]}... (length: {len(anthropic_key)})")
-        else:
-            print("[AI DEBUG] No Anthropic API Key found")
-        if anthropic_key:
-            try:
-                from anthropic import Anthropic
-                self.client = Anthropic(api_key=anthropic_key)
-                self.api_provider = 'claude'
-                print("[AI DEBUG] Using Claude API - Client initialized successfully")
-            except ImportError:
-                print("[AI DEBUG] anthropic package not installed")
-            except Exception as e:
-                print(f"[AI DEBUG] Failed to initialize Claude: {e}")
-                import traceback
-                traceback.print_exc()
-
-        # Fall back to OpenAI if Claude not available
-        if not self.client:
-            openai_key = os.getenv('OPENAI_API_KEY')
-            if openai_key:
-                try:
-                    from openai import OpenAI
-                    self.client = OpenAI(
-                        api_key=openai_key,
-                        timeout=60.0,
-                        max_retries=3
-                    )
-                    self.api_provider = 'openai'
-                    print("Using OpenAI API")
-                except ImportError:
-                    print("openai package not installed")
-                except Exception as e:
-                    print(f"Failed to initialize OpenAI: {e}")
-
-        if not self.client:
-            print("Warning: No AI API key found in environment variables")
-            self.api_provider = None
-
+    def _init_subject_templates(self):
+        """Initialize subject templates and knowledge base"""
         # Knowledge base for different subjects
         self.subject_templates = {
             'peptides': {
@@ -184,6 +141,45 @@ class UniversalRecommendationAI:
             }
         }
 
+    def _ensure_client(self):
+        """Initialize OpenAI API client only when first needed"""
+        if self._initialized:
+            return
+
+        self._initialized = True
+
+        # Use OpenAI API only
+        openai_key = os.getenv('OPENAI_API_KEY')
+        if openai_key:
+            print(f"[AI DEBUG] OpenAI API Key found (length: {len(openai_key)})")
+            try:
+                from openai import OpenAI
+                self.client = OpenAI(
+                    api_key=openai_key,
+                    timeout=60.0,
+                    max_retries=3
+                )
+                self.api_provider = 'openai'
+                print("[AI DEBUG] Using OpenAI API - Client initialized successfully")
+            except ImportError:
+                print("[AI DEBUG] openai package not installed")
+                self.client = None
+                self.api_provider = None
+            except Exception as e:
+                print(f"[AI DEBUG] Failed to initialize OpenAI: {e}")
+                import traceback
+                traceback.print_exc()
+                self.client = None
+                self.api_provider = None
+        else:
+            print("[AI DEBUG] No OpenAI API Key found")
+            self.client = None
+            self.api_provider = None
+
+        if not self.client:
+            print("Warning: No AI API key found or failed to initialize")
+            self.api_provider = None
+
     def get_recommendations(self, subject, metabolic_data, user_goals=None, custom_context=None):
         """
         Get AI-powered recommendations for ANY subject
@@ -231,34 +227,19 @@ In the meantime, your basic metabolic report with all your core performance metr
             print(f"[AI DEBUG] API provider: {self.api_provider}")
             print(f"[AI DEBUG] Client object: {self.client}")
 
-            if self.api_provider == 'claude':
-                # Use Claude API - using Claude 3 Haiku (most accessible model)
-                print("[AI DEBUG] Making Anthropic API call...")
-                response = self.client.messages.create(
-                    model="claude-3-haiku-20240307",
-                    max_tokens=4000,
-                    system=self._get_system_prompt(template),
-                    messages=[
-                        {"role": "user", "content": prompt}
-                    ]
-                )
-                print("[AI DEBUG] Anthropic API call succeeded!")
-                recommendation_text = response.content[0].text
-
-            elif self.api_provider == 'openai':
-                # Use OpenAI API
-                response = self.client.chat.completions.create(
-                    model="gpt-4",
-                    messages=[
-                        {"role": "system", "content": self._get_system_prompt(template)},
-                        {"role": "user", "content": prompt}
-                    ],
-                    temperature=0.7,
-                    max_tokens=2500
-                )
-                recommendation_text = response.choices[0].message.content
-            else:
-                raise Exception("No API provider configured")
+            # Use OpenAI API
+            print("[AI DEBUG] Making OpenAI API call...")
+            response = self.client.chat.completions.create(
+                model="gpt-4",
+                messages=[
+                    {"role": "system", "content": self._get_system_prompt(template)},
+                    {"role": "user", "content": prompt}
+                ],
+                temperature=0.7,
+                max_tokens=2500
+            )
+            print("[AI DEBUG] OpenAI API call succeeded!")
+            recommendation_text = response.choices[0].message.content
 
             return {
                 'subject': subject,
