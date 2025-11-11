@@ -1159,7 +1159,12 @@ def download_report(file_id):
     if not os.path.exists(report_path):
         return "Report not found", 404
 
-    return send_file(report_path, as_attachment=True, download_name='pnoe_report.html')
+    return send_file(
+        report_path,
+        as_attachment=True,
+        download_name='pnoe_report.html',
+        mimetype='text/html'
+    )
 
 @app.route('/download-ai/<file_id>')
 def download_ai_report(file_id):
@@ -1169,7 +1174,18 @@ def download_ai_report(file_id):
     if not os.path.exists(report_path):
         return "Report with AI not found", 404
 
-    return send_file(report_path, as_attachment=True, download_name='pnoe_report_with_ai.html')
+    try:
+        return send_file(
+            report_path,
+            as_attachment=True,
+            download_name='pnoe_report_with_ai.html',
+            mimetype='text/html',
+            max_age=0,
+            conditional=True
+        )
+    except Exception as e:
+        print(f"[DOWNLOAD ERROR] Failed to send file: {e}")
+        return f"Download error: {str(e)}", 500
 
 @app.route('/view/<file_id>')
 def view_report(file_id):
