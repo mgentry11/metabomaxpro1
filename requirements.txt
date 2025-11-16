@@ -7,3 +7,5 @@ stripe==8.0.0
 requests==2.31.0
 urllib3==1.26.18
 openai>=2.0.0
+weasyprint==59.0
+pydyf==0.10.0

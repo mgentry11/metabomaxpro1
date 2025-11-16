@@ -1358,11 +1358,11 @@ def download_report(file_id, format='html'):
             # Create HTML object with base URL for resolving relative resources
             html_doc = HTML(string=html_content, base_url=os.path.dirname(report_path))
 
-            # PDF CSS - Preserves HTML styling with proper page margins
+            # PDF CSS - Matches reformatted style with 3in margins
             pdf_css = CSS(string='''
                 @page {
                     size: letter;
-                    margin: 0.5in 0.75in;
+                    margin: 0.5in 3in;
                 }
                 body {
                     -webkit-print-color-adjust: exact;
@@ -1438,11 +1438,11 @@ def download_ai_report(file_id, format='html'):
             # Create HTML object with base URL for resolving relative resources
             html_doc = HTML(string=html_content, base_url=os.path.dirname(report_path))
 
-            # PDF CSS - Preserves HTML styling with proper page margins
+            # PDF CSS - Matches reformatted style with 3in margins
             pdf_css = CSS(string='''
                 @page {
                     size: letter;
-                    margin: 0.5in 0.75in;
+                    margin: 0.5in 3in;
                 }
                 body {
                     -webkit-print-color-adjust: exact;

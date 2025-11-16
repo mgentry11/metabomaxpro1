@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- SEO Meta Tags -->
+    <title>{{ post.title }} | MetaboMax Pro</title>
+    <meta name="description" content="{{ post.description }}">
+    <meta name="keywords" content="{{ post.keywords }}">
+    <meta name="author" content="{{ post.author }}">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="{{ post.title }}">
+    <meta property="og:description" content="{{ post.description }}">
+    <meta property="og:url" content="https://metabomaxpro.com/blog/{{ post.slug }}">
+    <meta property="og:image" content="https://metabomaxpro.com{{ post.image }}">
+    <meta property="article:published_time" content="{{ post.date.isoformat() }}">
+    <meta property="article:author" content="{{ post.author }}">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ post.title }}">
+    <meta name="twitter:description" content="{{ post.description }}">
+    <meta name="twitter:image" content="https://metabomaxpro.com{{ post.image }}">
+
+    <!-- Schema.org markup -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "headline": "{{ post.title }}",
+      "description": "{{ post.description }}",
+      "author": {
+        "@type": "Organization",
+        "name": "{{ post.author }}"
+      },
+      "datePublished": "{{ post.date.isoformat() }}",
+      "keywords": "{{ post.keywords }}"
+    }
+    </script>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .blog-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            line-height: 1.8;
+        }
+        .blog-content h2 {
+            font-size: 1.75rem;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            color: #1a1a1a;
+        }
+        .blog-content h3 {
+            font-size: 1.4rem;
+            margin-top: 2rem;
+            margin-bottom: 0.75rem;
+            color: #2a2a2a;
+        }
+        .blog-content p {
+            margin-bottom: 1.5rem;
+            color: #444;
+        }
+        .blog-content ul, .blog-content ol {
+            margin-bottom: 1.5rem;
+            padding-left: 2rem;
+        }
+        .blog-content li {
+            margin-bottom: 0.5rem;
+        }
+        .callout-box, .info-box, .warning-box, .cta-box {
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 8px;
+            border-left: 4px solid #10b981;
+            background: #f0fdf4;
+        }
+        .warning-box {
+            border-left-color: #f59e0b;
+            background: #fffbeb;
+        }
+        .cta-box {
+            border-left-color: #3b82f6;
+            background: #eff6ff;
+            text-align: center;
+        }
+        .cta-button {
+            display: inline-block;
+            background: #10b981;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+        }
+        th, td {
+            padding: 0.75rem;
+            border: 1px solid #e0e0e0;
+            text-align: left;
+        }
+        th {
+            background: #f9fafb;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header style="max-width: 800px; margin: 0 auto; padding: 2rem; border-bottom: 1px solid #e0e0e0;">
+            <nav style="margin-bottom: 2rem;">
+                <a href="/blog" style="color: #10b981; text-decoration: none; font-weight: 500;">← Back to Blog</a>
+                <span style="margin: 0 1rem;">|</span>
+                <a href="/" style="margin: 0 0.5rem;">Home</a>
+                <a href="/pricing" style="margin: 0 0.5rem;">Pricing</a>
+            </nav>
+
+            <div style="margin-bottom: 1rem;">
+                <span style="background: #10b981; color: white; padding: 0.25rem 0.75rem; border-radius: 4px; font-size: 0.875rem;">{{ post.category }}</span>
+                <span style="color: #666; font-size: 0.875rem; margin-left: 1rem;">{{ post.reading_time }}</span>
+            </div>
+
+            <p style="color: #666; margin-bottom: 1rem;">
+                By {{ post.author }} | {{ post.date.strftime('%B %d, %Y') }}
+            </p>
+        </header>
+
+        <div class="blog-content">
+            {{ post.content | safe }}
+        </div>
+
+        <aside style="max-width: 800px; margin: 3rem auto; padding: 2rem; background: #f9fafb; border-radius: 8px;">
+            <h3 style="margin-bottom: 1.5rem;">Related Articles</h3>
+            <div style="display: grid; gap: 1rem;">
+                {% for related_post in recent_posts %}
+                {% if related_post.slug != post.slug %}
+                <div style="padding: 1rem; background: white; border-radius: 6px;">
+                    <h4 style="margin-bottom: 0.5rem;">
+                        <a href="/blog/{{ related_post.slug }}" style="color: #1a1a1a; text-decoration: none;">{{ related_post.title }}</a>
+                    </h4>
+                    <p style="color: #666; font-size: 0.875rem; margin: 0;">{{ related_post.reading_time }}</p>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </aside>
+
+        <footer style="max-width: 800px; margin: 2rem auto; padding-top: 2rem; border-top: 1px solid #e0e0e0; text-align: center; color: #666;">
+            <p>&copy; 2024 MetaboMax Pro. All rights reserved.</p>
+            <p style="margin-top: 0.5rem;">
+                <a href="/terms" style="margin: 0 1rem;">Terms</a>
+                <a href="/privacy" style="margin: 0 1rem;">Privacy</a>
+            </p>
+        </footer>
+    </div>
+</body>
+</html>

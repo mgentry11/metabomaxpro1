@@ -97,6 +97,14 @@
             opacity: 1 !important;
         }
 
+        /* Extra protection for custom subject button */
+        #customSubjectBtn {
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            position: relative !important;
+        }
+
         .custom-subject-input {
             margin-top: 1rem;
             display: none;
@@ -332,7 +340,7 @@
                             {{ subject.title() }}
                         </button>
                         {% endfor %}
-                        <button type="button" class="subject-btn" data-subject="custom">
+                        <button type="button" class="subject-btn" id="customSubjectBtn" data-subject="custom">
                             ✏️ Custom Subject
                         </button>
                     </div>
@@ -402,62 +410,187 @@
     </div>
 
     <script>
+        console.log('🚀 JavaScript is loading!');
+        console.log('🚀 Page URL:', window.location.href);
+
         let selectedSubject = null;
         let selectedGoals = [];
 
-        // Subject selection
-        document.querySelectorAll('.subject-btn').forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                e.preventDefault(); // Prevent any default behavior
-                e.stopPropagation(); // Stop event from bubbling
+        // Function to create a custom subject button
+        function createCustomSubjectButton(subject, subjectGrid, customBtn) {
+            // Check if button already exists
+            const existingBtn = Array.from(document.querySelectorAll('.subject-btn')).find(
+                btn => btn.dataset.subject === subject
+            );
 
-                console.log('Button clicked:', this.textContent.trim()); // Debug
+            if (existingBtn) {
+                console.log('Button already exists for:', subject);
+                return existingBtn;
+            }
 
-                // Remove active from all buttons
-                document.querySelectorAll('.subject-btn').forEach(b => b.classList.remove('active'));
+            // Create button for saved custom subject
+            const newBtn = document.createElement('button');
+            newBtn.type = 'button';
+            newBtn.className = 'subject-btn';
+            newBtn.dataset.subject = subject;
+            newBtn.textContent = subject;
 
-                // Add active to clicked button
-                this.classList.add('active');
+            // Add inline styles to prevent disappearing
+            newBtn.style.display = 'block';
+            newBtn.style.visibility = 'visible';
+            newBtn.style.opacity = '1';
 
-                const subject = this.dataset.subject;
-                selectedSubject = subject;
+            // No need to add click handler - event delegation handles all clicks
 
-                console.log('Selected subject:', subject);
-                console.log('Button count after click:', document.querySelectorAll('.subject-btn').length);
+            // Insert before the "Custom Subject" button
+            if (customBtn && subjectGrid) {
+                subjectGrid.insertBefore(newBtn, customBtn);
+                console.log('Created/restored custom subject button:', subject);
+            }
 
-                const customInput = document.getElementById('customSubjectInput');
-                if (subject === 'custom') {
-                    customInput.classList.add('show');
-                    console.log('Custom input shown');
-                    // Focus on the input field
-                    setTimeout(() => {
-                        document.getElementById('customSubject').focus();
-                        console.log('Button still exists?', this.parentElement !== null);
-                    }, 100);
-                } else {
-                    customInput.classList.remove('show');
-                }
+            return newBtn;
+        }
+
+        // Restore custom subject buttons from localStorage on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            const customSubjects = JSON.parse(localStorage.getItem('customSubjects') || '[]');
+            const subjectGrid = document.querySelector('.subject-grid');
+            const customBtn = document.getElementById('customSubjectBtn');
+
+            console.log('Restoring custom subjects:', customSubjects);
+
+            customSubjects.forEach(subject => {
+                createCustomSubjectButton(subject, subjectGrid, customBtn);
             });
         });
 
-        // Monitor for button removal
+        // Subject selection - using event delegation to handle dynamic buttons
+        const subjectGridElement = document.querySelector('.subject-grid');
+        console.log('🎬 Event delegation setup starting...');
+        console.log('Grid element found?', subjectGridElement !== null);
+
+        if (subjectGridElement) {
+            console.log('✅ Attaching click listener to grid');
+            subjectGridElement.addEventListener('click', function(e) {
+                console.log('🖱️ Click detected on grid');
+                console.log('Target:', e.target);
+                console.log('Target classes:', e.target.className);
+
+                // Check if clicked element is a subject button
+                const btn = e.target.closest('.subject-btn');
+                if (!btn) {
+                    console.log('❌ Not a button click, ignoring');
+                    return;
+                }
+
+                console.log('✅ Button identified:', btn.textContent.trim());
+                console.log('Button dataset.subject:', btn.dataset.subject);
+                console.log('Button in DOM?', document.contains(btn));
+
+                e.preventDefault(); // Prevent any default behavior
+                e.stopPropagation(); // Stop event from bubbling
+
+                console.log('🔄 Removing active class from all buttons');
+                // Remove active from all buttons
+                document.querySelectorAll('.subject-btn').forEach(b => b.classList.remove('active'));
+
+                console.log('➕ Adding active class to clicked button');
+                // Add active to clicked button
+                btn.classList.add('active');
+
+                const subject = btn.dataset.subject;
+                selectedSubject = subject;
+
+                console.log('📝 Selected subject set to:', subject);
+                console.log('📊 Total buttons after click:', document.querySelectorAll('.subject-btn').length);
+                console.log('🔍 Button still in DOM?', document.contains(btn));
+
+                const customInput = document.getElementById('customSubjectInput');
+                if (subject === 'custom') {
+                    console.log('🎯 Custom subject selected, showing input');
+                    customInput.classList.add('show');
+                    // Focus on the input field
+                    setTimeout(() => {
+                        document.getElementById('customSubject').focus();
+                        console.log('⏰ After 100ms - Button still in DOM?', document.contains(btn));
+                    }, 100);
+                } else {
+                    console.log('🎯 Regular subject selected:', subject);
+                    customInput.classList.remove('show');
+                }
+
+                console.log('✅ Click handler complete');
+                console.log('🔍 Final check - Button still in DOM?', document.contains(btn));
+            });
+        }
+
+        // Store reference to custom subject button and protect it from removal
+        const customSubjectBtn = document.getElementById('customSubjectBtn');
+        const subjectGrid = document.querySelector('.subject-grid');
+
+        // Monitor for button removal and restore if needed
         const observer = new MutationObserver(function(mutations) {
             mutations.forEach(function(mutation) {
                 if (mutation.type === 'childList' && mutation.removedNodes.length > 0) {
                     mutation.removedNodes.forEach(node => {
                         if (node.classList && node.classList.contains('subject-btn')) {
-                            console.error('BUTTON REMOVED FROM DOM!', node);
+                            console.error('⚠️ BUTTON REMOVED FROM DOM!', node);
+                            console.error('Button text:', node.textContent);
+                            console.error('Button data-subject:', node.dataset.subject);
                             console.trace();
+
+                            // If custom subject button was removed, re-add it
+                            if (node.id === 'customSubjectBtn') {
+                                console.warn('🔄 Custom Subject button was removed! Re-adding it...');
+                                if (subjectGrid && !document.getElementById('customSubjectBtn')) {
+                                    subjectGrid.appendChild(customSubjectBtn);
+                                }
+                            }
+
+                            // If a custom subject button was removed, restore it
+                            const removedSubject = node.dataset.subject;
+                            if (removedSubject && removedSubject !== 'custom') {
+                                console.warn('🔄 Restoring removed custom button:', removedSubject);
+                                setTimeout(() => {
+                                    const customBtn = document.getElementById('customSubjectBtn');
+                                    const grid = document.querySelector('.subject-grid');
+                                    createCustomSubjectButton(removedSubject, grid, customBtn);
+                                }, 100);
+                            }
                         }
                     });
                 }
             });
         });
 
-        const subjectGrid = document.querySelector('.subject-grid');
         if (subjectGrid) {
             observer.observe(subjectGrid, { childList: true, subtree: true });
+            console.log('✅ MutationObserver active - monitoring button grid');
         }
+
+        // Periodic check to ensure custom buttons stay visible
+        setInterval(() => {
+            // Check if Custom Subject button exists
+            const customBtn = document.getElementById('customSubjectBtn');
+            if (!customBtn) {
+                console.error('❌ Custom Subject button missing! This should never happen.');
+            }
+
+            // Check and restore any missing custom subject buttons
+            const customSubjects = JSON.parse(localStorage.getItem('customSubjects') || '[]');
+            customSubjects.forEach(subject => {
+                const existingBtn = Array.from(document.querySelectorAll('.subject-btn')).find(
+                    btn => btn.dataset.subject === subject
+                );
+
+                if (!existingBtn) {
+                    console.warn('⚠️ Custom button missing for:', subject, '- Restoring...');
+                    const grid = document.querySelector('.subject-grid');
+                    const customMainBtn = document.getElementById('customSubjectBtn');
+                    createCustomSubjectButton(subject, grid, customMainBtn);
+                }
+            });
+        }, 1000); // Check every second
 
         // Goals selection
         document.querySelectorAll('.goal-tag').forEach(tag => {
@@ -525,6 +658,22 @@
                     document.getElementById('recommendationForm').style.display = 'block';
                     document.getElementById('submitBtn').disabled = false;
                     return;
+                }
+
+                // If this was a custom subject, create a button for it
+                if (selectedSubject === 'custom' && finalSubject !== 'custom') {
+                    const customBtn = document.getElementById('customSubjectBtn');
+
+                    // Create the button using the shared function
+                    createCustomSubjectButton(finalSubject, subjectGrid, customBtn);
+
+                    // Save to localStorage so it persists
+                    let customSubjects = JSON.parse(localStorage.getItem('customSubjects') || '[]');
+                    if (!customSubjects.includes(finalSubject)) {
+                        customSubjects.push(finalSubject);
+                        localStorage.setItem('customSubjects', JSON.stringify(customSubjects));
+                        console.log('Saved custom subject to localStorage:', finalSubject);
+                    }
                 }
 
                 // Show results

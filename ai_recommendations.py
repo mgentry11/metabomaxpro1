@@ -22,21 +22,26 @@ class UniversalRecommendationAI:
             'peptides': {
                 'expert_role': 'expert peptide therapy advisor and metabolic health specialist',
                 'categories': [
-                    'Recovery & Healing: BPC-157, TB-500, GHK-Cu',
-                    'Fat Loss & Metabolism: Semaglutide, Tirzepatide, AOD-9604, CJC-1295/Ipamorelin',
-                    'Muscle Growth: CJC-1295, Ipamorelin, Tesamorelin, MK-677',
-                    'Anti-Aging & Longevity: Epithalon, MOTS-c, Thymosin Alpha-1',
-                    'Performance: BPC-157, TB-500, Hexarelin',
-                    'Sleep & Recovery: DSIP, Selank'
+                    '1. Growth Hormone–Related: CJC-1295, Sermorelin, Ipamorelin, GHRP-2, GHRP-6, Hexarelin, Tesamorelin, MK-677',
+                    '2. Healing & Regeneration: BPC-157, TB-500 (Thymosin Beta-4), Thymosin Alpha-1, KPV, GHK-Cu',
+                    '3. Fat-Loss & Metabolic: AOD-9604, Tesamorelin, MOTS-c, Melanotan I & II',
+                    '4. Muscle-Building & Strength: CJC-1295 + Ipamorelin, IGF-1 LR3, IGF DES, Follistatin 344/315, Myostatin inhibitors',
+                    '5. Libido, Mood & Energy: PT-141 (Bremelanotide), Kisspeptin-10, Melanotan II',
+                    '6. Cognitive & Neuropeptides: Selank, Semax, DSIP, Cerebrolysin',
+                    '7. Immune & Anti-inflammatory: Thymosin Alpha-1, LL-37, KPV, Defensins, CIGB-258',
+                    '8. Cosmetic & Skin: GHK-Cu, Matrixyl, Argireline, SNAP-8, Tripeptide-1',
+                    '9. Weight Management & Appetite: Semaglutide, Tirzepatide, Liraglutide, Exenatide, PYY, GLP-1 analogs',
+                    '10. Core Human Peptide Hormones: Insulin, Glucagon, ACTH, Somatostatin, Oxytocin, Vasopressin, Endorphins',
+                    '11. Research-Only & Experimental: Epitalon, FOXO4-DRI, Humanin, MOTS-c, ARA-290, GDF-11 fragments'
                 ],
                 'output_sections': [
-                    'Primary Peptide Recommendations (2-3 most suited)',
-                    'Dosing Protocol for each',
-                    'Scientific Rationale',
+                    'Primary Peptide Recommendations (2-3 most suited based on metabolic data)',
+                    'Specific Dosing Protocol for each peptide',
+                    'Scientific Rationale (why these peptides match your metabolic profile)',
                     'Expected Benefits and Timeline',
-                    'Stacking Recommendations',
-                    'Safety Considerations',
-                    'Lifestyle Optimization tips'
+                    'Strategic Stacking Recommendations',
+                    'Safety Considerations and Contraindications',
+                    'Lifestyle Optimization tips to maximize peptide effectiveness'
                 ]
             },
             'supplements': {

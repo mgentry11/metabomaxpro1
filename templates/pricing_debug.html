@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pricing Debug - MetaboMax Pro</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .debug-info {
+            background: #f0f0f0;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        button {
+            padding: 15px 30px;
+            margin: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+        }
+        button:hover {
+            background: #5568d3;
+        }
+        .log {
+            background: #000;
+            color: #0f0;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 4px;
+            font-family: monospace;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .error {
+            color: #f00;
+        }
+        .success {
+            color: #0f0;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 Pricing Purchase Debug Page</h1>
+
+    <div class="debug-info">
+        <h2>Session Info:</h2>
+        <p><strong>Logged in:</strong> {{ 'Yes' if session.get('user') else 'No' }}</p>
+        {% if session.get('user') %}
+        <p><strong>User Email:</strong> {{ session.get('user').get('email') }}</p>
+        <p><strong>User ID:</strong> {{ session.get('user').get('id') }}</p>
+        {% endif %}
+    </div>
+
+    <h2>Test Purchase Buttons:</h2>
+    <button onclick="testPurchase('unlimited_basic')">Test $69 Purchase</button>
+    <button onclick="testPurchase('ai_package')">Test $99 Purchase</button>
+    <button onclick="testPurchase('subscription')">Test $39/month Purchase</button>
+
+    <h2>Console Log:</h2>
+    <div id="log" class="log"></div>
+
+    <script>
+        const logDiv = document.getElementById('log');
+
+        function log(message, isError = false) {
+            const timestamp = new Date().toLocaleTimeString();
+            const className = isError ? 'error' : 'success';
+            logDiv.innerHTML += `<div class="${className}">[${timestamp}] ${message}</div>`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+            console.log(message);
+        }
+
+        async function testPurchase(planType) {
+            log(`🚀 Starting purchase for plan: ${planType}`);
+
+            {% if session.get('user') %}
+                log('✅ User is logged in, proceeding with checkout...');
+
+                try {
+                    log(`📤 Sending POST to /create-checkout-session with plan_type: ${planType}`);
+
+                    const response = await fetch('/create-checkout-session', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            plan_type: planType
+                        })
+                    });
+
+                    log(`📥 Response status: ${response.status} ${response.statusText}`);
+
+                    if (!response.ok) {
+                        log(`❌ Response not OK: ${response.status}`, true);
+                        const text = await response.text();
+                        log(`Response body: ${text}`, true);
+                        return;
+                    }
+
+                    const data = await response.json();
+                    log(`📦 Response data: ${JSON.stringify(data)}`);
+
+                    if (data.checkout_url) {
+                        log(`✅ Got checkout URL: ${data.checkout_url}`);
+                        log('🔄 Redirecting to Stripe in 2 seconds...');
+                        setTimeout(() => {
+                            window.location.href = data.checkout_url;
+                        }, 2000);
+                    } else if (data.error) {
+                        log(`❌ Error from server: ${data.error}`, true);
+                        alert('Error: ' + data.error);
+                    } else {
+                        log('❌ No checkout_url in response', true);
+                        log(`Full response: ${JSON.stringify(data)}`, true);
+                        alert('Error creating checkout session. Please try again.');
+                    }
+                } catch (error) {
+                    log(`❌ Exception caught: ${error.name}`, true);
+                    log(`❌ Error message: ${error.message}`, true);
+                    log(`❌ Error stack: ${error.stack}`, true);
+                    alert('An error occurred. Please check the console log above.');
+                }
+            {% else %}
+                log('⚠️ User is not logged in, redirecting to registration...');
+                log('🔄 Redirecting to {{ url_for("register") }}');
+                setTimeout(() => {
+                    window.location.href = '{{ url_for("register") }}';
+                }, 1000);
+            {% endif %}
+        }
+
+        log('✅ Debug page loaded successfully');
+        log('{% if session.get("user") %}User is logged in{% else %}User is NOT logged in{% endif %}');
+    </script>
+
+    <p><a href="{{ url_for('pricing') }}">← Back to Pricing Page</a></p>
+</body>
+</html>

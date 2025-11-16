@@ -494,12 +494,16 @@
                     if (data.checkout_url) {
                         // Redirect to Stripe checkout
                         window.location.href = data.checkout_url;
+                    } else if (data.error) {
+                        // Show specific error message from server
+                        console.error('Checkout error:', data.error);
+                        alert('Error: ' + data.error);
                     } else {
                         alert('Error creating checkout session. Please try again.');
                     }
                 } catch (error) {
                     console.error('Error:', error);
-                    alert('An error occurred. Please try again.');
+                    alert('An error occurred. Please try again. Details: ' + error.message);
                 }
             {% else %}
                 // User is not logged in, redirect to registration

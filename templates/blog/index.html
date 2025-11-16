@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog - MetaboMax Pro | VO2 Max, Metabolic Testing & Optimization</title>
+    <meta name="description" content="Expert guides on VO2 max, metabolic testing, training optimization, and longevity. Science-backed strategies to improve your metabolic health.">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 2rem;">
+        <header style="text-align: center; margin-bottom: 3rem;">
+            <h1 style="font-size: 2.5rem; margin-bottom: 0.5rem;">📊 MetaboMax Pro Blog</h1>
+            <p style="font-size: 1.2rem; color: #666;">Expert Guides on Metabolic Health & Performance Optimization</p>
+            <nav style="margin-top: 1.5rem;">
+                <a href="/" style="margin: 0 1rem;">Home</a>
+                <a href="/pricing" style="margin: 0 1rem;">Pricing</a>
+                <a href="/blog" style="margin: 0 1rem; font-weight: bold;">Blog</a>
+            </nav>
+        </header>
+
+        <main>
+            <div class="blog-posts" style="display: grid; gap: 2rem;">
+                {% for post in posts %}
+                <article class="blog-card" style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 2rem; background: white;">
+                    <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap;">
+                        <span style="background: #10b981; color: white; padding: 0.25rem 0.75rem; border-radius: 4px; font-size: 0.875rem;">{{ post.category }}</span>
+                        <span style="color: #666; font-size: 0.875rem;">{{ post.reading_time }}</span>
+                        <span style="color: #666; font-size: 0.875rem;">{{ post.date.strftime('%B %d, %Y') }}</span>
+                    </div>
+
+                    <h2 style="font-size: 1.75rem; margin-bottom: 1rem;">
+                        <a href="/blog/{{ post.slug }}" style="color: #1a1a1a; text-decoration: none;">{{ post.title }}</a>
+                    </h2>
+
+                    <p style="color: #666; line-height: 1.6; margin-bottom: 1.5rem;">{{ post.description }}</p>
+
+                    <a href="/blog/{{ post.slug }}" style="display: inline-block; background: #10b981; color: white; padding: 0.75rem 1.5rem; border-radius: 6px; text-decoration: none; font-weight: 500;">
+                        Read Full Article →
+                    </a>
+                </article>
+                {% endfor %}
+            </div>
+        </main>
+
+        <footer style="margin-top: 4rem; padding-top: 2rem; border-top: 1px solid #e0e0e0; text-align: center; color: #666;">
+            <p>&copy; 2024 MetaboMax Pro. All rights reserved.</p>
+            <p style="margin-top: 0.5rem;">
+                <a href="/terms" style="margin: 0 1rem;">Terms</a>
+                <a href="/privacy" style="margin: 0 1rem;">Privacy</a>
+            </p>
+        </footer>
+    </div>
+</body>
+</html>
