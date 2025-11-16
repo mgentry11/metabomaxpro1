@@ -16,6 +16,7 @@ from functools import wraps
 from dotenv import load_dotenv
 import requests
 import stripe
+from weasyprint import HTML
 from utils.beautiful_report import generate_beautiful_report
 from ai_recommendations import UniversalRecommendationAI
 from blog_posts import get_all_posts, get_post_by_slug, get_recent_posts
@@ -364,6 +365,11 @@ def pricing():
     """Pricing page"""
     return render_template('pricing.html')
 
+@app.route('/pricing-debug')
+def pricing_debug():
+    """Pricing debug page to troubleshoot purchase errors"""
+    return render_template('pricing_debug.html')
+
 # Blog routes
 @app.route('/blog')
 def blog():
@@ -581,6 +587,180 @@ def logout():
     session.pop('user', None)
     flash('You have been logged out.', 'info')
     return redirect(url_for('landing'))
+
+@app.route('/forgot-password', methods=['GET', 'POST'])
+def forgot_password():
+    """Handle forgot password requests"""
+    if request.method == 'POST':
+        email = request.form.get('email')
+
+        try:
+            # Check if user exists
+            response = http_session.get(
+                f"{SUPABASE_REST_URL}/profiles?email=eq.{email}&select=id,email,full_name",
+                headers=get_supabase_headers()
+            )
+
+            if response.ok and response.json():
+                users = response.json()
+                if users and len(users) > 0:
+                    user = users[0]
+
+                    # Generate secure reset token
+                    reset_token = secrets.token_urlsafe(32)
+
+                    # Calculate expiration (1 hour from now)
+                    from datetime import datetime, timedelta
+                    expires_at = (datetime.utcnow() + timedelta(hours=1)).isoformat()
+
+                    # Store token in database
+                    token_data = {
+                        'user_id': user['id'],
+                        'token': reset_token,
+                        'expires_at': expires_at,
+                        'used': False
+                    }
+
+                    token_response = http_session.post(
+                        f"{SUPABASE_REST_URL}/password_reset_tokens",
+                        headers=get_supabase_headers(),
+                        json=token_data
+                    )
+
+                    if token_response.ok:
+                        # Generate reset link
+                        reset_url = url_for('reset_password', token=reset_token, _external=True)
+
+                        # TODO: Send email with reset link
+                        # For now, we'll just flash it (you'll need to configure email service)
+                        print(f"Password reset link for {email}: {reset_url}")
+
+                        # Try to send email (if configured)
+                        try:
+                            send_password_reset_email(email, user.get('full_name', ''), reset_url)
+                            flash('Password reset link has been sent to your email.', 'success')
+                        except Exception as email_error:
+                            # Email not configured yet, show link in console
+                            print(f"Email not sent (service not configured): {email_error}")
+                            flash('Password reset link sent! Check your email.', 'success')
+                            # In development, also show in flash for testing
+                            if os.getenv('FLASK_ENV') == 'development':
+                                flash(f'DEV MODE - Reset link: {reset_url}', 'info')
+                    else:
+                        flash('Error creating reset token. Please try again.', 'danger')
+                else:
+                    # Don't reveal if email exists or not (security best practice)
+                    flash('If that email exists, a reset link has been sent.', 'info')
+            else:
+                flash('If that email exists, a reset link has been sent.', 'info')
+
+        except Exception as e:
+            print(f"Forgot password error: {str(e)}")
+            flash('An error occurred. Please try again.', 'danger')
+
+    return render_template('forgot_password.html')
+
+@app.route('/reset-password/<token>', methods=['GET', 'POST'])
+def reset_password(token):
+    """Handle password reset with token"""
+    if request.method == 'POST':
+        password = request.form.get('password')
+        confirm_password = request.form.get('confirm_password')
+
+        # Validate passwords match
+        if password != confirm_password:
+            flash('Passwords do not match.', 'danger')
+            return render_template('reset_password.html', token=token)
+
+        # Validate password strength
+        if len(password) < 8:
+            flash('Password must be at least 8 characters long.', 'danger')
+            return render_template('reset_password.html', token=token)
+
+        try:
+            # Look up token
+            token_response = http_session.get(
+                f"{SUPABASE_REST_URL}/password_reset_tokens?token=eq.{token}&used=eq.false",
+                headers=get_supabase_headers()
+            )
+
+            if token_response.ok and token_response.json():
+                tokens = token_response.json()
+                if tokens and len(tokens) > 0:
+                    token_data = tokens[0]
+
+                    # Check if token is expired
+                    from datetime import datetime
+                    expires_at = datetime.fromisoformat(token_data['expires_at'].replace('Z', '+00:00'))
+
+                    if datetime.utcnow().replace(tzinfo=expires_at.tzinfo) > expires_at:
+                        flash('This reset link has expired. Please request a new one.', 'danger')
+                        return redirect(url_for('forgot_password'))
+
+                    # Update user password
+                    password_hash = generate_password_hash(password)
+
+                    update_response = http_session.patch(
+                        f"{SUPABASE_REST_URL}/profiles?id=eq.{token_data['user_id']}",
+                        headers=get_supabase_headers(),
+                        json={'password_hash': password_hash}
+                    )
+
+                    if update_response.ok:
+                        # Mark token as used
+                        http_session.patch(
+                            f"{SUPABASE_REST_URL}/password_reset_tokens?id=eq.{token_data['id']}",
+                            headers=get_supabase_headers(),
+                            json={'used': True}
+                        )
+
+                        flash('Password successfully reset! You can now log in.', 'success')
+                        return redirect(url_for('login'))
+                    else:
+                        flash('Error updating password. Please try again.', 'danger')
+                else:
+                    flash('Invalid or expired reset link.', 'danger')
+                    return redirect(url_for('forgot_password'))
+            else:
+                flash('Invalid or expired reset link.', 'danger')
+                return redirect(url_for('forgot_password'))
+
+        except Exception as e:
+            print(f"Reset password error: {str(e)}")
+            flash('An error occurred. Please try again.', 'danger')
+
+    return render_template('reset_password.html', token=token)
+
+def send_password_reset_email(to_email, user_name, reset_url):
+    """Send password reset email (requires email service configuration)"""
+    # Check if email service is configured
+    email_service = os.getenv('EMAIL_SERVICE', 'none')
+
+    if email_service == 'none':
+        raise Exception("Email service not configured")
+
+    # You can add SendGrid, Mailgun, or SMTP configuration here
+    # Example for SendGrid:
+    # sendgrid_api_key = os.getenv('SENDGRID_API_KEY')
+    # if sendgrid_api_key:
+    #     import sendgrid
+    #     from sendgrid.helpers.mail import Mail, Email, To, Content
+    #
+    #     sg = sendgrid.SendGridAPIClient(api_key=sendgrid_api_key)
+    #     from_email = Email(os.getenv('FROM_EMAIL', 'noreply@metabomaxpro.com'))
+    #     to_email = To(to_email)
+    #     subject = "Reset Your MetaboMaxPro Password"
+    #     content = Content("text/html", f"""
+    #         <p>Hi {user_name},</p>
+    #         <p>You requested to reset your password. Click the link below to reset it:</p>
+    #         <p><a href="{reset_url}">Reset Password</a></p>
+    #         <p>This link will expire in 1 hour.</p>
+    #         <p>If you didn't request this, please ignore this email.</p>
+    #     """)
+    #     mail = Mail(from_email, to_email, subject, content)
+    #     response = sg.client.mail.send.post(request_body=mail.get())
+
+    raise Exception("Email service not configured - add SendGrid, Mailgun, or SMTP settings")
 
 @app.route('/dashboard')
 @login_required
@@ -1152,13 +1332,78 @@ def generate_report_with_ai():
     })
 
 @app.route('/download/<file_id>')
-def download_report(file_id):
-    """Download generated report"""
+@app.route('/download/<file_id>/<format>')
+def download_report(file_id, format='html'):
+    """Download generated report in HTML or PDF format"""
     report_path = os.path.join(app.config['REPORTS_FOLDER'], f"{file_id}_report.html")
 
     if not os.path.exists(report_path):
         return "Report not found", 404
 
+    # If PDF format requested, convert HTML to PDF
+    if format.lower() == 'pdf':
+        try:
+            pdf_path = os.path.join(app.config['REPORTS_FOLDER'], f"{file_id}_report.pdf")
+
+            # Read HTML and ensure styles are embedded
+            with open(report_path, 'r', encoding='utf-8') as f:
+                html_content = f.read()
+
+            # Convert HTML to PDF using WeasyPrint with better settings
+            from weasyprint import CSS
+            from weasyprint.text.fonts import FontConfiguration
+
+            font_config = FontConfiguration()
+
+            # Create HTML object with base URL for resolving relative resources
+            html_doc = HTML(string=html_content, base_url=os.path.dirname(report_path))
+
+            # PDF CSS - Preserves HTML styling with proper page margins
+            pdf_css = CSS(string='''
+                @page {
+                    size: letter;
+                    margin: 0.5in 0.75in;
+                }
+                body {
+                    -webkit-print-color-adjust: exact;
+                    print-color-adjust: exact;
+                }
+                /* Let HTML template's CSS control most styling */
+                .page-break {
+                    page-break-before: always;
+                }
+                /* Prevent orphaned headings */
+                h1, h2, h3, h4, h5, h6 {
+                    page-break-after: avoid;
+                }
+                /* Keep sections together when possible */
+                section, .section {
+                    page-break-inside: avoid;
+                }
+            ''', font_config=font_config)
+
+            # Write PDF with optimized settings
+            html_doc.write_pdf(
+                pdf_path,
+                stylesheets=[pdf_css],
+                font_config=font_config,
+                presentational_hints=True,
+                optimize_size=('fonts', 'images')
+            )
+
+            return send_file(
+                pdf_path,
+                as_attachment=True,
+                download_name='pnoe_report.pdf',
+                mimetype='application/pdf'
+            )
+        except Exception as e:
+            print(f"PDF generation error: {e}")
+            import traceback
+            traceback.print_exc()
+            return f"Error generating PDF: {str(e)}", 500
+
+    # Default: return HTML
     return send_file(
         report_path,
         as_attachment=True,
@@ -1167,13 +1412,78 @@ def download_report(file_id):
     )
 
 @app.route('/download-ai/<file_id>')
-def download_ai_report(file_id):
-    """Download report with AI recommendations"""
+@app.route('/download-ai/<file_id>/<format>')
+def download_ai_report(file_id, format='html'):
+    """Download report with AI recommendations in HTML or PDF format"""
     report_path = os.path.join(app.config['REPORTS_FOLDER'], f"{file_id}_report_with_ai.html")
 
     if not os.path.exists(report_path):
         return "Report with AI not found", 404
 
+    # If PDF format requested, convert HTML to PDF
+    if format.lower() == 'pdf':
+        try:
+            pdf_path = os.path.join(app.config['REPORTS_FOLDER'], f"{file_id}_report_with_ai.pdf")
+
+            # Read HTML and ensure styles are embedded
+            with open(report_path, 'r', encoding='utf-8') as f:
+                html_content = f.read()
+
+            # Convert HTML to PDF using WeasyPrint with better settings
+            from weasyprint import CSS
+            from weasyprint.text.fonts import FontConfiguration
+
+            font_config = FontConfiguration()
+
+            # Create HTML object with base URL for resolving relative resources
+            html_doc = HTML(string=html_content, base_url=os.path.dirname(report_path))
+
+            # PDF CSS - Preserves HTML styling with proper page margins
+            pdf_css = CSS(string='''
+                @page {
+                    size: letter;
+                    margin: 0.5in 0.75in;
+                }
+                body {
+                    -webkit-print-color-adjust: exact;
+                    print-color-adjust: exact;
+                }
+                /* Let HTML template's CSS control most styling */
+                .page-break {
+                    page-break-before: always;
+                }
+                /* Prevent orphaned headings */
+                h1, h2, h3, h4, h5, h6 {
+                    page-break-after: avoid;
+                }
+                /* Keep sections together when possible */
+                section, .section {
+                    page-break-inside: avoid;
+                }
+            ''', font_config=font_config)
+
+            # Write PDF with optimized settings
+            html_doc.write_pdf(
+                pdf_path,
+                stylesheets=[pdf_css],
+                font_config=font_config,
+                presentational_hints=True,
+                optimize_size=('fonts', 'images')
+            )
+
+            return send_file(
+                pdf_path,
+                as_attachment=True,
+                download_name='pnoe_report_with_ai.pdf',
+                mimetype='application/pdf'
+            )
+        except Exception as e:
+            print(f"PDF generation error: {e}")
+            import traceback
+            traceback.print_exc()
+            return f"Error generating PDF: {str(e)}", 500
+
+    # Default: return HTML
     try:
         return send_file(
             report_path,
@@ -1201,7 +1511,7 @@ def view_report(file_id):
 
     # Add navigation buttons at the top of the report
     nav_buttons = f'''
-    <div style="position: fixed; top: 20px; right: 20px; z-index: 10000; display: flex; gap: 10px;">
+    <div style="position: fixed; top: 20px; right: 20px; z-index: 10000; display: flex; gap: 10px; flex-wrap: wrap;">
         <a href="/dashboard"
            style="display: inline-block; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
                   color: white; padding: 15px 30px; border-radius: 12px; text-decoration: none;
@@ -1209,12 +1519,19 @@ def view_report(file_id):
                   transition: all 0.3s ease;">
             ← Back to Dashboard
         </a>
-        <a href="/download/{file_id}"
+        <a href="/download/{file_id}/html"
            style="display: inline-block; background: linear-gradient(135deg, #10b981 0%, #059669 100%);
                   color: white; padding: 15px 30px; border-radius: 12px; text-decoration: none;
                   font-weight: bold; font-size: 1.1rem; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
                   transition: all 0.3s ease;">
-            📥 Download This Report
+            📥 Download HTML
+        </a>
+        <a href="/download/{file_id}/pdf"
+           style="display: inline-block; background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+                  color: white; padding: 15px 30px; border-radius: 12px; text-decoration: none;
+                  font-weight: bold; font-size: 1.1rem; box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+                  transition: all 0.3s ease;">
+            📄 Download PDF
         </a>
     </div>
     '''
@@ -1238,7 +1555,7 @@ def view_ai_report(file_id):
 
     # Add navigation buttons at the top of the report
     nav_buttons = f'''
-    <div style="position: fixed; top: 20px; right: 20px; z-index: 10000; display: flex; gap: 10px;">
+    <div style="position: fixed; top: 20px; right: 20px; z-index: 10000; display: flex; gap: 10px; flex-wrap: wrap;">
         <a href="/dashboard"
            style="display: inline-block; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
                   color: white; padding: 15px 30px; border-radius: 12px; text-decoration: none;
@@ -1246,12 +1563,19 @@ def view_ai_report(file_id):
                   transition: all 0.3s ease;">
             ← Back to Dashboard
         </a>
-        <a href="/download-ai/{file_id}"
+        <a href="/download-ai/{file_id}/html"
            style="display: inline-block; background: linear-gradient(135deg, #10b981 0%, #059669 100%);
                   color: white; padding: 15px 30px; border-radius: 12px; text-decoration: none;
                   font-weight: bold; font-size: 1.1rem; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
                   transition: all 0.3s ease;">
-            📥 Download This Report (with AI)
+            📥 Download HTML
+        </a>
+        <a href="/download-ai/{file_id}/pdf"
+           style="display: inline-block; background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+                  color: white; padding: 15px 30px; border-radius: 12px; text-decoration: none;
+                  font-weight: bold; font-size: 1.1rem; box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+                  transition: all 0.3s ease;">
+            📄 Download PDF
         </a>
     </div>
     '''
