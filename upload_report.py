@@ -12,7 +12,7 @@ from datetime import datetime
 # Add utils to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'utils'))
 
-def upload_and_generate_report(pdf_path, user_id='admin', report_type='Performance', biological_age_override=None):
+def upload_and_generate_report(pdf_path, user_id='admin', report_type='Performance', biological_age_override=None, premium=False):
     """
     Upload a PDF, extract data, generate report, and save to database
 
@@ -21,6 +21,7 @@ def upload_and_generate_report(pdf_path, user_id='admin', report_type='Performan
         user_id: User ID (default: 'admin')
         report_type: Report type (default: 'Performance')
         biological_age_override: Optional manual biological age
+        premium: Generate premium report (default: False = basic report)
 
     Returns:
         dict with report_id, file_id, and download info
@@ -38,8 +39,14 @@ def upload_and_generate_report(pdf_path, user_id='admin', report_type='Performan
     print(f"Report Type: {report_type}\n")
 
     # Import app functions
-    from app import extract_pnoe_data, calculate_biological_age
-    from beautiful_report import generate_beautiful_report
+    from app import extract_pnoe_data
+    from ai_basic_report import generate_beautiful_report as generate_basic_report
+    from ai_premium_report import generate_premium_report
+    from calculate_scores import calculate_biological_age
+
+    # Select report generator
+    generate_report = generate_premium_report if premium else generate_basic_report
+    report_label = "PREMIUM" if premium else "BASIC"
 
     # Read PDF file
     with open(pdf_path, 'rb') as f:
@@ -62,15 +69,12 @@ def upload_and_generate_report(pdf_path, user_id='admin', report_type='Performan
     print(f"   Age: {patient_info.get('age', 'N/A')}, Gender: {patient_info.get('gender', 'N/A')}")
     print(f"   Weight: {patient_info.get('weight_kg', 'N/A')}kg, Height: {patient_info.get('height_cm', 'N/A')}cm")
 
-    # Save extracted data
+    # Save initial extracted data
     uploads_dir = 'uploads'
     os.makedirs(uploads_dir, exist_ok=True)
 
     data_file = os.path.join(uploads_dir, f'{file_id}_data.json')
-    with open(data_file, 'w') as f:
-        json.dump(extracted_data, f, indent=2)
-
-    print(f"\n✅ Data extracted and saved to: {data_file}")
+    # Note: Will update this file later with calculated data
 
     # Calculate biological age if not overridden
     chronological_age = patient_info.get('age')
@@ -81,19 +85,17 @@ def upload_and_generate_report(pdf_path, user_id='admin', report_type='Performan
     elif chronological_age:
         print(f"\n🧬 Calculating biological age...")
         biological_age = calculate_biological_age(
+            patient_info,
             extracted_data.get('core_scores', {}),
-            chronological_age,
-            extracted_data.get('metabolic_data', {}),
-            extracted_data.get('hr_data', {}),
-            patient_info
+            extracted_data.get('metabolic_data', {})
         )
         print(f"✅ Calculated biological age: {biological_age} (chronological: {chronological_age})")
     else:
         biological_age = None
         print(f"\n⚠️  Could not calculate biological age (missing chronological age)")
 
-    # Generate HTML report
-    print(f"\n📄 Generating HTML report...")
+    # Generate HTML report (this also enhances extracted_data with calculations)
+    print(f"\n📄 Generating {report_label} HTML report...")
 
     custom_data = {
         'chronological_age': chronological_age,
@@ -104,7 +106,7 @@ def upload_and_generate_report(pdf_path, user_id='admin', report_type='Performan
     }
 
     try:
-        html_content = generate_beautiful_report(extracted_data, custom_data)
+        html_content = generate_report(extracted_data, custom_data)
 
         # Save HTML report
         html_file = os.path.join(uploads_dir, f'{file_id}_report.html')
@@ -112,6 +114,13 @@ def upload_and_generate_report(pdf_path, user_id='admin', report_type='Performan
             f.write(html_content)
 
         print(f"✅ HTML report generated: {html_file}")
+
+        # Now save the ENHANCED extracted_data (with calculated scores and caloric data)
+        # The generate_beautiful_report function enhances the data in-place
+        with open(data_file, 'w') as f:
+            json.dump(extracted_data, f, indent=2)
+
+        print(f"✅ Enhanced data saved to: {data_file}")
 
         # Also save a copy with patient name for easy access
         patient_name = patient_info.get('name', 'Unknown').replace(' ', '_').replace('/', '_')
@@ -159,18 +168,33 @@ def upload_and_generate_report(pdf_path, user_id='admin', report_type='Performan
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:
-        print("Usage: python3 upload_report.py /path/to/test.pdf [report_type] [biological_age]")
+        print("Usage: python3 upload_report.py /path/to/test.pdf [report_type] [biological_age] [--premium]")
         print("\nExamples:")
+        print("  # Basic report")
         print("  python3 upload_report.py test.pdf")
         print("  python3 upload_report.py test.pdf Performance")
         print("  python3 upload_report.py test.pdf Longevity 45")
+        print()
+        print("  # Premium report (30+ pages)")
+        print("  python3 upload_report.py test.pdf Performance --premium")
+        print("  python3 upload_report.py test.pdf Longevity 45 --premium")
         sys.exit(1)
 
     pdf_path = sys.argv[1]
-    report_type = sys.argv[2] if len(sys.argv) > 2 else 'Performance'
-    bio_age = int(sys.argv[3]) if len(sys.argv) > 3 else None
+    report_type = 'Performance'
+    bio_age = None
+    premium = '--premium' in sys.argv
 
-    result = upload_and_generate_report(pdf_path, report_type=report_type, biological_age_override=bio_age)
+    # Parse arguments
+    for i, arg in enumerate(sys.argv[2:], 2):
+        if arg == '--premium':
+            continue
+        elif arg.isdigit():
+            bio_age = int(arg)
+        else:
+            report_type = arg
+
+    result = upload_and_generate_report(pdf_path, report_type=report_type, biological_age_override=bio_age, premium=premium)
 
     if result.get('error'):
         print(f"\n❌ ERROR: {result['error']}\n")
