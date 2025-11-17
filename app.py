@@ -2683,7 +2683,7 @@ def generate_ai_recommendation():
         custom_context = data.get('custom_context', '')
 
         user_id = session['user']['id']
-        user_email = session.get('email')
+        user_email = session['user']['email']
 
         # CHECK AI CREDITS
         can_use_ai, message = can_use_ai_recommendations(user_id)
