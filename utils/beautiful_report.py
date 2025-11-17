@@ -11,16 +11,23 @@ import os
 # Add parent directory to path to import template
 sys.path.insert(0, os.path.dirname(__file__))
 from pnoe_professional_template import PNOEProfessionalReport
+from calculate_scores import enhance_extracted_data_with_calculated_scores
 
 def generate_beautiful_report(extracted_data, custom_data):
     """Generate a comprehensive, beautiful HTML report using the PNOE professional template"""
 
     # DEBUG: Print what we received
-    print(f"\n[DEBUG] EXTRACTED DATA:")
+    print(f"\n[DEBUG] EXTRACTED DATA (before enhancement):")
     print(f"  patient_info: {extracted_data.get('patient_info', {})}")
     print(f"  core_scores: {extracted_data.get('core_scores', {})}")
     print(f"  caloric_data: {extracted_data.get('caloric_data', {})}")
     print(f"[DEBUG] CUSTOM DATA: {custom_data}\n")
+
+    # CALCULATE CORE SCORES if not present in PDF
+    extracted_data = enhance_extracted_data_with_calculated_scores(extracted_data)
+
+    print(f"[DEBUG] EXTRACTED DATA (after enhancement):")
+    print(f"  core_scores: {extracted_data.get('core_scores', {})}\n")
 
     # Create a modified report instance with user's data
     report = PNOEProfessionalReport()
