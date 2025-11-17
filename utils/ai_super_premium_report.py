@@ -10,7 +10,7 @@ import os
 
 # Add parent directory to path to import template
 sys.path.insert(0, os.path.dirname(__file__))
-from pnoe_professional_template import PNOEProfessionalReport
+from sp_comprehensive_blueprint_template import SPComprehensiveBlueprintReport
 from calculate_scores import enhance_extracted_data_with_calculated_scores, calculate_biological_age
 from peptide_recommendations import calculate_peptide_recommendations, format_peptide_recommendations_html
 
@@ -36,8 +36,8 @@ def generate_super_premium_report(extracted_data, custom_data):
     print(f"[DEBUG] EXTRACTED DATA (after enhancement):")
     print(f"  core_scores: {extracted_data.get('core_scores', {})}\n")
 
-    # Create a modified report instance with user's data
-    report = PNOEProfessionalReport()
+    # Create a modified report instance with user's data (using SP Comprehensive Blueprint)
+    report = SPComprehensiveBlueprintReport()
 
     # Override with extracted data - UPDATE ALL FIELDS
     patient_info = extracted_data.get('patient_info', {})
