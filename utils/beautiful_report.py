@@ -58,34 +58,48 @@ def generate_beautiful_report(extracted_data, custom_data):
 
     print(f"[DEBUG] Final core_scores: {report.core_scores}")
 
-    # Override caloric data if extracted
-    # The extraction provides: rmr, total_burn, fat_percent, cho_percent
-    # The template needs: burn_rest, burn_workout, eat_rest, eat_workout, fat_percent, cho_percent
+    # Calculate PROPER RMR from patient data (don't trust extracted values - they're wrong!)
+    # The PDF extraction picks up wrong numbers (VO2 ml/min instead of RMR)
+    print(f"[DEBUG] Calculating PROPER RMR from patient data...")
+
+    # Calculate RMR using Mifflin-St Jeor equation
+    age = report.patient_info['age']
+    weight_kg = report.patient_info['weight_kg']
+    height_cm = report.patient_info['height_cm']
+    gender = report.patient_info['gender'].lower()
+
+    if 'male' in gender:
+        calculated_rmr = (10 * weight_kg) + (6.25 * height_cm) - (5 * age) + 5
+    else:
+        calculated_rmr = (10 * weight_kg) + (6.25 * height_cm) - (5 * age) - 161
+
+    calculated_rmr = int(calculated_rmr)
+
+    # Calculate TDEE (Total Daily Energy Expenditure) based on activity level
+    # Using moderate activity multiplier (1.55) for workout days
+    # Using light activity multiplier (1.375) for rest days
+    tdee_rest = int(calculated_rmr * 1.375)  # Light activity
+    tdee_workout = int(calculated_rmr * 1.55)  # Moderate activity
+
+    print(f"[DEBUG] Calculated RMR: {calculated_rmr} kcal (age={age}, weight={weight_kg}kg, height={height_cm}cm, gender={gender})")
+    print(f"[DEBUG] TDEE Rest: {tdee_rest} kcal, TDEE Workout: {tdee_workout} kcal")
+
+    # Use calculated values for caloric balance
+    report.caloric_data['burn_rest'] = tdee_rest
+    report.caloric_data['burn_workout'] = tdee_workout
+
+    # Calculate eat values based on goals (maintenance = TDEE, bulk = +300-500, cut = -300-500)
+    # Default to slight surplus for performance/health goals
+    report.caloric_data['eat_rest'] = tdee_rest + 200
+    report.caloric_data['eat_workout'] = tdee_workout + 300
+
+    # Update fuel percentages if extracted
     caloric_data = extracted_data.get('caloric_data', {})
     if caloric_data:
-        print(f"[DEBUG] Updating caloric_data with: {caloric_data}")
-
-        # Map RMR to burn_rest
-        if 'rmr' in caloric_data:
-            report.caloric_data['burn_rest'] = caloric_data['rmr']
-            # Estimate workout burn as RMR + 200 calories
-            report.caloric_data['burn_workout'] = caloric_data['rmr'] + 200
-
-        # If we have total_burn, use it for workout day
-        if 'total_burn' in caloric_data:
-            report.caloric_data['burn_workout'] = caloric_data['total_burn']
-
-        # Update fuel percentages
         if 'fat_percent' in caloric_data:
             report.caloric_data['fat_percent'] = caloric_data['fat_percent']
         if 'cho_percent' in caloric_data:
             report.caloric_data['cho_percent'] = caloric_data['cho_percent']
-
-        # Calculate eat values (burn + 350 cal surplus for goals)
-        if 'burn_rest' in report.caloric_data:
-            report.caloric_data['eat_rest'] = report.caloric_data['burn_rest'] + 350
-        if 'burn_workout' in report.caloric_data:
-            report.caloric_data['eat_workout'] = report.caloric_data['burn_workout'] + 350
 
     print(f"[DEBUG] Final caloric_data: {report.caloric_data}")
 

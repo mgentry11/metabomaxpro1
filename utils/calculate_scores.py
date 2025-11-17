@@ -49,7 +49,24 @@ def calculate_core_scores_from_metabolic_data(patient_info, metabolic_data, calo
     height_cm = patient_info.get('height_cm', 180)
     gender = patient_info.get('gender', 'Male').lower()
 
-    rmr = metabolic_data.get('rmr') or caloric_data.get('rmr', 1700)
+    # DON'T trust extracted RMR - it's often wrong (PDF extracts VO2 ml/min instead)
+    # Calculate proper RMR from patient data
+    if gender == 'male':
+        calculated_rmr = (10 * weight_kg) + (6.25 * height_cm) - (5 * age) + 5
+    else:
+        calculated_rmr = (10 * weight_kg) + (6.25 * height_cm) - (5 * age) - 161
+
+    # Use extracted RMR only if it's realistic (within 50% of calculated)
+    extracted_rmr = metabolic_data.get('rmr') or caloric_data.get('rmr')
+    if extracted_rmr and 0.5 < (extracted_rmr / calculated_rmr) < 1.5:
+        rmr = extracted_rmr
+        print(f"[CALCULATE_SCORES] Using extracted RMR: {rmr} kcal (validated against calculated: {calculated_rmr:.0f})")
+    else:
+        rmr = calculated_rmr
+        if extracted_rmr:
+            print(f"[CALCULATE_SCORES] Rejected extracted RMR ({extracted_rmr}) - using calculated: {rmr:.0f} kcal")
+        else:
+            print(f"[CALCULATE_SCORES] No extracted RMR - using calculated: {rmr:.0f} kcal")
     rer = metabolic_data.get('rer', 0.85)
     fat_percent = caloric_data.get('fat_percent', 50)
 
