@@ -1454,10 +1454,10 @@ def download_report(file_id, format='html'):
                     page-break-after: auto;
                 }
                 .hero {
-                    padding: 3pt !important;
+                    padding: 10pt !important;
                     background: #1E40AF !important;
                     background-image: none !important;
-                    margin: 0 !important;
+                    margin: 0 0 3pt 0 !important;
                 }
                 .container {
                     max-width: 100%;
@@ -1520,40 +1520,43 @@ def download_report(file_id, format='html'):
                     min-height: 0 !important;
                     max-height: none !important;
                 }
-                /* Patient card - can break across pages */
+                /* Patient card - FULL SIZE for visibility */
                 .patient-card {
-                    padding: 3pt !important;
-                    margin: 0 !important;
+                    padding: 8pt !important;
+                    margin: 2pt 0 !important;
                     page-break-inside: auto;
                     page-break-before: auto;
                     page-break-after: auto;
                 }
                 .patient-name {
-                    font-size: 7pt !important;
-                    margin: 0 !important;
+                    font-size: 14pt !important;
+                    margin-bottom: 3pt !important;
+                    font-weight: bold !important;
                 }
                 .patient-details {
-                    font-size: 3.5pt !important;
-                    line-height: 0.95 !important;
+                    font-size: 9pt !important;
+                    line-height: 1.3 !important;
                     opacity: 1 !important;
                     margin: 0 !important;
                 }
                 .patient-details strong {
-                    font-weight: 600 !important;
+                    font-weight: 700 !important;
                 }
-                /* Hero section */
+                /* Hero section - FULL SIZE */
                 .hero-badge {
-                    font-size: 3.5pt !important;
-                    padding: 1pt !important;
-                    margin: 0 !important;
+                    font-size: 8pt !important;
+                    padding: 3pt 6pt !important;
+                    margin-bottom: 3pt !important;
                 }
                 .hero-title {
-                    font-size: 6pt !important;
-                    margin: 0 !important;
+                    font-size: 16pt !important;
+                    margin: 3pt 0 !important;
+                    font-weight: bold !important;
                 }
                 .hero-subtitle {
-                    font-size: 3.5pt !important;
-                    margin: 0 !important;
+                    font-size: 9pt !important;
+                    margin: 2pt 0 3pt !important;
+                    line-height: 1.3 !important;
                 }
             ''', font_config=font_config)
 
@@ -1670,10 +1673,10 @@ def download_ai_report(file_id, format='html'):
                     page-break-after: auto;
                 }
                 .hero {
-                    padding: 3pt !important;
+                    padding: 10pt !important;
                     background: #1E40AF !important;
                     background-image: none !important;
-                    margin: 0 !important;
+                    margin: 0 0 3pt 0 !important;
                 }
                 .container {
                     max-width: 100%;
@@ -1736,40 +1739,43 @@ def download_ai_report(file_id, format='html'):
                     min-height: 0 !important;
                     max-height: none !important;
                 }
-                /* Patient card - can break across pages */
+                /* Patient card - FULL SIZE for visibility */
                 .patient-card {
-                    padding: 3pt !important;
-                    margin: 0 !important;
+                    padding: 8pt !important;
+                    margin: 2pt 0 !important;
                     page-break-inside: auto;
                     page-break-before: auto;
                     page-break-after: auto;
                 }
                 .patient-name {
-                    font-size: 7pt !important;
-                    margin: 0 !important;
+                    font-size: 14pt !important;
+                    margin-bottom: 3pt !important;
+                    font-weight: bold !important;
                 }
                 .patient-details {
-                    font-size: 3.5pt !important;
-                    line-height: 0.95 !important;
+                    font-size: 9pt !important;
+                    line-height: 1.3 !important;
                     opacity: 1 !important;
                     margin: 0 !important;
                 }
                 .patient-details strong {
-                    font-weight: 600 !important;
+                    font-weight: 700 !important;
                 }
-                /* Hero section */
+                /* Hero section - FULL SIZE */
                 .hero-badge {
-                    font-size: 3.5pt !important;
-                    padding: 1pt !important;
-                    margin: 0 !important;
+                    font-size: 8pt !important;
+                    padding: 3pt 6pt !important;
+                    margin-bottom: 3pt !important;
                 }
                 .hero-title {
-                    font-size: 6pt !important;
-                    margin: 0 !important;
+                    font-size: 16pt !important;
+                    margin: 3pt 0 !important;
+                    font-weight: bold !important;
                 }
                 .hero-subtitle {
-                    font-size: 3.5pt !important;
-                    margin: 0 !important;
+                    font-size: 9pt !important;
+                    margin: 2pt 0 3pt !important;
+                    line-height: 1.3 !important;
                 }
             ''', font_config=font_config)
 
