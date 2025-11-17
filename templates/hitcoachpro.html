@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HIT Coach Pro - Science-Based Strength Training for Over 50</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/marketing.css') }}">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="{{ url_for('landing') }}" class="brand-link">
+                    <span class="logo">HCP</span>
+                    <span class="brand-name">HIT Coach Pro</span>
+                </a>
+                <span class="brand-subtitle">by MetaboMax Pro</span>
+            </div>
+            <div class="nav-links">
+                <a href="{{ url_for('landing') }}">← Back to Home</a>
+                <a href="#about">About</a>
+                <a href="#science">Science</a>
+                <a href="#protocols">Protocols</a>
+                <a href="#pricing">Pricing</a>
+                <a href="{{ url_for('dashboard') }}">Account</a>
+                <a href="{{ url_for('hitcoach_app') }}" class="btn btn-primary" style="padding: 0.5rem 1rem;">Try Free</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Strength Training<br>Designed for <span class="highlight">Over 50</span></h1>
+                <p class="hero-subtitle">Science-backed High-Intensity Training protocols proven effective for building strength, muscle, and vitality in mature adults.</p>
+                <div class="hero-cta">
+                    <a href="{{ url_for('hitcoach_app') }}" class="btn btn-primary">Launch Web App</a>
+                    <a href="#" class="btn btn-secondary">Download on App Store</a>
+                    <a href="#how-it-works" class="btn btn-secondary">See How It Works</a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <div class="stat-number">40+</div>
+                        <div class="stat-label">Years of Research</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">15-20 Min</div>
+                        <div class="stat-label">Per Workout</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">2-3x</div>
+                        <div class="stat-label">Per Week</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <h2>What is High-Intensity Training (HIT)?</h2>
+            <div class="about-grid">
+                <div class="about-card">
+                    <div class="icon">💪</div>
+                    <h3>Maximum Results, Minimum Time</h3>
+                    <p>HIT is a strength training methodology that emphasizes brief, intense workouts focusing on slow, controlled movements to complete muscle fatigue. One set per exercise is all you need.</p>
+                </div>
+                <div class="about-card">
+                    <div class="icon">🧬</div>
+                    <h3>Proven by Science</h3>
+                    <p>Decades of research demonstrate that HIT produces equal or superior strength and muscle gains compared to traditional high-volume training, with significantly less time investment and joint stress.</p>
+                </div>
+                <div class="about-card">
+                    <div class="icon">🎯</div>
+                    <h3>Perfect for Mature Adults</h3>
+                    <p>The controlled, deliberate nature of HIT makes it ideal for those over 50. Lower injury risk, minimal joint impact, and efficient recovery align perfectly with mature physiology.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Science Section -->
+    <section id="science" class="science">
+        <div class="container">
+            <h2>The Science Behind HCP</h2>
+            <div class="science-content">
+                <div class="research-highlights">
+                    <h3>Research-Backed Effectiveness</h3>
+                    <p class="section-intro">High-Intensity Training has been extensively studied for over four decades, with consistent findings demonstrating its effectiveness for building strength and muscle mass in adults of all ages, with particular benefits for those over 50.</p>
+
+                    <div class="finding">
+                        <div class="finding-icon">📊</div>
+                        <div class="finding-content">
+                            <h4>Superior Muscle Growth in Older Adults</h4>
+                            <p>Multiple research studies with men and women over 50 have demonstrated that HIT protocols produce significant muscle gains (8-12 lbs of lean mass in 10-12 weeks) while simultaneously reducing body fat, without the excessive time and recovery demands of traditional programs.</p>
+                        </div>
+                    </div>
+
+                    <div class="finding">
+                        <div class="finding-icon">⏱️</div>
+                        <div class="finding-content">
+                            <h4>Time-Efficient Protocol</h4>
+                            <p>Clinical studies show that single-set training to muscular failure produces 90-95% of the strength gains of multiple-set protocols, but in a fraction of the time. Perfect for busy professionals and retirees who value their time.</p>
+                        </div>
+                    </div>
+
+                    <div class="finding">
+                        <div class="finding-icon">🛡️</div>
+                        <div class="finding-content">
+                            <h4>Reduced Injury Risk</h4>
+                            <p>The slow, controlled movements and brief workout duration significantly reduce injury risk compared to explosive lifting or high-volume training. Critical for maintaining long-term training consistency over 50.</p>
+                        </div>
+                    </div>
+
+                    <div class="finding">
+                        <div class="finding-icon">🔄</div>
+                        <div class="finding-content">
+                            <h4>Optimal Recovery</h4>
+                            <p>Research indicates that mature adults require 48-72 hours between intense workouts for optimal recovery and growth. HIT's 2-3x per week frequency aligns perfectly with this physiological reality.</p>
+                        </div>
+                    </div>
+
+                    <div class="finding">
+                        <div class="finding-icon">🦴</div>
+                        <div class="finding-content">
+                            <h4>Bone Density Benefits</h4>
+                            <p>Studies show that the high-intensity resistance training stimulates bone formation and increases bone mineral density, crucial for preventing osteoporosis in aging populations.</p>
+                        </div>
+                    </div>
+
+                    <div class="finding">
+                        <div class="finding-icon">❤️</div>
+                        <div class="finding-content">
+                            <h4>Cardiovascular Improvements</h4>
+                            <p>Research demonstrates that brief, intense resistance training provides cardiovascular benefits comparable to traditional aerobic exercise, with the added benefit of muscle preservation and strength gains.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="methodology-box">
+                    <h3>The HIT Methodology</h3>
+                    <p>High-Intensity Training emphasizes quality over quantity. Each exercise is performed for a single set with slow, controlled movements, maintaining constant tension on the muscle until complete failure is reached. This approach maximizes the growth stimulus while minimizing cumulative fatigue and recovery demands.</p>
+
+                    <div class="key-principles">
+                        <div class="principle-item">
+                            <strong>Extended Time Under Tension:</strong> 90 seconds total per exercise (30s eccentric + 20s concentric + 40s final eccentric)
+                        </div>
+                        <div class="principle-item">
+                            <strong>Complete Muscular Failure:</strong> Each set continues until you physically cannot complete another repetition with proper form
+                        </div>
+                        <div class="principle-item">
+                            <strong>Minimal Volume, Maximum Intensity:</strong> One properly executed set per exercise provides sufficient stimulus for growth
+                        </div>
+                        <div class="principle-item">
+                            <strong>Adequate Recovery:</strong> 2-3 workouts per week with 48-72 hours between sessions allows complete recovery and adaptation
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Target Audience Section -->
+    <section class="audience">
+        <div class="container">
+            <h2>Built for the Over-50 Athlete</h2>
+            <p class="section-intro">Your body's needs change with age. HIT Coach Pro respects and optimizes for those changes.</p>
+
+            <div class="benefits-grid">
+                <div class="benefit">
+                    <h3>🦴 Joint-Friendly</h3>
+                    <p>Slow, controlled movements minimize joint stress while maximizing muscle tension. No ballistic movements or heavy impact.</p>
+                </div>
+                <div class="benefit">
+                    <h3>⚡ Time-Efficient</h3>
+                    <p>15-20 minute workouts fit easily into your schedule. Spend less time in the gym, more time living life.</p>
+                </div>
+                <div class="benefit">
+                    <h3>🧘 Sustainable</h3>
+                    <p>Brief, infrequent workouts allow for complete recovery. Train smarter, not harder, for long-term results.</p>
+                </div>
+                <div class="benefit">
+                    <h3>💯 Effective</h3>
+                    <p>Research-proven to build muscle and strength in mature adults. Real results, backed by decades of science.</p>
+                </div>
+                <div class="benefit">
+                    <h3>🎯 Simple</h3>
+                    <p>No complicated programming or constant adjustments. Follow the protocol, trust the process, see results.</p>
+                </div>
+                <div class="benefit">
+                    <h3>🔐 Safe</h3>
+                    <p>Lower injury risk than traditional training. Maintain your independence and quality of life.</p>
+                </div>
+            </div>
+
+            <div class="testimonial-box">
+                <p class="testimonial-text">"At 58, I was skeptical about building muscle. After 12 weeks with HIT Coach Pro, I've gained 9 pounds of lean mass and feel stronger than I did in my 40s. The voice coaching keeps me focused on perfect form."</p>
+                <p class="testimonial-author">— Mark T., Age 58</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <h2>Intelligent Coaching at Your Fingertips</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🎙️</div>
+                    <h3>Voice-Guided Workouts</h3>
+                    <p>Real-time verbal coaching guides you through every phase: eccentric (30 sec), concentric (20 sec), and final eccentric (40 sec). No need to watch the screen.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">⏲️</div>
+                    <h3>Precision Timing</h3>
+                    <p>Built-in timer ensures perfect tempo execution. The app counts for you, so you can focus entirely on the muscle contraction.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Progress Tracking</h3>
+                    <p>Log weights and track progress over time. See your strength gains accumulate week after week.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Muscle Failure Tracking</h3>
+                    <p>Mark when you've achieved true muscular failure - the key stimulus for growth in HIT training.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">⏸️</div>
+                    <h3>Rest Timer with Voice</h3>
+                    <p>Automated rest periods with vocal countdown (60-120 seconds). Announces next exercise name so you can prepare mentally and physically.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🗣️</div>
+                    <h3>Siri Integration</h3>
+                    <p>Start workouts hands-free with voice commands. "Hey Siri, start chest press" - perfect for when you're already positioned at the machine.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">👤</div>
+                    <h3>Personalization</h3>
+                    <p>Customize voice gender, coaching style, and personal encouragement. The app adapts to your preferences.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🌓</div>
+                    <h3>Light & Dark Mode</h3>
+                    <p>Visual comfort in any environment. Easy to read in bright gyms or dimly lit home workout spaces.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Protocols Section -->
+    <section id="protocols" class="protocols">
+        <div class="container">
+            <h2>Proven Training Protocols</h2>
+            <p class="section-intro">HIT Coach Pro supports time-tested workout routines based on decades of HIT research, designed specifically for maximum efficiency and results.</p>
+
+            <div class="protocol-comparison">
+                <div class="protocol-card">
+                    <div class="protocol-header">
+                        <h3>Workout A</h3>
+                        <span class="protocol-badge">Push Focus</span>
+                    </div>
+                    <p class="protocol-desc">Full-body routine emphasizing pushing movements and leg strength.</p>
+                    <ul class="exercise-list">
+                        <li><span class="exercise-icon">🦵</span> Leg Press</li>
+                        <li><span class="exercise-icon">💪</span> Pulldown</li>
+                        <li><span class="exercise-icon">💪</span> Chest Press</li>
+                        <li><span class="exercise-icon">💪</span> Overhead Press</li>
+                        <li><span class="exercise-icon">🦵</span> Leg Curl</li>
+                        <li><span class="exercise-icon">💪</span> Bicep Curl</li>
+                        <li><span class="exercise-icon">💪</span> Tricep Extension</li>
+                        <li><span class="exercise-icon">🦵</span> Calf Raise</li>
+                    </ul>
+                    <div class="protocol-stats">
+                        <div class="stat-small">8 Exercises</div>
+                        <div class="stat-small">15-20 min</div>
+                    </div>
+                </div>
+
+                <div class="protocol-card">
+                    <div class="protocol-header">
+                        <h3>Workout B</h3>
+                        <span class="protocol-badge">Pull Focus</span>
+                    </div>
+                    <p class="protocol-desc">Complementary full-body routine emphasizing pulling movements and core.</p>
+                    <ul class="exercise-list">
+                        <li><span class="exercise-icon">🦵</span> Leg Extension</li>
+                        <li><span class="exercise-icon">💪</span> Seated Row</li>
+                        <li><span class="exercise-icon">💪</span> Incline Press</li>
+                        <li><span class="exercise-icon">💪</span> Lateral Raise</li>
+                        <li><span class="exercise-icon">🦵</span> Leg Curl</li>
+                        <li><span class="exercise-icon">💪</span> Shrug</li>
+                        <li><span class="exercise-icon">🧘</span> Ab Crunch</li>
+                        <li><span class="exercise-icon">🧘</span> Back Extension</li>
+                    </ul>
+                    <div class="protocol-stats">
+                        <div class="stat-small">8 Exercises</div>
+                        <div class="stat-small">15-20 min</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="protocol-details">
+                <h3>The Protocol Principles</h3>
+                <div class="principles-grid">
+                    <div class="principle">
+                        <h4>One Set to Failure</h4>
+                        <p>Each exercise is performed for a single set taken to complete muscular failure. This maximizes the growth stimulus while minimizing fatigue and recovery demands.</p>
+                    </div>
+                    <div class="principle">
+                        <h4>Controlled Tempo</h4>
+                        <p>30-second eccentric (lowering), 20-second concentric (lifting), 40-second final eccentric. This extended time under tension is the key to HIT's effectiveness.</p>
+                    </div>
+                    <div class="principle">
+                        <h4>Alternating Routines</h4>
+                        <p>Alternate between Workout A and B, 2-3 times per week. This provides complete recovery while hitting all major muscle groups twice weekly.</p>
+                    </div>
+                    <div class="principle">
+                        <h4>Progressive Resistance</h4>
+                        <p>Increase weight by 5-10% when you can complete the full set (90 seconds total time under tension) with good form. Steady, sustainable progress.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Phase Timing Illustration -->
+            <div class="phase-timing-section">
+                <h3>⏱️ Exercise Phase Breakdown</h3>
+                <p class="section-intro">Each exercise follows a precise 5-phase protocol designed to maximize muscle stimulus while maintaining safety. The app's voice coaching guides you through every second.</p>
+
+                <div class="phase-timeline">
+                    <div class="phase-step">
+                        <div class="phase-number">1</div>
+                        <div class="phase-info">
+                            <h4>Prep Phase</h4>
+                            <div class="phase-duration">10 seconds</div>
+                            <p>Get your weight ready and mentally prepare. The app counts down so you can focus.</p>
+                        </div>
+                        <div class="phase-bar prep-bar"></div>
+                    </div>
+
+                    <div class="phase-step">
+                        <div class="phase-number">2</div>
+                        <div class="phase-info">
+                            <h4>Positioning Phase</h4>
+                            <div class="phase-duration">5 seconds</div>
+                            <p>Get into the eccentric (starting) position. Voice announces: "You have 5 seconds to get into position."</p>
+                        </div>
+                        <div class="phase-bar position-bar"></div>
+                    </div>
+
+                    <div class="phase-step">
+                        <div class="phase-number">3</div>
+                        <div class="phase-info">
+                            <h4>Eccentric Phase</h4>
+                            <div class="phase-duration">30 seconds</div>
+                            <p>Slow, controlled lowering. This is where the magic happens - maximum muscle tension with minimal joint stress.</p>
+                        </div>
+                        <div class="phase-bar eccentric-bar"></div>
+                    </div>
+
+                    <div class="phase-step">
+                        <div class="phase-number">4</div>
+                        <div class="phase-info">
+                            <h4>Concentric Phase</h4>
+                            <div class="phase-duration">20 seconds</div>
+                            <p>Powerful lifting phase. Maintain control and constant tension. Voice coaching keeps you motivated.</p>
+                        </div>
+                        <div class="phase-bar concentric-bar"></div>
+                    </div>
+
+                    <div class="phase-step">
+                        <div class="phase-number">5</div>
+                        <div class="phase-info">
+                            <h4>Final Eccentric Phase</h4>
+                            <div class="phase-duration">40 seconds</div>
+                            <p>Extended negative to complete muscular failure. This final push triggers maximum growth response.</p>
+                        </div>
+                        <div class="phase-bar final-bar"></div>
+                    </div>
+                </div>
+
+                <div class="phase-total-time">
+                    <strong>Total Time Under Tension:</strong> 105 seconds per exercise
+                </div>
+
+                <div class="customization-note">
+                    <h4>✨ Fully Customizable on Web & Mobile</h4>
+                    <p>Both the web app and iOS app allow you to adjust each phase duration to match your training style and experience level. Navigate to Settings and scroll to "Phase Timing Customization" to adjust any or all of the 5 phases. Your custom timings are saved locally on each device and apply to every workout automatically.</p>
+
+                    <div class="customization-examples">
+                        <div class="custom-example">
+                            <strong>🟢 Beginner Protocol:</strong><br>
+                            Prep: 15s | Position: 5s | Eccentric: 20s | Concentric: 15s | Final: 30s<br>
+                            <em>Total: 85 seconds - Perfect for building foundational strength and learning proper form</em>
+                        </div>
+                        <div class="custom-example">
+                            <strong>🟡 Standard Protocol (Default):</strong><br>
+                            Prep: 10s | Position: 5s | Eccentric: 30s | Concentric: 20s | Final: 40s<br>
+                            <em>Total: 105 seconds - Research-proven optimal time under tension for muscle growth</em>
+                        </div>
+                        <div class="custom-example">
+                            <strong>🔴 Advanced Protocol:</strong><br>
+                            Prep: 10s | Position: 5s | Eccentric: 40s | Concentric: 25s | Final: 50s<br>
+                            <em>Total: 130 seconds - Extended time under tension for experienced trainees</em>
+                        </div>
+                        <div class="custom-example">
+                            <strong>⚙️ Custom Protocol:</strong><br>
+                            You control every phase (0-90 seconds each)<br>
+                            <em>Create your own timing protocol based on your goals, equipment, or training methodology</em>
+                        </div>
+                    </div>
+
+                    <div class="platform-note" style="margin-top: 1.5rem; padding: 1rem; background: var(--dark-bg); border-radius: 8px; border-left: 4px solid var(--neon-green);">
+                        <strong style="color: var(--neon-green);">📱 Available on Both Platforms:</strong>
+                        <p style="margin: 0.5rem 0 0 0; color: var(--text-gray);">Phase customization works identically on the web app and iOS app. Settings are stored locally on each device, so you can set different protocols on your phone vs. tablet if desired, or keep them the same. Future versions will include cloud sync for seamless cross-device experience.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="custom-workouts">
+                <h3>✏️ Create Custom Workouts</h3>
+                <p>While we provide proven HIT routines, you can also create your own custom exercises and routines. Perfect for accommodating gym equipment availability or specific training goals.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="how-it-works">
+        <div class="container">
+            <h2>How It Works</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Select Your Exercise</h3>
+                        <p>Choose from Workout A or B, or select any exercise from your custom list. The app shows your last weight for easy reference.</p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Get into Position</h3>
+                        <p>10-second prep countdown gives you time to set your weight. Voice announces "You have 5 seconds to get into eccentric position" with a 5-second countdown to position yourself.</p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Follow Voice Coaching</h3>
+                        <p>The app guides you through each phase with voice commands and timer display. Focus entirely on the muscle contraction - the app handles the timing.</p>
+                        <ul class="phase-list">
+                            <li><strong>Eccentric (30s):</strong> Slow, controlled lowering</li>
+                            <li><strong>Concentric (20s):</strong> Powerful lifting phase</li>
+                            <li><strong>Final Eccentric (40s):</strong> Extended negative to failure</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>Log Your Results</h3>
+                        <p>Enter weight used and mark if you reached muscular failure. Track progress over time and watch your strength grow.</p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">5</div>
+                    <div class="step-content">
+                        <h3>Rest & Repeat</h3>
+                        <p>Automatic rest timer (60-120 seconds, configurable) with voice countdown. Announces next exercise at 5 seconds. Move smoothly through your workout.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="workflow-visual">
+                <div class="workflow-box">
+                    <p><strong>Total Workout Time:</strong> 15-20 minutes</p>
+                    <p><strong>Frequency:</strong> 2-3x per week</p>
+                    <p><strong>Results Timeline:</strong> Noticeable strength gains in 2-3 weeks, visible muscle growth in 6-8 weeks</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="pricing-section">
+        <div class="container">
+            <div class="launch-special-banner">
+                🎉 <strong>Launch Special:</strong> Lock in Premium at $4.99/mo or Elite at $9.99/mo forever! (First 60 days only)
+            </div>
+
+            <h2>Choose Your Plan</h2>
+            <p class="section-intro">Start free and upgrade anytime. No long-term commitments. Cancel whenever you want.</p>
+
+            <div class="pricing-cards">
+                <!-- Free Tier -->
+                <div class="pricing-card">
+                    <div class="price-header">
+                        <h3>Free</h3>
+                        <div class="price">$0</div>
+                        <p class="price-period">Forever</p>
+                    </div>
+                    <div class="price-includes">
+                        <h4>Try HIT Training:</h4>
+                        <ul>
+                            <li>✓ Voice-guided workouts</li>
+                            <li>✓ <strong>4 exercises per workout</strong></li>
+                            <li>✓ Default phase timing (105s)</li>
+                            <li>✓ Basic voice coaching</li>
+                            <li>✓ Light & dark mode</li>
+                            <li>✓ Works on any device</li>
+                            <li>✗ Limited to 4 exercises</li>
+                            <li>✗ No progress tracking</li>
+                            <li>✗ No custom phase timing</li>
+                            <li>✗ No cloud sync</li>
+                        </ul>
+                    </div>
+                    <a href="hitcoach-app.html" class="btn btn-secondary btn-large">Start Free</a>
+                    <p class="price-note">Perfect for trying HIT</p>
+                </div>
+
+                <!-- Premium Tier -->
+                <div class="pricing-card featured-pricing">
+                    <div class="pricing-badge">MOST POPULAR</div>
+                    <div class="price-header">
+                        <h3>Premium</h3>
+                        <div class="price-group">
+                            <div class="price-original">$6.99/mo</div>
+                            <div class="price launch-price">$4.99/mo</div>
+                        </div>
+                        <p class="price-period">or $49.99/year (save 40%)</p>
+                    </div>
+                    <div class="price-includes">
+                        <h4>Full HIT Experience:</h4>
+                        <ul>
+                            <li>✓ <strong>Full Workout A & B (8 exercises each)</strong></li>
+                            <li>✓ <strong>Unlimited exercise variability</strong></li>
+                            <li>✓ <strong>All customizable phase durations</strong></li>
+                            <li>✓ <strong>All 3 coaching styles</strong></li>
+                            <li>✓ <strong>Cloud sync across devices</strong></li>
+                            <li>✓ <strong>Unlimited workout history</strong></li>
+                            <li>✓ <strong>Progress analytics & charts</strong></li>
+                            <li>✓ <strong>Personal records (PR) tracking</strong></li>
+                            <li>✓ <strong>Workout streaks & badges</strong></li>
+                            <li>✓ <strong>Progress photo uploads</strong></li>
+                            <li>✓ Milestone celebrations</li>
+                            <li>✓ Weekly stats dashboard</li>
+                            <li>✓ Workout reminder notifications</li>
+                        </ul>
+                    </div>
+                    <a href="account.html?plan=premium" class="btn btn-primary btn-large">Start Premium Trial</a>
+                    <p class="price-note">7-day free trial • Cancel anytime</p>
+                </div>
+
+                <!-- Elite Tier -->
+                <div class="pricing-card">
+                    <div class="price-header">
+                        <h3>Elite</h3>
+                        <div class="price-group">
+                            <div class="price-original">$14.99/mo</div>
+                            <div class="price launch-price">$9.99/mo</div>
+                        </div>
+                        <p class="price-period">or $99.99/year (save 44%)</p>
+                    </div>
+                    <div class="price-includes">
+                        <h4>Everything in Premium, plus:</h4>
+                        <ul>
+                            <li>✓ <strong>Private community forum</strong> (50+ focused)</li>
+                            <li>✓ <strong>Share workouts with friends</strong></li>
+                            <li>✓ <strong>Leaderboards</strong> (age-adjusted)</li>
+                            <li>✓ <strong>Monthly challenges</strong></li>
+                            <li>✓ <strong>Video exercise library</strong></li>
+                            <li>✓ <strong>Custom workout builder</strong></li>
+                            <li>✓ <strong>Advanced analytics</strong> (volume, estimated 1RM)</li>
+                            <li>✓ <strong>Export workout data</strong> (CSV, PDF)</li>
+                            <li>✓ <strong>AI workout recommendations</strong></li>
+                            <li>✓ <strong>Deload week suggestions</strong></li>
+                            <li>✓ <strong>Priority support</strong></li>
+                            <li>✓ <strong>Early access to new features</strong></li>
+                            <li>✓ <strong>Monthly Q&A with HIT experts</strong></li>
+                        </ul>
+                    </div>
+                    <a href="account.html?plan=elite" class="btn btn-secondary btn-large">Start Elite Trial</a>
+                    <p class="price-note">7-day free trial • Cancel anytime</p>
+                </div>
+            </div>
+
+            <div class="pricing-faq">
+                <h3>Pricing Questions</h3>
+                <div class="faq-grid">
+                    <div class="faq-item">
+                        <h4>Is the launch pricing permanent?</h4>
+                        <p>Yes! If you subscribe in the first 60 days, you lock in $4.99/mo Premium or $9.99/mo Elite forever. Even if we raise prices for new users, your rate stays the same as long as you remain subscribed.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h4>Can I cancel anytime?</h4>
+                        <p>Absolutely! No long-term commitments. Cancel your subscription anytime from your dashboard. You'll keep access until the end of your billing period.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h4>What's the 7-day free trial?</h4>
+                        <p>Try Premium or Elite completely free for 7 days. Full access to all features. No credit card required upfront. If you love it, subscribe to continue. If not, simply don't subscribe—no charges, no hassle.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h4>Monthly vs. Yearly—which is better?</h4>
+                        <p>Annual plans save you 40-44%. Premium yearly is $49.99 (vs. $59.88 monthly), Elite yearly is $99.99 (vs. $119.88 monthly). Plus you lock in pricing even if rates increase.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h4>Can I upgrade from Premium to Elite?</h4>
+                        <p>Yes! Upgrade anytime. We'll prorate your Premium payment and you'll only pay the difference for Elite. All your data, streaks, and progress carry over instantly.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h4>What happens to my data if I cancel?</h4>
+                        <p>Your workout history and progress photos are saved for 12 months. You can downgrade to the free tier (4 exercises) to keep using the app. Re-subscribe anytime to restore full access.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h4>Do you offer refunds?</h4>
+                        <p>Yes! If you're not satisfied within 30 days of subscribing, contact us for a full refund. We stand behind our product and want you to be thrilled with your results.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h4>What about the iOS app?</h4>
+                        <p>The iOS app (coming Q2 2025) will have the same subscription tiers and pricing. Your Premium/Elite subscription will work on both web and iOS automatically via cloud sync.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="money-back-guarantee">
+                <h4>💯 30-Day Money-Back Guarantee</h4>
+                <p>Try HIT Coach Pro risk-free. If you're not completely satisfied with your subscription, we'll refund your payment within 30 days, no questions asked. Plus, you get a 7-day free trial to try before you buy.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="container">
+            <h2>Start Your HIT Journey Today</h2>
+            <p>Join the growing community of people over 50 building real strength with science-backed HIT training.</p>
+            <div class="cta-buttons">
+                <a href="hitcoach-app.html" class="btn btn-primary btn-large">Start Free - No Credit Card</a>
+                <a href="account.html?plan=premium" class="btn btn-secondary btn-large">Try Premium Free for 7 Days</a>
+            </div>
+            <p class="cta-note">🎉 Launch Special: Lock in $4.99/mo Premium pricing forever (first 60 days only)</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <span class="logo">HCP</span>
+                    <span class="brand-name">HIT Coach Pro</span>
+                    <p>Science-based strength training for mature adults.</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Product</h4>
+                        <a href="hitcoach-app.html">Web App</a>
+                        <a href="#features">Features</a>
+                        <a href="#protocols">Protocols</a>
+                        <a href="#how-it-works">How It Works</a>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Learn</h4>
+                        <a href="#about">About HIT</a>
+                        <a href="#science">The Science</a>
+                        <a href="index.html">MetaboMax Pro</a>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Company</h4>
+                        <a href="#">Privacy Policy</a>
+                        <a href="#">Terms of Service</a>
+                        <a href="#">Contact</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 HIT Coach Pro by MetaboMax Pro. All rights reserved.</p>
+                <p class="disclaimer">Based on decades of published research in High-Intensity Training and exercise science.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

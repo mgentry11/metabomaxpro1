@@ -370,6 +370,17 @@ def pricing_debug():
     """Pricing debug page to troubleshoot purchase errors"""
     return render_template('pricing_debug.html')
 
+# HIT Coach Pro routes
+@app.route('/hitcoachpro')
+def hitcoachpro():
+    """HIT Coach Pro marketing page"""
+    return render_template('hitcoachpro.html')
+
+@app.route('/hitcoach-app')
+def hitcoach_app():
+    """HIT Coach Pro web application"""
+    return render_template('hitcoach_app.html')
+
 # Blog routes
 @app.route('/blog')
 def blog():
