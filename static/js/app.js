@@ -76,8 +76,10 @@ async function submitManualData() {
     try {
         const response = await fetch('/submit_manual', {
             method: 'POST',
+            credentials: 'same-origin',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
             },
             body: JSON.stringify(manualData)
         });
@@ -183,8 +185,18 @@ async function uploadFile() {
     try {
         const response = await fetch('/upload', {
             method: 'POST',
-            body: formData
+            body: formData,
+            credentials: 'same-origin',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
         });
+
+        // Check if response is JSON
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+            throw new Error('Please log in again. Your session may have expired.');
+        }
 
         const data = await response.json();
 
@@ -401,8 +413,10 @@ async function generateReport() {
     try {
         const response = await fetch('/generate', {
             method: 'POST',
+            credentials: 'same-origin',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
             },
             body: JSON.stringify(reportData)
         });
