@@ -1373,7 +1373,7 @@ def download_report(file_id, format='html'):
             pdf_css = CSS(string='''
                 @page {
                     size: letter;
-                    margin: 0.35in;
+                    margin: 0.25in;
                 }
                 body {
                     -webkit-print-color-adjust: exact;
@@ -1522,7 +1522,7 @@ def download_ai_report(file_id, format='html'):
             pdf_css = CSS(string='''
                 @page {
                     size: letter;
-                    margin: 0.35in;
+                    margin: 0.25in;
                 }
                 body {
                     -webkit-print-color-adjust: exact;
