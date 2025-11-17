@@ -601,6 +601,7 @@ strong { font-weight: bold; }
 {self._generate_interventions()}
 {self._generate_action_plan()}
 {self._generate_90day_protocol()}
+{self.peptide_html if self.peptide_html else ''}
 </body>
 </html>
 """
