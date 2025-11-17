@@ -15,10 +15,17 @@ from pnoe_professional_template import PNOEProfessionalReport
 def generate_beautiful_report(extracted_data, custom_data):
     """Generate a comprehensive, beautiful HTML report using the PNOE professional template"""
 
+    # DEBUG: Print what we received
+    print(f"\n[DEBUG] EXTRACTED DATA:")
+    print(f"  patient_info: {extracted_data.get('patient_info', {})}")
+    print(f"  core_scores: {extracted_data.get('core_scores', {})}")
+    print(f"  caloric_data: {extracted_data.get('caloric_data', {})}")
+    print(f"[DEBUG] CUSTOM DATA: {custom_data}\n")
+
     # Create a modified report instance with user's data
     report = PNOEProfessionalReport()
 
-    # Override with extracted data
+    # Override with extracted data - UPDATE ALL FIELDS
     patient_info = extracted_data.get('patient_info', {})
     if patient_info.get('name'):
         report.patient_info['name'] = patient_info['name']
@@ -26,18 +33,54 @@ def generate_beautiful_report(extracted_data, custom_data):
         report.patient_info['test_date'] = patient_info['test_date']
     if patient_info.get('weight_kg'):
         report.patient_info['weight_kg'] = patient_info['weight_kg']
+    if patient_info.get('height_cm'):
+        report.patient_info['height_cm'] = patient_info['height_cm']
     if patient_info.get('gender'):
         report.patient_info['gender'] = patient_info['gender']
+    if patient_info.get('age'):
+        report.patient_info['age'] = patient_info['age']
+        # Also use as chronological age if not provided in custom_data
+        if not custom_data.get('chronological_age'):
+            report.chronological_age = patient_info['age']
 
     # Override core scores if extracted
     core_scores = extracted_data.get('core_scores', {})
     if core_scores:
+        print(f"[DEBUG] Updating core_scores with: {core_scores}")
         report.core_scores.update(core_scores)
 
+    print(f"[DEBUG] Final core_scores: {report.core_scores}")
+
     # Override caloric data if extracted
+    # The extraction provides: rmr, total_burn, fat_percent, cho_percent
+    # The template needs: burn_rest, burn_workout, eat_rest, eat_workout, fat_percent, cho_percent
     caloric_data = extracted_data.get('caloric_data', {})
     if caloric_data:
-        report.caloric_data.update(caloric_data)
+        print(f"[DEBUG] Updating caloric_data with: {caloric_data}")
+
+        # Map RMR to burn_rest
+        if 'rmr' in caloric_data:
+            report.caloric_data['burn_rest'] = caloric_data['rmr']
+            # Estimate workout burn as RMR + 200 calories
+            report.caloric_data['burn_workout'] = caloric_data['rmr'] + 200
+
+        # If we have total_burn, use it for workout day
+        if 'total_burn' in caloric_data:
+            report.caloric_data['burn_workout'] = caloric_data['total_burn']
+
+        # Update fuel percentages
+        if 'fat_percent' in caloric_data:
+            report.caloric_data['fat_percent'] = caloric_data['fat_percent']
+        if 'cho_percent' in caloric_data:
+            report.caloric_data['cho_percent'] = caloric_data['cho_percent']
+
+        # Calculate eat values (burn + 350 cal surplus for goals)
+        if 'burn_rest' in report.caloric_data:
+            report.caloric_data['eat_rest'] = report.caloric_data['burn_rest'] + 350
+        if 'burn_workout' in report.caloric_data:
+            report.caloric_data['eat_workout'] = report.caloric_data['burn_workout'] + 350
+
+    print(f"[DEBUG] Final caloric_data: {report.caloric_data}")
 
     # Override with custom data
     if custom_data.get('chronological_age'):
