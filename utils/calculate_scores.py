@@ -95,17 +95,22 @@ def calculate_core_scores_from_metabolic_data(patient_info, metabolic_data, calo
     symp_parasym = min(100, max(40, int(60 + rer_balance * 30 + (fat_burning - 60) * 0.3)))
 
     # 6. VENTILATION EFFICIENCY
-    # Correlates with lung utilization and age
+    # Correlates with lung utilization, age, and BMI
+    bmi = weight_kg / ((height_cm / 100) ** 2)
+    bmi_factor = max(-5, min(5, (25 - bmi) * 0.5))  # Optimal BMI ~25, ±5 points
+
     vent_base = lung_util * 0.8
     vent_age_factor = max(0, (50 - age) * 0.3)
-    ventilation_eff = min(100, max(40, int(vent_base + vent_age_factor)))
+    ventilation_eff = min(100, max(40, int(vent_base + vent_age_factor + bmi_factor)))
 
     # 7. BREATHING COORDINATION
     # Related to ventilation efficiency but with more variation
-    # Good metabolic rate suggests good breathing
+    # Good metabolic rate + weight management suggest good breathing
     breath_base = ventilation_eff * 0.85
     breath_metabolic = (rmr_ratio - 0.85) * 20
-    breathing_coord = min(100, max(30, int(breath_base + breath_metabolic)))
+    # Add weight-based factor: lighter/optimal weight = better coordination
+    weight_factor = max(-3, min(3, (80 - weight_kg) * 0.05))  # Optimal ~80kg
+    breathing_coord = min(100, max(30, int(breath_base + breath_metabolic + weight_factor)))
 
     scores = {
         'metabolic_rate': metabolic_rate,
