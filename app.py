@@ -1397,89 +1397,112 @@ def download_report(file_id, format='html'):
             # Create HTML object with base URL for resolving relative resources
             html_doc = HTML(string=html_content, base_url=os.path.dirname(report_path))
 
-            # Ultra-compact PDF CSS - 30% smaller overall
+            # Ultra-compact PDF CSS - Dense layout, no orphaned content
             pdf_css = CSS(string='''
                 @page {
                     size: letter;
-                    margin: 0.07in;
+                    margin: 0.05in;
+                    orphans: 4;
+                    widows: 4;
                 }
                 body {
                     -webkit-print-color-adjust: exact;
                     print-color-adjust: exact;
-                    font-size: 5pt;
-                    line-height: 1.0;
+                    font-size: 4.5pt;
+                    line-height: 0.95;
                     margin: 0;
                     padding: 0;
+                    orphans: 4;
+                    widows: 4;
                 }
-                /* Fit images within document - 30% smaller */
+                /* Very small images - inline with text */
                 img {
                     max-width: 100%;
-                    max-height: 21pt;
+                    max-height: 15pt;
                     height: auto;
-                    display: block;
-                    margin: 0pt auto;
-                    page-break-inside: auto;
+                    display: inline-block;
+                    margin: 0;
+                    padding: 0;
+                    page-break-before: avoid;
+                    page-break-after: avoid;
+                    page-break-inside: avoid;
                 }
-                /* Minimal headers - 30% smaller */
+                /* Minimal headers */
                 h1 {
-                    font-size: 8pt;
-                    margin: 0.3pt 0 0pt;
+                    font-size: 7pt;
+                    margin: 0;
+                    padding: 0;
+                    page-break-after: avoid;
                 }
                 h2 {
-                    font-size: 6pt;
-                    margin: 0.3pt 0 0pt;
+                    font-size: 5.5pt;
+                    margin: 0;
+                    padding: 0;
+                    page-break-after: avoid;
                 }
                 h3 {
-                    font-size: 5pt;
-                    margin: 0pt 0 0pt;
+                    font-size: 4.5pt;
+                    margin: 0;
+                    padding: 0;
+                    page-break-after: avoid;
                 }
                 h4, h5, h6 {
-                    font-size: 5pt;
-                    margin: 0pt 0 0pt;
+                    font-size: 4.5pt;
+                    margin: 0;
+                    padding: 0;
+                    page-break-after: avoid;
                 }
-                /* Zero spacing sections - allow breaking */
+                /* Sections flow together */
                 section, .section {
                     margin: 0;
                     padding: 0;
                     page-break-inside: auto;
                 }
                 .hero {
-                    padding: 4pt !important;
+                    padding: 3pt !important;
                     background: #1E40AF !important;
                     background-image: none !important;
                     margin: 0 !important;
+                    page-break-after: avoid;
                 }
                 .container {
                     max-width: 100%;
                     padding: 0;
                     margin: 0;
                 }
-                /* Zero spacing */
+                /* Tight spacing */
                 p {
-                    margin: 0pt 0;
+                    margin: 0;
+                    padding: 0;
                     page-break-inside: auto;
+                    orphans: 3;
+                    widows: 3;
                 }
                 ul, ol {
-                    margin: 0pt 0;
-                    padding-left: 7pt;
+                    margin: 0;
+                    padding-left: 5pt;
                     page-break-inside: auto;
                 }
                 li {
                     margin: 0;
+                    padding: 0;
                 }
                 .card, .metric-card, .section-card {
-                    padding: 1pt !important;
-                    margin: 0pt 0 !important;
+                    padding: 0.5pt !important;
+                    margin: 0 !important;
                     page-break-inside: auto;
                 }
-                /* Reduce chart size - 30% smaller */
+                /* Very small charts */
                 canvas {
-                    max-height: 28px !important;
+                    max-height: 20px !important;
                     max-width: 100% !important;
                     height: auto !important;
-                    page-break-inside: auto;
+                    display: inline-block !important;
+                    margin: 0 !important;
+                    page-break-before: avoid;
+                    page-break-after: avoid;
                 }
-                /* Remove forced page breaks */
+                /* No page breaks */
                 .page-break {
                     display: none;
                 }
@@ -1489,11 +1512,12 @@ def download_report(file_id, format='html'):
                     padding: 0;
                 }
                 table {
-                    margin: 1pt 0;
+                    margin: 0;
+                    padding: 0;
                     page-break-inside: auto;
                 }
                 td, th {
-                    padding: 1pt 2pt;
+                    padding: 0.5pt 1pt;
                 }
                 * {
                     margin-top: 0 !important;
@@ -1502,37 +1526,38 @@ def download_report(file_id, format='html'):
                     min-height: 0 !important;
                     max-height: none !important;
                 }
-                /* Patient card - 30% smaller */
+                /* Patient card */
                 .patient-card {
-                    padding: 4pt !important;
-                    margin: 1pt 0 !important;
+                    padding: 3pt !important;
+                    margin: 0 !important;
                     page-break-inside: avoid;
                 }
                 .patient-name {
-                    font-size: 8pt !important;
-                    margin-bottom: 1pt !important;
+                    font-size: 7pt !important;
+                    margin: 0 !important;
                 }
                 .patient-details {
-                    font-size: 4pt !important;
-                    line-height: 1.0 !important;
+                    font-size: 3.5pt !important;
+                    line-height: 0.95 !important;
                     opacity: 1 !important;
+                    margin: 0 !important;
                 }
                 .patient-details strong {
                     font-weight: 600 !important;
                 }
-                /* Hero section - 30% smaller */
+                /* Hero section */
                 .hero-badge {
-                    font-size: 4pt !important;
-                    padding: 1pt 2pt !important;
-                    margin-bottom: 1pt !important;
+                    font-size: 3.5pt !important;
+                    padding: 1pt !important;
+                    margin: 0 !important;
                 }
                 .hero-title {
-                    font-size: 7pt !important;
-                    margin: 1pt 0 !important;
+                    font-size: 6pt !important;
+                    margin: 0 !important;
                 }
                 .hero-subtitle {
-                    font-size: 4pt !important;
-                    margin: 1pt 0 !important;
+                    font-size: 3.5pt !important;
+                    margin: 0 !important;
                 }
             ''', font_config=font_config)
 
@@ -1592,89 +1617,112 @@ def download_ai_report(file_id, format='html'):
             # Create HTML object with base URL for resolving relative resources
             html_doc = HTML(string=html_content, base_url=os.path.dirname(report_path))
 
-            # Ultra-compact PDF CSS - 30% smaller overall
+            # Ultra-compact PDF CSS - Dense layout, no orphaned content
             pdf_css = CSS(string='''
                 @page {
                     size: letter;
-                    margin: 0.07in;
+                    margin: 0.05in;
+                    orphans: 4;
+                    widows: 4;
                 }
                 body {
                     -webkit-print-color-adjust: exact;
                     print-color-adjust: exact;
-                    font-size: 5pt;
-                    line-height: 1.0;
+                    font-size: 4.5pt;
+                    line-height: 0.95;
                     margin: 0;
                     padding: 0;
+                    orphans: 4;
+                    widows: 4;
                 }
-                /* Fit images within document - 30% smaller */
+                /* Very small images - inline with text */
                 img {
                     max-width: 100%;
-                    max-height: 21pt;
+                    max-height: 15pt;
                     height: auto;
-                    display: block;
-                    margin: 0pt auto;
-                    page-break-inside: auto;
+                    display: inline-block;
+                    margin: 0;
+                    padding: 0;
+                    page-break-before: avoid;
+                    page-break-after: avoid;
+                    page-break-inside: avoid;
                 }
-                /* Minimal headers - 30% smaller */
+                /* Minimal headers */
                 h1 {
-                    font-size: 8pt;
-                    margin: 0.3pt 0 0pt;
+                    font-size: 7pt;
+                    margin: 0;
+                    padding: 0;
+                    page-break-after: avoid;
                 }
                 h2 {
-                    font-size: 6pt;
-                    margin: 0.3pt 0 0pt;
+                    font-size: 5.5pt;
+                    margin: 0;
+                    padding: 0;
+                    page-break-after: avoid;
                 }
                 h3 {
-                    font-size: 5pt;
-                    margin: 0pt 0 0pt;
+                    font-size: 4.5pt;
+                    margin: 0;
+                    padding: 0;
+                    page-break-after: avoid;
                 }
                 h4, h5, h6 {
-                    font-size: 5pt;
-                    margin: 0pt 0 0pt;
+                    font-size: 4.5pt;
+                    margin: 0;
+                    padding: 0;
+                    page-break-after: avoid;
                 }
-                /* Zero spacing sections - allow breaking */
+                /* Sections flow together */
                 section, .section {
                     margin: 0;
                     padding: 0;
                     page-break-inside: auto;
                 }
                 .hero {
-                    padding: 4pt !important;
+                    padding: 3pt !important;
                     background: #1E40AF !important;
                     background-image: none !important;
                     margin: 0 !important;
+                    page-break-after: avoid;
                 }
                 .container {
                     max-width: 100%;
                     padding: 0;
                     margin: 0;
                 }
-                /* Zero spacing */
+                /* Tight spacing */
                 p {
-                    margin: 0pt 0;
+                    margin: 0;
+                    padding: 0;
                     page-break-inside: auto;
+                    orphans: 3;
+                    widows: 3;
                 }
                 ul, ol {
-                    margin: 0pt 0;
-                    padding-left: 7pt;
+                    margin: 0;
+                    padding-left: 5pt;
                     page-break-inside: auto;
                 }
                 li {
                     margin: 0;
+                    padding: 0;
                 }
                 .card, .metric-card, .section-card {
-                    padding: 1pt !important;
-                    margin: 0pt 0 !important;
+                    padding: 0.5pt !important;
+                    margin: 0 !important;
                     page-break-inside: auto;
                 }
-                /* Reduce chart size - 30% smaller */
+                /* Very small charts */
                 canvas {
-                    max-height: 28px !important;
+                    max-height: 20px !important;
                     max-width: 100% !important;
                     height: auto !important;
-                    page-break-inside: auto;
+                    display: inline-block !important;
+                    margin: 0 !important;
+                    page-break-before: avoid;
+                    page-break-after: avoid;
                 }
-                /* Remove forced page breaks */
+                /* No page breaks */
                 .page-break {
                     display: none;
                 }
@@ -1684,11 +1732,12 @@ def download_ai_report(file_id, format='html'):
                     padding: 0;
                 }
                 table {
-                    margin: 1pt 0;
+                    margin: 0;
+                    padding: 0;
                     page-break-inside: auto;
                 }
                 td, th {
-                    padding: 1pt 2pt;
+                    padding: 0.5pt 1pt;
                 }
                 * {
                     margin-top: 0 !important;
@@ -1697,37 +1746,38 @@ def download_ai_report(file_id, format='html'):
                     min-height: 0 !important;
                     max-height: none !important;
                 }
-                /* Patient card - 30% smaller */
+                /* Patient card */
                 .patient-card {
-                    padding: 4pt !important;
-                    margin: 1pt 0 !important;
+                    padding: 3pt !important;
+                    margin: 0 !important;
                     page-break-inside: avoid;
                 }
                 .patient-name {
-                    font-size: 8pt !important;
-                    margin-bottom: 1pt !important;
+                    font-size: 7pt !important;
+                    margin: 0 !important;
                 }
                 .patient-details {
-                    font-size: 4pt !important;
-                    line-height: 1.0 !important;
+                    font-size: 3.5pt !important;
+                    line-height: 0.95 !important;
                     opacity: 1 !important;
+                    margin: 0 !important;
                 }
                 .patient-details strong {
                     font-weight: 600 !important;
                 }
-                /* Hero section - 30% smaller */
+                /* Hero section */
                 .hero-badge {
-                    font-size: 4pt !important;
-                    padding: 1pt 2pt !important;
-                    margin-bottom: 1pt !important;
+                    font-size: 3.5pt !important;
+                    padding: 1pt !important;
+                    margin: 0 !important;
                 }
                 .hero-title {
-                    font-size: 7pt !important;
-                    margin: 1pt 0 !important;
+                    font-size: 6pt !important;
+                    margin: 0 !important;
                 }
                 .hero-subtitle {
-                    font-size: 4pt !important;
-                    margin: 1pt 0 !important;
+                    font-size: 3.5pt !important;
+                    margin: 0 !important;
                 }
             ''', font_config=font_config)
 
