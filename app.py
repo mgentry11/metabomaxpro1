@@ -1381,9 +1381,14 @@ def download_report(file_id, format='html'):
                     font-size: 8pt;
                     line-height: 1.15;
                 }
-                /* Hide images for compact PDF */
+                /* Fit images within document */
                 img {
-                    display: none !important;
+                    max-width: 100%;
+                    max-height: 120pt;
+                    height: auto;
+                    display: block;
+                    margin: 2pt auto;
+                    page-break-inside: avoid;
                 }
                 /* Ultra-compact headers */
                 h1 {
@@ -1525,9 +1530,14 @@ def download_ai_report(file_id, format='html'):
                     font-size: 8pt;
                     line-height: 1.15;
                 }
-                /* Hide images for compact PDF */
+                /* Fit images within document */
                 img {
-                    display: none !important;
+                    max-width: 100%;
+                    max-height: 120pt;
+                    height: auto;
+                    display: block;
+                    margin: 2pt auto;
+                    page-break-inside: avoid;
                 }
                 /* Ultra-compact headers */
                 h1 {
