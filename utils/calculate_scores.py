@@ -257,3 +257,124 @@ def enhance_extracted_data_with_calculated_scores(extracted_data):
         print(f"[ENHANCE_DATA] Using {len(core_scores)} core scores from PDF extraction")
 
     return extracted_data
+
+
+def calculate_biological_age(patient_info, core_scores, metabolic_data):
+    """
+    Calculate biological age from metabolic data and core performance scores
+
+    Args:
+        patient_info: dict with age, weight_kg, height_cm, gender
+        core_scores: dict with 7 core performance scores
+        metabolic_data: dict with rmr, rer, vo2max, etc.
+
+    Returns:
+        int: calculated biological age (18-90 years)
+    """
+    chronological_age = patient_info.get('age', 35)
+
+    if not chronological_age:
+        return None
+
+    print(f"\n[CALCULATE_BIO_AGE] Calculating biological age...")
+    print(f"  Chronological age: {chronological_age}")
+
+    age_adjustments = []
+
+    # Component 1: Overall core scores average
+    # Higher scores = better health = younger biological age
+    if core_scores and len(core_scores) > 0:
+        avg_score = sum(core_scores.values()) / len(core_scores)
+
+        if avg_score >= 85:
+            score_adjustment = -5  # Excellent: 5 years younger
+        elif avg_score >= 75:
+            score_adjustment = -3  # Very good: 3 years younger
+        elif avg_score >= 65:
+            score_adjustment = -1  # Good: 1 year younger
+        elif avg_score >= 55:
+            score_adjustment = 1   # Fair: 1 year older
+        else:
+            score_adjustment = 3   # Needs improvement: 3 years older
+
+        age_adjustments.append(score_adjustment)
+        print(f"  Core scores avg: {avg_score:.1f}% → adjustment: {score_adjustment:+d} years")
+
+    # Component 2: Metabolic rate (RMR efficiency)
+    weight_kg = patient_info.get('weight_kg', 77)
+    height_cm = patient_info.get('height_cm', 180)
+    gender = patient_info.get('gender', 'Male').lower()
+
+    # Calculate expected RMR
+    if gender == 'male':
+        expected_rmr = (10 * weight_kg) + (6.25 * height_cm) - (5 * chronological_age) + 5
+    else:
+        expected_rmr = (10 * weight_kg) + (6.25 * height_cm) - (5 * chronological_age) - 161
+
+    # Get actual RMR
+    rmr = metabolic_data.get('rmr')
+    if not rmr:
+        # Calculate if not provided
+        rmr = expected_rmr
+
+    rmr_ratio = rmr / expected_rmr if expected_rmr > 0 else 1.0
+
+    # Higher metabolic rate = younger biological age
+    if rmr_ratio >= 1.15:
+        rmr_adjustment = -4  # Fast metabolism: 4 years younger
+    elif rmr_ratio >= 1.05:
+        rmr_adjustment = -2  # Above average: 2 years younger
+    elif rmr_ratio >= 0.95:
+        rmr_adjustment = 0   # Average: no change
+    elif rmr_ratio >= 0.85:
+        rmr_adjustment = 2   # Below average: 2 years older
+    else:
+        rmr_adjustment = 4   # Slow metabolism: 4 years older
+
+    age_adjustments.append(rmr_adjustment)
+    print(f"  RMR ratio: {rmr_ratio:.2f} → adjustment: {rmr_adjustment:+d} years")
+
+    # Component 3: Fat-burning efficiency
+    fat_burning_score = core_scores.get('fat_burning', 50)
+
+    if fat_burning_score >= 80:
+        fat_adjustment = -3  # Excellent fat burner: 3 years younger
+    elif fat_burning_score >= 65:
+        fat_adjustment = -1  # Good fat burner: 1 year younger
+    elif fat_burning_score >= 50:
+        fat_adjustment = 0   # Average: no change
+    else:
+        fat_adjustment = 2   # Poor fat burner: 2 years older
+
+    age_adjustments.append(fat_adjustment)
+    print(f"  Fat burning: {fat_burning_score}% → adjustment: {fat_adjustment:+d} years")
+
+    # Component 4: Cardiovascular health (HRV + Lung utilization)
+    hrv_score = core_scores.get('hrv', 60)
+    lung_score = core_scores.get('lung_util', 70)
+    cardio_avg = (hrv_score + lung_score) / 2
+
+    if cardio_avg >= 80:
+        cardio_adjustment = -3  # Excellent cardio: 3 years younger
+    elif cardio_avg >= 65:
+        cardio_adjustment = -1  # Good cardio: 1 year younger
+    elif cardio_avg >= 50:
+        cardio_adjustment = 0   # Average: no change
+    else:
+        cardio_adjustment = 2   # Poor cardio: 2 years older
+
+    age_adjustments.append(cardio_adjustment)
+    print(f"  Cardiovascular avg: {cardio_avg:.1f}% → adjustment: {cardio_adjustment:+d} years")
+
+    # Calculate final biological age
+    total_adjustment = sum(age_adjustments)
+    biological_age = chronological_age + total_adjustment
+
+    # Ensure reasonable bounds (18-90 years)
+    biological_age = max(18, min(90, round(biological_age)))
+
+    print(f"  Total adjustment: {total_adjustment:+d} years")
+    print(f"  BIOLOGICAL AGE: {biological_age} (vs chronological: {chronological_age})")
+    print()
+
+    return biological_age

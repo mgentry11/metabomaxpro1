@@ -11,7 +11,7 @@ import os
 # Add parent directory to path to import template
 sys.path.insert(0, os.path.dirname(__file__))
 from pnoe_professional_template import PNOEProfessionalReport
-from calculate_scores import enhance_extracted_data_with_calculated_scores
+from calculate_scores import enhance_extracted_data_with_calculated_scores, calculate_biological_age
 
 def generate_beautiful_report(extracted_data, custom_data):
     """Generate a comprehensive, beautiful HTML report using the PNOE professional template"""
@@ -109,9 +109,21 @@ def generate_beautiful_report(extracted_data, custom_data):
         report.patient_info['age'] = custom_data['chronological_age']
         print(f"DEBUG beautiful_report: Set chronological_age = {custom_data['chronological_age']}")
 
+    # Calculate or use provided biological age
     if custom_data.get('biological_age'):
         report.biological_age = custom_data['biological_age']
         print(f"DEBUG beautiful_report: Set biological_age = {custom_data['biological_age']}")
+    else:
+        # Calculate biological age from metabolic data and core scores
+        print(f"DEBUG beautiful_report: Calculating biological age from metabolic data...")
+        calculated_bio_age = calculate_biological_age(
+            report.patient_info,
+            extracted_data.get('core_scores', {}),
+            extracted_data.get('metabolic_data', {})
+        )
+        if calculated_bio_age:
+            report.biological_age = calculated_bio_age
+            print(f"DEBUG beautiful_report: Calculated biological_age = {calculated_bio_age}")
 
     # Store custom notes and goals for later use
     report.custom_notes = custom_data.get('custom_notes', '')
