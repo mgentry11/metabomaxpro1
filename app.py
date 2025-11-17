@@ -1397,44 +1397,44 @@ def download_report(file_id, format='html'):
             # Create HTML object with base URL for resolving relative resources
             html_doc = HTML(string=html_content, base_url=os.path.dirname(report_path))
 
-            # Ultra-compact PDF CSS - No blank pages, continuous flow
+            # Ultra-compact PDF CSS - 30% smaller overall
             pdf_css = CSS(string='''
                 @page {
                     size: letter;
-                    margin: 0.1in;
+                    margin: 0.07in;
                 }
                 body {
                     -webkit-print-color-adjust: exact;
                     print-color-adjust: exact;
-                    font-size: 7pt;
-                    line-height: 1.05;
+                    font-size: 5pt;
+                    line-height: 1.0;
                     margin: 0;
                     padding: 0;
                 }
-                /* Fit images within document - tiny */
+                /* Fit images within document - 30% smaller */
                 img {
                     max-width: 100%;
-                    max-height: 30pt;
+                    max-height: 21pt;
                     height: auto;
                     display: block;
                     margin: 0pt auto;
                     page-break-inside: auto;
                 }
-                /* Minimal headers */
+                /* Minimal headers - 30% smaller */
                 h1 {
-                    font-size: 11pt;
-                    margin: 0.5pt 0 0pt;
+                    font-size: 8pt;
+                    margin: 0.3pt 0 0pt;
                 }
                 h2 {
-                    font-size: 8pt;
-                    margin: 0.5pt 0 0pt;
+                    font-size: 6pt;
+                    margin: 0.3pt 0 0pt;
                 }
                 h3 {
-                    font-size: 7pt;
+                    font-size: 5pt;
                     margin: 0pt 0 0pt;
                 }
                 h4, h5, h6 {
-                    font-size: 7pt;
+                    font-size: 5pt;
                     margin: 0pt 0 0pt;
                 }
                 /* Zero spacing sections - allow breaking */
@@ -1444,7 +1444,7 @@ def download_report(file_id, format='html'):
                     page-break-inside: auto;
                 }
                 .hero {
-                    padding: 5pt !important;
+                    padding: 4pt !important;
                     background: #1E40AF !important;
                     background-image: none !important;
                     margin: 0 !important;
@@ -1461,7 +1461,7 @@ def download_report(file_id, format='html'):
                 }
                 ul, ol {
                     margin: 0pt 0;
-                    padding-left: 10pt;
+                    padding-left: 7pt;
                     page-break-inside: auto;
                 }
                 li {
@@ -1472,9 +1472,9 @@ def download_report(file_id, format='html'):
                     margin: 0pt 0 !important;
                     page-break-inside: auto;
                 }
-                /* Reduce chart size to absolute minimum */
+                /* Reduce chart size - 30% smaller */
                 canvas {
-                    max-height: 40px !important;
+                    max-height: 28px !important;
                     max-width: 100% !important;
                     height: auto !important;
                     page-break-inside: auto;
@@ -1493,7 +1493,7 @@ def download_report(file_id, format='html'):
                     page-break-inside: auto;
                 }
                 td, th {
-                    padding: 1pt 3pt;
+                    padding: 1pt 2pt;
                 }
                 * {
                     margin-top: 0 !important;
@@ -1502,36 +1502,36 @@ def download_report(file_id, format='html'):
                     min-height: 0 !important;
                     max-height: none !important;
                 }
-                /* Patient card - preserve all data (20% smaller) */
+                /* Patient card - 30% smaller */
                 .patient-card {
-                    padding: 6pt !important;
-                    margin: 2pt 0 !important;
+                    padding: 4pt !important;
+                    margin: 1pt 0 !important;
                     page-break-inside: avoid;
                 }
                 .patient-name {
-                    font-size: 11pt !important;
-                    margin-bottom: 2pt !important;
+                    font-size: 8pt !important;
+                    margin-bottom: 1pt !important;
                 }
                 .patient-details {
-                    font-size: 6pt !important;
+                    font-size: 4pt !important;
                     line-height: 1.0 !important;
                     opacity: 1 !important;
                 }
                 .patient-details strong {
                     font-weight: 600 !important;
                 }
-                /* Hero section - preserve patient info (20% smaller) */
+                /* Hero section - 30% smaller */
                 .hero-badge {
-                    font-size: 6pt !important;
-                    padding: 2pt 3pt !important;
+                    font-size: 4pt !important;
+                    padding: 1pt 2pt !important;
                     margin-bottom: 1pt !important;
                 }
                 .hero-title {
-                    font-size: 10pt !important;
+                    font-size: 7pt !important;
                     margin: 1pt 0 !important;
                 }
                 .hero-subtitle {
-                    font-size: 5pt !important;
+                    font-size: 4pt !important;
                     margin: 1pt 0 !important;
                 }
             ''', font_config=font_config)
@@ -1592,44 +1592,44 @@ def download_ai_report(file_id, format='html'):
             # Create HTML object with base URL for resolving relative resources
             html_doc = HTML(string=html_content, base_url=os.path.dirname(report_path))
 
-            # Ultra-compact PDF CSS - No blank pages, continuous flow
+            # Ultra-compact PDF CSS - 30% smaller overall
             pdf_css = CSS(string='''
                 @page {
                     size: letter;
-                    margin: 0.1in;
+                    margin: 0.07in;
                 }
                 body {
                     -webkit-print-color-adjust: exact;
                     print-color-adjust: exact;
-                    font-size: 7pt;
-                    line-height: 1.05;
+                    font-size: 5pt;
+                    line-height: 1.0;
                     margin: 0;
                     padding: 0;
                 }
-                /* Fit images within document - tiny */
+                /* Fit images within document - 30% smaller */
                 img {
                     max-width: 100%;
-                    max-height: 30pt;
+                    max-height: 21pt;
                     height: auto;
                     display: block;
                     margin: 0pt auto;
                     page-break-inside: auto;
                 }
-                /* Minimal headers */
+                /* Minimal headers - 30% smaller */
                 h1 {
-                    font-size: 11pt;
-                    margin: 0.5pt 0 0pt;
+                    font-size: 8pt;
+                    margin: 0.3pt 0 0pt;
                 }
                 h2 {
-                    font-size: 8pt;
-                    margin: 0.5pt 0 0pt;
+                    font-size: 6pt;
+                    margin: 0.3pt 0 0pt;
                 }
                 h3 {
-                    font-size: 7pt;
+                    font-size: 5pt;
                     margin: 0pt 0 0pt;
                 }
                 h4, h5, h6 {
-                    font-size: 7pt;
+                    font-size: 5pt;
                     margin: 0pt 0 0pt;
                 }
                 /* Zero spacing sections - allow breaking */
@@ -1639,7 +1639,7 @@ def download_ai_report(file_id, format='html'):
                     page-break-inside: auto;
                 }
                 .hero {
-                    padding: 5pt !important;
+                    padding: 4pt !important;
                     background: #1E40AF !important;
                     background-image: none !important;
                     margin: 0 !important;
@@ -1656,7 +1656,7 @@ def download_ai_report(file_id, format='html'):
                 }
                 ul, ol {
                     margin: 0pt 0;
-                    padding-left: 10pt;
+                    padding-left: 7pt;
                     page-break-inside: auto;
                 }
                 li {
@@ -1667,9 +1667,9 @@ def download_ai_report(file_id, format='html'):
                     margin: 0pt 0 !important;
                     page-break-inside: auto;
                 }
-                /* Reduce chart size to absolute minimum */
+                /* Reduce chart size - 30% smaller */
                 canvas {
-                    max-height: 40px !important;
+                    max-height: 28px !important;
                     max-width: 100% !important;
                     height: auto !important;
                     page-break-inside: auto;
@@ -1688,7 +1688,7 @@ def download_ai_report(file_id, format='html'):
                     page-break-inside: auto;
                 }
                 td, th {
-                    padding: 1pt 3pt;
+                    padding: 1pt 2pt;
                 }
                 * {
                     margin-top: 0 !important;
@@ -1697,36 +1697,36 @@ def download_ai_report(file_id, format='html'):
                     min-height: 0 !important;
                     max-height: none !important;
                 }
-                /* Patient card - preserve all data (20% smaller) */
+                /* Patient card - 30% smaller */
                 .patient-card {
-                    padding: 6pt !important;
-                    margin: 2pt 0 !important;
+                    padding: 4pt !important;
+                    margin: 1pt 0 !important;
                     page-break-inside: avoid;
                 }
                 .patient-name {
-                    font-size: 11pt !important;
-                    margin-bottom: 2pt !important;
+                    font-size: 8pt !important;
+                    margin-bottom: 1pt !important;
                 }
                 .patient-details {
-                    font-size: 6pt !important;
+                    font-size: 4pt !important;
                     line-height: 1.0 !important;
                     opacity: 1 !important;
                 }
                 .patient-details strong {
                     font-weight: 600 !important;
                 }
-                /* Hero section - preserve patient info (20% smaller) */
+                /* Hero section - 30% smaller */
                 .hero-badge {
-                    font-size: 6pt !important;
-                    padding: 2pt 3pt !important;
+                    font-size: 4pt !important;
+                    padding: 1pt 2pt !important;
                     margin-bottom: 1pt !important;
                 }
                 .hero-title {
-                    font-size: 10pt !important;
+                    font-size: 7pt !important;
                     margin: 1pt 0 !important;
                 }
                 .hero-subtitle {
-                    font-size: 5pt !important;
+                    font-size: 4pt !important;
                     margin: 1pt 0 !important;
                 }
             ''', font_config=font_config)
