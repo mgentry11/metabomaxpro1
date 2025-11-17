@@ -18,6 +18,7 @@ import requests
 import stripe
 from weasyprint import HTML
 from utils.beautiful_report import generate_beautiful_report
+from utils.calculate_scores import calculate_biological_age as calculate_bio_age_proper
 from ai_recommendations import UniversalRecommendationAI
 from blog_posts import get_all_posts, get_post_by_slug, get_recent_posts
 
@@ -979,141 +980,25 @@ def upload_file():
     })
 
 def calculate_biological_age(core_scores, chronological_age, metabolic_data, hr_data, patient_info):
-    """Calculate biological age based on actual metabolic markers"""
-    if not chronological_age:
-        return None
+    """
+    WRAPPER: Call the proper calculate_biological_age from utils/calculate_scores.py
+    This wrapper converts the old function signature to the new one
+    """
+    # Convert old signature to new signature
+    # Old: calculate_biological_age(core_scores, chronological_age, metabolic_data, hr_data, patient_info)
+    # New: calculate_biological_age(patient_info, core_scores, metabolic_data)
 
-    print(f"\n[CALC DEBUG] === Starting biological age calculation ===")
-    print(f"[CALC DEBUG] Chronological age: {chronological_age}")
-    print(f"[CALC DEBUG] Core scores: {core_scores}")
-    print(f"[CALC DEBUG] Metabolic data: {metabolic_data}")
-    print(f"[CALC DEBUG] HR data: {hr_data}")
-    print(f"[CALC DEBUG] Patient info: {patient_info}")
+    print(f"\n[APP.PY WRAPPER] Converting old bio age call to new proper function...")
+    print(f"[APP.PY WRAPPER] Chronological age: {chronological_age}")
 
-    age_components = []
+    # Ensure patient_info has age
+    if patient_info and 'age' not in patient_info:
+        patient_info['age'] = chronological_age
 
-    # Component 1: VO2 max (if available) - most accurate biological age predictor
-    vo2_rel = metabolic_data.get('vo2max_rel')
-    gender = patient_info.get('gender', 'Male')
+    # Call the PROPER function from utils/calculate_scores.py (NO DEFAULTS!)
+    biological_age = calculate_bio_age_proper(patient_info, core_scores, metabolic_data)
 
-    if vo2_rel:
-        # Normative VO2 max data (ml/kg/min) by age and gender
-        # Men: VO2 max = 60 - (0.55 * age) for average fitness
-        # Women: VO2 max = 48 - (0.45 * age) for average fitness
-        if gender == 'Male':
-            # Calculate what age would have this VO2 max
-            predicted_age = (60 - vo2_rel) / 0.55
-        else:
-            predicted_age = (48 - vo2_rel) / 0.45
-
-        age_components.append(max(18, min(90, predicted_age)))
-        print(f"[CALC DEBUG] Component 1 (VO2 max): {max(18, min(90, predicted_age))}")
-
-    # Component 2: Resting Heart Rate
-    resting_hr = hr_data.get('resting_hr')
-    if resting_hr:
-        # Lower RHR = younger biological age
-        # Average RHR by age: ~70 at age 30, increases ~0.5 bpm per decade
-        # Excellent fitness: 50-60 bpm
-        # Average: 70-80 bpm
-        # Poor: 80+ bpm
-        if resting_hr < 60:
-            hr_age = chronological_age - 5
-        elif resting_hr < 70:
-            hr_age = chronological_age - 2
-        elif resting_hr < 80:
-            hr_age = chronological_age
-        elif resting_hr < 90:
-            hr_age = chronological_age + 3
-        else:
-            hr_age = chronological_age + 5
-
-        age_components.append(hr_age)
-        print(f"[CALC DEBUG] Component 2 (Resting HR): {hr_age}")
-
-    # Component 3: Heart Rate Variability (HRV)
-    hrv_score = core_scores.get('hrv')
-    if hrv_score:
-        # HRV declines with age, higher HRV = younger bio age
-        if hrv_score >= 90:
-            hrv_age = chronological_age - 6
-        elif hrv_score >= 80:
-            hrv_age = chronological_age - 4
-        elif hrv_score >= 70:
-            hrv_age = chronological_age - 2
-        elif hrv_score >= 60:
-            hrv_age = chronological_age
-        elif hrv_score >= 50:
-            hrv_age = chronological_age + 2
-        else:
-            hrv_age = chronological_age + 4
-
-        age_components.append(hrv_age)
-        print(f"[CALC DEBUG] Component 3 (HRV): {hrv_age}")
-
-    # Component 4: RMR (Resting Metabolic Rate)
-    rmr = metabolic_data.get('rmr')
-    weight_kg = patient_info.get('weight_kg')
-
-    if rmr and weight_kg:
-        # RMR per kg of body weight
-        rmr_per_kg = rmr / weight_kg
-
-        # Higher metabolic rate = younger biological age
-        # Average RMR/kg: ~22-28 kcal/kg/day
-        if rmr_per_kg > 30:
-            rmr_age = chronological_age - 5
-        elif rmr_per_kg > 26:
-            rmr_age = chronological_age - 2
-        elif rmr_per_kg > 22:
-            rmr_age = chronological_age
-        elif rmr_per_kg > 18:
-            rmr_age = chronological_age + 3
-        else:
-            rmr_age = chronological_age + 5
-
-        age_components.append(rmr_age)
-        print(f"[CALC DEBUG] Component 4 (RMR): {rmr_age}")
-
-    # Component 5: Overall core scores average (weighted less than metabolic markers)
-    if core_scores:
-        avg_score = sum(core_scores.values()) / len(core_scores)
-
-        if avg_score >= 85:
-            score_age = chronological_age - 4
-        elif avg_score >= 75:
-            score_age = chronological_age - 2
-        elif avg_score >= 65:
-            score_age = chronological_age
-        elif avg_score >= 55:
-            score_age = chronological_age + 2
-        else:
-            score_age = chronological_age + 4
-
-        age_components.append(score_age)
-        print(f"[CALC DEBUG] Component 5 (Core scores): {score_age}")
-
-    # Calculate weighted average (if we have metabolic data, weight it higher)
-    print(f"[CALC DEBUG] All age components: {age_components}")
-    if age_components:
-        calculated_age = sum(age_components) / len(age_components)
-        print(f"[CALC DEBUG] Average of components: {calculated_age}")
-
-        # REVERSE THE CALCULATION: If it says older, make younger and vice versa
-        # This compensates for bad PDF extraction giving wrong values
-        age_difference = calculated_age - chronological_age
-        biological_age = chronological_age - age_difference  # Flip the difference
-        print(f"[CALC DEBUG] Age difference (calculated - chronological): {age_difference}")
-        print(f"[CALC DEBUG] Reversed biological age: {biological_age}")
-    else:
-        # Fallback to chronological age if no data
-        biological_age = chronological_age
-        print(f"[CALC DEBUG] No components, using chronological age: {biological_age}")
-
-    # Round and ensure reasonable bounds
-    biological_age = max(18, min(90, round(biological_age)))
-    print(f"[CALC DEBUG] Final biological age (after rounding): {biological_age}")
-    print(f"[CALC DEBUG] === End biological age calculation ===\n")
+    print(f"[APP.PY WRAPPER] Proper function returned: {biological_age}")
 
     return biological_age
 
