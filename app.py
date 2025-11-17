@@ -1397,110 +1397,89 @@ def download_report(file_id, format='html'):
             # Create HTML object with base URL for resolving relative resources
             html_doc = HTML(string=html_content, base_url=os.path.dirname(report_path))
 
-            # Ultra-compact PDF CSS - Dense layout, no orphaned content
+            # Maximum condensed PDF - continuous flow, then add page breaks
             pdf_css = CSS(string='''
                 @page {
                     size: letter;
-                    margin: 0.05in;
-                    orphans: 2;
-                    widows: 2;
+                    margin: 0.03in;
                 }
                 body {
                     -webkit-print-color-adjust: exact;
                     print-color-adjust: exact;
-                    font-size: 4.5pt;
-                    line-height: 0.95;
+                    font-size: 4pt;
+                    line-height: 0.9;
                     margin: 0;
                     padding: 0;
-                    orphans: 2;
-                    widows: 2;
                 }
-                /* Very small images - inline with text */
+                /* Tiny images */
                 img {
                     max-width: 100%;
-                    max-height: 15pt;
+                    max-height: 12pt;
                     height: auto;
                     display: inline-block;
                     margin: 0;
                     padding: 0;
                 }
-                /* Minimal headers - allow free flow */
+                /* Compact headers */
                 h1 {
-                    font-size: 7pt;
+                    font-size: 6pt;
                     margin: 0;
                     padding: 0;
                 }
                 h2 {
-                    font-size: 5.5pt;
+                    font-size: 5pt;
                     margin: 0;
                     padding: 0;
                 }
-                h3 {
-                    font-size: 4.5pt;
+                h3, h4, h5, h6 {
+                    font-size: 4pt;
                     margin: 0;
                     padding: 0;
                 }
-                h4, h5, h6 {
-                    font-size: 4.5pt;
-                    margin: 0;
-                    padding: 0;
-                }
-                /* Sections flow together - multiple subjects per page */
+                /* Everything flows together */
                 section, .section {
                     margin: 0;
                     padding: 0;
-                    page-break-inside: auto;
-                    page-break-before: auto;
-                    page-break-after: auto;
                 }
                 .hero {
-                    padding: 10pt !important;
+                    padding: 8pt !important;
                     background: #1E40AF !important;
                     background-image: none !important;
-                    margin: 0 0 3pt 0 !important;
+                    margin: 0 !important;
+                    page-break-after: always;
                 }
                 .container {
                     max-width: 100%;
                     padding: 0;
                     margin: 0;
                 }
-                /* Tight spacing */
                 p {
                     margin: 0;
                     padding: 0;
-                    page-break-inside: auto;
-                    orphans: 2;
-                    widows: 2;
                 }
                 ul, ol {
                     margin: 0;
-                    padding-left: 5pt;
-                    page-break-inside: auto;
+                    padding-left: 4pt;
                 }
                 li {
                     margin: 0;
                     padding: 0;
                 }
                 .card, .metric-card, .section-card {
-                    padding: 0.5pt !important;
+                    padding: 0.3pt !important;
                     margin: 0 !important;
-                    page-break-inside: auto;
-                    page-break-before: auto;
-                    page-break-after: auto;
                 }
-                /* Very small charts */
+                /* Tiny charts */
                 canvas {
-                    max-height: 20px !important;
+                    max-height: 15px !important;
                     max-width: 100% !important;
                     height: auto !important;
                     display: inline-block !important;
                     margin: 0 !important;
                 }
-                /* No page breaks */
                 .page-break {
                     display: none;
                 }
-                /* Zero spacing everywhere */
                 div {
                     margin: 0;
                     padding: 0;
@@ -1508,55 +1487,60 @@ def download_report(file_id, format='html'):
                 table {
                     margin: 0;
                     padding: 0;
-                    page-break-inside: auto;
                 }
                 td, th {
-                    padding: 0.5pt 1pt;
+                    padding: 0.3pt 1pt;
                 }
                 * {
-                    margin-top: 0 !important;
-                    margin-bottom: 0 !important;
-                    page-break-inside: auto !important;
-                    min-height: 0 !important;
-                    max-height: none !important;
+                    margin: 0 !important;
+                    padding: 0 !important;
                 }
-                /* Patient card - FULL SIZE for visibility */
+                /* Patient info - FULL SIZE and always visible */
                 .patient-card {
                     padding: 8pt !important;
-                    margin: 2pt 0 !important;
-                    page-break-inside: auto;
-                    page-break-before: auto;
-                    page-break-after: auto;
+                    margin: 2pt 0 4pt 0 !important;
+                    background: white !important;
+                    border: 1pt solid #ddd !important;
                 }
                 .patient-name {
-                    font-size: 14pt !important;
-                    margin-bottom: 3pt !important;
+                    font-size: 16pt !important;
+                    margin-bottom: 4pt !important;
                     font-weight: bold !important;
+                    color: #1E40AF !important;
                 }
                 .patient-details {
-                    font-size: 9pt !important;
-                    line-height: 1.3 !important;
+                    font-size: 10pt !important;
+                    line-height: 1.4 !important;
                     opacity: 1 !important;
                     margin: 0 !important;
+                    word-wrap: break-word !important;
+                    white-space: normal !important;
                 }
                 .patient-details strong {
                     font-weight: 700 !important;
                 }
                 /* Hero section - FULL SIZE */
                 .hero-badge {
-                    font-size: 8pt !important;
-                    padding: 3pt 6pt !important;
-                    margin-bottom: 3pt !important;
+                    font-size: 9pt !important;
+                    padding: 3pt 8pt !important;
+                    margin-bottom: 4pt !important;
+                    display: inline-block !important;
                 }
                 .hero-title {
-                    font-size: 16pt !important;
-                    margin: 3pt 0 !important;
+                    font-size: 18pt !important;
+                    margin: 4pt 0 !important;
                     font-weight: bold !important;
+                    line-height: 1.2 !important;
                 }
                 .hero-subtitle {
-                    font-size: 9pt !important;
-                    margin: 2pt 0 3pt !important;
-                    line-height: 1.3 !important;
+                    font-size: 10pt !important;
+                    margin: 2pt 0 4pt !important;
+                    line-height: 1.4 !important;
+                    white-space: normal !important;
+                }
+                /* Add page breaks after major sections */
+                h1 {
+                    page-break-before: auto;
                 }
             ''', font_config=font_config)
 
@@ -1616,110 +1600,89 @@ def download_ai_report(file_id, format='html'):
             # Create HTML object with base URL for resolving relative resources
             html_doc = HTML(string=html_content, base_url=os.path.dirname(report_path))
 
-            # Ultra-compact PDF CSS - Dense layout, no orphaned content
+            # Maximum condensed PDF - continuous flow, then add page breaks
             pdf_css = CSS(string='''
                 @page {
                     size: letter;
-                    margin: 0.05in;
-                    orphans: 2;
-                    widows: 2;
+                    margin: 0.03in;
                 }
                 body {
                     -webkit-print-color-adjust: exact;
                     print-color-adjust: exact;
-                    font-size: 4.5pt;
-                    line-height: 0.95;
+                    font-size: 4pt;
+                    line-height: 0.9;
                     margin: 0;
                     padding: 0;
-                    orphans: 2;
-                    widows: 2;
                 }
-                /* Very small images - inline with text */
+                /* Tiny images */
                 img {
                     max-width: 100%;
-                    max-height: 15pt;
+                    max-height: 12pt;
                     height: auto;
                     display: inline-block;
                     margin: 0;
                     padding: 0;
                 }
-                /* Minimal headers - allow free flow */
+                /* Compact headers */
                 h1 {
-                    font-size: 7pt;
+                    font-size: 6pt;
                     margin: 0;
                     padding: 0;
                 }
                 h2 {
-                    font-size: 5.5pt;
+                    font-size: 5pt;
                     margin: 0;
                     padding: 0;
                 }
-                h3 {
-                    font-size: 4.5pt;
+                h3, h4, h5, h6 {
+                    font-size: 4pt;
                     margin: 0;
                     padding: 0;
                 }
-                h4, h5, h6 {
-                    font-size: 4.5pt;
-                    margin: 0;
-                    padding: 0;
-                }
-                /* Sections flow together - multiple subjects per page */
+                /* Everything flows together */
                 section, .section {
                     margin: 0;
                     padding: 0;
-                    page-break-inside: auto;
-                    page-break-before: auto;
-                    page-break-after: auto;
                 }
                 .hero {
-                    padding: 10pt !important;
+                    padding: 8pt !important;
                     background: #1E40AF !important;
                     background-image: none !important;
-                    margin: 0 0 3pt 0 !important;
+                    margin: 0 !important;
+                    page-break-after: always;
                 }
                 .container {
                     max-width: 100%;
                     padding: 0;
                     margin: 0;
                 }
-                /* Tight spacing */
                 p {
                     margin: 0;
                     padding: 0;
-                    page-break-inside: auto;
-                    orphans: 2;
-                    widows: 2;
                 }
                 ul, ol {
                     margin: 0;
-                    padding-left: 5pt;
-                    page-break-inside: auto;
+                    padding-left: 4pt;
                 }
                 li {
                     margin: 0;
                     padding: 0;
                 }
                 .card, .metric-card, .section-card {
-                    padding: 0.5pt !important;
+                    padding: 0.3pt !important;
                     margin: 0 !important;
-                    page-break-inside: auto;
-                    page-break-before: auto;
-                    page-break-after: auto;
                 }
-                /* Very small charts */
+                /* Tiny charts */
                 canvas {
-                    max-height: 20px !important;
+                    max-height: 15px !important;
                     max-width: 100% !important;
                     height: auto !important;
                     display: inline-block !important;
                     margin: 0 !important;
                 }
-                /* No page breaks */
                 .page-break {
                     display: none;
                 }
-                /* Zero spacing everywhere */
                 div {
                     margin: 0;
                     padding: 0;
@@ -1727,55 +1690,60 @@ def download_ai_report(file_id, format='html'):
                 table {
                     margin: 0;
                     padding: 0;
-                    page-break-inside: auto;
                 }
                 td, th {
-                    padding: 0.5pt 1pt;
+                    padding: 0.3pt 1pt;
                 }
                 * {
-                    margin-top: 0 !important;
-                    margin-bottom: 0 !important;
-                    page-break-inside: auto !important;
-                    min-height: 0 !important;
-                    max-height: none !important;
+                    margin: 0 !important;
+                    padding: 0 !important;
                 }
-                /* Patient card - FULL SIZE for visibility */
+                /* Patient info - FULL SIZE and always visible */
                 .patient-card {
                     padding: 8pt !important;
-                    margin: 2pt 0 !important;
-                    page-break-inside: auto;
-                    page-break-before: auto;
-                    page-break-after: auto;
+                    margin: 2pt 0 4pt 0 !important;
+                    background: white !important;
+                    border: 1pt solid #ddd !important;
                 }
                 .patient-name {
-                    font-size: 14pt !important;
-                    margin-bottom: 3pt !important;
+                    font-size: 16pt !important;
+                    margin-bottom: 4pt !important;
                     font-weight: bold !important;
+                    color: #1E40AF !important;
                 }
                 .patient-details {
-                    font-size: 9pt !important;
-                    line-height: 1.3 !important;
+                    font-size: 10pt !important;
+                    line-height: 1.4 !important;
                     opacity: 1 !important;
                     margin: 0 !important;
+                    word-wrap: break-word !important;
+                    white-space: normal !important;
                 }
                 .patient-details strong {
                     font-weight: 700 !important;
                 }
                 /* Hero section - FULL SIZE */
                 .hero-badge {
-                    font-size: 8pt !important;
-                    padding: 3pt 6pt !important;
-                    margin-bottom: 3pt !important;
+                    font-size: 9pt !important;
+                    padding: 3pt 8pt !important;
+                    margin-bottom: 4pt !important;
+                    display: inline-block !important;
                 }
                 .hero-title {
-                    font-size: 16pt !important;
-                    margin: 3pt 0 !important;
+                    font-size: 18pt !important;
+                    margin: 4pt 0 !important;
                     font-weight: bold !important;
+                    line-height: 1.2 !important;
                 }
                 .hero-subtitle {
-                    font-size: 9pt !important;
-                    margin: 2pt 0 3pt !important;
-                    line-height: 1.3 !important;
+                    font-size: 10pt !important;
+                    margin: 2pt 0 4pt !important;
+                    line-height: 1.4 !important;
+                    white-space: normal !important;
+                }
+                /* Add page breaks after major sections */
+                h1 {
+                    page-break-before: auto;
                 }
             ''', font_config=font_config)
 
