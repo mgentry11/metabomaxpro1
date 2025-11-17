@@ -1402,8 +1402,8 @@ def download_report(file_id, format='html'):
                 @page {
                     size: letter;
                     margin: 0.05in;
-                    orphans: 4;
-                    widows: 4;
+                    orphans: 2;
+                    widows: 2;
                 }
                 body {
                     -webkit-print-color-adjust: exact;
@@ -1412,8 +1412,8 @@ def download_report(file_id, format='html'):
                     line-height: 0.95;
                     margin: 0;
                     padding: 0;
-                    orphans: 4;
-                    widows: 4;
+                    orphans: 2;
+                    widows: 2;
                 }
                 /* Very small images - inline with text */
                 img {
@@ -1423,47 +1423,41 @@ def download_report(file_id, format='html'):
                     display: inline-block;
                     margin: 0;
                     padding: 0;
-                    page-break-before: avoid;
-                    page-break-after: avoid;
-                    page-break-inside: avoid;
                 }
-                /* Minimal headers */
+                /* Minimal headers - allow free flow */
                 h1 {
                     font-size: 7pt;
                     margin: 0;
                     padding: 0;
-                    page-break-after: avoid;
                 }
                 h2 {
                     font-size: 5.5pt;
                     margin: 0;
                     padding: 0;
-                    page-break-after: avoid;
                 }
                 h3 {
                     font-size: 4.5pt;
                     margin: 0;
                     padding: 0;
-                    page-break-after: avoid;
                 }
                 h4, h5, h6 {
                     font-size: 4.5pt;
                     margin: 0;
                     padding: 0;
-                    page-break-after: avoid;
                 }
-                /* Sections flow together */
+                /* Sections flow together - multiple subjects per page */
                 section, .section {
                     margin: 0;
                     padding: 0;
                     page-break-inside: auto;
+                    page-break-before: auto;
+                    page-break-after: auto;
                 }
                 .hero {
                     padding: 3pt !important;
                     background: #1E40AF !important;
                     background-image: none !important;
                     margin: 0 !important;
-                    page-break-after: avoid;
                 }
                 .container {
                     max-width: 100%;
@@ -1475,8 +1469,8 @@ def download_report(file_id, format='html'):
                     margin: 0;
                     padding: 0;
                     page-break-inside: auto;
-                    orphans: 3;
-                    widows: 3;
+                    orphans: 2;
+                    widows: 2;
                 }
                 ul, ol {
                     margin: 0;
@@ -1491,6 +1485,8 @@ def download_report(file_id, format='html'):
                     padding: 0.5pt !important;
                     margin: 0 !important;
                     page-break-inside: auto;
+                    page-break-before: auto;
+                    page-break-after: auto;
                 }
                 /* Very small charts */
                 canvas {
@@ -1499,8 +1495,6 @@ def download_report(file_id, format='html'):
                     height: auto !important;
                     display: inline-block !important;
                     margin: 0 !important;
-                    page-break-before: avoid;
-                    page-break-after: avoid;
                 }
                 /* No page breaks */
                 .page-break {
@@ -1526,11 +1520,13 @@ def download_report(file_id, format='html'):
                     min-height: 0 !important;
                     max-height: none !important;
                 }
-                /* Patient card */
+                /* Patient card - can break across pages */
                 .patient-card {
                     padding: 3pt !important;
                     margin: 0 !important;
-                    page-break-inside: avoid;
+                    page-break-inside: auto;
+                    page-break-before: auto;
+                    page-break-after: auto;
                 }
                 .patient-name {
                     font-size: 7pt !important;
@@ -1622,8 +1618,8 @@ def download_ai_report(file_id, format='html'):
                 @page {
                     size: letter;
                     margin: 0.05in;
-                    orphans: 4;
-                    widows: 4;
+                    orphans: 2;
+                    widows: 2;
                 }
                 body {
                     -webkit-print-color-adjust: exact;
@@ -1632,8 +1628,8 @@ def download_ai_report(file_id, format='html'):
                     line-height: 0.95;
                     margin: 0;
                     padding: 0;
-                    orphans: 4;
-                    widows: 4;
+                    orphans: 2;
+                    widows: 2;
                 }
                 /* Very small images - inline with text */
                 img {
@@ -1643,47 +1639,41 @@ def download_ai_report(file_id, format='html'):
                     display: inline-block;
                     margin: 0;
                     padding: 0;
-                    page-break-before: avoid;
-                    page-break-after: avoid;
-                    page-break-inside: avoid;
                 }
-                /* Minimal headers */
+                /* Minimal headers - allow free flow */
                 h1 {
                     font-size: 7pt;
                     margin: 0;
                     padding: 0;
-                    page-break-after: avoid;
                 }
                 h2 {
                     font-size: 5.5pt;
                     margin: 0;
                     padding: 0;
-                    page-break-after: avoid;
                 }
                 h3 {
                     font-size: 4.5pt;
                     margin: 0;
                     padding: 0;
-                    page-break-after: avoid;
                 }
                 h4, h5, h6 {
                     font-size: 4.5pt;
                     margin: 0;
                     padding: 0;
-                    page-break-after: avoid;
                 }
-                /* Sections flow together */
+                /* Sections flow together - multiple subjects per page */
                 section, .section {
                     margin: 0;
                     padding: 0;
                     page-break-inside: auto;
+                    page-break-before: auto;
+                    page-break-after: auto;
                 }
                 .hero {
                     padding: 3pt !important;
                     background: #1E40AF !important;
                     background-image: none !important;
                     margin: 0 !important;
-                    page-break-after: avoid;
                 }
                 .container {
                     max-width: 100%;
@@ -1695,8 +1685,8 @@ def download_ai_report(file_id, format='html'):
                     margin: 0;
                     padding: 0;
                     page-break-inside: auto;
-                    orphans: 3;
-                    widows: 3;
+                    orphans: 2;
+                    widows: 2;
                 }
                 ul, ol {
                     margin: 0;
@@ -1711,6 +1701,8 @@ def download_ai_report(file_id, format='html'):
                     padding: 0.5pt !important;
                     margin: 0 !important;
                     page-break-inside: auto;
+                    page-break-before: auto;
+                    page-break-after: auto;
                 }
                 /* Very small charts */
                 canvas {
@@ -1719,8 +1711,6 @@ def download_ai_report(file_id, format='html'):
                     height: auto !important;
                     display: inline-block !important;
                     margin: 0 !important;
-                    page-break-before: avoid;
-                    page-break-after: avoid;
                 }
                 /* No page breaks */
                 .page-break {
@@ -1746,11 +1736,13 @@ def download_ai_report(file_id, format='html'):
                     min-height: 0 !important;
                     max-height: none !important;
                 }
-                /* Patient card */
+                /* Patient card - can break across pages */
                 .patient-card {
                     padding: 3pt !important;
                     margin: 0 !important;
-                    page-break-inside: avoid;
+                    page-break-inside: auto;
+                    page-break-before: auto;
+                    page-break-after: auto;
                 }
                 .patient-name {
                     font-size: 7pt !important;
