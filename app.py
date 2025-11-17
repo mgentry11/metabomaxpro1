@@ -1397,167 +1397,38 @@ def download_report(file_id, format='html'):
             # Create HTML object with base URL for resolving relative resources
             html_doc = HTML(string=html_content, base_url=os.path.dirname(report_path))
 
-            # ULTRA DENSE - Zero white space everywhere
+            # Professional PNOE-style PDF formatting
             pdf_css = CSS(string='''
                 @page {
                     size: letter;
-                    margin: 0.02in;
+                    margin: 0.5in 0.5in;
                 }
                 body {
                     -webkit-print-color-adjust: exact;
                     print-color-adjust: exact;
-                    font-size: 3.5pt;
-                    line-height: 0.85;
-                    margin: 0 !important;
-                    padding: 0 !important;
+                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+                    font-size: 10pt;
+                    line-height: 1.4;
+                    color: #1F2937;
                 }
-                img {
-                    max-width: 100%;
-                    max-height: 10pt;
-                    height: auto;
-                    display: inline-block;
-                    margin: 0 !important;
-                    padding: 0 !important;
-                    vertical-align: middle;
-                }
-                h1 {
-                    font-size: 5pt;
-                    margin: 0 !important;
-                    padding: 0 !important;
-                    line-height: 0.9;
-                }
-                h2 {
-                    font-size: 4.5pt;
-                    margin: 0 !important;
-                    padding: 0 !important;
-                    line-height: 0.9;
-                }
-                h3, h4, h5, h6 {
-                    font-size: 3.5pt;
-                    margin: 0 !important;
-                    padding: 0 !important;
-                    line-height: 0.9;
-                }
-                section, .section {
-                    margin: 0 !important;
-                    padding: 0 !important;
-                    line-height: 0.85;
-                }
-                .hero {
-                    padding: 6pt !important;
-                    background: #1E40AF !important;
-                    background-image: none !important;
-                    margin: 0 !important;
-                    page-break-after: always;
-                    line-height: 1.1 !important;
-                }
-                .container {
-                    max-width: 100%;
-                    padding: 0 !important;
-                    margin: 0 !important;
-                }
-                p {
-                    margin: 0 !important;
-                    padding: 0 !important;
-                    line-height: 0.85;
-                }
-                ul, ol {
-                    margin: 0 !important;
-                    padding: 0 0 0 3pt !important;
-                    line-height: 0.85;
-                }
-                li {
-                    margin: 0 !important;
-                    padding: 0 !important;
-                    line-height: 0.85;
-                }
-                .card, .metric-card, .section-card {
-                    padding: 0 !important;
-                    margin: 0 !important;
-                    line-height: 0.85 !important;
-                }
-                canvas {
-                    max-height: 12px !important;
-                    max-width: 100% !important;
-                    height: auto !important;
-                    display: inline-block !important;
-                    margin: 0 !important;
-                    padding: 0 !important;
-                    vertical-align: middle !important;
-                }
-                .page-break {
-                    display: none;
-                }
-                div {
-                    margin: 0 !important;
-                    padding: 0 !important;
-                    line-height: 0.85;
-                }
-                table {
-                    margin: 0 !important;
-                    padding: 0 !important;
-                    border-spacing: 0 !important;
-                    line-height: 0.85;
-                }
-                td, th {
-                    padding: 0.2pt 0.5pt !important;
-                    margin: 0 !important;
-                    line-height: 0.85;
-                }
+                /* Ensure all styles from HTML are preserved */
                 * {
-                    margin: 0 !important;
-                    padding: 0 !important;
-                    line-height: 0.85 !important;
+                    -webkit-print-color-adjust: exact;
+                    print-color-adjust: exact;
                 }
-                /* Patient info - FULL SIZE visible */
-                .patient-card {
-                    padding: 6pt !important;
-                    margin: 0 !important;
-                    background: white !important;
-                    border: 1pt solid #ccc !important;
-                    line-height: 1.3 !important;
+                /* Page break control */
+                .page-break {
+                    page-break-before: always;
                 }
-                .patient-name {
-                    font-size: 16pt !important;
-                    margin: 0 0 2pt 0 !important;
-                    padding: 0 !important;
-                    font-weight: bold !important;
-                    color: #1E40AF !important;
-                    line-height: 1.1 !important;
-                }
-                .patient-details {
-                    font-size: 10pt !important;
-                    line-height: 1.3 !important;
-                    opacity: 1 !important;
-                    margin: 0 !important;
-                    padding: 0 !important;
-                    word-wrap: break-word !important;
-                    white-space: normal !important;
-                }
-                .patient-details strong {
-                    font-weight: 700 !important;
-                }
-                /* Hero FULL SIZE */
-                .hero-badge {
-                    font-size: 9pt !important;
-                    padding: 2pt 6pt !important;
-                    margin: 0 0 2pt 0 !important;
-                    display: inline-block !important;
-                    line-height: 1.1 !important;
-                }
-                .hero-title {
-                    font-size: 18pt !important;
-                    margin: 0 0 2pt 0 !important;
-                    padding: 0 !important;
-                    font-weight: bold !important;
-                    line-height: 1.1 !important;
-                }
-                .hero-subtitle {
-                    font-size: 10pt !important;
-                    margin: 0 !important;
-                    padding: 0 !important;
-                    line-height: 1.3 !important;
-                    white-space: normal !important;
+                .executive-summary,
+                .bio-age-section,
+                .patient-info,
+                .metrics-list,
+                .zones-list,
+                .action-list,
+                .protocol-list,
+                .interventions-grid {
+                    page-break-inside: avoid;
                 }
             ''', font_config=font_config)
 
@@ -1617,167 +1488,38 @@ def download_ai_report(file_id, format='html'):
             # Create HTML object with base URL for resolving relative resources
             html_doc = HTML(string=html_content, base_url=os.path.dirname(report_path))
 
-            # ULTRA DENSE - Zero white space everywhere
+            # Professional PNOE-style PDF formatting
             pdf_css = CSS(string='''
                 @page {
                     size: letter;
-                    margin: 0.02in;
+                    margin: 0.5in 0.5in;
                 }
                 body {
                     -webkit-print-color-adjust: exact;
                     print-color-adjust: exact;
-                    font-size: 3.5pt;
-                    line-height: 0.85;
-                    margin: 0 !important;
-                    padding: 0 !important;
+                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+                    font-size: 10pt;
+                    line-height: 1.4;
+                    color: #1F2937;
                 }
-                img {
-                    max-width: 100%;
-                    max-height: 10pt;
-                    height: auto;
-                    display: inline-block;
-                    margin: 0 !important;
-                    padding: 0 !important;
-                    vertical-align: middle;
-                }
-                h1 {
-                    font-size: 5pt;
-                    margin: 0 !important;
-                    padding: 0 !important;
-                    line-height: 0.9;
-                }
-                h2 {
-                    font-size: 4.5pt;
-                    margin: 0 !important;
-                    padding: 0 !important;
-                    line-height: 0.9;
-                }
-                h3, h4, h5, h6 {
-                    font-size: 3.5pt;
-                    margin: 0 !important;
-                    padding: 0 !important;
-                    line-height: 0.9;
-                }
-                section, .section {
-                    margin: 0 !important;
-                    padding: 0 !important;
-                    line-height: 0.85;
-                }
-                .hero {
-                    padding: 6pt !important;
-                    background: #1E40AF !important;
-                    background-image: none !important;
-                    margin: 0 !important;
-                    page-break-after: always;
-                    line-height: 1.1 !important;
-                }
-                .container {
-                    max-width: 100%;
-                    padding: 0 !important;
-                    margin: 0 !important;
-                }
-                p {
-                    margin: 0 !important;
-                    padding: 0 !important;
-                    line-height: 0.85;
-                }
-                ul, ol {
-                    margin: 0 !important;
-                    padding: 0 0 0 3pt !important;
-                    line-height: 0.85;
-                }
-                li {
-                    margin: 0 !important;
-                    padding: 0 !important;
-                    line-height: 0.85;
-                }
-                .card, .metric-card, .section-card {
-                    padding: 0 !important;
-                    margin: 0 !important;
-                    line-height: 0.85 !important;
-                }
-                canvas {
-                    max-height: 12px !important;
-                    max-width: 100% !important;
-                    height: auto !important;
-                    display: inline-block !important;
-                    margin: 0 !important;
-                    padding: 0 !important;
-                    vertical-align: middle !important;
-                }
-                .page-break {
-                    display: none;
-                }
-                div {
-                    margin: 0 !important;
-                    padding: 0 !important;
-                    line-height: 0.85;
-                }
-                table {
-                    margin: 0 !important;
-                    padding: 0 !important;
-                    border-spacing: 0 !important;
-                    line-height: 0.85;
-                }
-                td, th {
-                    padding: 0.2pt 0.5pt !important;
-                    margin: 0 !important;
-                    line-height: 0.85;
-                }
+                /* Ensure all styles from HTML are preserved */
                 * {
-                    margin: 0 !important;
-                    padding: 0 !important;
-                    line-height: 0.85 !important;
+                    -webkit-print-color-adjust: exact;
+                    print-color-adjust: exact;
                 }
-                /* Patient info - FULL SIZE visible */
-                .patient-card {
-                    padding: 6pt !important;
-                    margin: 0 !important;
-                    background: white !important;
-                    border: 1pt solid #ccc !important;
-                    line-height: 1.3 !important;
+                /* Page break control */
+                .page-break {
+                    page-break-before: always;
                 }
-                .patient-name {
-                    font-size: 16pt !important;
-                    margin: 0 0 2pt 0 !important;
-                    padding: 0 !important;
-                    font-weight: bold !important;
-                    color: #1E40AF !important;
-                    line-height: 1.1 !important;
-                }
-                .patient-details {
-                    font-size: 10pt !important;
-                    line-height: 1.3 !important;
-                    opacity: 1 !important;
-                    margin: 0 !important;
-                    padding: 0 !important;
-                    word-wrap: break-word !important;
-                    white-space: normal !important;
-                }
-                .patient-details strong {
-                    font-weight: 700 !important;
-                }
-                /* Hero FULL SIZE */
-                .hero-badge {
-                    font-size: 9pt !important;
-                    padding: 2pt 6pt !important;
-                    margin: 0 0 2pt 0 !important;
-                    display: inline-block !important;
-                    line-height: 1.1 !important;
-                }
-                .hero-title {
-                    font-size: 18pt !important;
-                    margin: 0 0 2pt 0 !important;
-                    padding: 0 !important;
-                    font-weight: bold !important;
-                    line-height: 1.1 !important;
-                }
-                .hero-subtitle {
-                    font-size: 10pt !important;
-                    margin: 0 !important;
-                    padding: 0 !important;
-                    line-height: 1.3 !important;
-                    white-space: normal !important;
+                .executive-summary,
+                .bio-age-section,
+                .patient-info,
+                .metrics-list,
+                .zones-list,
+                .action-list,
+                .protocol-list,
+                .interventions-grid {
+                    page-break-inside: avoid;
                 }
             ''', font_config=font_config)
 

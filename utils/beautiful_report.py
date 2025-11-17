@@ -10,13 +10,13 @@ import os
 
 # Add parent directory to path to import template
 sys.path.insert(0, os.path.dirname(__file__))
-from ultimate_report_template import MarkGentryReport
+from pnoe_professional_template import PNOEProfessionalReport
 
 def generate_beautiful_report(extracted_data, custom_data):
-    """Generate a comprehensive, beautiful HTML report using the ultimate template"""
+    """Generate a comprehensive, beautiful HTML report using the PNOE professional template"""
 
     # Create a modified report instance with user's data
-    report = MarkGentryReport()
+    report = PNOEProfessionalReport()
 
     # Override with extracted data
     patient_info = extracted_data.get('patient_info', {})
