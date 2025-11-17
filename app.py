@@ -1413,9 +1413,9 @@ def download_report(file_id, format='html'):
                 }
                 /* Ultra-compact sections */
                 section, .section {
-                    margin-bottom: 6pt;
+                    margin-bottom: 3pt;
                     padding: 0;
-                    page-break-inside: avoid;
+                    page-break-inside: auto;
                 }
                 .hero {
                     padding: 10pt !important;
@@ -1562,9 +1562,9 @@ def download_ai_report(file_id, format='html'):
                 }
                 /* Ultra-compact sections */
                 section, .section {
-                    margin-bottom: 6pt;
+                    margin-bottom: 3pt;
                     padding: 0;
-                    page-break-inside: avoid;
+                    page-break-inside: auto;
                 }
                 .hero {
                     padding: 10pt !important;
