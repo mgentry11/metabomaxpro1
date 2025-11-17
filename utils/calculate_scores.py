@@ -4,6 +4,32 @@ Since PNOE PDFs don't include these scores, we calculate them from raw metabolic
 """
 import math
 
+def calculate_fuel_percentages_from_rer(rer):
+    """
+    Calculate fat and carb utilization percentages from RER
+
+    RER (Respiratory Exchange Ratio) = VCO2 / VO2
+    - RER 0.7 = 100% fat oxidation
+    - RER 0.85 = ~50/50 fat/carb
+    - RER 1.0 = 100% carb oxidation
+
+    Args:
+        rer: Respiratory Exchange Ratio (0.7-1.0)
+
+    Returns:
+        tuple: (fat_percent, cho_percent)
+    """
+    # Clamp RER to valid range
+    rer = max(0.7, min(1.0, rer))
+
+    # Linear interpolation between 0.7 and 1.0
+    # At 0.7: 100% fat, 0% carbs
+    # At 1.0: 0% fat, 100% carbs
+    carb_percent = int(((rer - 0.7) / 0.3) * 100)
+    fat_percent = 100 - carb_percent
+
+    return fat_percent, carb_percent
+
 def calculate_core_scores_from_metabolic_data(patient_info, metabolic_data, caloric_data):
     """
     Calculate 7 core performance scores from available metabolic data
@@ -107,22 +133,95 @@ def calculate_core_scores_from_metabolic_data(patient_info, metabolic_data, calo
 def enhance_extracted_data_with_calculated_scores(extracted_data):
     """
     If core_scores is empty, calculate them from available data
+    Also calculate fuel percentages if missing
 
     Args:
         extracted_data: The data extracted from PDF
 
     Returns:
-        extracted_data with core_scores filled in if they were empty
+        extracted_data with core_scores and fuel percentages filled in if they were empty
     """
+    # STEP 1: Calculate fuel percentages if missing
+    caloric_data = extracted_data.get('caloric_data', {})
+    metabolic_data = extracted_data.get('metabolic_data', {})
+
+    if 'fat_percent' not in caloric_data or 'cho_percent' not in caloric_data:
+        print("[ENHANCE_DATA] Fuel percentages not found in PDF, calculating from metabolic data...")
+
+        # Get RER value
+        rer = metabolic_data.get('rer')
+
+        # Fix invalid RER values (sometimes extraction gets wrong numbers)
+        if not rer or rer < 0.7 or rer > 1.0:
+            # Estimate RER based on metabolic efficiency
+            # Better metabolic rate = lower RER (more fat burning)
+            patient_info = extracted_data.get('patient_info', {})
+            age = patient_info.get('age', 35)
+            weight_kg = patient_info.get('weight_kg', 77)
+            height_cm = patient_info.get('height_cm', 180)
+            gender = patient_info.get('gender', 'Male').lower()
+
+            rmr = caloric_data.get('rmr', 1700)
+
+            # Calculate expected RMR
+            if gender == 'male':
+                expected_rmr = (10 * weight_kg) + (6.25 * height_cm) - (5 * age) + 5
+            else:
+                expected_rmr = (10 * weight_kg) + (6.25 * height_cm) - (5 * age) - 161
+
+            # RMR ratio: higher ratio = better metabolism = more fat burning = lower RER
+            rmr_ratio = (rmr / expected_rmr) if expected_rmr > 0 else 1.0
+
+            # Estimate RER on a continuous scale based on RMR ratio
+            # Use age as a secondary factor (younger = better fat burning potential)
+            age_factor = max(0, (50 - age) * 0.002)  # Bonus for being younger than 50
+
+            # Map RMR ratio to RER:
+            # - ratio 0.3-0.5 (very low) -> RER 0.90-0.95 (carb dependent)
+            # - ratio 0.5-0.8 (low) -> RER 0.87-0.90 (carb leaning)
+            # - ratio 0.8-1.0 (normal low) -> RER 0.83-0.87 (mixed)
+            # - ratio 1.0-1.2 (normal high) -> RER 0.78-0.83 (fat leaning)
+            # - ratio >1.2 (high) -> RER 0.70-0.78 (fat burner)
+
+            if rmr_ratio < 0.5:
+                # Very low metabolism
+                rer = 0.95 - (rmr_ratio * 0.1)  # Scale between 0.90-0.95
+            elif rmr_ratio < 0.8:
+                # Low metabolism
+                rer = 0.90 - ((rmr_ratio - 0.5) / 0.3) * 0.03  # Scale between 0.87-0.90
+            elif rmr_ratio < 1.0:
+                # Below normal
+                rer = 0.87 - ((rmr_ratio - 0.8) / 0.2) * 0.04  # Scale between 0.83-0.87
+            elif rmr_ratio < 1.2:
+                # Above normal
+                rer = 0.83 - ((rmr_ratio - 1.0) / 0.2) * 0.05  # Scale between 0.78-0.83
+            else:
+                # High metabolism
+                rer = max(0.70, 0.78 - (rmr_ratio - 1.2) * 0.04)  # Scale down from 0.78
+
+            # Apply age bonus (younger = lower RER)
+            rer = max(0.70, rer - age_factor)
+
+            print(f"[ENHANCE_DATA] Invalid/missing RER, estimated from RMR ratio ({rmr_ratio:.2f}) + age ({age}): {rer:.3f}")
+        else:
+            print(f"[ENHANCE_DATA] Using extracted RER: {rer}")
+
+        # Calculate fuel percentages from RER
+        fat_pct, cho_pct = calculate_fuel_percentages_from_rer(rer)
+
+        extracted_data['caloric_data']['fat_percent'] = fat_pct
+        extracted_data['caloric_data']['cho_percent'] = cho_pct
+
+        print(f"[ENHANCE_DATA] Calculated fuel percentages: Fat {fat_pct}%, Carbs {cho_pct}%")
+
+    # STEP 2: Calculate core scores if missing
     core_scores = extracted_data.get('core_scores', {})
 
-    # Only calculate if scores are missing
     if not core_scores or len(core_scores) == 0:
         print("[ENHANCE_DATA] No core scores found in PDF, calculating from metabolic data...")
 
         patient_info = extracted_data.get('patient_info', {})
-        metabolic_data = extracted_data.get('metabolic_data', {})
-        caloric_data = extracted_data.get('caloric_data', {})
+        caloric_data = extracted_data.get('caloric_data', {})  # Use updated caloric_data
 
         calculated_scores = calculate_core_scores_from_metabolic_data(
             patient_info,
