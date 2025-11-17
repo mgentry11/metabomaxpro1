@@ -680,13 +680,23 @@ Example:
                 try {
                     const response = await fetch('/api/ai-recommend', {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
+                        credentials: 'same-origin',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
                         body: JSON.stringify({
                             subject: subject,
                             goals: selectedGoals,
                             custom_context: ''
                         })
                     });
+
+                    // Check if response is JSON
+                    const contentType = response.headers.get('content-type');
+                    if (!contentType || !contentType.includes('application/json')) {
+                        throw new Error('Please log in again. Your session may have expired.');
+                    }
 
                     const data = await response.json();
 
@@ -886,7 +896,11 @@ Example:
                 // Call backend to generate report with AI
                 const response = await fetch('/generate-with-ai', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'same-origin',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
                     body: JSON.stringify({
                         file_id: fileId,
                         ai_recommendations: allRecommendations
@@ -894,6 +908,13 @@ Example:
                 });
 
                 console.log('[DEBUG] Response status:', response.status);
+
+                // Check if response is JSON
+                const contentType = response.headers.get('content-type');
+                if (!contentType || !contentType.includes('application/json')) {
+                    throw new Error('Please log in again. Your session may have expired.');
+                }
+
                 const data = await response.json();
                 console.log('[DEBUG] Response data:', data);
 
@@ -969,7 +990,18 @@ Example:
         // Load user's reports
         async function loadMyReports() {
             try {
-                const response = await fetch('/api/my-reports');
+                const response = await fetch('/api/my-reports', {
+                    credentials: 'same-origin',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                });
+
+                const contentType = response.headers.get('content-type');
+                if (!contentType || !contentType.includes('application/json')) {
+                    throw new Error('Please log in again. Your session may have expired.');
+                }
+
                 const data = await response.json();
 
                 const reportsList = document.getElementById('reportsList');
@@ -1103,10 +1135,17 @@ Example:
             try {
                 const response = await fetch('/api/delete-old-reports', {
                     method: 'POST',
+                    credentials: 'same-origin',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
                     }
                 });
+
+                const contentType = response.headers.get('content-type');
+                if (!contentType || !contentType.includes('application/json')) {
+                    throw new Error('Please log in again. Your session may have expired.');
+                }
 
                 const data = await response.json();
 
