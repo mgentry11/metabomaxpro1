@@ -1369,27 +1369,66 @@ def download_report(file_id, format='html'):
             # Create HTML object with base URL for resolving relative resources
             html_doc = HTML(string=html_content, base_url=os.path.dirname(report_path))
 
-            # PDF CSS - Matches reformatted style with 3in margins
+            # Mini PDF CSS - Compact, condensed formatting
             pdf_css = CSS(string='''
                 @page {
                     size: letter;
-                    margin: 0.5in 3in;
+                    margin: 0.5in;
                 }
                 body {
                     -webkit-print-color-adjust: exact;
                     print-color-adjust: exact;
+                    font-size: 9pt;
+                    line-height: 1.3;
                 }
-                /* Let HTML template's CSS control most styling */
-                .page-break {
-                    page-break-before: always;
+                /* Hide images for compact PDF */
+                img {
+                    display: none !important;
                 }
-                /* Prevent orphaned headings */
-                h1, h2, h3, h4, h5, h6 {
+                /* Compact headers */
+                h1 {
+                    font-size: 16pt;
+                    margin: 8pt 0 4pt;
                     page-break-after: avoid;
                 }
-                /* Keep sections together when possible */
+                h2 {
+                    font-size: 13pt;
+                    margin: 6pt 0 3pt;
+                    page-break-after: avoid;
+                }
+                h3 {
+                    font-size: 11pt;
+                    margin: 4pt 0 2pt;
+                    page-break-after: avoid;
+                }
+                /* Compact sections */
                 section, .section {
+                    margin-bottom: 12pt;
                     page-break-inside: avoid;
+                }
+                .hero {
+                    padding: 20pt !important;
+                    background: #1E40AF !important;
+                    background-image: none !important;
+                }
+                .container {
+                    max-width: 100%;
+                    padding: 0;
+                }
+                /* Compact spacing */
+                p {
+                    margin: 2pt 0;
+                }
+                .card, .metric-card, .section-card {
+                    padding: 8pt !important;
+                    margin: 4pt 0 !important;
+                }
+                /* Reduce chart size */
+                canvas {
+                    max-height: 200px !important;
+                }
+                .page-break {
+                    page-break-before: always;
                 }
             ''', font_config=font_config)
 
@@ -1449,27 +1488,66 @@ def download_ai_report(file_id, format='html'):
             # Create HTML object with base URL for resolving relative resources
             html_doc = HTML(string=html_content, base_url=os.path.dirname(report_path))
 
-            # PDF CSS - Matches reformatted style with 3in margins
+            # Mini PDF CSS - Compact, condensed formatting
             pdf_css = CSS(string='''
                 @page {
                     size: letter;
-                    margin: 0.5in 3in;
+                    margin: 0.5in;
                 }
                 body {
                     -webkit-print-color-adjust: exact;
                     print-color-adjust: exact;
+                    font-size: 9pt;
+                    line-height: 1.3;
                 }
-                /* Let HTML template's CSS control most styling */
-                .page-break {
-                    page-break-before: always;
+                /* Hide images for compact PDF */
+                img {
+                    display: none !important;
                 }
-                /* Prevent orphaned headings */
-                h1, h2, h3, h4, h5, h6 {
+                /* Compact headers */
+                h1 {
+                    font-size: 16pt;
+                    margin: 8pt 0 4pt;
                     page-break-after: avoid;
                 }
-                /* Keep sections together when possible */
+                h2 {
+                    font-size: 13pt;
+                    margin: 6pt 0 3pt;
+                    page-break-after: avoid;
+                }
+                h3 {
+                    font-size: 11pt;
+                    margin: 4pt 0 2pt;
+                    page-break-after: avoid;
+                }
+                /* Compact sections */
                 section, .section {
+                    margin-bottom: 12pt;
                     page-break-inside: avoid;
+                }
+                .hero {
+                    padding: 20pt !important;
+                    background: #1E40AF !important;
+                    background-image: none !important;
+                }
+                .container {
+                    max-width: 100%;
+                    padding: 0;
+                }
+                /* Compact spacing */
+                p {
+                    margin: 2pt 0;
+                }
+                .card, .metric-card, .section-card {
+                    padding: 8pt !important;
+                    margin: 4pt 0 !important;
+                }
+                /* Reduce chart size */
+                canvas {
+                    max-height: 200px !important;
+                }
+                .page-break {
+                    page-break-before: always;
                 }
             ''', font_config=font_config)
 
