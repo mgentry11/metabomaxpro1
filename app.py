@@ -1378,15 +1378,15 @@ def download_report(file_id, format='html'):
                 body {
                     -webkit-print-color-adjust: exact;
                     print-color-adjust: exact;
-                    font-size: 8pt;
-                    line-height: 1.1;
+                    font-size: 7pt;
+                    line-height: 1.05;
                     margin: 0;
                     padding: 0;
                 }
-                /* Fit images within document - extra small */
+                /* Fit images within document - tiny */
                 img {
                     max-width: 100%;
-                    max-height: 40pt;
+                    max-height: 30pt;
                     height: auto;
                     display: block;
                     margin: 0pt auto;
@@ -1394,20 +1394,20 @@ def download_report(file_id, format='html'):
                 }
                 /* Minimal headers */
                 h1 {
-                    font-size: 12pt;
-                    margin: 1pt 0 0.5pt;
+                    font-size: 11pt;
+                    margin: 0.5pt 0 0pt;
                 }
                 h2 {
-                    font-size: 9pt;
-                    margin: 1pt 0 0.5pt;
+                    font-size: 8pt;
+                    margin: 0.5pt 0 0pt;
                 }
                 h3 {
-                    font-size: 8pt;
-                    margin: 0.5pt 0 0pt;
+                    font-size: 7pt;
+                    margin: 0pt 0 0pt;
                 }
                 h4, h5, h6 {
-                    font-size: 8pt;
-                    margin: 0.5pt 0 0pt;
+                    font-size: 7pt;
+                    margin: 0pt 0 0pt;
                 }
                 /* Zero spacing sections - allow breaking */
                 section, .section {
@@ -1426,27 +1426,27 @@ def download_report(file_id, format='html'):
                     padding: 0;
                     margin: 0;
                 }
-                /* Minimal spacing */
+                /* Zero spacing */
                 p {
-                    margin: 0.5pt 0;
+                    margin: 0pt 0;
                     page-break-inside: auto;
                 }
                 ul, ol {
-                    margin: 1pt 0;
-                    padding-left: 12pt;
+                    margin: 0pt 0;
+                    padding-left: 10pt;
                     page-break-inside: auto;
                 }
                 li {
                     margin: 0;
                 }
                 .card, .metric-card, .section-card {
-                    padding: 2pt !important;
-                    margin: 1pt 0 !important;
+                    padding: 1pt !important;
+                    margin: 0pt 0 !important;
                     page-break-inside: auto;
                 }
-                /* Reduce chart size to minimum */
+                /* Reduce chart size to absolute minimum */
                 canvas {
-                    max-height: 50px !important;
+                    max-height: 40px !important;
                     max-width: 100% !important;
                     height: auto !important;
                     page-break-inside: auto;
@@ -1541,15 +1541,15 @@ def download_ai_report(file_id, format='html'):
                 body {
                     -webkit-print-color-adjust: exact;
                     print-color-adjust: exact;
-                    font-size: 8pt;
-                    line-height: 1.1;
+                    font-size: 7pt;
+                    line-height: 1.05;
                     margin: 0;
                     padding: 0;
                 }
-                /* Fit images within document - extra small */
+                /* Fit images within document - tiny */
                 img {
                     max-width: 100%;
-                    max-height: 40pt;
+                    max-height: 30pt;
                     height: auto;
                     display: block;
                     margin: 0pt auto;
@@ -1557,20 +1557,20 @@ def download_ai_report(file_id, format='html'):
                 }
                 /* Minimal headers */
                 h1 {
-                    font-size: 12pt;
-                    margin: 1pt 0 0.5pt;
+                    font-size: 11pt;
+                    margin: 0.5pt 0 0pt;
                 }
                 h2 {
-                    font-size: 9pt;
-                    margin: 1pt 0 0.5pt;
+                    font-size: 8pt;
+                    margin: 0.5pt 0 0pt;
                 }
                 h3 {
-                    font-size: 8pt;
-                    margin: 0.5pt 0 0pt;
+                    font-size: 7pt;
+                    margin: 0pt 0 0pt;
                 }
                 h4, h5, h6 {
-                    font-size: 8pt;
-                    margin: 0.5pt 0 0pt;
+                    font-size: 7pt;
+                    margin: 0pt 0 0pt;
                 }
                 /* Zero spacing sections - allow breaking */
                 section, .section {
@@ -1589,27 +1589,27 @@ def download_ai_report(file_id, format='html'):
                     padding: 0;
                     margin: 0;
                 }
-                /* Minimal spacing */
+                /* Zero spacing */
                 p {
-                    margin: 0.5pt 0;
+                    margin: 0pt 0;
                     page-break-inside: auto;
                 }
                 ul, ol {
-                    margin: 1pt 0;
-                    padding-left: 12pt;
+                    margin: 0pt 0;
+                    padding-left: 10pt;
                     page-break-inside: auto;
                 }
                 li {
                     margin: 0;
                 }
                 .card, .metric-card, .section-card {
-                    padding: 2pt !important;
-                    margin: 1pt 0 !important;
+                    padding: 1pt !important;
+                    margin: 0pt 0 !important;
                     page-break-inside: auto;
                 }
-                /* Reduce chart size to minimum */
+                /* Reduce chart size to absolute minimum */
                 canvas {
-                    max-height: 50px !important;
+                    max-height: 40px !important;
                     max-width: 100% !important;
                     height: auto !important;
                     page-break-inside: auto;
