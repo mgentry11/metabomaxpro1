@@ -1369,7 +1369,7 @@ def download_report(file_id, format='html'):
             # Create HTML object with base URL for resolving relative resources
             html_doc = HTML(string=html_content, base_url=os.path.dirname(report_path))
 
-            # Ultra-compact PDF CSS - Absolute minimum whitespace
+            # Ultra-compact PDF CSS - No blank pages, continuous flow
             pdf_css = CSS(string='''
                 @page {
                     size: letter;
@@ -1383,37 +1383,33 @@ def download_report(file_id, format='html'):
                     margin: 0;
                     padding: 0;
                 }
-                /* Fit images within document */
+                /* Fit images within document - allow breaking */
                 img {
                     max-width: 100%;
                     max-height: 100pt;
                     height: auto;
                     display: block;
                     margin: 1pt auto;
-                    page-break-inside: avoid;
+                    page-break-inside: auto;
                 }
-                /* Minimal headers */
+                /* Minimal headers - allow page breaks after */
                 h1 {
                     font-size: 13pt;
                     margin: 2pt 0 1pt;
-                    page-break-after: avoid;
                 }
                 h2 {
                     font-size: 10pt;
                     margin: 2pt 0 1pt;
-                    page-break-after: avoid;
                 }
                 h3 {
                     font-size: 9pt;
                     margin: 1pt 0 0pt;
-                    page-break-after: avoid;
                 }
                 h4, h5, h6 {
                     font-size: 8pt;
                     margin: 1pt 0 0pt;
-                    page-break-after: avoid;
                 }
-                /* Zero spacing sections */
+                /* Zero spacing sections - allow breaking */
                 section, .section {
                     margin: 0;
                     padding: 0;
@@ -1433,10 +1429,12 @@ def download_report(file_id, format='html'):
                 /* Minimal spacing */
                 p {
                     margin: 0.5pt 0;
+                    page-break-inside: auto;
                 }
                 ul, ol {
                     margin: 1pt 0;
                     padding-left: 12pt;
+                    page-break-inside: auto;
                 }
                 li {
                     margin: 0;
@@ -1444,13 +1442,16 @@ def download_report(file_id, format='html'):
                 .card, .metric-card, .section-card {
                     padding: 2pt !important;
                     margin: 1pt 0 !important;
+                    page-break-inside: auto;
                 }
                 /* Reduce chart size */
                 canvas {
                     max-height: 120px !important;
+                    page-break-inside: auto;
                 }
+                /* Remove forced page breaks */
                 .page-break {
-                    page-break-before: always;
+                    display: none;
                 }
                 /* Zero spacing everywhere */
                 div {
@@ -1459,6 +1460,7 @@ def download_report(file_id, format='html'):
                 }
                 table {
                     margin: 1pt 0;
+                    page-break-inside: auto;
                 }
                 td, th {
                     padding: 1pt 3pt;
@@ -1466,6 +1468,7 @@ def download_report(file_id, format='html'):
                 * {
                     margin-top: 0 !important;
                     margin-bottom: 0 !important;
+                    page-break-inside: auto !important;
                 }
             ''', font_config=font_config)
 
@@ -1525,7 +1528,7 @@ def download_ai_report(file_id, format='html'):
             # Create HTML object with base URL for resolving relative resources
             html_doc = HTML(string=html_content, base_url=os.path.dirname(report_path))
 
-            # Ultra-compact PDF CSS - Absolute minimum whitespace
+            # Ultra-compact PDF CSS - No blank pages, continuous flow
             pdf_css = CSS(string='''
                 @page {
                     size: letter;
@@ -1539,37 +1542,33 @@ def download_ai_report(file_id, format='html'):
                     margin: 0;
                     padding: 0;
                 }
-                /* Fit images within document */
+                /* Fit images within document - allow breaking */
                 img {
                     max-width: 100%;
                     max-height: 100pt;
                     height: auto;
                     display: block;
                     margin: 1pt auto;
-                    page-break-inside: avoid;
+                    page-break-inside: auto;
                 }
-                /* Minimal headers */
+                /* Minimal headers - allow page breaks after */
                 h1 {
                     font-size: 13pt;
                     margin: 2pt 0 1pt;
-                    page-break-after: avoid;
                 }
                 h2 {
                     font-size: 10pt;
                     margin: 2pt 0 1pt;
-                    page-break-after: avoid;
                 }
                 h3 {
                     font-size: 9pt;
                     margin: 1pt 0 0pt;
-                    page-break-after: avoid;
                 }
                 h4, h5, h6 {
                     font-size: 8pt;
                     margin: 1pt 0 0pt;
-                    page-break-after: avoid;
                 }
-                /* Zero spacing sections */
+                /* Zero spacing sections - allow breaking */
                 section, .section {
                     margin: 0;
                     padding: 0;
@@ -1589,10 +1588,12 @@ def download_ai_report(file_id, format='html'):
                 /* Minimal spacing */
                 p {
                     margin: 0.5pt 0;
+                    page-break-inside: auto;
                 }
                 ul, ol {
                     margin: 1pt 0;
                     padding-left: 12pt;
+                    page-break-inside: auto;
                 }
                 li {
                     margin: 0;
@@ -1600,13 +1601,16 @@ def download_ai_report(file_id, format='html'):
                 .card, .metric-card, .section-card {
                     padding: 2pt !important;
                     margin: 1pt 0 !important;
+                    page-break-inside: auto;
                 }
                 /* Reduce chart size */
                 canvas {
                     max-height: 120px !important;
+                    page-break-inside: auto;
                 }
+                /* Remove forced page breaks */
                 .page-break {
-                    page-break-before: always;
+                    display: none;
                 }
                 /* Zero spacing everywhere */
                 div {
@@ -1615,6 +1619,7 @@ def download_ai_report(file_id, format='html'):
                 }
                 table {
                     margin: 1pt 0;
+                    page-break-inside: auto;
                 }
                 td, th {
                     padding: 1pt 3pt;
@@ -1622,6 +1627,7 @@ def download_ai_report(file_id, format='html'):
                 * {
                     margin-top: 0 !important;
                     margin-bottom: 0 !important;
+                    page-break-inside: auto !important;
                 }
             ''', font_config=font_config)
 
