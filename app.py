@@ -1383,31 +1383,31 @@ def download_report(file_id, format='html'):
                     margin: 0;
                     padding: 0;
                 }
-                /* Fit images within document - allow breaking */
+                /* Fit images within document - very small */
                 img {
                     max-width: 100%;
-                    max-height: 100pt;
+                    max-height: 60pt;
                     height: auto;
                     display: block;
-                    margin: 1pt auto;
+                    margin: 0.5pt auto;
                     page-break-inside: auto;
                 }
-                /* Minimal headers - allow page breaks after */
+                /* Minimal headers */
                 h1 {
-                    font-size: 13pt;
-                    margin: 2pt 0 1pt;
+                    font-size: 12pt;
+                    margin: 1pt 0 0.5pt;
                 }
                 h2 {
-                    font-size: 10pt;
-                    margin: 2pt 0 1pt;
+                    font-size: 9pt;
+                    margin: 1pt 0 0.5pt;
                 }
                 h3 {
-                    font-size: 9pt;
-                    margin: 1pt 0 0pt;
+                    font-size: 8pt;
+                    margin: 0.5pt 0 0pt;
                 }
                 h4, h5, h6 {
                     font-size: 8pt;
-                    margin: 1pt 0 0pt;
+                    margin: 0.5pt 0 0pt;
                 }
                 /* Zero spacing sections - allow breaking */
                 section, .section {
@@ -1444,9 +1444,11 @@ def download_report(file_id, format='html'):
                     margin: 1pt 0 !important;
                     page-break-inside: auto;
                 }
-                /* Reduce chart size */
+                /* Reduce chart size significantly */
                 canvas {
-                    max-height: 120px !important;
+                    max-height: 70px !important;
+                    max-width: 100% !important;
+                    height: auto !important;
                     page-break-inside: auto;
                 }
                 /* Remove forced page breaks */
@@ -1469,6 +1471,8 @@ def download_report(file_id, format='html'):
                     margin-top: 0 !important;
                     margin-bottom: 0 !important;
                     page-break-inside: auto !important;
+                    min-height: 0 !important;
+                    max-height: none !important;
                 }
             ''', font_config=font_config)
 
@@ -1542,31 +1546,31 @@ def download_ai_report(file_id, format='html'):
                     margin: 0;
                     padding: 0;
                 }
-                /* Fit images within document - allow breaking */
+                /* Fit images within document - very small */
                 img {
                     max-width: 100%;
-                    max-height: 100pt;
+                    max-height: 60pt;
                     height: auto;
                     display: block;
-                    margin: 1pt auto;
+                    margin: 0.5pt auto;
                     page-break-inside: auto;
                 }
-                /* Minimal headers - allow page breaks after */
+                /* Minimal headers */
                 h1 {
-                    font-size: 13pt;
-                    margin: 2pt 0 1pt;
+                    font-size: 12pt;
+                    margin: 1pt 0 0.5pt;
                 }
                 h2 {
-                    font-size: 10pt;
-                    margin: 2pt 0 1pt;
+                    font-size: 9pt;
+                    margin: 1pt 0 0.5pt;
                 }
                 h3 {
-                    font-size: 9pt;
-                    margin: 1pt 0 0pt;
+                    font-size: 8pt;
+                    margin: 0.5pt 0 0pt;
                 }
                 h4, h5, h6 {
                     font-size: 8pt;
-                    margin: 1pt 0 0pt;
+                    margin: 0.5pt 0 0pt;
                 }
                 /* Zero spacing sections - allow breaking */
                 section, .section {
@@ -1603,9 +1607,11 @@ def download_ai_report(file_id, format='html'):
                     margin: 1pt 0 !important;
                     page-break-inside: auto;
                 }
-                /* Reduce chart size */
+                /* Reduce chart size significantly */
                 canvas {
-                    max-height: 120px !important;
+                    max-height: 70px !important;
+                    max-width: 100% !important;
+                    height: auto !important;
                     page-break-inside: auto;
                 }
                 /* Remove forced page breaks */
@@ -1628,6 +1634,8 @@ def download_ai_report(file_id, format='html'):
                     margin-top: 0 !important;
                     margin-bottom: 0 !important;
                     page-break-inside: auto !important;
+                    min-height: 0 !important;
+                    max-height: none !important;
                 }
             ''', font_config=font_config)
 
