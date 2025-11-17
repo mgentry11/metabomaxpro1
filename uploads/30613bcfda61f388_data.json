@@ -1,0 +1,35 @@
+{
+  "patient_info": {
+    "name": "Littlefield Bradlely",
+    "test_date": "11/12/2025",
+    "gender": "Male",
+    "age": 54,
+    "weight_kg": 77,
+    "height_cm": 185,
+    "test_source": "PNOE"
+  },
+  "core_scores": {
+    "metabolic_rate": 85,
+    "fat_burning": 49,
+    "lung_util": 87,
+    "hrv": 74,
+    "symp_parasym": 56,
+    "ventilation_eff": 70,
+    "breathing_coord": 62
+  },
+  "caloric_data": {
+    "rmr": 500,
+    "fat_percent": 27,
+    "cho_percent": 73
+  },
+  "metabolic_data": {
+    "rmr": 500,
+    "rer": 200.0
+  },
+  "heart_rate_data": {},
+  "all_text": [
+    "PNOE Ergometry results\nSubject \uf044 Measurement\nName Littlefield Bradlely Status \u2713 Closed\nGender Male (54) Date 11/12/2025 13:44:10\nWeight 77 kg Duration 11' (78 breaths)\nHeight 185 cm Protocol \uf0c1Grow - RMR (/Protocol/Edit?id=819c33a7-6215-4d47-aa22-aed301484062)\nExercise Frequency 3 times a week Device PNOE 2516-338 / Absorber\nExercise Goal Muscle Development Granular HR 639\nReport Type RMR\nRMR\n500\nVO2 (ml/min)\n400\nVCO2 (ml/min)\n300\n200\n100\n0\n50 100 150 200 250 300 350 400 450 500 550 600 650\nTime (sec)\n)nim/lm(\n2OCV\n&\n2OV\n100\n[02] Heart Rate\n95\n90\n85\n80\n50 100 150 200 250 300 350 400 450 500 550 600 650\nTime (sec)\n)mpb(\nRH\n0.9\n0.8\n0.7\n0.6\n0.5\n50 100 150 200 250 300 350 400 450 500 550 600 650\nTime (sec)\n)-(\nRER",
+    "VE/VO2\n60 VE/VCO2\n50\n40\n50 100 150 200 250 300 350 400 450 500 550 600 650\nTime (sec)\n2OCV/EV\n&\n2OV/EV\nCHO (kcal/min)\nFAT (kcal/min)\n0 50 100 150 200 250 300 350 400 450 500 550 600 650\nTime [sec]\n)nim/lack(TAF\n/\n)nim/lack(OHC\n3.0\n2.5 Total Cal (kcal/min)\nFAT (kcal/min)\n2.0\n1.5\n1.0\n0.5\n0.0\n50 100 150 200 250 300 350 400 450 500 550 600 650\nTime [sec]\n)nim/lack(\ntaF/laC\nlatoT\nWatts\nSpeed\n0 0.0\n0 50 100 150 200 250 300 350 400 450 500 550 600 650\nTime [sec]\nWatts Speed\nFAT (kcal/min)\nCHO (kcal/min)\nWatts\nHR [bpm]\n80.0\n0.0 0\n50 100 150 200 250 300 350 400 450 500 550 600 650\nTime [sec]\n)nim/lack(\nTAF/OHC\nWatts\nHR\n(bpm)",
+    "5.0\n4.0\n3.0\n2.0\n1.0\n0.0\n0.0 1.0 2.0 3.0 4.0 5.0\nVO2 (L/min)\n)nim/L(\n2OCV\n200\n150\n100\n50\n0\n0.0 1.0 2.0 3.0 4.0 5.0\nVO2 (L/min)\n)nim/L(\nEV\n200\n150\n100\n50\n0\n0.0 1.0 2.0 3.0 4.0 5.0\nVCO2 (L/min)\n)nim/L(\nEV\n50\nVE/VO2\n40\nVE/VCO2\n30\n20\n10\n0\n0.0 1.0 2.0 3.0 4.0 5.0\nVO2 (L/min)\n)-(\n2OV\n/\nEV\n5.0\n4.0\n3.0\n2.0\n1.0\n0.0\n0 50 100 150 200 250 300 350 400\nWL (Watts)\n)nim/L(\n2OV\n5.0\n4.0\n3.0\n2.0\n1.0\n0.0\n0 50 100 150 200 250 300 350 400\nWL (Watts)\n)nim/L(\n2OCV\n2.0\n1.5\n1.0\n0.5\n0.0\n0.0 1.0 2.0 3.0 4.0 5.0\nVO2 (L/min)\n)-(\nRER\n200\n150\n100\n50\n0\n0.0 1.0 2.0 3.0 4.0 5.0\nVO2 (L/min)\n)mpb(\nRH"
+  ]
+}

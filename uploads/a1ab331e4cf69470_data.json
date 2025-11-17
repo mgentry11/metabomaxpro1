@@ -1,0 +1,35 @@
+{
+  "patient_info": {
+    "name": "Robison Debra",
+    "test_date": "10/08/2025",
+    "gender": "Female",
+    "age": 72,
+    "weight_kg": 65,
+    "height_cm": 165,
+    "test_source": "PNOE"
+  },
+  "core_scores": {
+    "metabolic_rate": 85,
+    "fat_burning": 50,
+    "lung_util": 78,
+    "hrv": 59,
+    "symp_parasym": 57,
+    "ventilation_eff": 62,
+    "breathing_coord": 56
+  },
+  "caloric_data": {
+    "rmr": 500,
+    "fat_percent": 32,
+    "cho_percent": 68
+  },
+  "metabolic_data": {
+    "rmr": 500,
+    "rer": 200.0
+  },
+  "heart_rate_data": {},
+  "all_text": [
+    "PNOE Ergometry results\nSubject \uf044 Measurement\nName Robison Debra Status \u2713 Closed\nGender Female (72) Date 10/08/2025 10:29:19\nWeight 65 kg Duration 7' (41 breaths)\nHeight 165 cm Protocol \uf0c1Grow - RMR (/Protocol/Edit?id=819c33a7-6215-4d47-aa22-aed301484062)\nExercise Frequency 7 times a week Device PNOE 2516-338 / Absorber\nExercise Goal Longevity Granular HR 526\nReport Type RMR\nRMR\n500 VO2 (ml/min)\nVCO2 (ml/min)\n400\n300\n200\n100\n0\n50 100 150 200 250 300 350 400\nTime (sec)\n)nim/lm(\n2OCV\n&\n2OV\n75 [02] Heart Rate\n70\n65\n60\n50 100 150 200 250 300 350 400\nTime (sec)\n)mpb(\nRH\n1.0\n0.9\n0.8\n0.7\n0.6\n0.5\n50 100 150 200 250 300 350 400\nTime (sec)\n)-(\nRER",
+    "70\nVE/VO2\n65\nVE/VCO2\n60\n55\n50\n45\n40\n50 100 150 200 250 300 350 400\nTime (sec)\n2OCV/EV\n&\n2OV/EV\nCHO (kcal/min)\nFAT (kcal/min)\n0.0\n0 50 100 150 200 250 300 350 400\nTime [sec]\n)nim/lack(TAF\n/\n)nim/lack(OHC\n3.0\n2.5 Total Cal (kcal/min)\nFAT (kcal/min)\n2.0\n1.5\n1.0\n0.5\n0.0\n50 100 150 200 250 300 350 400\nTime [sec]\n)nim/lack(\ntaF/laC\nlatoT\nWatts\nSpeed\n0 0.0\n0 50 100 150 200 250 300 350 400\nTime [sec]\nWatts Speed\nFAT (kcal/min)\nCHO (kcal/min)\nWatts\nHR [bpm]\n0.0 0 60\n50 100 150 200 250 300 350 400\nTime [sec]\n)nim/lack(\nTAF/OHC\nWatts\nHR\n(bpm)",
+    "5.0\n4.0\n3.0\n2.0\n1.0\n0.0\n0.0 1.0 2.0 3.0 4.0 5.0\nVO2 (L/min)\n)nim/L(\n2OCV\n200\n150\n100\n50\n0\n0.0 1.0 2.0 3.0 4.0 5.0\nVO2 (L/min)\n)nim/L(\nEV\n200\n150\n100\n50\n0\n0.0 1.0 2.0 3.0 4.0 5.0\nVCO2 (L/min)\n)nim/L(\nEV\n50\nVE/VO2\n40\nVE/VCO2\n30\n20\n10\n0\n0.0 1.0 2.0 3.0 4.0 5.0\nVO2 (L/min)\n)-(\n2OV\n/\nEV\n5.0\n4.0\n3.0\n2.0\n1.0\n0.0\n0 50 100 150 200 250 300 350 400\nWL (Watts)\n)nim/L(\n2OV\n5.0\n4.0\n3.0\n2.0\n1.0\n0.0\n0 50 100 150 200 250 300 350 400\nWL (Watts)\n)nim/L(\n2OCV\n2.0\n1.5\n1.0\n0.5\n0.0\n0.0 1.0 2.0 3.0 4.0 5.0\nVO2 (L/min)\n)-(\nRER\n200\n150\n100\n50\n0\n0.0 1.0 2.0 3.0 4.0 5.0\nVO2 (L/min)\n)mpb(\nRH"
+  ]
+}

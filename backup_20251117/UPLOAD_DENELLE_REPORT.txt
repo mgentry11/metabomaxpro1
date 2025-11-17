@@ -1,0 +1,96 @@
+═══════════════════════════════════════════════════════════════════════════════
+  UPLOAD ALEXANDER DENELLE'S REPORT TO WEBSITE
+═══════════════════════════════════════════════════════════════════════════════
+
+📊 REPORT DETAILS:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Patient: Alexander Denelle
+Age: 62 → Biological: 61
+Type: AI_Basic_Report (includes AI peptide recommendations)
+File: uploads/98eaff0843aacd7c_report.html
+Size: 37KB
+
+✅ AI Peptide Recommendations Included:
+  1. AOD-9604 (Fat Loss) - 257mcg daily
+  2. BPC-157 (Recovery) - 257mcg twice daily
+  3. NAD+ (Cellular Energy) - 370mg, 2-3x/week
+  4. CJC-1295 (Hormonal Support) - 85mcg, 3-4x/week
+  5. Selank (Cognitive & Stress) - 300mcg, 2x daily
+
+All personalized based on her:
+  - Age: 62, Gender: Female
+  - Fat burning: 51%, HRV: 67%
+  - Overall score: 68%
+
+
+📤 TO UPLOAD TO WEBSITE:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Step 1: Open Terminal and navigate to project:
+  cd /Users/markgentry/Downloads/pnoe_webapp
+  source venv/bin/activate
+
+Step 2: Upload the report (REPLACE WITH YOUR EMAIL):
+  python3 upload_to_database.py YOUR_EMAIL@example.com uploads/98eaff0843aacd7c_report.html
+
+Example with clinic email:
+  python3 upload_to_database.py drgarcia@vitalitymed.co uploads/98eaff0843aacd7c_report.html
+
+Or use your own:
+  python3 upload_to_database.py your@email.com uploads/98eaff0843aacd7c_report.html
+
+
+✅ WHAT HAPPENS:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Script connects to Supabase database
+2. Finds your user account by email
+3. Creates metabolic_tests record
+4. Creates reports record with HTML content
+5. Report becomes viewable/downloadable on website
+
+
+📋 THEN VIEW ON WEBSITE:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Go to: https://metabomaxpro1.onrender.com/dashboard
+2. Log in with your email
+3. See Alexander Denelle's report in your dashboard
+4. View online or download as needed
+
+
+🔐 NEED AN ACCOUNT?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+If you don't have an account yet:
+  1. Go to: https://metabomaxpro1.onrender.com
+  2. Click "Sign Up"
+  3. Create account with your email
+  4. Then run the upload command above
+
+
+💡 UPLOAD ALL REPORTS AT ONCE:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+To upload ALL 8 patient reports (including Denelle):
+  python3 upload_to_database.py your@email.com
+
+This uploads all reports in uploads/ directory:
+  ✓ Alexander Denelle (with AI peptides)
+  ✓ Franco Jessica
+  ✓ Dee Jay
+  ✓ Littlefield Bradlely
+  ✓ Robison Debra
+  ✓ Alexander Eric
+  ✓ gentry mark
+  ✓ Kurtzer John
+
+
+═══════════════════════════════════════════════════════════════════════════════
+
+QUICK COMMAND (Replace email):
+
+cd /Users/markgentry/Downloads/pnoe_webapp && source venv/bin/activate && python3 upload_to_database.py YOUR_EMAIL@example.com uploads/98eaff0843aacd7c_report.html
+
+═══════════════════════════════════════════════════════════════════════════════

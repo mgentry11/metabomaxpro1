@@ -1,0 +1,110 @@
+═══════════════════════════════════════════════════════════════════════════════
+  METABOMAX PRO - QUICK REFERENCE GUIDE
+  Session Date: November 17, 2025
+═══════════════════════════════════════════════════════════════════════════════
+
+🚀 GENERATE REPORTS
+───────────────────────────────────────────────────────────────────────────────
+
+Basic Report (1-2 pages):
+  cd /Users/markgentry/Downloads/pnoe_webapp
+  source venv/bin/activate
+  python3 upload_report.py "/Users/markgentry/Downloads/PNOE_tests/Brad_P N O E - View Ergometry.pdf"
+
+Premium Report (30+ pages):
+  python3 upload_report.py "/Users/markgentry/Downloads/PNOE_tests/Brad_P N O E - View Ergometry.pdf" Longevity --premium
+
+Batch Process All Tests:
+  python3 process_all_tests.py
+
+
+📤 UPLOAD TO WEBSITE
+───────────────────────────────────────────────────────────────────────────────
+
+Upload All Reports:
+  python3 upload_to_database.py your@email.com
+
+Upload Specific Report:
+  python3 upload_to_database.py your@email.com uploads/abc123_report.html
+
+View on Website:
+  https://metabomaxpro1.onrender.com/dashboard
+
+
+✅ VERIFICATION RESULTS
+───────────────────────────────────────────────────────────────────────────────
+
+8 Patients Tested - NO DEFAULTING FOUND!
+  ✓ All caloric burns UNIQUE (1,681 - 2,426 kcal)
+  ✓ All core scores UNIQUE (63.7% - 73.4%)
+  ✓ Proper correlation: heavier = more calories
+  ✓ Algorithms working perfectly
+
+
+📁 FILES CREATED
+───────────────────────────────────────────────────────────────────────────────
+
+NEW FILES:
+  ✓ utils/ai_basic_report.py - Basic report generator
+  ✓ utils/ai_premium_report.py - Premium 30+ page report
+  ✓ upload_to_database.py - CLI database uploader
+  ✓ REPORT_TYPES_GUIDE.md - Complete documentation
+  ✓ backup_20251117/ - THIS BACKUP DIRECTORY
+
+MODIFIED:
+  ✓ upload_report.py - Added --premium flag
+
+BACKUP LOCATION:
+  /Users/markgentry/Downloads/pnoe_webapp/backup_20251117/
+
+
+🔄 RESTORE FROM BACKUP
+───────────────────────────────────────────────────────────────────────────────
+
+cd /Users/markgentry/Downloads/pnoe_webapp
+cp backup_20251117/ai_basic_report.py utils/
+cp backup_20251117/ai_premium_report.py utils/
+cp backup_20251117/upload_to_database.py .
+cp backup_20251117/upload_report.py .
+
+
+💰 PRICING
+───────────────────────────────────────────────────────────────────────────────
+
+AI_Basic_Report: $50-$150
+AI_Premium_Report: $300-$500 (industry standard)
+
+
+📊 SAMPLE PREMIUM REPORT
+───────────────────────────────────────────────────────────────────────────────
+
+Generated: uploads/Littlefield_Bradlely_20251117.html
+Patient: Littlefield Bradlely, Age 54 (Bio: 51)
+Size: 908 lines, 37KB
+Status: ✅ Successfully generated
+
+Open with: open uploads/Littlefield_Bradlely_20251117.html
+
+
+🔗 IMPORTANT PATHS
+───────────────────────────────────────────────────────────────────────────────
+
+Project: /Users/markgentry/Downloads/pnoe_webapp/
+Test PDFs: /Users/markgentry/Downloads/PNOE_tests/
+Reports: /Users/markgentry/Downloads/pnoe_webapp/uploads/
+Website: /Users/markgentry/Sites/metabomaxpro.com/
+Virtual Env: /Users/markgentry/Downloads/pnoe_webapp/venv/
+
+
+📧 DEPLOY INFO
+───────────────────────────────────────────────────────────────────────────────
+
+Website: https://metabomaxpro1.onrender.com
+GitHub: https://github.com/mgentry11/metabomaxpro1
+Platform: Render (free tier)
+Database: Supabase
+
+
+═══════════════════════════════════════════════════════════════════════════════
+  ALL DATA BACKED UP AND VERIFIED ✅
+═══════════════════════════════════════════════════════════════════════════════

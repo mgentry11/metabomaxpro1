@@ -1,0 +1,123 @@
+═══════════════════════════════════════════════════════════════════════════════
+  🚨 AFTER CRASH/RESTART - GIVE THIS TO CLAUDE
+═══════════════════════════════════════════════════════════════════════════════
+
+TELL CLAUDE TO READ THIS FILE:
+/Users/markgentry/Downloads/pnoe_webapp/RESTORE_INSTRUCTIONS.txt
+
+OR JUST PASTE THIS COMMAND:
+cat /Users/markgentry/Downloads/pnoe_webapp/backup_20251117/SESSION_SUMMARY_CRITICAL_DATA.md
+
+═══════════════════════════════════════════════════════════════════════════════
+  BACKUP LOCATION
+═══════════════════════════════════════════════════════════════════════════════
+
+ABSOLUTE PATH:
+/Users/markgentry/Downloads/pnoe_webapp/backup_20251117/
+
+QUICK REFERENCE:
+/Users/markgentry/Downloads/pnoe_webapp/backup_20251117/QUICK_REFERENCE.txt
+
+FULL SESSION DETAILS:
+/Users/markgentry/Downloads/pnoe_webapp/backup_20251117/SESSION_SUMMARY_CRITICAL_DATA.md
+
+═══════════════════════════════════════════════════════════════════════════════
+  WHAT TO TELL CLAUDE AFTER CRASH
+═══════════════════════════════════════════════════════════════════════════════
+
+Option 1 (Simple):
+"Read this file: /Users/markgentry/Downloads/pnoe_webapp/backup_20251117/SESSION_SUMMARY_CRITICAL_DATA.md"
+
+Option 2 (Even Simpler):
+"Look at the backup in /Users/markgentry/Downloads/pnoe_webapp/backup_20251117/"
+
+Option 3 (Restore Everything):
+"Restore from backup_20251117 directory"
+
+═══════════════════════════════════════════════════════════════════════════════
+  FILES IN BACKUP
+═══════════════════════════════════════════════════════════════════════════════
+
+CODE FILES:
+  ✓ ai_basic_report.py - Basic report generator (copy to utils/)
+  ✓ ai_premium_report.py - Premium 30+ page report (copy to utils/)
+  ✓ upload_to_database.py - CLI database uploader (copy to .)
+  ✓ upload_report.py - Main report generator with --premium flag (copy to .)
+  ✓ process_all_tests.py - Batch processor (copy to .)
+
+DOCUMENTATION:
+  ✓ SESSION_SUMMARY_CRITICAL_DATA.md - Complete session details
+  ✓ QUICK_REFERENCE.txt - Fast commands
+  ✓ REPORT_TYPES_GUIDE.md - Full documentation
+  ✓ CLI_USAGE.md - CLI usage guide
+
+═══════════════════════════════════════════════════════════════════════════════
+  AUTO-RESTORE COMMAND
+═══════════════════════════════════════════════════════════════════════════════
+
+Give Claude this command to restore everything:
+
+cd /Users/markgentry/Downloads/pnoe_webapp && \
+cp backup_20251117/ai_basic_report.py utils/ && \
+cp backup_20251117/ai_premium_report.py utils/ && \
+cp backup_20251117/upload_to_database.py . && \
+cp backup_20251117/upload_report.py . && \
+cp backup_20251117/process_all_tests.py . && \
+echo "✅ All files restored from backup"
+
+═══════════════════════════════════════════════════════════════════════════════
+  WHAT WE BUILT (Summary)
+═══════════════════════════════════════════════════════════════════════════════
+
+1. AI_Basic_Report - Original comprehensive report (1-2 pages)
+2. AI_Premium_Report - NEW 30+ page premium report (Frank Shallenberger style)
+3. upload_to_database.py - CLI tool to upload reports to website
+4. Verified all algorithms - NO DEFAULTING (8 patients tested)
+5. Generated sample premium report for Brad (Littlefield Bradlely)
+
+COMMANDS:
+  Basic: python3 upload_report.py "test.pdf"
+  Premium: python3 upload_report.py "test.pdf" --premium
+  Upload: python3 upload_to_database.py your@email.com
+
+═══════════════════════════════════════════════════════════════════════════════
+  KEY PATHS
+═══════════════════════════════════════════════════════════════════════════════
+
+Project Root:
+  /Users/markgentry/Downloads/pnoe_webapp/
+
+Backup:
+  /Users/markgentry/Downloads/pnoe_webapp/backup_20251117/
+
+Test PDFs:
+  /Users/markgentry/Downloads/PNOE_tests/
+
+Generated Reports:
+  /Users/markgentry/Downloads/pnoe_webapp/uploads/
+
+Virtual Environment:
+  /Users/markgentry/Downloads/pnoe_webapp/venv/
+  (activate with: source venv/bin/activate)
+
+Website Code:
+  /Users/markgentry/Sites/metabomaxpro.com/
+
+═══════════════════════════════════════════════════════════════════════════════
+  SAMPLE PREMIUM REPORT GENERATED
+═══════════════════════════════════════════════════════════════════════════════
+
+Location: /Users/markgentry/Downloads/pnoe_webapp/uploads/Littlefield_Bradlely_20251117.html
+Patient: Littlefield Bradlely (Brad)
+Age: 54 (Biological: 51)
+Size: 908 lines, 37KB
+Status: ✅ Successfully generated and verified
+
+═══════════════════════════════════════════════════════════════════════════════
+  DATE CREATED
+═══════════════════════════════════════════════════════════════════════════════
+
+November 17, 2025 - Session completed successfully
+All data backed up and verified ✅
+
+═══════════════════════════════════════════════════════════════════════════════

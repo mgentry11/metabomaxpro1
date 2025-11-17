@@ -1,0 +1,35 @@
+{
+  "patient_info": {
+    "name": "Kurtzer John",
+    "test_date": "10/07/2025",
+    "gender": "Male",
+    "age": 69,
+    "weight_kg": 98,
+    "height_cm": 180,
+    "test_source": "PNOE"
+  },
+  "core_scores": {
+    "metabolic_rate": 85,
+    "fat_burning": 49,
+    "lung_util": 80,
+    "hrv": 62,
+    "symp_parasym": 56,
+    "ventilation_eff": 61,
+    "breathing_coord": 53
+  },
+  "caloric_data": {
+    "rmr": 600,
+    "fat_percent": 28,
+    "cho_percent": 72
+  },
+  "metabolic_data": {
+    "rmr": 600,
+    "rer": 200.0
+  },
+  "heart_rate_data": {},
+  "all_text": [
+    "PNOE Ergometry results\nSubject \uf044 Measurement\nName Kurtzer John Status \u2713 Closed\nGender Male (69) Date 10/07/2025 08:44:47\nWeight 98 kg Duration 11' (40 breaths)\nHeight 180 cm Protocol \uf0c1Grow - RMR (/Protocol/Edit?id=819c33a7-6215-4d47-aa22-aed301484062)\nExercise Frequency 4 times a week Device PNOE 2516-338 / Absorber\nExercise Goal Longevity Granular HR 643\nReport Type RMR\nRMR\n600\nVO2 (ml/min)\n500\nVCO2 (ml/min)\n400\n300\n200\n100\n0\n50 100 150 200 250 300 350 400 450 500 550 600\nTime (sec)\n)nim/lm(\n2OCV\n&\n2OV\n80\n[02] Heart Rate\n75\n70\n65\n50 100 150 200 250 300 350 400 450 500 550 600\nTime (sec)\n)mpb(\nRH\n1.2\n1.1\n1.0\n0.9\n0.8\n0.7\n0.6\n0.5\n50 100 150 200 250 300 350 400 450 500 550 600\nTime (sec)\n)-(\nRER",
+    "VE/VO2\n40 VE/VCO2\n35\n30\n25\n50 100 150 200 250 300 350 400 450 500 550 600\nTime (sec)\n2OCV/EV\n&\n2OV/EV\nCHO (kcal/min)\nFAT (kcal/min)\n0.0\n0 50 100 150 200 250 300 350 400 450 500 550 600\nTime [sec]\n)nim/lack(TAF\n/\n)nim/lack(OHC\n3.5\n3.0 Total Cal (kcal/min)\nFAT (kcal/min)\n2.5\n2.0\n1.5\n1.0\n0.5\n0.0\n50 100 150 200 250 300 350 400 450 500 550 600\nTime [sec]\n)nim/lack(\ntaF/laC\nlatoT\nWatts\nSpeed\n0 0.0\n0 50 100 150 200 250 300 350 400 450 500 550 600\nTime [sec]\nWatts Speed\nFAT (kcal/min)\nCHO (kcal/min)\nWatts\nHR [bpm]\n0.0 0\n50 100 150 200 250 300 350 400 450 500 550 600\nTime [sec]\n)nim/lack(\nTAF/OHC\nWatts\nHR\n(bpm)",
+    "5.0\n4.0\n3.0\n2.0\n1.0\n0.0\n0.0 1.0 2.0 3.0 4.0 5.0\nVO2 (L/min)\n)nim/L(\n2OCV\n200\n150\n100\n50\n0\n0.0 1.0 2.0 3.0 4.0 5.0\nVO2 (L/min)\n)nim/L(\nEV\n200\n150\n100\n50\n0\n0.0 1.0 2.0 3.0 4.0 5.0\nVCO2 (L/min)\n)nim/L(\nEV\n50\nVE/VO2\n40\nVE/VCO2\n30\n20\n10\n0\n0.0 1.0 2.0 3.0 4.0 5.0\nVO2 (L/min)\n)-(\n2OV\n/\nEV\n5.0\n4.0\n3.0\n2.0\n1.0\n0.0\n0 50 100 150 200 250 300 350 400\nWL (Watts)\n)nim/L(\n2OV\n5.0\n4.0\n3.0\n2.0\n1.0\n0.0\n0 50 100 150 200 250 300 350 400\nWL (Watts)\n)nim/L(\n2OCV\n2.0\n1.5\n1.0\n0.5\n0.0\n0.0 1.0 2.0 3.0 4.0 5.0\nVO2 (L/min)\n)-(\nRER\n200\n150\n100\n50\n0\n0.0 1.0 2.0 3.0 4.0 5.0\nVO2 (L/min)\n)mpb(\nRH"
+  ]
+}

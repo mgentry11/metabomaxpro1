@@ -44,14 +44,14 @@ def find_user_by_email(email):
         print(f"❌ Error finding user: {e}")
         return None
 
-def upload_report_to_database(html_file, user_email, report_type=None):
+def upload_report_to_database(html_file, user_email, report_type='AI_basic_report'):
     """
     Upload a generated HTML report to the database
 
     Args:
         html_file: Path to HTML report file
         user_email: User's email address
-        report_type: Type of report (AI_basic_report or AI_premium_report), auto-detects if None
+        report_type: Type of report (AI_basic_report or AI_premium_report)
 
     Returns:
         Report ID if successful, None otherwise
@@ -127,10 +127,6 @@ def upload_report_to_database(html_file, user_email, report_type=None):
     chronological_age = patient_info.get('age')
     biological_age = extracted_data.get('biological_age', chronological_age)
 
-    # Extract file_id from filename (e.g., "98eaff0843aacd7c_report.html" -> "98eaff0843aacd7c")
-    filename = os.path.basename(html_file)
-    file_id = filename.replace('_report.html', '')
-
     report_data = {
         'user_id': user_id,
         'test_id': test_id,
@@ -145,8 +141,7 @@ def upload_report_to_database(html_file, user_email, report_type=None):
             'metabolic_data': extracted_data.get('metabolic_data', {})
         },
         'html_content': html_content,
-        'html_storage_path': os.path.basename(html_file),
-        'file_id': file_id
+        'html_storage_path': os.path.basename(html_file)
     }
 
     try:
