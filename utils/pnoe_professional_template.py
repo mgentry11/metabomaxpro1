@@ -114,7 +114,10 @@ th { background: linear-gradient(135deg, #f0f8ff 0%, #e6f3ff 100%); font-weight:
 .circular-progress-inner { width: 90px; height: 90px; border-radius: 50%;
                             display: flex; align-items: center; justify-content: center;
                             position: relative; }
-.score-text { font-size: 1.6em; font-weight: bold; color: #0066cc; text-align: center; line-height: 1; z-index: 1; }
+.circular-progress-inner::before { content: ''; position: absolute; width: 70px; height: 70px;
+                                    background: white; border-radius: 50%; z-index: 0; }
+.score-text { font-size: 1.6em; font-weight: bold; color: #0066cc; text-align: center; line-height: 1;
+              z-index: 1; position: relative; }
 .score-text small { font-size: 0.5em; display: block; margin-top: 2px; }
 
 /* HERO IMAGE */
