@@ -29,6 +29,13 @@ app.config['SECRET_KEY'] = os.getenv('FLASK_SECRET_KEY', secrets.token_hex(16))
 app.config['UPLOAD_FOLDER'] = 'uploads'
 app.config['REPORTS_FOLDER'] = 'reports'
 app.config['MAX_CONTENT_LENGTH'] = 200 * 1024 * 1024  # 200MB max file size
+
+# Session configuration for better reliability
+app.config['SESSION_COOKIE_SECURE'] = os.getenv('FLASK_ENV') == 'production'
+app.config['SESSION_COOKIE_HTTPONLY'] = True
+app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
+app.config['PERMANENT_SESSION_LIFETIME'] = 86400  # 24 hours
+
 ALLOWED_EXTENSIONS = {'pdf'}
 
 # Supabase configuration
@@ -113,13 +120,22 @@ def login_required(f):
     """Decorator to require login for routes"""
     @wraps(f)
     def decorated_function(*args, **kwargs):
+        # Debug session
+        print(f"[LOGIN_CHECK] Route: {request.endpoint}")
+        print(f"[LOGIN_CHECK] Session keys: {list(session.keys())}")
+        print(f"[LOGIN_CHECK] Has user: {'user' in session}")
+
         if 'user' not in session:
             # If this is an AJAX/JSON request, return JSON error instead of redirect
             if request.is_json or request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                print(f"[LOGIN_CHECK] Returning 401 - not logged in (AJAX request)")
                 return jsonify({'error': 'Please log in to access this feature', 'login_required': True}), 401
             # Otherwise, redirect to login page
+            print(f"[LOGIN_CHECK] Redirecting to login - not logged in")
             flash('Please log in to access this page.', 'warning')
             return redirect(url_for('login'))
+
+        print(f"[LOGIN_CHECK] User authenticated: {session['user'].get('id', 'unknown')}")
         return f(*args, **kwargs)
     return decorated_function
 
