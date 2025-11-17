@@ -1502,37 +1502,37 @@ def download_report(file_id, format='html'):
                     min-height: 0 !important;
                     max-height: none !important;
                 }
-                /* Patient card - preserve all data */
+                /* Patient card - preserve all data (20% smaller) */
                 .patient-card {
-                    padding: 8pt !important;
-                    margin: 3pt 0 !important;
+                    padding: 6pt !important;
+                    margin: 2pt 0 !important;
                     page-break-inside: avoid;
                 }
                 .patient-name {
-                    font-size: 14pt !important;
-                    margin-bottom: 3pt !important;
+                    font-size: 11pt !important;
+                    margin-bottom: 2pt !important;
                 }
                 .patient-details {
-                    font-size: 7pt !important;
-                    line-height: 1.2 !important;
+                    font-size: 6pt !important;
+                    line-height: 1.0 !important;
                     opacity: 1 !important;
                 }
                 .patient-details strong {
                     font-weight: 600 !important;
                 }
-                /* Hero section - preserve patient info */
+                /* Hero section - preserve patient info (20% smaller) */
                 .hero-badge {
-                    font-size: 7pt !important;
-                    padding: 2pt 4pt !important;
-                    margin-bottom: 2pt !important;
+                    font-size: 6pt !important;
+                    padding: 2pt 3pt !important;
+                    margin-bottom: 1pt !important;
                 }
                 .hero-title {
-                    font-size: 12pt !important;
-                    margin: 2pt 0 !important;
+                    font-size: 10pt !important;
+                    margin: 1pt 0 !important;
                 }
                 .hero-subtitle {
-                    font-size: 6pt !important;
-                    margin: 2pt 0 !important;
+                    font-size: 5pt !important;
+                    margin: 1pt 0 !important;
                 }
             ''', font_config=font_config)
 
@@ -1697,37 +1697,37 @@ def download_ai_report(file_id, format='html'):
                     min-height: 0 !important;
                     max-height: none !important;
                 }
-                /* Patient card - preserve all data */
+                /* Patient card - preserve all data (20% smaller) */
                 .patient-card {
-                    padding: 8pt !important;
-                    margin: 3pt 0 !important;
+                    padding: 6pt !important;
+                    margin: 2pt 0 !important;
                     page-break-inside: avoid;
                 }
                 .patient-name {
-                    font-size: 14pt !important;
-                    margin-bottom: 3pt !important;
+                    font-size: 11pt !important;
+                    margin-bottom: 2pt !important;
                 }
                 .patient-details {
-                    font-size: 7pt !important;
-                    line-height: 1.2 !important;
+                    font-size: 6pt !important;
+                    line-height: 1.0 !important;
                     opacity: 1 !important;
                 }
                 .patient-details strong {
                     font-weight: 600 !important;
                 }
-                /* Hero section - preserve patient info */
+                /* Hero section - preserve patient info (20% smaller) */
                 .hero-badge {
-                    font-size: 7pt !important;
-                    padding: 2pt 4pt !important;
-                    margin-bottom: 2pt !important;
+                    font-size: 6pt !important;
+                    padding: 2pt 3pt !important;
+                    margin-bottom: 1pt !important;
                 }
                 .hero-title {
-                    font-size: 12pt !important;
-                    margin: 2pt 0 !important;
+                    font-size: 10pt !important;
+                    margin: 1pt 0 !important;
                 }
                 .hero-subtitle {
-                    font-size: 6pt !important;
-                    margin: 2pt 0 !important;
+                    font-size: 5pt !important;
+                    margin: 1pt 0 !important;
                 }
             ''', font_config=font_config)
 
