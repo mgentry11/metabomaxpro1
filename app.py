@@ -1455,14 +1455,29 @@ def download_ai_report(file_id, format='html'):
 @app.route('/view/<file_id>')
 def view_report(file_id):
     """View generated report in browser with download button"""
-    report_path = os.path.join(app.config['REPORTS_FOLDER'], f"{file_id}_report.html")
 
-    if not os.path.exists(report_path):
-        return "Report not found", 404
-
-    # Read the report HTML
-    with open(report_path, 'r') as f:
-        report_html = f.read()
+    # First try to get from database
+    try:
+        response = supabase.table('reports').select('html_content').eq('file_id', file_id).execute()
+        if response.data and len(response.data) > 0:
+            report_html = response.data[0]['html_content']
+            print(f"[VIEW] Fetched report {file_id} from database")
+        else:
+            # Fallback to file system
+            report_path = os.path.join(app.config['REPORTS_FOLDER'], f"{file_id}_report.html")
+            if not os.path.exists(report_path):
+                return "Report not found", 404
+            with open(report_path, 'r') as f:
+                report_html = f.read()
+            print(f"[VIEW] Fetched report {file_id} from file system")
+    except Exception as e:
+        # Fallback to file system if database fails
+        print(f"[VIEW] Database error: {e}, falling back to file system")
+        report_path = os.path.join(app.config['REPORTS_FOLDER'], f"{file_id}_report.html")
+        if not os.path.exists(report_path):
+            return "Report not found", 404
+        with open(report_path, 'r') as f:
+            report_html = f.read()
 
     # Add navigation buttons at the top of the report
     nav_buttons = f'''
@@ -1499,14 +1514,29 @@ def view_report(file_id):
 @app.route('/view-ai/<file_id>')
 def view_ai_report(file_id):
     """View report with AI recommendations in browser with download button"""
-    report_path = os.path.join(app.config['REPORTS_FOLDER'], f"{file_id}_report_with_ai.html")
 
-    if not os.path.exists(report_path):
-        return "Report with AI not found", 404
-
-    # Read the report HTML
-    with open(report_path, 'r') as f:
-        report_html = f.read()
+    # First try to get from database
+    try:
+        response = supabase.table('reports').select('html_content').eq('file_id', file_id).execute()
+        if response.data and len(response.data) > 0:
+            report_html = response.data[0]['html_content']
+            print(f"[VIEW-AI] Fetched report {file_id} from database")
+        else:
+            # Fallback to file system
+            report_path = os.path.join(app.config['REPORTS_FOLDER'], f"{file_id}_report_with_ai.html")
+            if not os.path.exists(report_path):
+                return "Report with AI not found", 404
+            with open(report_path, 'r') as f:
+                report_html = f.read()
+            print(f"[VIEW-AI] Fetched report {file_id} from file system")
+    except Exception as e:
+        # Fallback to file system if database fails
+        print(f"[VIEW-AI] Database error: {e}, falling back to file system")
+        report_path = os.path.join(app.config['REPORTS_FOLDER'], f"{file_id}_report_with_ai.html")
+        if not os.path.exists(report_path):
+            return "Report with AI not found", 404
+        with open(report_path, 'r') as f:
+            report_html = f.read()
 
     # Add navigation buttons at the top of the report
     nav_buttons = f'''
