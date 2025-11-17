@@ -2685,6 +2685,10 @@ def generate_ai_recommendation():
         user_id = session['user']['id']
         user_email = session['user']['email']
 
+        print(f"[AI RECOMMEND] user_id: {user_id}")
+        print(f"[AI RECOMMEND] user_email: {user_email}")
+        print(f"[AI RECOMMEND] subject: {subject}")
+
         # CHECK AI CREDITS
         can_use_ai, message = can_use_ai_recommendations(user_id)
         if not can_use_ai:
@@ -2712,6 +2716,9 @@ def generate_ai_recommendation():
             user_goals=user_goals,
             custom_context=custom_context
         )
+
+        print(f"[AI RECOMMEND] Recommendations generated: {recommendations.keys()}")
+        print(f"[AI RECOMMEND] Has error: {'error' in recommendations}")
 
         # USE AI CREDIT (decrement counter)
         use_ai_credit(user_id)
