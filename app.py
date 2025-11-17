@@ -155,6 +155,10 @@ def get_user_subscription(user_id):
 
 def can_generate_basic_report(user_id):
     """Check if user can generate a basic report"""
+    # Admin bypass - check if user is admin
+    if 'user' in session and session['user'].get('email') == 'mark.gentry@gmail.com':
+        return True, "Admin access (unlimited)"
+
     subscription = get_user_subscription(user_id)
     if not subscription:
         return False, "No subscription found"
@@ -169,6 +173,10 @@ def can_generate_basic_report(user_id):
 
 def can_use_ai_recommendations(user_id):
     """Check if user has AI credits available"""
+    # Admin bypass - check if user is admin
+    if 'user' in session and session['user'].get('email') == 'mark.gentry@gmail.com':
+        return True, "Admin access (unlimited)"
+
     subscription = get_user_subscription(user_id)
     if not subscription:
         return False, "No subscription found"
@@ -188,6 +196,10 @@ def can_use_ai_recommendations(user_id):
 
 def use_ai_credit(user_id):
     """Decrement user's AI credits by 1"""
+    # Admin bypass - don't decrement for admin
+    if 'user' in session and session['user'].get('email') == 'mark.gentry@gmail.com':
+        return True
+
     subscription = get_user_subscription(user_id)
     if not subscription:
         return False
