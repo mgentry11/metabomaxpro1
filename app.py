@@ -1373,7 +1373,7 @@ def download_report(file_id, format='html'):
             pdf_css = CSS(string='''
                 @page {
                     size: letter;
-                    margin: 0.15in;
+                    margin: 0.1in;
                 }
                 body {
                     -webkit-print-color-adjust: exact;
@@ -1383,13 +1383,13 @@ def download_report(file_id, format='html'):
                     margin: 0;
                     padding: 0;
                 }
-                /* Fit images within document - very small */
+                /* Fit images within document - extra small */
                 img {
                     max-width: 100%;
-                    max-height: 60pt;
+                    max-height: 40pt;
                     height: auto;
                     display: block;
-                    margin: 0.5pt auto;
+                    margin: 0pt auto;
                     page-break-inside: auto;
                 }
                 /* Minimal headers */
@@ -1444,9 +1444,9 @@ def download_report(file_id, format='html'):
                     margin: 1pt 0 !important;
                     page-break-inside: auto;
                 }
-                /* Reduce chart size significantly */
+                /* Reduce chart size to minimum */
                 canvas {
-                    max-height: 70px !important;
+                    max-height: 50px !important;
                     max-width: 100% !important;
                     height: auto !important;
                     page-break-inside: auto;
@@ -1536,7 +1536,7 @@ def download_ai_report(file_id, format='html'):
             pdf_css = CSS(string='''
                 @page {
                     size: letter;
-                    margin: 0.15in;
+                    margin: 0.1in;
                 }
                 body {
                     -webkit-print-color-adjust: exact;
@@ -1546,13 +1546,13 @@ def download_ai_report(file_id, format='html'):
                     margin: 0;
                     padding: 0;
                 }
-                /* Fit images within document - very small */
+                /* Fit images within document - extra small */
                 img {
                     max-width: 100%;
-                    max-height: 60pt;
+                    max-height: 40pt;
                     height: auto;
                     display: block;
-                    margin: 0.5pt auto;
+                    margin: 0pt auto;
                     page-break-inside: auto;
                 }
                 /* Minimal headers */
@@ -1607,9 +1607,9 @@ def download_ai_report(file_id, format='html'):
                     margin: 1pt 0 !important;
                     page-break-inside: auto;
                 }
-                /* Reduce chart size significantly */
+                /* Reduce chart size to minimum */
                 canvas {
-                    max-height: 70px !important;
+                    max-height: 50px !important;
                     max-width: 100% !important;
                     height: auto !important;
                     page-break-inside: auto;
