@@ -696,6 +696,12 @@ body {
 
     def _generate_hero(self):
         """Hero page for Mark"""
+        # Calculate additional patient info
+        weight_lbs = round(self.patient_info.get('weight_kg', 0) * 2.20462, 1)
+        height_in = round(self.patient_info.get('height_cm', 0) / 2.54, 1)
+        height_ft = int(height_in // 12)
+        height_remaining_in = int(height_in % 12)
+
         return f"""
 <div class="hero">
     <img src="{self.LOGO_URL}" alt="Optimal Vitality" class="logo" onerror="this.style.display='none'">
@@ -711,7 +717,13 @@ body {
         <div class="patient-card">
             <div class="patient-name">{self.patient_info['name']}</div>
             <div class="patient-details">
-                Test Date: {self.patient_info['test_date']} • Performance Assessment • Optimal Vitality
+                <strong>Test Date:</strong> {self.patient_info['test_date']} •
+                <strong>Age:</strong> {self.patient_info.get('age', 'N/A')} years •
+                <strong>Gender:</strong> {self.patient_info.get('gender', 'N/A')}<br>
+                <strong>Weight:</strong> {weight_lbs} lbs ({self.patient_info.get('weight_kg', 'N/A')} kg) •
+                <strong>Height:</strong> {height_ft}'{height_remaining_in}" ({self.patient_info.get('height_cm', 'N/A')} cm) •
+                <strong>Test Type:</strong> {self.patient_info.get('test_type', 'Performance Assessment')}<br>
+                <strong>Facility:</strong> Optimal Vitality
             </div>
         </div>
     </div>
