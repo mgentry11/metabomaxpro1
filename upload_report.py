@@ -12,7 +12,7 @@ from datetime import datetime
 # Add utils to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'utils'))
 
-def upload_and_generate_report(pdf_path, user_id='admin', report_type='Performance', biological_age_override=None, premium=False):
+def upload_and_generate_report(pdf_path, user_id='admin', report_type='Performance', biological_age_override=None, premium=False, super_premium=False):
     """
     Upload a PDF, extract data, generate report, and save to database
 
@@ -42,11 +42,19 @@ def upload_and_generate_report(pdf_path, user_id='admin', report_type='Performan
     from app import extract_pnoe_data
     from ai_basic_report import generate_beautiful_report as generate_basic_report
     from ai_premium_report import generate_premium_report
+    from ai_super_premium_report import generate_super_premium_report
     from calculate_scores import calculate_biological_age
 
     # Select report generator
-    generate_report = generate_premium_report if premium else generate_basic_report
-    report_label = "PREMIUM" if premium else "BASIC"
+    if super_premium:
+        generate_report = generate_super_premium_report
+        report_label = "SUPER PREMIUM"
+    elif premium:
+        generate_report = generate_premium_report
+        report_label = "PREMIUM"
+    else:
+        generate_report = generate_basic_report
+        report_label = "BASIC"
 
     # Read PDF file
     with open(pdf_path, 'rb') as f:
@@ -168,9 +176,9 @@ def upload_and_generate_report(pdf_path, user_id='admin', report_type='Performan
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:
-        print("Usage: python3 upload_report.py /path/to/test.pdf [report_type] [biological_age] [--premium]")
+        print("Usage: python3 upload_report.py /path/to/test.pdf [report_type] [biological_age] [--premium | --super-premium]")
         print("\nExamples:")
-        print("  # Basic report")
+        print("  # Basic report (single page)")
         print("  python3 upload_report.py test.pdf")
         print("  python3 upload_report.py test.pdf Performance")
         print("  python3 upload_report.py test.pdf Longevity 45")
@@ -178,23 +186,28 @@ if __name__ == '__main__':
         print("  # Premium report (30+ pages)")
         print("  python3 upload_report.py test.pdf Performance --premium")
         print("  python3 upload_report.py test.pdf Longevity 45 --premium")
+        print()
+        print("  # SUPER PREMIUM report (THE ULTIMATE - single page with ALL details + images)")
+        print("  python3 upload_report.py test.pdf Performance --super-premium")
+        print("  python3 upload_report.py test.pdf Longevity 45 --super-premium")
         sys.exit(1)
 
     pdf_path = sys.argv[1]
     report_type = 'Performance'
     bio_age = None
     premium = '--premium' in sys.argv
+    super_premium = '--super-premium' in sys.argv
 
     # Parse arguments
     for i, arg in enumerate(sys.argv[2:], 2):
-        if arg == '--premium':
+        if arg in ['--premium', '--super-premium']:
             continue
         elif arg.isdigit():
             bio_age = int(arg)
         else:
             report_type = arg
 
-    result = upload_and_generate_report(pdf_path, report_type=report_type, biological_age_override=bio_age, premium=premium)
+    result = upload_and_generate_report(pdf_path, report_type=report_type, biological_age_override=bio_age, premium=premium, super_premium=super_premium)
 
     if result.get('error'):
         print(f"\n❌ ERROR: {result['error']}\n")

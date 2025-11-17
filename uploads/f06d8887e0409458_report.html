@@ -1,909 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Performance Metabolic Blueprint 2025</title>
+    <style>
 
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Metabolic Blueprint - Dee Jay</title>
-            
-        <style>
-            /* Premium Report Styles */
-            @page {
-                size: letter;
-                margin: 0.5in;
-            }
+* { box-sizing: border-box; }
+body { max-width: 880px; margin: 0 auto; padding: 20px 40px; font-family: Arial, sans-serif;
+       line-height: 1.2; background: linear-gradient(135deg, #f8fbff 0%, #ffffff 100%); font-size: 0.85em; }
 
-            * {
-                margin: 0;
-                padding: 0;
-                box-sizing: border-box;
-            }
+/* HEADER */
+.header { text-align: center; margin-bottom: 15px; background: linear-gradient(135deg, #0066cc 0%, #4da6ff 100%);
+          color: white; padding: 12px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,102,204,0.2); }
+.brand { font-size: 1.1em; margin-bottom: 4px; }
+h1 { color: white; font-size: 1.8em; margin: 8px 0; font-weight: bold; }
+.subtitle { margin: 4px 0; font-size: 0.9em; opacity: 0.95; }
 
-            body {
-                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-                font-size: 11pt;
-                line-height: 1.6;
-                color: #1f2937;
-            }
+/* SECTION HEADERS */
+h2 { color: #0066cc; font-size: 1.2em; margin: 12px 0 6px 0; border-bottom: 2px solid #4da6ff;
+     padding: 5px; background: linear-gradient(90deg, #f0f8ff 0%, transparent 100%); border-radius: 5px; }
+h3 { color: #0066cc; font-size: 1.05em; margin: 10px 0 5px 0; }
 
-            /* Cover Page */
-            .cover-page {
-                page-break-after: always;
-                text-align: center;
-                padding: 3in 1in;
-            }
+/* PATIENT INFO TABLE */
+.patient-info { background: #f0f8ff; border: 2px solid #4da6ff; border-radius: 8px; padding: 8px; margin: 8px 0; }
+table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 0.9em; background: white;
+        border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+th, td { border: 1px solid #ddd; padding: 4px 8px; }
+th { background: linear-gradient(135deg, #f0f8ff 0%, #e6f3ff 100%); font-weight: bold; color: #003366; }
 
-            .cover-title {
-                font-size: 32pt;
-                font-weight: 700;
-                color: #10b981;
-                margin-bottom: 0.5in;
-            }
+/* EXECUTIVE SUMMARY - 3 CARD GRID */
+.executive-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin: 10px 0; }
+.metric-card { background: white; border: 2px solid #ddd; border-radius: 8px; padding: 10px;
+               text-align: center; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+.metric-card.excellent { border-color: #00cc00; }
+.metric-card.good { border-color: #0066cc; }
 
-            .cover-subtitle {
-                font-size: 24pt;
-                font-weight: 600;
-                color: #374151;
-                margin-bottom: 0.3in;
-            }
+/* CIRCULAR PROGRESS */
+.circular-progress { display: flex; justify-content: center; margin: 8px 0; }
+.circular-progress-inner { width: 90px; height: 90px; border-radius: 50%;
+                            display: flex; align-items: center; justify-content: center;
+                            position: relative; }
+.circular-progress-inner::before { content: ''; position: absolute; width: 70px; height: 70px;
+                                    background: white; border-radius: 50%; z-index: 0; }
+.score-text { font-size: 1.6em; font-weight: bold; color: #0066cc; text-align: center; line-height: 1;
+              z-index: 1; position: relative; }
+.score-text small { font-size: 0.5em; display: block; margin-top: 2px; }
 
-            .cover-patient {
-                font-size: 20pt;
-                font-weight: 500;
-                color: #1f2937;
-                margin-bottom: 1in;
-            }
+/* HERO IMAGE */
+.hero-img { text-align: center; margin: 10px 0; }
+.hero-img img { max-width: 450px; width: 100%; height: auto; border-radius: 8px;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.15); border: 2px solid #0066cc; }
 
-            .cover-details {
-                text-align: left;
-                max-width: 500px;
-                margin: 0 auto;
-            }
+/* BIOLOGICAL AGE */
+.age-comparison-visual { background: linear-gradient(135deg, #e6f3ff 0%, #ffffff 100%);
+                         border: 2px solid #00cc00; border-radius: 10px; padding: 12px;
+                         text-align: center; box-shadow: 0 3px 8px rgba(0,204,0,0.2); margin: 10px 0; }
+.age-arrow { font-size: 2em; color: #00cc00; font-weight: bold; margin: 5px 0; }
 
-            .detail-row {
-                display: flex;
-                justify-content: space-between;
-                margin-bottom: 0.2in;
-                font-size: 12pt;
-            }
+/* CORE METRICS - VISUAL PROGRESS BARS */
+.metrics-visual { margin: 10px 0; }
+.metric-row { display: flex; align-items: center; margin: 4px 0; padding: 5px;
+              background: white; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+.metric-icon { width: 25px; text-align: center; font-size: 1.1em; }
+.metric-name { flex: 0 0 180px; font-size: 0.95em; }
+.progress-container { flex: 1; height: 18px; background: #e0e0e0; border-radius: 10px;
+                       margin: 0 8px; overflow: hidden; }
+.progress-bar { height: 100%; border-radius: 10px; transition: width 0.3s; }
+.progress-bar.excellent { background: linear-gradient(90deg, #00cc00 0%, #66ff66 100%); }
+.progress-bar.good { background: linear-gradient(90deg, #0066cc 0%, #66b3ff 100%); }
+.progress-bar.neutral { background: linear-gradient(90deg, #999999 0%, #cccccc 100%); }
+.metric-score { flex: 0 0 45px; font-weight: bold; text-align: right; }
+.metric-label { flex: 0 0 85px; font-weight: bold; font-size: 0.85em; }
 
-            /* Standard Pages */
-            .disclaimer-page,
-            .pillars-page,
-            .overview-page,
-            .metrics-intro-page,
-            .metric-page,
-            .caloric-page,
-            .macro-page,
-            .schedule-page,
-            .supplements-section {
-                page-break-after: always;
-                padding: 0.5in;
-            }
+/* CALORIC BALANCE */
+.caloric-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 10px 0; }
+.caloric-card { background: white; border: 2px solid; border-radius: 8px; padding: 12px;
+                text-align: center; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+.caloric-card.burn { border-color: #ff6600; }
+.caloric-card.eat { border-color: #00cc00; }
+.caloric-icon { font-size: 2.5em; margin-bottom: 5px; }
+.caloric-card h3 { margin: 5px 0; color: #003366; }
+.caloric-card p { margin: 3px 0; font-size: 0.95em; }
 
-            h1 {
-                font-size: 24pt;
-                font-weight: 700;
-                color: #10b981;
-                margin-bottom: 0.3in;
-                border-bottom: 3px solid #10b981;
-                padding-bottom: 0.1in;
-            }
+/* FUEL SOURCES BAR */
+.fuel-sources { background: white; border: 2px solid #0066cc; border-radius: 8px; padding: 10px; margin: 10px 0; }
+.fuel-bar { display: flex; height: 30px; border-radius: 8px; overflow: hidden; margin-top: 8px; }
+.fuel-fats, .fuel-carbs { display: flex; align-items: center; justify-content: center;
+                          color: white; font-weight: bold; font-size: 0.9em; }
+.fuel-fats { background: linear-gradient(90deg, #ff6600 0%, #ffaa66 100%); }
+.fuel-carbs { background: linear-gradient(90deg, #0066cc 0%, #66b3ff 100%); }
 
-            h2 {
-                font-size: 16pt;
-                font-weight: 600;
-                color: #374151;
-                margin-top: 0.2in;
-                margin-bottom: 0.1in;
-            }
+/* TRAINING ZONES */
+.zone-cards { margin: 10px 0; }
+.zone-card { padding: 8px; border-radius: 8px; border: 2px solid; display: flex;
+             align-items: center; margin-bottom: 6px; background: white; }
+.zone-card.zone1 { border-color: #999999; }
+.zone-card.zone2 { border-color: #0066cc; border-width: 3px; box-shadow: 0 4px 12px rgba(0,102,204,0.3); }
+.zone-card.zone3 { border-color: #ffaa00; }
+.zone-card.zone4 { border-color: #ff6600; }
+.zone-card.zone5 { border-color: #cc0000; }
+.zone-icon { font-size: 1.5em; margin-right: 10px; width: 35px; text-align: center; }
+.zone-info { flex: 1; }
+.zone-name { font-weight: bold; color: #003366; margin-bottom: 2px; }
+.zone-hr { color: #0066cc; font-weight: bold; font-size: 1.05em; margin: 2px 0; }
+.zone-description { font-size: 0.85em; color: #666; }
+.primary-badge { background: #ffaa00; color: white; padding: 2px 8px; border-radius: 10px;
+                 font-size: 0.7em; margin-left: 6px; }
 
-            h3 {
-                font-size: 14pt;
-                font-weight: 600;
-                color: #1f2937;
-                margin-bottom: 0.1in;
-            }
+/* WEEKLY TRAINING PLAN */
+.training-plan { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 10px 0; }
+.training-card { background: white; border: 2px solid #0066cc; border-radius: 8px;
+                 padding: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+.training-card.priority-high { border-color: #cc0000; }
+.training-icon { font-size: 1.3em; margin-right: 6px; }
+.priority-badge { padding: 4px 8px; border-radius: 15px; font-size: 0.75em;
+                  font-weight: bold; color: white; display: inline-block; margin: 4px 0; }
+.priority-badge.high { background: #cc0000; }
+.priority-badge.medium { background: #ff6600; }
+.priority-badge.low { background: #999999; }
 
-            p {
-                margin-bottom: 0.15in;
-            }
+/* INTERVENTIONS GRID */
+.interventions-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 10px 0; }
+.intervention-card { background: white; border: 2px solid #0066cc; border-radius: 8px;
+                      padding: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); text-align: center; }
+.intervention-card img { width: 100%; height: 120px; object-fit: cover; border-radius: 8px;
+                         margin-bottom: 8px; }
+.intervention-icon { font-size: 2.5em; margin-bottom: 8px; }
+.evidence-badge { background: linear-gradient(90deg, #00cc00 0%, #66ff66 100%);
+                  color: white; padding: 3px 8px; border-radius: 10px; font-size: 0.7em;
+                  display: inline-block; margin-top: 6px; }
 
-            /* Pillars Grid */
-            .pillars-grid {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 0.3in;
-                margin-top: 0.2in;
-            }
+/* ACTION PLAN - AUTO NUMBERED */
+.action-plan { counter-reset: action-counter; margin: 10px 0; }
+.action-item { counter-increment: action-counter; display: flex; margin: 6px 0; padding: 8px;
+               border-left: 4px solid #0066cc; background: #f8fbff; border-radius: 5px; }
+.action-number { background: #0066cc; color: white; width: 30px; height: 30px;
+                 border-radius: 50%; display: flex; align-items: center; justify-content: center;
+                 font-weight: bold; margin-right: 10px; flex-shrink: 0; }
+.action-number::before { content: counter(action-counter); }
 
-            .pillar {
-                background: #f9fafb;
-                padding: 0.2in;
-                border-radius: 8px;
-                border-left: 4px solid #10b981;
-            }
+/* 90-DAY PROTOCOL - TIMELINE */
+.timeline-visual { position: relative; margin: 15px 0; padding-left: 40px; }
+.timeline-line { position: absolute; left: 24px; top: 0; bottom: 0; width: 3px;
+                 background: linear-gradient(180deg, #0066cc 0%, #4da6ff 100%); }
+.timeline-phase { position: relative; margin: 8px 0; padding: 8px 8px 8px 30px;
+                  border: 2px solid #4da6ff; border-radius: 8px; background: white; }
+.timeline-phase::before { content: ''; position: absolute; left: -28px; top: 15px;
+                          width: 12px; height: 12px; background: #0066cc; border-radius: 50%;
+                          border: 2px solid white; box-shadow: 0 0 0 2px #0066cc; z-index: 1; }
+.timeline-phase.retest { border-color: #00cc00; background: linear-gradient(135deg, #f0fff0 0%, #ffffff 100%); }
+.timeline-phase.retest::before { background: #00cc00; box-shadow: 0 0 0 2px #00cc00; }
+.phase-weeks { font-weight: bold; color: #0066cc; margin-bottom: 4px; }
+.timeline-phase.retest .phase-weeks { color: #00cc00; }
 
-            /* Overview Dashboard */
-            .overview-summary {
-                display: flex;
-                gap: 0.2in;
-                margin: 0.3in 0;
-                align-items: center;
-            }
+/* DISCLAIMERS */
+.disclaimer { background: linear-gradient(135deg, #fff3cd 0%, #ffffff 100%);
+              border: 2px solid #ffc107; padding: 15px; border-radius: 10px; margin: 10px 0; }
+.peptide-section { background: linear-gradient(135deg, #fff5f5 0%, #ffffff 100%);
+                   border: 2px solid #ff6b6b; padding: 20px; border-radius: 10px; margin: 10px 0; }
+.warning-box { text-align: center; margin-top: 30px; font-size: 1em; color: #cc0000;
+               font-weight: bold; border: 2px solid #cc0000; padding: 15px; border-radius: 10px;
+               background: #ffe6e6; }
 
-            .summary-count {
-                font-size: 28pt;
-                font-weight: 700;
-                padding: 0.15in 0.25in;
-                border-radius: 8px;
-                color: white;
-            }
+/* UTILITIES */
+.text-center { text-align: center; }
+strong { font-weight: bold; }
 
-            .summary-count.severe { background: #991b1b; }
-            .summary-count.limitation { background: #ef4444; }
-            .summary-count.neutral { background: #f59e0b; }
-            .summary-count.good { background: #3b82f6; }
-            .summary-count.excellent { background: #10b981; }
+    </style>
+</head>
+<body>
 
-            .summary-label {
-                font-size: 14pt;
-                font-weight: 600;
-                color: #6b7280;
-            }
+<div class="header">
+    <div class="brand">Optimal Vitality ⚡</div>
+    <h1>PERFORMANCE METABOLIC BLUEPRINT 2025</h1>
+    <p class="subtitle">Comprehensive metabolic testing, training zones, and performance optimization</p>
+</div>
 
-            .overview-legend {
-                display: flex;
-                gap: 0.2in;
-                margin-bottom: 0.3in;
-                font-size: 9pt;
-            }
 
-            .legend-item {
-                padding: 0.05in 0.1in;
-                border-radius: 4px;
-                color: white;
-                font-weight: 500;
-            }
+<div class="patient-info">
+<h2>📋 Patient Information</h2>
+<table>
+<tr><th>Name</th><td>Dee Jay</td><th>Test Date</th><td>10/10/2025</td></tr>
+<tr><th>Age</th><td>54 years</td><th>Gender</th><td>Female</td></tr>
+<tr><th>Weight</th><td>114.6 lbs (52 kg)</td><th>Height</th><td>5.0'1" (155 cm)</td></tr>
+<tr><th>Test Type</th><td>Performance</td><th>Facility</th><td>Optimal Vitality</td></tr>
+</table>
+</div>
 
-            .legend-item.severe { background: #991b1b; }
-            .legend-item.limitation { background: #ef4444; }
-            .legend-item.neutral { background: #f59e0b; }
-            .legend-item.good { background: #3b82f6; }
-            .legend-item.excellent { background: #10b981; }
 
-            /* Score Bars */
-            .score-bar-container {
-                margin: 0.2in 0;
-            }
-
-            .score-label {
-                font-size: 12pt;
-                font-weight: 600;
-                color: #1f2937;
-                margin-bottom: 0.1in;
-            }
-
-            .score-track {
-                height: 30px;
-                background: #e5e7eb;
-                border-radius: 15px;
-                position: relative;
-                overflow: hidden;
-            }
-
-            .score-fill {
-                height: 100%;
-                border-radius: 15px;
-                transition: width 0.3s ease;
-            }
-
-            .score-markers {
-                display: flex;
-                justify-content: space-between;
-                font-size: 8pt;
-                color: #6b7280;
-                margin-top: 0.05in;
-            }
-
-            .score-zones {
-                display: flex;
-                justify-content: space-between;
-                margin-top: 0.1in;
-                font-size: 8pt;
-            }
-
-            .zone {
-                padding: 0.03in 0.08in;
-                border-radius: 4px;
-                color: white;
-                font-weight: 500;
-            }
-
-            .zone.severe { background: #991b1b; }
-            .zone.limitation { background: #ef4444; }
-            .zone.neutral { background: #f59e0b; }
-            .zone.good { background: #3b82f6; }
-            .zone.excellent { background: #10b981; }
-
-            /* Metric Pages */
-            .metric-section {
-                margin: 0.2in 0;
-                background: #f9fafb;
-                padding: 0.2in;
-                border-radius: 8px;
-            }
-
-            /* Caloric Balance */
-            .caloric-grid {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 0.3in;
-                margin: 0.2in 0;
-            }
-
-            .caloric-box {
-                background: #f9fafb;
-                padding: 0.2in;
-                border-radius: 8px;
-                border-top: 4px solid #10b981;
-            }
-
-            .cal-section {
-                margin: 0.15in 0;
-            }
-
-            .cal-label {
-                font-size: 10pt;
-                color: #6b7280;
-                margin-bottom: 0.05in;
-            }
-
-            .cal-value {
-                font-size: 18pt;
-                font-weight: 700;
-                color: #10b981;
-            }
-
-            .fuel-sources {
-                margin-top: 0.3in;
-            }
-
-            .fuel-bars {
-                margin: 0.2in 0;
-            }
-
-            .fuel-bar {
-                display: grid;
-                grid-template-columns: 120px 1fr 60px;
-                gap: 0.1in;
-                align-items: center;
-                margin-bottom: 0.15in;
-            }
-
-            .fuel-label {
-                font-weight: 600;
-                color: #1f2937;
-            }
-
-            .fuel-track {
-                height: 24px;
-                background: #e5e7eb;
-                border-radius: 12px;
-                overflow: hidden;
-            }
-
-            .fuel-fill {
-                height: 100%;
-                border-radius: 12px;
-            }
-
-            .fuel-percent {
-                font-weight: 700;
-                color: #1f2937;
-                text-align: right;
-            }
-
-            .fuel-note {
-                font-size: 9pt;
-                color: #6b7280;
-                font-style: italic;
-                margin-top: 0.2in;
-            }
-
-            /* Print Optimization */
-            @media print {
-                body {
-                    print-color-adjust: exact;
-                    -webkit-print-color-adjust: exact;
-                }
-            }
-        </style>
-        
-        </head>
-        <body>
-            
-        <div class="cover-page">
-            <h1 class="cover-title">Metabolic Blueprint & Nutrition Analysis</h1>
-            <h2 class="cover-subtitle">Longevity</h2>
-            <h3 class="cover-patient">Dee Jay</h3>
-            <div class="cover-details">
-                <div class="detail-row">
-                    <span class="detail-label">Test Type:</span>
-                    <span class="detail-value">Resting</span>
-                </div>
-                <div class="detail-row">
-                    <span class="detail-label">Optimal Vitality</span>
-                </div>
-                <div class="detail-row">
-                    <span class="detail-label">Test Date:</span>
-                    <span class="detail-value">10/10/2025</span>
-                    <span class="detail-provider">provider@clinic.com</span>
-                </div>
+<h2>📊 Executive Summary</h2>
+<div class="executive-grid">
+    <div class="metric-card">
+        <div class="circular-progress">
+            <div class="circular-progress-inner" style="background: conic-gradient(#0066cc 0deg, #0066cc 248.39999999999998deg, #e0e0e0 248.39999999999998deg, #e0e0e0 360deg);">
+                <div class="score-text">69<br/><small>/100</small></div>
             </div>
         </div>
-        
-            
-        <div class="disclaimer-page">
-            <h2>Disclaimer</h2>
-            <p>The present Assessment/Report is intended for information purposes only and under no circumstances should it be considered a substitute for professional medical advice, diagnosis or treatment. You need to consult your physician and/or family doctor prior to engaging in any exercise program and/or changing your diet and/or habits as a result of the information provided by the present Assessment/Report.</p>
+        <strong>Overall Health Score</strong>
+    </div>
+    <div class="metric-card excellent">
+        <div style="font-size:2.5em;color:#00cc00">✓</div>
+        <strong>2 of 7</strong><br/><small>Excellent Metrics</small>
+    </div>
+    <div class="metric-card good">
+        <div style="font-size:2.5em;color:#0066cc">●</div>
+        <strong>5 of 7</strong><br/><small>Good+ Metrics</small>
+    </div>
+</div>
 
-            <p>Company makes no representation that the present Assessment/Report will result in any improvement of your health and fitness status. You agree that participating in any workout regimen, physical exercise or activity may result in an increased risk of physical injury based on the nature, frequency, intensity and duration of the workout regimen, physical exercise or activity.</p>
 
-            <p>You agree that if you participate in any workout regimen, physical exercise or activity, you do so at your own risk and you assume the risk of any and all injury and/or damage you may suffer.</p>
-        </div>
-        
-            
-        <div class="pillars-page">
-            <h1>Pillars of Longevity</h1>
-            <div class="pillars-grid">
-                <div class="pillar">
-                    <h3>Mental status</h3>
-                    <p>Mental status is a fundamental pillar of wellness since a healthy mind is a prerequisite for healthy choices and a healthy lifestyle. A well-functioning brain is tightly linked to effective breathing since our breath drives our brain's chemistry balance. On the contrary, poor breathing is linked to anxiety and lower cognitive capacity.</p>
-                </div>
-                <div class="pillar">
-                    <h3>Heart fitness</h3>
-                    <p>A healthy heart is critical for overall wellness since cardiovascular dysfunction is the second most likely cause of mortality and one of the most common threats to the quality of life. A healthy heart is effective in pumping oxygen-rich blood into your body.</p>
-                </div>
-                <div class="pillar">
-                    <h3>Lung fitness</h3>
-                    <p>High lung fitness is critical for a long and healthy life as lung dysfunction has become one of the most common causes of mortality. Healthy lungs are effective in transferring oxygen from their surface into the bloodstream.</p>
-                </div>
-                <div class="pillar">
-                    <h3>Posture</h3>
-                    <p>Lower back pain and musculoskeletal problems are the number one driver of lower quality of life since they are a source of chronic pain and physical inactivity. Good posture is inextricably related to our breath since the way we inhale is one of the most potent regulators of our core's stability.</p>
-                </div>
-                <div class="pillar">
-                    <h3>Cellular performance</h3>
-                    <p>Cellular performance is a fundamental driver of wellness as it provides one of the most potent shields against metabolic dysfunction and obesity. Healthy cells absorb oxygen efficiently, a prerequisite for burning fat and maintaining a high metabolism.</p>
-                </div>
-            </div>
-        </div>
-        
-            
-        <div class="overview-page">
-            <h1>Overview</h1>
-            <div class="overview-summary">
-                <div class="summary-count severe">0</div>
-                <div class="summary-count limitation">0</div>
-                <div class="summary-count neutral">2</div>
-                <div class="summary-count good">3</div>
-                <div class="summary-count excellent">2</div>
-                <div class="summary-label">Core Limitations</div>
-            </div>
-            <div class="overview-legend">
-                <span class="legend-item severe">Severe limitation</span>
-                <span class="legend-item limitation">Limitation</span>
-                <span class="legend-item neutral">Neutral</span>
-                <span class="legend-item good">Good</span>
-                <span class="legend-item excellent">Excellent</span>
-            </div>
-            <div class="overview-scores">
-                
-        <div class="score-bar-container">
-            <div class="score-label">Sympathetic/Parasympathetic activation - 56% | Neutral</div>
-            <div class="score-track">
-                <div class="score-markers">
-                    <span>0%</span>
-                    <span>20%</span>
-                    <span>40%</span>
-                    <span>60%</span>
-                    <span>80%</span>
-                    <span>100%</span>
-                </div>
-                <div class="score-fill" style="width: 56%; background: #f59e0b;"></div>
-            </div>
-            <div class="score-zones">
-                <span class="zone severe">Severe limitation</span>
-                <span class="zone limitation">Limitation</span>
-                <span class="zone neutral">Neutral</span>
-                <span class="zone good">Good</span>
-                <span class="zone excellent">Excellent</span>
-            </div>
-        </div>
-        
-        <div class="score-bar-container">
-            <div class="score-label">Breathing Coordination - 64% | Good</div>
-            <div class="score-track">
-                <div class="score-markers">
-                    <span>0%</span>
-                    <span>20%</span>
-                    <span>40%</span>
-                    <span>60%</span>
-                    <span>80%</span>
-                    <span>100%</span>
-                </div>
-                <div class="score-fill" style="width: 64%; background: #3b82f6;"></div>
-            </div>
-            <div class="score-zones">
-                <span class="zone severe">Severe limitation</span>
-                <span class="zone limitation">Limitation</span>
-                <span class="zone neutral">Neutral</span>
-                <span class="zone good">Good</span>
-                <span class="zone excellent">Excellent</span>
-            </div>
-        </div>
-        
-        <div class="score-bar-container">
-            <div class="score-label">Ventilation efficiency - 71% | Good</div>
-            <div class="score-track">
-                <div class="score-markers">
-                    <span>0%</span>
-                    <span>20%</span>
-                    <span>40%</span>
-                    <span>60%</span>
-                    <span>80%</span>
-                    <span>100%</span>
-                </div>
-                <div class="score-fill" style="width: 71%; background: #3b82f6;"></div>
-            </div>
-            <div class="score-zones">
-                <span class="zone severe">Severe limitation</span>
-                <span class="zone limitation">Limitation</span>
-                <span class="zone neutral">Neutral</span>
-                <span class="zone good">Good</span>
-                <span class="zone excellent">Excellent</span>
-            </div>
-        </div>
-        
-        <div class="score-bar-container">
-            <div class="score-label">Lung utilization - 87% | Excellent</div>
-            <div class="score-track">
-                <div class="score-markers">
-                    <span>0%</span>
-                    <span>20%</span>
-                    <span>40%</span>
-                    <span>60%</span>
-                    <span>80%</span>
-                    <span>100%</span>
-                </div>
-                <div class="score-fill" style="width: 87%; background: #10b981;"></div>
-            </div>
-            <div class="score-zones">
-                <span class="zone severe">Severe limitation</span>
-                <span class="zone limitation">Limitation</span>
-                <span class="zone neutral">Neutral</span>
-                <span class="zone good">Good</span>
-                <span class="zone excellent">Excellent</span>
-            </div>
-        </div>
-        
-        <div class="score-bar-container">
-            <div class="score-label">Heart Rate Variability (HRV) - 74% | Good</div>
-            <div class="score-track">
-                <div class="score-markers">
-                    <span>0%</span>
-                    <span>20%</span>
-                    <span>40%</span>
-                    <span>60%</span>
-                    <span>80%</span>
-                    <span>100%</span>
-                </div>
-                <div class="score-fill" style="width: 74%; background: #3b82f6;"></div>
-            </div>
-            <div class="score-zones">
-                <span class="zone severe">Severe limitation</span>
-                <span class="zone limitation">Limitation</span>
-                <span class="zone neutral">Neutral</span>
-                <span class="zone good">Good</span>
-                <span class="zone excellent">Excellent</span>
-            </div>
-        </div>
-        
-        <div class="score-bar-container">
-            <div class="score-label">Metabolic rate - 85% | Excellent</div>
-            <div class="score-track">
-                <div class="score-markers">
-                    <span>0%</span>
-                    <span>20%</span>
-                    <span>40%</span>
-                    <span>60%</span>
-                    <span>80%</span>
-                    <span>100%</span>
-                </div>
-                <div class="score-fill" style="width: 85%; background: #10b981;"></div>
-            </div>
-            <div class="score-zones">
-                <span class="zone severe">Severe limitation</span>
-                <span class="zone limitation">Limitation</span>
-                <span class="zone neutral">Neutral</span>
-                <span class="zone good">Good</span>
-                <span class="zone excellent">Excellent</span>
-            </div>
-        </div>
-        
-        <div class="score-bar-container">
-            <div class="score-label">Fat-burning Efficiency & Mitochondrial Function - 49% | Neutral</div>
-            <div class="score-track">
-                <div class="score-markers">
-                    <span>0%</span>
-                    <span>20%</span>
-                    <span>40%</span>
-                    <span>60%</span>
-                    <span>80%</span>
-                    <span>100%</span>
-                </div>
-                <div class="score-fill" style="width: 49%; background: #f59e0b;"></div>
-            </div>
-            <div class="score-zones">
-                <span class="zone severe">Severe limitation</span>
-                <span class="zone limitation">Limitation</span>
-                <span class="zone neutral">Neutral</span>
-                <span class="zone good">Good</span>
-                <span class="zone excellent">Excellent</span>
-            </div>
-        </div>
-        
-            </div>
-        </div>
-        
-            
-        <div class="metrics-intro-page">
-            <h1>Core Metrics</h1>
-            <p class="intro-text">The following metrics are the most important for longevity. Achieving a high score maximizes the likelihood of maintaining a good quality of life.</p>
-        </div>
-        
-            
-        <div class="metric-page">
-            <h1>Breathing Coordination - 64% | Good</h1>
-            
-        <div class="score-bar-container">
-            <div class="score-label">Breathing Coordination - 64% | Good</div>
-            <div class="score-track">
-                <div class="score-markers">
-                    <span>0%</span>
-                    <span>20%</span>
-                    <span>40%</span>
-                    <span>60%</span>
-                    <span>80%</span>
-                    <span>100%</span>
-                </div>
-                <div class="score-fill" style="width: 64%; background: #3b82f6;"></div>
-            </div>
-            <div class="score-zones">
-                <span class="zone severe">Severe limitation</span>
-                <span class="zone limitation">Limitation</span>
-                <span class="zone neutral">Neutral</span>
-                <span class="zone good">Good</span>
-                <span class="zone excellent">Excellent</span>
-            </div>
-        </div>
-        
+<div class="hero-img">
+    <img src="https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?w=1200&fit=crop" alt="Performance Training">
+</div>
 
-            <div class="metric-section">
-                <h2>What it shows</h2>
-                <p>Breathing coordination shows your ability to maintain regular and efficient breathing during resting states and is a measure of how efficiently you can coordinate your respiratory muscles and diaphragm.</p>
-            </div>
 
-            <div class="metric-section">
-                <h2>Why it's important to track</h2>
-                <p>Breathing coordination is important to track as it can regulate your nervous system activation and oxygenation levels across the entire body. How fast and deep you breathe can profoundly regulate the activation of your sympathetic and parasympathetic nervous systems.</p>
-            </div>
-        
-            <div class="metric-section">
-                <h2>How to improve it</h2>
-                <p>Meditation and breathwork are one of the most powerful tools for improving breathing for better brain function and reduced stress.</p>
-            </div>
-            </div>
+<div class="age-comparison-visual">
+    <h3>🧬 Biological Age Analysis</h3>
+    <div class="age-arrow">54 → 51</div>
+    <div style="font-size:1.2em;font-weight:bold;color:#00cc00">Outstanding! 3 years younger than chronological age!</div>
+    <p>Your excellent performance metrics indicate superior metabolic health and cellular function.</p>
+</div>
 
-        <div class="metric-page">
-            <h1>Sympathetic/Parasympathetic activation - 56% | Neutral</h1>
-            
-        <div class="score-bar-container">
-            <div class="score-label">Sympathetic/Parasympathetic activation - 56% | Neutral</div>
-            <div class="score-track">
-                <div class="score-markers">
-                    <span>0%</span>
-                    <span>20%</span>
-                    <span>40%</span>
-                    <span>60%</span>
-                    <span>80%</span>
-                    <span>100%</span>
-                </div>
-                <div class="score-fill" style="width: 56%; background: #f59e0b;"></div>
-            </div>
-            <div class="score-zones">
-                <span class="zone severe">Severe limitation</span>
-                <span class="zone limitation">Limitation</span>
-                <span class="zone neutral">Neutral</span>
-                <span class="zone good">Good</span>
-                <span class="zone excellent">Excellent</span>
-            </div>
+<h2>📈 Core Performance Metrics</h2>
+<div class="metrics-visual">
+
+    <div class="metric-row">
+        <div class="metric-icon">-</div>
+        <div class="metric-name">Sympathetic/Parasympathetic</div>
+        <div class="progress-container">
+            <div class="progress-bar neutral" style="width:56%"></div>
         </div>
-        
+        <div class="metric-score" style="color:#999999">56%</div>
+        <div class="metric-label" style="color:#999999">NEUTRAL</div>
+    </div>
 
-            <div class="metric-section">
-                <h2>What it shows</h2>
-                <p>Sympathetic & Parasympathetic activation shows the balance between the two main parts of the autonomic nervous system and, specifically, which one of the two is more activated.</p>
-            </div>
-
-            <div class="metric-section">
-                <h2>Why it's important to track</h2>
-                <p>Tracking the balance between your sympathetic and parasympathetic activation is important because it indicates the level of psychosomatic stress your body has accumulated. High parasympathetic activation indicates sufficient recovery and stress management.</p>
-            </div>
+    <div class="metric-row">
+        <div class="metric-icon">●</div>
+        <div class="metric-name">Ventilation Efficiency</div>
+        <div class="progress-container">
+            <div class="progress-bar good" style="width:71%"></div>
         </div>
+        <div class="metric-score" style="color:#0066cc">71%</div>
+        <div class="metric-label" style="color:#0066cc">GOOD</div>
+    </div>
 
-        <div class="metric-page">
-            <h1>Ventilation efficiency - 71% | Good</h1>
-            
-        <div class="score-bar-container">
-            <div class="score-label">Ventilation efficiency - 71% | Good</div>
-            <div class="score-track">
-                <div class="score-markers">
-                    <span>0%</span>
-                    <span>20%</span>
-                    <span>40%</span>
-                    <span>60%</span>
-                    <span>80%</span>
-                    <span>100%</span>
-                </div>
-                <div class="score-fill" style="width: 71%; background: #3b82f6;"></div>
-            </div>
-            <div class="score-zones">
-                <span class="zone severe">Severe limitation</span>
-                <span class="zone limitation">Limitation</span>
-                <span class="zone neutral">Neutral</span>
-                <span class="zone good">Good</span>
-                <span class="zone excellent">Excellent</span>
-            </div>
+    <div class="metric-row">
+        <div class="metric-icon">●</div>
+        <div class="metric-name">Breathing Coordination</div>
+        <div class="progress-container">
+            <div class="progress-bar good" style="width:64%"></div>
         </div>
-        
+        <div class="metric-score" style="color:#0066cc">64%</div>
+        <div class="metric-label" style="color:#0066cc">GOOD</div>
+    </div>
 
-            <div class="metric-section">
-                <h2>What it shows</h2>
-                <p>Ventilation efficiency indicates your lungs' ability to absorb oxygen and clear carbon dioxide. It is calculated by the ratio of the total amount of air exchange between your lungs and the environment (VE) over the exhaled carbon dioxide volume (VCO2).</p>
-            </div>
-
-            <div class="metric-section">
-                <h2>Why it's important to track</h2>
-                <p>Ventilation efficiency is important to track, especially in individuals who cannot perform cardiopulmonary exercise testing. It provides insights into pulmonary function and gas exchange efficiency.</p>
-            </div>
+    <div class="metric-row">
+        <div class="metric-icon">✓</div>
+        <div class="metric-name">Lung Utilization</div>
+        <div class="progress-container">
+            <div class="progress-bar excellent" style="width:87%"></div>
         </div>
+        <div class="metric-score" style="color:#00cc00">87%</div>
+        <div class="metric-label" style="color:#00cc00">EXCELLENT</div>
+    </div>
 
-        <div class="metric-page">
-            <h1>Lung utilization - 87% | Excellent</h1>
-            
-        <div class="score-bar-container">
-            <div class="score-label">Lung utilization - 87% | Excellent</div>
-            <div class="score-track">
-                <div class="score-markers">
-                    <span>0%</span>
-                    <span>20%</span>
-                    <span>40%</span>
-                    <span>60%</span>
-                    <span>80%</span>
-                    <span>100%</span>
-                </div>
-                <div class="score-fill" style="width: 87%; background: #10b981;"></div>
-            </div>
-            <div class="score-zones">
-                <span class="zone severe">Severe limitation</span>
-                <span class="zone limitation">Limitation</span>
-                <span class="zone neutral">Neutral</span>
-                <span class="zone good">Good</span>
-                <span class="zone excellent">Excellent</span>
-            </div>
+    <div class="metric-row">
+        <div class="metric-icon">●</div>
+        <div class="metric-name">Heart Rate Variability (HRV)</div>
+        <div class="progress-container">
+            <div class="progress-bar good" style="width:74%"></div>
         </div>
-        
+        <div class="metric-score" style="color:#0066cc">74%</div>
+        <div class="metric-label" style="color:#0066cc">GOOD</div>
+    </div>
 
-            <div class="metric-section">
-                <h2>What it shows</h2>
-                <p>Lung utilization indicates how much of your lungs you use in a resting state. It is measured by evaluating your tidal volume, which is the amount of air you exhale during every breathing cycle.</p>
-            </div>
+    <div class="metric-row">
+        <div class="metric-icon">✓</div>
+        <div class="metric-name">Metabolic Rate</div>
+        <div class="progress-container">
+            <div class="progress-bar excellent" style="width:85%"></div>
+        </div>
+        <div class="metric-score" style="color:#00cc00">85%</div>
+        <div class="metric-label" style="color:#00cc00">EXCELLENT</div>
+    </div>
 
-            <div class="metric-section">
-                <h2>Why it's important to track</h2>
-                <p>Lung utilization is important to track as it's a measure of your body's ability to absorb oxygen and a major contributor to a high VO2max. The more of your lungs you use, the more oxygen you can absorb and deliver across your body.</p>
-            </div>
+    <div class="metric-row">
+        <div class="metric-icon">-</div>
+        <div class="metric-name">Fat-Burning Efficiency</div>
+        <div class="progress-container">
+            <div class="progress-bar neutral" style="width:49%"></div>
         </div>
+        <div class="metric-score" style="color:#999999">49%</div>
+        <div class="metric-label" style="color:#999999">NEUTRAL</div>
+    </div>
+</div>
 
-        <div class="metric-page">
-            <h1>Heart Rate Variability (HRV) - 74% | Good</h1>
-            
-        <div class="score-bar-container">
-            <div class="score-label">Heart Rate Variability (HRV) - 74% | Good</div>
-            <div class="score-track">
-                <div class="score-markers">
-                    <span>0%</span>
-                    <span>20%</span>
-                    <span>40%</span>
-                    <span>60%</span>
-                    <span>80%</span>
-                    <span>100%</span>
-                </div>
-                <div class="score-fill" style="width: 74%; background: #3b82f6;"></div>
-            </div>
-            <div class="score-zones">
-                <span class="zone severe">Severe limitation</span>
-                <span class="zone limitation">Limitation</span>
-                <span class="zone neutral">Neutral</span>
-                <span class="zone good">Good</span>
-                <span class="zone excellent">Excellent</span>
-            </div>
-        </div>
-        
 
-            <div class="metric-section">
-                <h2>What it shows</h2>
-                <p>HRV shows your cardiovascular system function in resting conditions. It's scored based on the heart frequency ratio, which, based on its values, can be indicative of heart-related conditions, such as heart failure and arrhythmias.</p>
-            </div>
+<h2>🔥 Caloric Balance & Fuel Strategy</h2>
+<div class="caloric-cards">
+    <div class="caloric-card burn">
+        <div class="caloric-icon">🔥</div>
+        <h3>YOU BURN</h3>
+        <p><strong>Rest Days:</strong> 1,681 kcal/day</p>
+        <p><strong>Workout Days:</strong> 1,895 kcal/day</p>
+    </div>
+    <div class="caloric-card eat">
+        <div class="caloric-icon">🍽️</div>
+        <h3>YOU SHOULD EAT</h3>
+        <p><strong>Rest Days:</strong> 1,881 kcal/day</p>
+        <p><strong>Workout Days:</strong> 2,195 kcal/day</p>
+    </div>
+</div>
+<div class="fuel-sources">
+    <h3>⛽ Fuel Sources at Rest</h3>
+    <div class="fuel-bar">
+        <div class="fuel-fats" style="width:28%">Fats 28%</div>
+        <div class="fuel-carbs" style="width:72%">Carbs 72%</div>
+    </div>
+</div>
 
-            <div class="metric-section">
-                <h2>Why it's important to track</h2>
-                <p>HRV is important to track because it reflects the function of your heart in terms of its rhythm and can demonstrate heart rhythm-related conditions such as atrial fibrillation. A high HRV equals a lower risk for such issues, while a low HRV may indicate cardiovascular stress.</p>
-            </div>
-        </div>
+<h2>💓 Training Zones</h2>
+<div class="zone-cards">
 
-        <div class="metric-page">
-            <h1>Metabolic rate - 85% | Excellent</h1>
-            
-        <div class="score-bar-container">
-            <div class="score-label">Metabolic rate - 85% | Excellent</div>
-            <div class="score-track">
-                <div class="score-markers">
-                    <span>0%</span>
-                    <span>20%</span>
-                    <span>40%</span>
-                    <span>60%</span>
-                    <span>80%</span>
-                    <span>100%</span>
-                </div>
-                <div class="score-fill" style="width: 85%; background: #10b981;"></div>
-            </div>
-            <div class="score-zones">
-                <span class="zone severe">Severe limitation</span>
-                <span class="zone limitation">Limitation</span>
-                <span class="zone neutral">Neutral</span>
-                <span class="zone good">Good</span>
-                <span class="zone excellent">Excellent</span>
-            </div>
+    <div class="zone-card zone1">
+        <div class="zone-icon">💤</div>
+        <div class="zone-info">
+            <div class="zone-name">Zone 1: Recovery</div>
+            <div class="zone-hr">83-99 bpm</div>
+            <div class="zone-description">Active recovery, warm-up, cool-down. Very easy conversational pace.</div>
         </div>
-        
+    </div>
 
-            <div class="metric-section">
-                <h2>What it shows</h2>
-                <p>Metabolic Rate shows how fast or slow your metabolism is. In other words, it shows whether your body is burning greater or fewer calories than predicted based on your weight, gender, age, and height during regular movements. The more the number of calories burned, the higher the metabolic rate score.</p>
-            </div>
+    <div class="zone-card zone2">
+        <div class="zone-icon">🏃</div>
+        <div class="zone-info">
+            <div class="zone-name">Zone 2: Endurance Base<span class="primary-badge">⭐ PRIMARY ZONE</span></div>
+            <div class="zone-hr">99-116 bpm</div>
+            <div class="zone-description">THE most important zone for improving metabolic rate and fat-burning. 3-4 sessions weekly, 45-60 minutes.</div>
+        </div>
+    </div>
 
-            <div class="metric-section">
-                <h2>Why it's important to track</h2>
-                <p>Metabolic rate is important to track as it indicates your predisposition for weight loss or weight gain. A high metabolic rate means your body burns more calories at rest, making weight management easier.</p>
-            </div>
+    <div class="zone-card zone3">
+        <div class="zone-icon">🚴</div>
+        <div class="zone-info">
+            <div class="zone-name">Zone 3: Tempo</div>
+            <div class="zone-hr">116-132 bpm</div>
+            <div class="zone-description">Moderate-hard pace, improves lactate threshold. Use sparingly.</div>
         </div>
+    </div>
 
-        <div class="metric-page">
-            <h1>Fat-burning Efficiency & Mitochondrial Function - 49% | Neutral</h1>
-            
-        <div class="score-bar-container">
-            <div class="score-label">Fat-burning Efficiency & Mitochondrial Function - 49% | Neutral</div>
-            <div class="score-track">
-                <div class="score-markers">
-                    <span>0%</span>
-                    <span>20%</span>
-                    <span>40%</span>
-                    <span>60%</span>
-                    <span>80%</span>
-                    <span>100%</span>
-                </div>
-                <div class="score-fill" style="width: 49%; background: #f59e0b;"></div>
-            </div>
-            <div class="score-zones">
-                <span class="zone severe">Severe limitation</span>
-                <span class="zone limitation">Limitation</span>
-                <span class="zone neutral">Neutral</span>
-                <span class="zone good">Good</span>
-                <span class="zone excellent">Excellent</span>
-            </div>
+    <div class="zone-card zone4">
+        <div class="zone-icon">🏋</div>
+        <div class="zone-info">
+            <div class="zone-name">Zone 4: Lactate Threshold</div>
+            <div class="zone-hr">132-149 bpm</div>
+            <div class="zone-description">Hard pace, 1-2 sessions weekly for strength development.</div>
         </div>
-        
+    </div>
 
-            <div class="metric-section">
-                <h2>What it shows</h2>
-                <p>Fat-burning Efficiency shows your cells' ability to use fat as a fuel source and is a hallmark of mitochondrial and cellular function. Our cells use a mix of fats and carbohydrates as fuel to release the energy they need to support vital functions. This is measured by analyzing the balance of carbon dioxide and oxygen in your breath. High reliance on fat as a fuel source is an indication of good mitochondrial and metabolic function.</p>
-            </div>
+    <div class="zone-card zone5">
+        <div class="zone-icon">⚡</div>
+        <div class="zone-info">
+            <div class="zone-name">Zone 5: VO2 Max</div>
+            <div class="zone-hr">149-166 bpm</div>
+            <div class="zone-description">Maximum effort intervals only. Short bursts (30sec - 5min).</div>
+        </div>
+    </div>
+</div>
 
-            <div class="metric-section">
-                <h2>Why it's important to track</h2>
-                <p>Fat-burning efficiency is important to track because it indicates metabolic flexibility and mitochondrial health. Better fat-burning capacity means improved energy levels and metabolic health.</p>
-            </div>
+
+<h2>📅 Weekly Training Plan</h2>
+<div class="training-plan">
+    <div class="training-card priority-high">
+        <div><span class="training-icon">🏃</span><strong>Zone 2 Endurance</strong></div>
+        <div>3-4 sessions × 45-60 min</div>
+        <span class="priority-badge high">PRIORITY #1</span>
+        <div style="font-size:0.9em;margin-top:5px">Improve metabolic rate and fat-burning</div>
+    </div>
+    <div class="training-card">
+        <div><span class="training-icon">💪</span><strong>Resistance Training</strong></div>
+        <div>3 sessions × 45-60 min</div>
+        <span class="priority-badge high">HIGH</span>
+        <div style="font-size:0.9em;margin-top:5px">Maintain strength development focus</div>
+    </div>
+    <div class="training-card">
+        <div><span class="training-icon">🏋</span><strong>Zone 4 Threshold</strong></div>
+        <div>1-2 sessions × 20-30 min</div>
+        <span class="priority-badge medium">MEDIUM</span>
+        <div style="font-size:0.9em;margin-top:5px">Support strength development goals</div>
+    </div>
+    <div class="training-card">
+        <div><span class="training-icon">😴</span><strong>Rest/Recovery</strong></div>
+        <div>1-2 days per week</div>
+        <span class="priority-badge low">LOW</span>
+        <div style="font-size:0.9em;margin-top:5px">Zone 1 activity</div>
+    </div>
+</div>
+
+
+<h2>🎯 Recommended Interventions</h2>
+<p class="text-center" style="font-style:italic;color:#666;font-size:0.95em;margin:5px 0">Targeted strategies for your specific needs</p>
+<div class="interventions-grid">
+    <div class="intervention-card">
+        <div class="intervention-icon">🏃</div>
+        <strong>Zone 2 Training</strong>
+        <div style="margin:6px 0;font-size:0.85em">Primary intervention for metabolic rate & fat-burning</div>
+        <span class="evidence-badge">Evidence-Based</span>
+    </div>
+    <div class="intervention-card">
+        <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800" alt="ARX Training">
+        <strong>ARX Omni</strong>
+        <div style="margin:6px 0;font-size:0.85em">Efficient resistance training for strength goals</div>
+        <span class="evidence-badge">Evidence-Based</span>
+    </div>
+    <div class="intervention-card">
+        <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800" alt="Cold Plunge">
+        <strong>Cold Plunge</strong>
+        <div style="margin:6px 0;font-size:0.85em">Boost fat-burning 15-37%, accelerate recovery</div>
+        <span class="evidence-badge">Evidence-Based</span>
+    </div>
+    <div class="intervention-card">
+        <img src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=800" alt="Nutrition">
+        <strong>Nutrition Protocol</strong>
+        <div style="margin:6px 0;font-size:0.85em">High protein (1.6-2.2g/kg) for muscle & metabolism</div>
+        <span class="evidence-badge">Evidence-Based</span>
+    </div>
+    <div class="intervention-card">
+        <img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=800" alt="Breathwork">
+        <strong>Breathwork Training</strong>
+        <div style="margin:6px 0;font-size:0.85em">Optimize breathing coordination (currently 64%)</div>
+        <span class="evidence-badge">Evidence-Based</span>
+    </div>
+    <div class="intervention-card">
+        <div class="intervention-icon">♨️</div>
+        <strong>Sauna Recovery</strong>
+        <div style="margin:6px 0;font-size:0.85em">Improve HRV and parasympathetic activation</div>
+        <span class="evidence-badge">Evidence-Based</span>
+    </div>
+</div>
+
+
+<h2>✅ Action Plan - Prioritized Roadmap</h2>
+<div class="action-plan">
+    <div class="action-item">
+        <div class="action-number"></div>
+        <div>
+            <strong>Zone 2 Endurance Training</strong> <span class="priority-badge high">HIGH</span>
+            <div style="margin-top:5px">3-4 sessions, 45-60 min at appropriate heart rate. Most powerful intervention for improving metabolic rate and fat-burning.</div>
         </div>
-            
-        <div class="caloric-page">
-            <h1>Caloric Balance</h1>
-            <div class="caloric-grid">
-                <div class="caloric-box">
-                    <h3>You Burn</h3>
-                    <div class="cal-section">
-                        <p class="cal-label">During days you don't work out</p>
-                        <p class="cal-value">2000 kcal/day</p>
-                    </div>
-                    <div class="cal-section">
-                        <p class="cal-label">During days you work out</p>
-                        <p class="cal-value">2500 kcal/day</p>
-                    </div>
-                </div>
-                <div class="caloric-box">
-                    <h3>You should eat</h3>
-                    <div class="cal-section">
-                        <p class="cal-label">During days you don't work out</p>
-                        <p class="cal-value">2000 kcal/day</p>
-                    </div>
-                    <div class="cal-section">
-                        <p class="cal-label">During days you work out</p>
-                        <p class="cal-value">2500 kcal/day</p>
-                    </div>
-                </div>
-            </div>
-            <div class="fuel-sources">
-                <h2>Fuel Sources</h2>
-                <div class="fuel-bars">
-                    <div class="fuel-bar">
-                        <div class="fuel-label">Fats</div>
-                        <div class="fuel-track">
-                            <div class="fuel-fill" style="width: 28%; background: #10b981;"></div>
-                        </div>
-                        <div class="fuel-percent">28%</div>
-                    </div>
-                    <div class="fuel-bar">
-                        <div class="fuel-label">Carbohydrates</div>
-                        <div class="fuel-track">
-                            <div class="fuel-fill" style="width: 72%; background: #3b82f6;"></div>
-                        </div>
-                        <div class="fuel-percent">72%</div>
-                    </div>
-                </div>
-                <p class="fuel-note">Your body uses a mixture of carbs and fats to produce the energy needed to sustain life and power daily activities. High reliance on fat as a fuel source is one of the most important markers of metabolic health.</p>
-            </div>
+    </div>
+    <div class="action-item">
+        <div class="action-number"></div>
+        <div>
+            <strong>Strength Training</strong> <span class="priority-badge high">HIGH</span>
+            <div style="margin-top:5px">Continue 3x weekly resistance work for strength development. Add compound movements to support metabolic rate increase.</div>
         </div>
-        
-            
-        <div class="macro-page">
-            <h1>Macronutrient Balance</h1>
-            <p class="macro-intro">Personalized macronutrient recommendations based on your metabolic profile.</p>
-            <!-- This page can be expanded with specific macro recommendations -->
+    </div>
+    <div class="action-item">
+        <div class="action-number"></div>
+        <div>
+            <strong>Performance Nutrition</strong> <span class="priority-badge medium">MEDIUM</span>
+            <div style="margin-top:5px">High protein intake, omega-3 rich fish 3x/week. Time carbs around workouts for performance.</div>
         </div>
-        
-            
-        <div class="schedule-page">
-            <h1>Testing Schedule</h1>
-            <p>Regular metabolic testing helps track progress and optimize your health journey.</p>
-            <div class="schedule-recommendations">
-                <h3>Recommended Testing Frequency:</h3>
-                <ul>
-                    <li><strong>Initial Phase:</strong> Every 4-6 weeks to establish baseline and track initial improvements</li>
-                    <li><strong>Maintenance Phase:</strong> Every 3-6 months to monitor long-term progress</li>
-                    <li><strong>Optimization Phase:</strong> As needed based on specific health goals</li>
-                </ul>
-            </div>
+    </div>
+    <div class="action-item">
+        <div class="action-number"></div>
+        <div>
+            <strong>Recovery Optimization</strong> <span class="priority-badge medium">MEDIUM</span>
+            <div style="margin-top:5px">7-9 hours nightly sleep. Consistent schedule. Maintain excellent HRV through proper recovery.</div>
         </div>
-        
-            
-        <div class="supplements-section">
-            <h1>Personalized Supplement & IV Therapy Recommendations</h1>
-            <p>Based on your metabolic profile, the following interventions may support your health optimization goals:</p>
-            <!-- AI-generated supplement recommendations will be inserted here -->
+    </div>
+    <div class="action-item">
+        <div class="action-number"></div>
+        <div>
+            <strong>Cold Exposure</strong> <span class="priority-badge low">LOW</span>
+            <div style="margin-top:5px">Cold plunges 3-5 min, 2-3x weekly. Can boost fat-burning by 15-37%.</div>
         </div>
-        
-        </body>
-        </html>
-        
+    </div>
+    <div class="action-item">
+        <div class="action-number"></div>
+        <div>
+            <strong>Breathwork Practice</strong> <span class="priority-badge low">LOW</span>
+            <div style="margin-top:5px">10 min daily box breathing to optimize breathing coordination.</div>
+        </div>
+    </div>
+</div>
+
+
+<h2>📅 90-Day Performance Protocol</h2>
+<div class="timeline-visual">
+    <div class="timeline-line"></div>
+    <div class="timeline-phase">
+        <div class="phase-weeks">Weeks 1-4: Base Building Phase</div>
+        <p>Add 2-3 Zone 2 sessions (45 min) alongside strength training. Monitor heart rate compliance. Focus on easy conversational pace.</p>
+    </div>
+    <div class="timeline-phase">
+        <div class="phase-weeks">Weeks 5-8: Development Phase</div>
+        <p>Increase to 3-4 Zone 2 sessions (60 min). Continue strength training 3x/week. Add cold plunges 2x/week. Implement performance nutrition timing.</p>
+    </div>
+    <div class="timeline-phase">
+        <div class="phase-weeks">Weeks 9-12: Integration Phase</div>
+        <p>Maintain 4x Zone 2 sessions. Add 1x Zone 4 threshold session. Continue all protocols. Monitor performance gains in strength training.</p>
+    </div>
+    <div class="timeline-phase retest">
+        <div class="phase-weeks">Week 13: Retest & Reassess</div>
+        <p><strong>Expected Results:</strong> Metabolic Rate: 46% → 70%+ | Fat-Burning: 58% → 75%+ | Overall Score: 73% → 80%+ | Strength gains + improved endurance capacity</p>
+    </div>
+</div>
+
+</body>
+</html>
