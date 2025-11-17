@@ -247,7 +247,7 @@ strong { font-weight: bold; }
 <div class="header">
     <div class="brand">Optimal Vitality ⚡</div>
     <h1>PERFORMANCE METABOLIC BLUEPRINT 2025</h1>
-    <p class="subtitle">Comprehensive metabolic testing, training zones, and performance optimization powered by PNOE technology</p>
+    <p class="subtitle">Comprehensive metabolic testing, training zones, and performance optimization{' powered by ' + self.patient_info.get('test_source', 'advanced metabolic') + ' technology' if self.patient_info.get('test_source') and self.patient_info.get('test_source') != 'Generic' else ''}</p>
 </div>
 """
 
@@ -581,7 +581,7 @@ strong { font-weight: bold; }
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PNOE Performance Metabolic Blueprint 2025</title>
+    <title>{self.patient_info.get('test_source', '') + ' ' if self.patient_info.get('test_source') and self.patient_info.get('test_source') != 'Generic' else ''}Performance Metabolic Blueprint 2025</title>
     <style>
 {self._get_styles()}
     </style>

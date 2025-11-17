@@ -363,6 +363,15 @@ def extract_pnoe_data(pdf_path):
     except Exception as e:
         data['error'] = str(e)
 
+    # Detect test source/type (PNOE, CorSense, etc.)
+    all_text_combined = ' '.join(data.get('all_text', [])).lower()
+    if 'pnoe' in all_text_combined or 'p n o e' in all_text_combined:
+        data['patient_info']['test_source'] = 'PNOE'
+    elif 'corsense' in all_text_combined:
+        data['patient_info']['test_source'] = 'CorSense'
+    else:
+        data['patient_info']['test_source'] = 'Generic'
+
     return data
 
 # ============= Authentication Routes =============
