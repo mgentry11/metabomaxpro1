@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+    <!-- PWA Meta Tags -->
+    <meta name="application-name" content="HIT Coach Pro">
+    <meta name="description" content="Voice-guided High-Intensity Training coach for building strength efficiently">
+    <meta name="theme-color" content="#10b981">
+
+    <!-- iOS Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="HIT Coach">
+
+    <!-- iOS Splash Screens -->
+    <link rel="apple-touch-startup-image" href="/icons/splash-2048.png" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)">
+    <link rel="apple-touch-startup-image" href="/icons/splash-1668.png" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2)">
+    <link rel="apple-touch-startup-image" href="/icons/splash-1536.png" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2)">
+    <link rel="apple-touch-startup-image" href="/icons/splash-1242.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3)">
+    <link rel="apple-touch-startup-image" href="/icons/splash-1125.png" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)">
+    <link rel="apple-touch-startup-image" href="/icons/splash-750.png" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)">
+
+    <!-- Apple Touch Icons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-180.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/icons/icon-144.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/icons/icon-120.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/icons/icon-114.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/icons/icon-76.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/icons/icon-72.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/icons/icon-60.png">
+    <link rel="apple-touch-icon" sizes="57x57" href="/icons/icon-57.png">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16.png">
+    <link rel="shortcut icon" href="/icons/favicon.ico">
+
+    <!-- Manifest -->
+    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+
+    <!-- Windows Metro -->
+    <meta name="msapplication-TileColor" content="#10b981">
+    <meta name="msapplication-TileImage" content="/icons/icon-144.png">
+
+    <title>HIT Coach Pro - Web App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/hitcoach_app.css') }}">
+</head>
+<body class="app-body">
+    <!-- App Header -->
+    <header class="app-header">
+        <div class="app-header-content">
+            <div class="app-logo">
+                <span class="logo">HCP</span>
+                <span class="app-title">HIT Coach Pro</span>
+            </div>
+            <button class="settings-btn" id="settingsBtn">⚙️</button>
+        </div>
+    </header>
+
+    <!-- Install Prompt Banner -->
+    <div class="install-banner" id="installBanner" style="display: none;">
+        <div class="install-content">
+            <div class="install-icon">📱</div>
+            <div class="install-text">
+                <strong>Install HIT Coach Pro</strong>
+                <p>Add to your home screen for the best experience</p>
+            </div>
+            <button class="btn-install" id="installButton">Install</button>
+            <button class="btn-dismiss" id="dismissInstall">✕</button>
+        </div>
+    </div>
+
+    <!-- iOS Install Instructions (Safari) -->
+    <div class="ios-install-prompt" id="iosInstallPrompt" style="display: none;">
+        <div class="ios-prompt-content">
+            <button class="ios-close" onclick="closeIOSPrompt()">✕</button>
+            <h3>📱 Install HIT Coach Pro</h3>
+            <p>Add this app to your home screen for quick access and offline use:</p>
+            <ol class="ios-steps">
+                <li>Tap the <strong>Share</strong> button <span class="ios-icon">⎙</span> at the bottom of Safari</li>
+                <li>Scroll down and tap <strong>"Add to Home Screen"</strong> <span class="ios-icon">➕</span></li>
+                <li>Tap <strong>"Add"</strong> in the top right corner</li>
+            </ol>
+            <button class="btn btn-secondary" onclick="closeIOSPrompt()">Got It</button>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="app-container">
+        <!-- Home Screen -->
+        <div class="screen active" id="homeScreen">
+            <div class="welcome-section">
+                <h1>Ready to Build Strength?</h1>
+                <p>Start your free workout or upgrade for full protocols</p>
+            </div>
+
+            <div class="workout-cards">
+                <!-- Free Quick Start Workout -->
+                <div class="workout-card workout-card-free" onclick="loadWorkout('FREE')">
+                    <div class="workout-card-header">
+                        <h2>Quick Start</h2>
+                        <span class="workout-badge workout-badge-free">FREE</span>
+                    </div>
+                    <p class="workout-desc">Complete 4-exercise full-body workout. Perfect for getting started with HIT training.</p>
+                    <ul class="workout-preview">
+                        <li>Leg Press</li>
+                        <li>Pulldown</li>
+                        <li>Chest Press</li>
+                        <li>Overhead Press</li>
+                    </ul>
+                    <div class="workout-stats">
+                        <span>4 Exercises</span>
+                        <span>8-10 min</span>
+                    </div>
+                </div>
+
+                <!-- Premium Workout A (Locked) -->
+                <div class="workout-card workout-card-locked" onclick="showUpgradePrompt('A')">
+                    <div class="workout-lock-overlay">
+                        <div class="lock-icon">🔒</div>
+                        <div class="lock-text">Premium</div>
+                    </div>
+                    <div class="workout-card-header">
+                        <h2>Workout A</h2>
+                        <span class="workout-badge">Push Focus</span>
+                    </div>
+                    <p class="workout-desc">Full 8-exercise protocol emphasizing pushing movements and leg strength</p>
+                    <ul class="workout-preview">
+                        <li>Leg Press</li>
+                        <li>Pulldown</li>
+                        <li>Chest Press</li>
+                        <li>Overhead Press</li>
+                        <li>Leg Curl</li>
+                        <li>Bicep Curl</li>
+                        <li>Tricep Extension</li>
+                        <li>Calf Raise</li>
+                    </ul>
+                    <div class="workout-stats">
+                        <span>8 Exercises</span>
+                        <span>15-20 min</span>
+                    </div>
+                </div>
+
+                <!-- Premium Workout B (Locked) -->
+                <div class="workout-card workout-card-locked" onclick="showUpgradePrompt('B')">
+                    <div class="workout-lock-overlay">
+                        <div class="lock-icon">🔒</div>
+                        <div class="lock-text">Premium</div>
+                    </div>
+                    <div class="workout-card-header">
+                        <h2>Workout B</h2>
+                        <span class="workout-badge">Pull Focus</span>
+                    </div>
+                    <p class="workout-desc">Full 8-exercise protocol emphasizing pulling movements and core strength</p>
+                    <ul class="workout-preview">
+                        <li>Leg Extension</li>
+                        <li>Seated Row</li>
+                        <li>Incline Press</li>
+                        <li>Lateral Raise</li>
+                        <li>Leg Curl</li>
+                        <li>Shrug</li>
+                        <li>Ab Crunch</li>
+                        <li>Back Extension</li>
+                    </ul>
+                    <div class="workout-stats">
+                        <span>8 Exercises</span>
+                        <span>15-20 min</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Upgrade CTA -->
+            <div class="upgrade-cta-box">
+                <h3>🚀 Want Full Workout Variety?</h3>
+                <p>Upgrade to <strong>Premium</strong> for access to complete Workout A & B protocols, progress tracking, custom phase timing, and more!</p>
+                <div class="upgrade-cta-buttons">
+                    <a href="hitcoachpro-safe.html#pricing" class="btn btn-primary">View Plans</a>
+                    <a href="account.html?plan=premium" class="btn btn-secondary">Start 7-Day Free Trial</a>
+                </div>
+                <p class="upgrade-cta-note">🎉 Launch Special: Premium just $4.99/mo (normally $6.99)</p>
+            </div>
+
+            <button class="btn-secondary btn-large" onclick="showScreen('progressScreen')">
+                📊 View Progress
+            </button>
+        </div>
+
+        <!-- Workout Screen -->
+        <div class="screen" id="workoutScreen">
+            <div class="workout-header">
+                <button class="back-btn" onclick="showScreen('homeScreen')">← Back</button>
+                <h2 id="workoutTitle">Workout A</h2>
+                <span class="exercise-counter" id="exerciseCounter">1 / 8</span>
+            </div>
+
+            <div class="current-exercise">
+                <h1 id="exerciseName">Leg Press</h1>
+                <div class="exercise-icon-display">💪</div>
+            </div>
+
+            <!-- Timer Display -->
+            <div class="timer-section">
+                <div class="phase-indicator" id="phaseIndicator">Ready</div>
+                <div class="timer-display" id="timerDisplay">00:00</div>
+                <div class="phase-progress">
+                    <div class="progress-bar" id="progressBar"></div>
+                </div>
+                <div class="phase-description" id="phaseDescription">Tap START to begin</div>
+            </div>
+
+            <!-- Weight Input -->
+            <div class="weight-input-section">
+                <label for="weightInput">Weight Used (lbs)</label>
+                <input type="number" id="weightInput" placeholder="Enter weight" step="5">
+                <div class="last-weight" id="lastWeight"></div>
+            </div>
+
+            <!-- Control Buttons -->
+            <div class="control-buttons">
+                <button class="btn-primary btn-large" id="startBtn" onclick="startExercise()">
+                    START EXERCISE
+                </button>
+                <button class="btn-secondary" id="pauseBtn" onclick="pauseExercise()" style="display: none;">
+                    ⏸ PAUSE
+                </button>
+                <button class="btn-secondary" id="resumeBtn" onclick="resumeExercise()" style="display: none;">
+                    ▶ RESUME
+                </button>
+            </div>
+
+            <!-- Complete Exercise Section -->
+            <div class="complete-section" id="completeSection" style="display: none;">
+                <h3>Exercise Complete!</h3>
+                <div class="failure-check">
+                    <label>
+                        <input type="checkbox" id="failureCheck">
+                        Reached Muscular Failure
+                    </label>
+                </div>
+                <div class="complete-buttons">
+                    <button class="btn-primary" onclick="completeExercise()">
+                        NEXT EXERCISE →
+                    </button>
+                    <button class="btn-secondary" onclick="redoExercise()">
+                        🔄 REDO
+                    </button>
+                </div>
+            </div>
+
+            <!-- Rest Timer -->
+            <div class="rest-screen" id="restScreen" style="display: none;">
+                <h2>Rest Period</h2>
+                <div class="rest-timer" id="restTimer">60</div>
+                <p>Next: <span id="nextExercise"></span></p>
+                <button class="btn-secondary" onclick="skipRest()">SKIP REST</button>
+            </div>
+        </div>
+
+        <!-- Progress Screen -->
+        <div class="screen" id="progressScreen">
+            <div class="workout-header">
+                <button class="back-btn" onclick="showScreen('homeScreen')">← Back</button>
+                <h2>Progress History</h2>
+                <button class="btn-secondary" onclick="clearProgress()">Clear All</button>
+            </div>
+
+            <div class="progress-filters">
+                <button class="filter-btn active" onclick="filterProgress('all')">All</button>
+                <button class="filter-btn" onclick="filterProgress('A')">Workout A</button>
+                <button class="filter-btn" onclick="filterProgress('B')">Workout B</button>
+            </div>
+
+            <div id="progressList" class="progress-list">
+                <!-- Progress entries will be inserted here -->
+            </div>
+        </div>
+
+        <!-- Settings Screen -->
+        <div class="screen" id="settingsScreen">
+            <div class="workout-header">
+                <button class="back-btn" onclick="showScreen('homeScreen')">← Back</button>
+                <h2>Settings</h2>
+            </div>
+
+            <div class="settings-section">
+                <div class="setting-item">
+                    <label>Voice Coaching</label>
+                    <div class="toggle-switch">
+                        <input type="checkbox" id="voiceToggle" checked onchange="toggleVoice()">
+                        <span class="toggle-slider"></span>
+                    </div>
+                </div>
+
+                <div class="setting-item">
+                    <label for="voiceGender">Voice Gender</label>
+                    <select id="voiceGender" onchange="changeVoiceGender()">
+                        <option value="female">Female</option>
+                        <option value="male">Male</option>
+                    </select>
+                </div>
+
+                <div class="setting-item">
+                    <label for="restDuration">Rest Duration (seconds)</label>
+                    <input type="number" id="restDuration" value="60" min="30" max="180" step="10">
+                </div>
+
+                <div class="setting-item">
+                    <label for="coachingStyle">Coaching Style</label>
+                    <select id="coachingStyle">
+                        <option value="motivational">Motivational</option>
+                        <option value="technical">Technical</option>
+                        <option value="minimal">Minimal</option>
+                    </select>
+                </div>
+
+                <div class="setting-item">
+                    <label>Theme</label>
+                    <div class="theme-buttons">
+                        <button class="theme-btn active" onclick="setTheme('dark')">🌙 Dark</button>
+                        <button class="theme-btn" onclick="setTheme('light')">☀️ Light</button>
+                    </div>
+                </div>
+
+                <div class="setting-item">
+                    <label>Sound Volume</label>
+                    <input type="range" id="volumeSlider" min="0" max="100" value="100" oninput="updateVolume()">
+                    <span id="volumeDisplay">100%</span>
+                </div>
+
+                <div class="setting-item">
+                    <label>Auto-complete Exercises</label>
+                    <div class="toggle-switch">
+                        <input type="checkbox" id="autoCompleteToggle" onchange="toggleAutoComplete()">
+                        <span class="toggle-slider"></span>
+                    </div>
+                    <p class="settings-note" style="margin-top: 0.5rem; font-size: 0.85rem;">Automatically save and move to next exercise when timer reaches 0</p>
+                </div>
+
+                <!-- Phase Timing Customization -->
+                <div class="settings-divider"></div>
+                <h3 class="settings-section-title">⏱️ Phase Timing Customization</h3>
+                <p class="settings-note">Adjust the duration of each exercise phase to match your training style</p>
+
+                <div class="setting-item">
+                    <label for="prepDuration">Prep Phase (get weight ready)</label>
+                    <div class="phase-input-group">
+                        <input type="number" id="prepDuration" value="10" min="0" max="60" step="5" onchange="savePhaseSettings()">
+                        <span class="phase-unit">seconds</span>
+                    </div>
+                    <span class="phase-default">Default: 10s</span>
+                </div>
+
+                <div class="setting-item">
+                    <label for="positioningDuration">Positioning Phase (get into position)</label>
+                    <div class="phase-input-group">
+                        <input type="number" id="positioningDuration" value="5" min="0" max="30" step="5" onchange="savePhaseSettings()">
+                        <span class="phase-unit">seconds</span>
+                    </div>
+                    <span class="phase-default">Default: 5s</span>
+                </div>
+
+                <div class="setting-item">
+                    <label for="eccentricDuration">Eccentric Phase (lowering)</label>
+                    <div class="phase-input-group">
+                        <input type="number" id="eccentricDuration" value="30" min="10" max="60" step="5" onchange="savePhaseSettings()">
+                        <span class="phase-unit">seconds</span>
+                    </div>
+                    <span class="phase-default">Default: 30s</span>
+                </div>
+
+                <div class="setting-item">
+                    <label for="concentricDuration">Concentric Phase (lifting)</label>
+                    <div class="phase-input-group">
+                        <input type="number" id="concentricDuration" value="20" min="10" max="60" step="5" onchange="savePhaseSettings()">
+                        <span class="phase-unit">seconds</span>
+                    </div>
+                    <span class="phase-default">Default: 20s</span>
+                </div>
+
+                <div class="setting-item">
+                    <label for="finalEccentricDuration">Final Eccentric Phase (to failure)</label>
+                    <div class="phase-input-group">
+                        <input type="number" id="finalEccentricDuration" value="40" min="20" max="90" step="5" onchange="savePhaseSettings()">
+                        <span class="phase-unit">seconds</span>
+                    </div>
+                    <span class="phase-default">Default: 40s</span>
+                </div>
+
+                <div class="phase-total">
+                    <strong>Total Exercise Time:</strong> <span id="totalPhaseTime">105</span> seconds
+                </div>
+
+                <button class="btn-secondary" onclick="resetPhaseDefaults()" style="width: 100%; margin-top: 1rem;">
+                    🔄 Reset to Defaults
+                </button>
+
+                <div class="settings-divider"></div>
+            </div>
+
+            <div class="app-info">
+                <p>HIT Coach Pro Web App v1.0</p>
+                <p>© 2024 MetaboMax Pro</p>
+            </div>
+        </div>
+
+        <!-- Workout Summary Screen -->
+        <div class="screen" id="summaryScreen">
+            <div class="summary-content">
+                <div class="summary-icon">🎉</div>
+                <h1>Workout Complete!</h1>
+                <p class="summary-subtitle">Excellent work today</p>
+
+                <div class="summary-stats">
+                    <div class="summary-stat">
+                        <div class="stat-value" id="summaryExercises">8</div>
+                        <div class="stat-label">Exercises</div>
+                    </div>
+                    <div class="summary-stat">
+                        <div class="stat-value" id="summaryDuration">18:42</div>
+                        <div class="stat-label">Duration</div>
+                    </div>
+                    <div class="summary-stat">
+                        <div class="stat-value" id="summaryFailures">6</div>
+                        <div class="stat-label">To Failure</div>
+                    </div>
+                </div>
+
+                <div class="summary-exercises" id="summaryExerciseList">
+                    <!-- Exercise summary will be inserted here -->
+                </div>
+
+                <div class="summary-buttons">
+                    <button class="btn-primary btn-large" onclick="showScreen('homeScreen')">
+                        FINISH
+                    </button>
+                    <button class="btn-secondary" onclick="shareWorkout()">
+                        📤 SHARE
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Upgrade Modal -->
+    <div class="upgrade-modal" id="upgradeModal">
+        <div class="upgrade-modal-content">
+            <button class="upgrade-modal-close" onclick="closeUpgradeModal()">&times;</button>
+            <h2>Unlock Full Workout Protocols</h2>
+            <p>Upgrade to <strong>Premium</strong> to access complete 8-exercise workouts with maximum variety and results.</p>
+
+            <ul class="upgrade-modal-benefits">
+                <li><strong>Workout A & B</strong> - 8 exercises each for full-body development</li>
+                <li><strong>Exercise variety</strong> - Target every muscle group comprehensively</li>
+                <li><strong>Progress tracking</strong> - Detailed analytics and workout history</li>
+                <li><strong>Workout streaks</strong> - Build consistency with streak tracking</li>
+                <li><strong>Achievement badges</strong> - Earn rewards for milestones</li>
+                <li><strong>Progress photos</strong> - Visual tracking of your transformation</li>
+                <li><strong>Cloud sync</strong> - Access your data across all devices</li>
+                <li><strong>PR tracking</strong> - See your personal records and strength gains</li>
+            </ul>
+
+            <div class="upgrade-modal-buttons">
+                <a href="hitcoachpro-safe.html#pricing" class="btn btn-primary">View Plans</a>
+                <a href="account.html?plan=premium" class="btn btn-secondary">Start 7-Day Free Trial</a>
+            </div>
+
+            <p style="text-align: center; color: var(--emerald); margin-top: 1rem; font-size: 0.9rem;">
+                🎉 Launch Special: Premium just $4.99/mo (normally $6.99)
+            </p>
+        </div>
+    </div>
+
+    <!-- Audio element for voice (fallback) -->
+    <audio id="audioPlayer"></audio>
+
+    <script src="{{ url_for('static', filename='js/hitcoach_app.js') }}"></script>
+</body>
+</html>

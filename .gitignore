@@ -1,0 +1,109 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+ENV/
+env/
+.venv
+
+# Flask
+instance/
+.webassets-cache
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Uploads and reports (generated files)
+uploads/
+reports/
+*.pdf
+
+# Logs
+*.log
+logs/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# MacOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Temporary files
+*.rtf
+*.zip
+hyph_*.dic
+_tokenizer.py
+html5parser.py
+anchors.py
+boxes.py
+table.py
+psLib.py
+protocol.py
+METADATA
+urlmap.ini
+*.jsbundle
+*.map
+
+# Xcode files (not needed for web deployment)
+*.xcodeproj
+*.xcworkspace
+HITCoachPro/
+
+# Documentation and notes (keep in repo but ignore generated ones)
+instructions*.rtf
+the\ files\ needed*.rtf
+back\ to\ metabo.rtf
+
+# Old/backup HTML files
+*-safe.html
+*-website.html
+*-complete.html
+*-demo.html
+*-pitch-deck.html
+*-dev-showcase.html
+*-pwa.html
+ai-peptide-analysis.html
+generate-icons.html
+metabomaxpro.html
+metabomaxpro-website.html
+metabomaxpro-complete.html
+tester.macos.jsbundle
+index.macos.jsbundle
+
+# Keep only the active versions
+# hitcoach_app.html, hitcoach_app.css, hitcoach_app.js (in templates/static)
+# hitcoachpro.html (marketing page)
