@@ -4,24 +4,24 @@
 
 const WORKOUTS = {
     A: [
-        { name: 'Leg Press', icon: '🦵', muscle: 'Legs' },
-        { name: 'Pulldown', icon: '💪', muscle: 'Back' },
-        { name: 'Chest Press', icon: '🏋️', muscle: 'Chest' },
-        { name: 'Overhead', icon: '🙆', muscle: 'Shoulders' },
-        { name: 'Leg Curl', icon: '🦵', muscle: 'Hamstrings' },
-        { name: 'Bicep Curl', icon: '💪', muscle: 'Biceps' },
-        { name: 'Tricep Extension', icon: '💪', muscle: 'Triceps' },
-        { name: 'Calf Raise', icon: '🦶', muscle: 'Calves' }
+        { name: 'Leg Press', icon: '⬇️', muscle: 'Legs' },
+        { name: 'Pulldown', icon: '⬆️', muscle: 'Back' },
+        { name: 'Chest Press', icon: '➡️', muscle: 'Chest' },
+        { name: 'Overhead', icon: '🔼', muscle: 'Shoulders' },
+        { name: 'Leg Curl', icon: '🔄', muscle: 'Hamstrings' },
+        { name: 'Bicep Curl', icon: '⤴️', muscle: 'Biceps' },
+        { name: 'Tricep Extension', icon: '⤵️', muscle: 'Triceps' },
+        { name: 'Calf Raise', icon: '📈', muscle: 'Calves' }
     ],
     B: [
-        { name: 'Leg Extension', icon: '🦵', muscle: 'Quads' },
-        { name: 'Seated Row', icon: '🚣', muscle: 'Back' },
-        { name: 'Incline Press', icon: '🏋️', muscle: 'Upper Chest' },
-        { name: 'Lateral Raise', icon: '🙆', muscle: 'Shoulders' },
-        { name: 'Leg Curl', icon: '🦵', muscle: 'Hamstrings' },
-        { name: 'Shrug', icon: '🤷', muscle: 'Traps' },
-        { name: 'Ab Crunch', icon: '🧘', muscle: 'Abs' },
-        { name: 'Back Extension', icon: '🧘', muscle: 'Lower Back' }
+        { name: 'Leg Extension', icon: '↗️', muscle: 'Quads' },
+        { name: 'Seated Row', icon: '⬅️', muscle: 'Back' },
+        { name: 'Incline Press', icon: '↖️', muscle: 'Upper Chest' },
+        { name: 'Lateral Raise', icon: '↔️', muscle: 'Shoulders' },
+        { name: 'Leg Curl', icon: '🔄', muscle: 'Hamstrings' },
+        { name: 'Shrug', icon: '⏫', muscle: 'Traps' },
+        { name: 'Ab Crunch', icon: '🎯', muscle: 'Abs' },
+        { name: 'Back Extension', icon: '↩️', muscle: 'Lower Back' }
     ]
 };
 
@@ -836,20 +836,207 @@ function loadProfile() {
     const nameInput = document.getElementById('profileName');
     const ageInput = document.getElementById('profileAge');
     const weightInput = document.getElementById('profileWeight');
+    const heightInput = document.getElementById('profileHeight');
+    const genderSelect = document.getElementById('profileGender');
+    const goalSelect = document.getElementById('profileGoal');
+    const experienceSelect = document.getElementById('profileExperience');
 
     if (nameInput) nameInput.value = profile.name || '';
     if (ageInput) ageInput.value = profile.age || '';
     if (weightInput) weightInput.value = profile.weight || '';
+    if (heightInput) heightInput.value = profile.height || '';
+    if (genderSelect) genderSelect.value = profile.gender || 'prefer-not';
+    if (goalSelect) goalSelect.value = profile.goal || 'strength';
+    if (experienceSelect) experienceSelect.value = profile.experience || 'beginner';
 }
 
 function saveProfile() {
     const profile = {
         name: document.getElementById('profileName')?.value || '',
         age: document.getElementById('profileAge')?.value || '',
-        weight: document.getElementById('profileWeight')?.value || ''
+        weight: document.getElementById('profileWeight')?.value || '',
+        height: document.getElementById('profileHeight')?.value || '',
+        gender: document.getElementById('profileGender')?.value || 'prefer-not',
+        goal: document.getElementById('profileGoal')?.value || 'strength',
+        experience: document.getElementById('profileExperience')?.value || 'beginner'
     };
     localStorage.setItem('userProfile', JSON.stringify(profile));
 }
+
+// ===== SIRI / VOICE COMMANDS =====
+
+let recognition = null;
+let isListening = false;
+
+function initVoiceCommands() {
+    // Check for Web Speech API support
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+        console.log('Voice commands not supported in this browser');
+        return;
+    }
+
+    recognition = new SpeechRecognition();
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.lang = 'en-US';
+
+    recognition.onresult = (event) => {
+        const command = event.results[0][0].transcript.toLowerCase().trim();
+        console.log('Voice command:', command);
+        processVoiceCommand(command);
+    };
+
+    recognition.onerror = (event) => {
+        console.log('Voice recognition error:', event.error);
+        isListening = false;
+        updateVoiceCommandButton();
+    };
+
+    recognition.onend = () => {
+        isListening = false;
+        updateVoiceCommandButton();
+    };
+}
+
+function toggleVoiceCommands() {
+    if (!recognition) {
+        initVoiceCommands();
+        if (!recognition) {
+            speak('Voice commands not supported');
+            return;
+        }
+    }
+
+    if (isListening) {
+        recognition.stop();
+        isListening = false;
+    } else {
+        recognition.start();
+        isListening = true;
+        speak('Listening');
+    }
+    updateVoiceCommandButton();
+}
+
+function updateVoiceCommandButton() {
+    const btn = document.getElementById('voiceCommandBtn');
+    if (btn) {
+        btn.classList.toggle('active', isListening);
+        btn.textContent = isListening ? '🎤' : '🎙️';
+    }
+}
+
+function processVoiceCommand(command) {
+    // Workout commands
+    if (command.includes('start') && command.includes('workout')) {
+        if (command.includes('a') || command.includes('one') || command.includes('1')) {
+            switchWorkoutTab('A');
+            speak('Starting Workout A');
+        } else if (command.includes('b') || command.includes('two') || command.includes('2')) {
+            switchWorkoutTab('B');
+            speak('Starting Workout B');
+        } else {
+            speak('Starting workout');
+        }
+        return;
+    }
+
+    // Exercise control
+    if (command.includes('start') || command.includes('begin') || command.includes('go')) {
+        if (document.getElementById('startBtn')?.style.display !== 'none') {
+            startExercise();
+            return;
+        }
+    }
+
+    if (command.includes('pause') || command.includes('stop') || command.includes('hold')) {
+        if (document.getElementById('pauseBtn')?.style.display !== 'none') {
+            pauseExercise();
+            return;
+        }
+    }
+
+    if (command.includes('resume') || command.includes('continue')) {
+        if (document.getElementById('resumeBtn')?.style.display !== 'none') {
+            resumeExercise();
+            return;
+        }
+    }
+
+    if (command.includes('next') || command.includes('done') || command.includes('complete')) {
+        if (document.getElementById('completeSection')?.style.display !== 'none') {
+            completeExercise();
+            return;
+        }
+    }
+
+    if (command.includes('skip') && command.includes('rest')) {
+        if (document.getElementById('restScreen')?.style.display !== 'none') {
+            skipRest();
+            return;
+        }
+    }
+
+    if (command.includes('redo') || command.includes('again') || command.includes('repeat')) {
+        redoExercise();
+        return;
+    }
+
+    // Navigation
+    if (command.includes('settings') || command.includes('setting')) {
+        showScreen('settingsScreen');
+        speak('Opening settings');
+        return;
+    }
+
+    if (command.includes('profile')) {
+        showScreen('profileScreen');
+        speak('Opening profile');
+        return;
+    }
+
+    if (command.includes('stats') || command.includes('statistics')) {
+        navigateTo('stats');
+        speak('Showing stats');
+        return;
+    }
+
+    if (command.includes('log') || command.includes('history')) {
+        navigateTo('log');
+        speak('Showing workout log');
+        return;
+    }
+
+    if (command.includes('home') || command.includes('workouts')) {
+        navigateTo('workouts');
+        speak('Going home');
+        return;
+    }
+
+    if (command.includes('back') || command.includes('exit')) {
+        exitWorkout();
+        return;
+    }
+
+    // Failure check
+    if (command.includes('failure') || command.includes('failed')) {
+        const checkbox = document.getElementById('failureCheck');
+        if (checkbox) {
+            checkbox.checked = true;
+            speak('Marked as failure');
+        }
+        return;
+    }
+
+    speak("Sorry, I didn't understand that command");
+}
+
+// Initialize voice commands on load
+document.addEventListener('DOMContentLoaded', () => {
+    initVoiceCommands();
+});
 
 // ===== UPGRADE MODAL =====
 
