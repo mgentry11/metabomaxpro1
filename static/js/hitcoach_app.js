@@ -1,31 +1,25 @@
-// HIT Coach Pro Web App JavaScript
+// HIT Coach Pro Web App JavaScript - Redesigned
 
 // ===== DATA STRUCTURES =====
 
 const WORKOUTS = {
-    FREE: [
-        { name: 'Leg Press', icon: '🦵', muscle: 'Legs' },
-        { name: 'Pulldown', icon: '💪', muscle: 'Back' },
-        { name: 'Chest Press', icon: '💪', muscle: 'Chest' },
-        { name: 'Overhead Press', icon: '💪', muscle: 'Shoulders' }
-    ],
     A: [
         { name: 'Leg Press', icon: '🦵', muscle: 'Legs' },
         { name: 'Pulldown', icon: '💪', muscle: 'Back' },
-        { name: 'Chest Press', icon: '💪', muscle: 'Chest' },
-        { name: 'Overhead Press', icon: '💪', muscle: 'Shoulders' },
+        { name: 'Chest Press', icon: '🏋️', muscle: 'Chest' },
+        { name: 'Overhead', icon: '🙆', muscle: 'Shoulders' },
         { name: 'Leg Curl', icon: '🦵', muscle: 'Hamstrings' },
         { name: 'Bicep Curl', icon: '💪', muscle: 'Biceps' },
         { name: 'Tricep Extension', icon: '💪', muscle: 'Triceps' },
-        { name: 'Calf Raise', icon: '🦵', muscle: 'Calves' }
+        { name: 'Calf Raise', icon: '🦶', muscle: 'Calves' }
     ],
     B: [
         { name: 'Leg Extension', icon: '🦵', muscle: 'Quads' },
-        { name: 'Seated Row', icon: '💪', muscle: 'Back' },
-        { name: 'Incline Press', icon: '💪', muscle: 'Chest' },
-        { name: 'Lateral Raise', icon: '💪', muscle: 'Shoulders' },
+        { name: 'Seated Row', icon: '🚣', muscle: 'Back' },
+        { name: 'Incline Press', icon: '🏋️', muscle: 'Upper Chest' },
+        { name: 'Lateral Raise', icon: '🙆', muscle: 'Shoulders' },
         { name: 'Leg Curl', icon: '🦵', muscle: 'Hamstrings' },
-        { name: 'Shrug', icon: '💪', muscle: 'Traps' },
+        { name: 'Shrug', icon: '🤷', muscle: 'Traps' },
         { name: 'Ab Crunch', icon: '🧘', muscle: 'Abs' },
         { name: 'Back Extension', icon: '🧘', muscle: 'Lower Back' }
     ]
@@ -51,211 +45,106 @@ let TIMER_PHASES = {
 
 // ===== STATE MANAGEMENT =====
 
-let currentWorkout = null;
+let currentWorkoutType = 'A';
 let currentExerciseIndex = 0;
 let currentPhase = null;
 let timerInterval = null;
+let restInterval = null;
 let timeRemaining = 0;
 let isPaused = false;
 let workoutStartTime = null;
 let currentWorkoutData = [];
 let voiceEnabled = true;
+let voiceGender = 'female';
 let synth = window.speechSynthesis;
 
-// ===== SETTINGS =====
+// ===== INITIALIZATION =====
 
-function loadSettings() {
-    const settings = JSON.parse(localStorage.getItem('hitCoachSettings')) || {
-        voiceEnabled: true,
-        voiceGender: 'female',
-        restDuration: 60,
-        coachingStyle: 'motivational',
-        theme: 'dark',
-        volume: 100
-    };
+document.addEventListener('DOMContentLoaded', () => {
+    loadSettings();
+    loadPhaseSettings();
+    loadProfile();
+    renderExerciseList();
+    loadStats();
+    loadLog();
 
-    voiceEnabled = settings.voiceEnabled;
-    document.getElementById('voiceToggle').checked = settings.voiceEnabled;
-    document.getElementById('voiceGender').value = settings.voiceGender;
-    document.getElementById('restDuration').value = settings.restDuration;
-    document.getElementById('coachingStyle').value = settings.coachingStyle;
-    document.getElementById('volumeSlider').value = settings.volume;
-    document.getElementById('volumeDisplay').textContent = settings.volume + '%';
-
-    if (settings.theme === 'light') {
-        document.body.classList.add('light-theme');
+    // Load voices when available
+    if (speechSynthesis.onvoiceschanged !== undefined) {
+        speechSynthesis.onvoiceschanged = () => {
+            speechSynthesis.getVoices();
+        };
     }
 
-    return settings;
-}
-
-function saveSettings() {
-    const settings = {
-        voiceEnabled: document.getElementById('voiceToggle').checked,
-        voiceGender: document.getElementById('voiceGender').value,
-        restDuration: parseInt(document.getElementById('restDuration').value),
-        coachingStyle: document.getElementById('coachingStyle').value,
-        theme: document.body.classList.contains('light-theme') ? 'light' : 'dark',
-        volume: parseInt(document.getElementById('volumeSlider').value)
-    };
-    localStorage.setItem('hitCoachSettings', JSON.stringify(settings));
-}
-
-function toggleVoice() {
-    voiceEnabled = document.getElementById('voiceToggle').checked;
-    saveSettings();
-}
-
-function changeVoiceGender() {
-    saveSettings();
-}
-
-function setTheme(theme) {
-    document.querySelectorAll('.theme-btn').forEach(btn => btn.classList.remove('active'));
-    event.target.classList.add('active');
-
-    if (theme === 'light') {
-        document.body.classList.add('light-theme');
-    } else {
-        document.body.classList.remove('light-theme');
-    }
-    saveSettings();
-}
-
-function updateVolume() {
-    const volume = document.getElementById('volumeSlider').value;
-    document.getElementById('volumeDisplay').textContent = volume + '%';
-    saveSettings();
-}
-
-// ===== PHASE TIMING CUSTOMIZATION =====
-
-function loadPhaseSettings() {
-    const savedPhases = JSON.parse(localStorage.getItem('phaseTimings')) || DEFAULT_PHASES;
-
-    // Update input fields
-    document.getElementById('prepDuration').value = savedPhases.PREP;
-    document.getElementById('positioningDuration').value = savedPhases.POSITIONING;
-    document.getElementById('eccentricDuration').value = savedPhases.ECCENTRIC;
-    document.getElementById('concentricDuration').value = savedPhases.CONCENTRIC;
-    document.getElementById('finalEccentricDuration').value = savedPhases.FINAL_ECCENTRIC;
-
-    // Update TIMER_PHASES with custom durations
-    TIMER_PHASES.PREP.duration = savedPhases.PREP;
-    TIMER_PHASES.POSITIONING.duration = savedPhases.POSITIONING;
-    TIMER_PHASES.ECCENTRIC.duration = savedPhases.ECCENTRIC;
-    TIMER_PHASES.CONCENTRIC.duration = savedPhases.CONCENTRIC;
-    TIMER_PHASES.FINAL_ECCENTRIC.duration = savedPhases.FINAL_ECCENTRIC;
-
-    updateTotalPhaseTime();
-}
-
-function savePhaseSettings() {
-    const phases = {
-        PREP: parseInt(document.getElementById('prepDuration').value) || DEFAULT_PHASES.PREP,
-        POSITIONING: parseInt(document.getElementById('positioningDuration').value) || DEFAULT_PHASES.POSITIONING,
-        ECCENTRIC: parseInt(document.getElementById('eccentricDuration').value) || DEFAULT_PHASES.ECCENTRIC,
-        CONCENTRIC: parseInt(document.getElementById('concentricDuration').value) || DEFAULT_PHASES.CONCENTRIC,
-        FINAL_ECCENTRIC: parseInt(document.getElementById('finalEccentricDuration').value) || DEFAULT_PHASES.FINAL_ECCENTRIC
-    };
-
-    // Save to localStorage
-    localStorage.setItem('phaseTimings', JSON.stringify(phases));
-
-    // Update TIMER_PHASES
-    TIMER_PHASES.PREP.duration = phases.PREP;
-    TIMER_PHASES.POSITIONING.duration = phases.POSITIONING;
-    TIMER_PHASES.ECCENTRIC.duration = phases.ECCENTRIC;
-    TIMER_PHASES.CONCENTRIC.duration = phases.CONCENTRIC;
-    TIMER_PHASES.FINAL_ECCENTRIC.duration = phases.FINAL_ECCENTRIC;
-
-    updateTotalPhaseTime();
-}
-
-function updateTotalPhaseTime() {
-    const total =
-        parseInt(document.getElementById('prepDuration').value || 0) +
-        parseInt(document.getElementById('positioningDuration').value || 0) +
-        parseInt(document.getElementById('eccentricDuration').value || 0) +
-        parseInt(document.getElementById('concentricDuration').value || 0) +
-        parseInt(document.getElementById('finalEccentricDuration').value || 0);
-
-    document.getElementById('totalPhaseTime').textContent = total;
-}
-
-function resetPhaseDefaults() {
-    document.getElementById('prepDuration').value = DEFAULT_PHASES.PREP;
-    document.getElementById('positioningDuration').value = DEFAULT_PHASES.POSITIONING;
-    document.getElementById('eccentricDuration').value = DEFAULT_PHASES.ECCENTRIC;
-    document.getElementById('concentricDuration').value = DEFAULT_PHASES.CONCENTRIC;
-    document.getElementById('finalEccentricDuration').value = DEFAULT_PHASES.FINAL_ECCENTRIC;
-
-    savePhaseSettings();
-
-    // Give user feedback
-    speak('Phase timings reset to defaults');
-}
-
-// ===== VOICE SYNTHESIS =====
-
-function speak(text, priority = false) {
-    if (!voiceEnabled) return;
-
-    if (priority) {
-        synth.cancel();
+    // Prevent screen sleep on mobile
+    if ('wakeLock' in navigator) {
+        navigator.wakeLock.request('screen').catch(err => {
+            console.log('Wake lock error:', err);
+        });
     }
 
-    const settings = loadSettings();
-    const utterance = new SpeechSynthesisUtterance(text);
+    // Show install prompt after a delay
+    setTimeout(showInstallPrompt, 5000);
+});
 
-    // Set voice based on gender preference
-    const voices = synth.getVoices();
-    const preferredVoice = voices.find(voice =>
-        voice.name.toLowerCase().includes(settings.voiceGender === 'female' ? 'female' : 'male') ||
-        voice.name.toLowerCase().includes(settings.voiceGender === 'female' ? 'samantha' : 'daniel')
-    );
+// ===== EXERCISE LIST RENDERING =====
 
-    if (preferredVoice) {
-        utterance.voice = preferredVoice;
-    }
+function renderExerciseList() {
+    const list = document.getElementById('exerciseList');
+    const exercises = WORKOUTS[currentWorkoutType];
 
-    utterance.rate = 0.9;
-    utterance.pitch = 1.0;
-    utterance.volume = settings.volume / 100;
-
-    synth.speak(utterance);
+    list.innerHTML = exercises.map((exercise, index) => `
+        <div class="exercise-item" onclick="startWorkoutFromExercise(${index})">
+            <div class="exercise-icon">${exercise.icon}</div>
+            <div class="exercise-info">
+                <div class="exercise-name">${exercise.name}</div>
+                <div class="exercise-muscle">${exercise.muscle}</div>
+            </div>
+            <div class="exercise-chevron">›</div>
+        </div>
+    `).join('');
 }
 
-function getMotivationalPhrase() {
-    const settings = loadSettings();
+// ===== WORKOUT TAB SWITCHING =====
 
-    if (settings.coachingStyle === 'minimal') return '';
+function switchWorkoutTab(type) {
+    currentWorkoutType = type;
 
-    if (settings.coachingStyle === 'technical') {
-        const phrases = [
-            'Maintain constant tension',
-            'Control the movement',
-            'Focus on the muscle',
-            'Perfect form',
-            'Slow and controlled'
-        ];
-        return phrases[Math.floor(Math.random() * phrases.length)];
+    // Update tab UI
+    document.getElementById('tabA').classList.toggle('active', type === 'A');
+    document.getElementById('tabB').classList.toggle('active', type === 'B');
+
+    // Re-render exercise list
+    renderExerciseList();
+}
+
+// ===== BOTTOM NAVIGATION =====
+
+function navigateTo(section) {
+    // Update nav items
+    document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+
+    // Show/hide workout tabs
+    const workoutTabs = document.getElementById('workoutTabs');
+
+    switch (section) {
+        case 'workouts':
+            document.getElementById('navWorkouts').classList.add('active');
+            workoutTabs.style.display = 'flex';
+            showScreen('homeScreen');
+            break;
+        case 'stats':
+            document.getElementById('navStats').classList.add('active');
+            workoutTabs.style.display = 'none';
+            loadStats();
+            showScreen('statsScreen');
+            break;
+        case 'log':
+            document.getElementById('navLog').classList.add('active');
+            workoutTabs.style.display = 'none';
+            loadLog();
+            showScreen('logScreen');
+            break;
     }
-
-    // Motivational
-    const phrases = [
-        'You\'ve got this!',
-        'Stay strong!',
-        'Perfect form!',
-        'Keep pushing!',
-        'Excellent work!',
-        'Stay focused!',
-        'You\'re crushing it!',
-        'Amazing control!',
-        'Build that strength!',
-        'Feel the burn!'
-    ];
-    return phrases[Math.floor(Math.random() * phrases.length)];
 }
 
 // ===== SCREEN NAVIGATION =====
@@ -266,36 +155,57 @@ function showScreen(screenId) {
     });
     document.getElementById(screenId).classList.add('active');
 
-    if (screenId === 'settingsScreen') {
-        loadSettings();
-        loadPhaseSettings();
-    }
+    // Show/hide workout tabs and bottom nav based on screen
+    const workoutTabs = document.getElementById('workoutTabs');
+    const bottomNav = document.getElementById('bottomNav');
 
-    if (screenId === 'progressScreen') {
-        loadProgressHistory();
+    if (screenId === 'homeScreen') {
+        workoutTabs.style.display = 'flex';
+        bottomNav.style.display = 'flex';
+    } else if (screenId === 'workoutScreen' || screenId === 'summaryScreen') {
+        workoutTabs.style.display = 'none';
+        bottomNav.style.display = 'none';
+    } else if (screenId === 'settingsScreen' || screenId === 'profileScreen') {
+        workoutTabs.style.display = 'none';
+        bottomNav.style.display = 'flex';
+    } else if (screenId === 'statsScreen' || screenId === 'logScreen') {
+        workoutTabs.style.display = 'none';
+        bottomNav.style.display = 'flex';
     }
 }
 
 // ===== WORKOUT MANAGEMENT =====
 
-function loadWorkout(workoutType) {
-    currentWorkout = workoutType;
-    currentExerciseIndex = 0;
+function startWorkoutFromExercise(exerciseIndex) {
+    currentExerciseIndex = exerciseIndex;
     workoutStartTime = new Date();
     currentWorkoutData = [];
 
-    document.getElementById('workoutTitle').textContent = `Workout ${workoutType}`;
+    document.getElementById('workoutTitle').textContent = `Workout ${currentWorkoutType}`;
     showScreen('workoutScreen');
     loadExercise();
 }
 
+function exitWorkout() {
+    if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+    }
+    if (restInterval) {
+        clearInterval(restInterval);
+        restInterval = null;
+    }
+    isPaused = false;
+    navigateTo('workouts');
+}
+
 function loadExercise() {
-    const exercises = WORKOUTS[currentWorkout];
+    const exercises = WORKOUTS[currentWorkoutType];
     const exercise = exercises[currentExerciseIndex];
 
     document.getElementById('exerciseName').textContent = exercise.name;
     document.getElementById('exerciseCounter').textContent = `${currentExerciseIndex + 1} / ${exercises.length}`;
-    document.querySelector('.exercise-icon-display').textContent = exercise.icon;
+    document.getElementById('exerciseIconDisplay').textContent = exercise.icon;
 
     // Load last weight for this exercise
     const lastWeight = getLastWeight(exercise.name);
@@ -343,7 +253,7 @@ function startExercise() {
     document.getElementById('startBtn').style.display = 'none';
     document.getElementById('pauseBtn').style.display = 'block';
 
-    const exercise = WORKOUTS[currentWorkout][currentExerciseIndex];
+    const exercise = WORKOUTS[currentWorkoutType][currentExerciseIndex];
     speak(`Starting ${exercise.name}. ${getMotivationalPhrase()}`, true);
 
     startPhase('PREP');
@@ -360,13 +270,13 @@ function startPhase(phaseName) {
 
     // Voice announcements
     if (phaseName === 'POSITIONING') {
-        speak('You have 5 seconds to get into eccentric position', true);
+        speak('Get into position', true);
     } else if (phaseName === 'ECCENTRIC') {
-        speak('Begin eccentric. Slow and controlled. ' + getMotivationalPhrase(), true);
+        speak('Begin eccentric. Slow and controlled.', true);
     } else if (phaseName === 'CONCENTRIC') {
-        speak('Begin concentric. Powerful lift. ' + getMotivationalPhrase(), true);
+        speak('Begin concentric. Powerful lift.', true);
     } else if (phaseName === 'FINAL_ECCENTRIC') {
-        speak('Final eccentric. Push to failure. ' + getMotivationalPhrase(), true);
+        speak('Final eccentric. Push to failure.', true);
     }
 
     runTimer();
@@ -383,23 +293,16 @@ function runTimer() {
         updateProgressBar(timeRemaining, totalDuration);
 
         // Countdown announcements
-        if (timeRemaining === 5) {
-            speak('5');
-        } else if (timeRemaining === 3) {
-            speak('3');
-        } else if (timeRemaining === 2) {
-            speak('2');
-        } else if (timeRemaining === 1) {
-            speak('1');
-        }
+        if (timeRemaining === 5) speak('5');
+        else if (timeRemaining === 3) speak('3');
+        else if (timeRemaining === 2) speak('2');
+        else if (timeRemaining === 1) speak('1');
 
         // Motivational phrases at intervals
         if (currentPhase === 'ECCENTRIC' && timeRemaining === 15) {
             speak(getMotivationalPhrase());
-        } else if (currentPhase === 'CONCENTRIC' && timeRemaining === 10) {
-            speak(getMotivationalPhrase());
         } else if (currentPhase === 'FINAL_ECCENTRIC' && timeRemaining === 20) {
-            speak('Halfway there! ' + getMotivationalPhrase());
+            speak('Halfway there!');
         } else if (currentPhase === 'FINAL_ECCENTRIC' && timeRemaining === 10) {
             speak('10 seconds! Give it everything!');
         }
@@ -449,18 +352,18 @@ function resumeExercise() {
 }
 
 function finishExercise() {
-    speak('Exercise complete! Excellent work!', true);
+    speak('Exercise complete!', true);
     document.getElementById('pauseBtn').style.display = 'none';
     document.getElementById('completeSection').style.display = 'block';
 }
 
 function redoExercise() {
     resetExerciseUI();
-    speak('Let\'s try that again');
+    speak("Let's try that again");
 }
 
 function completeExercise() {
-    const exercise = WORKOUTS[currentWorkout][currentExerciseIndex];
+    const exercise = WORKOUTS[currentWorkoutType][currentExerciseIndex];
     const weight = parseFloat(document.getElementById('weightInput').value) || 0;
     const reachedFailure = document.getElementById('failureCheck').checked;
 
@@ -478,7 +381,7 @@ function completeExercise() {
     });
 
     // Move to next exercise or finish workout
-    if (currentExerciseIndex < WORKOUTS[currentWorkout].length - 1) {
+    if (currentExerciseIndex < WORKOUTS[currentWorkoutType].length - 1) {
         currentExerciseIndex++;
         startRestPeriod();
     } else {
@@ -490,15 +393,17 @@ function completeExercise() {
 
 function startRestPeriod() {
     const settings = loadSettings();
-    let restTime = settings.restDuration;
+    let restTime = settings.restDuration || 60;
 
-    const nextExercise = WORKOUTS[currentWorkout][currentExerciseIndex];
+    const nextExercise = WORKOUTS[currentWorkoutType][currentExerciseIndex];
     document.getElementById('nextExercise').textContent = nextExercise.name;
     document.getElementById('restScreen').style.display = 'block';
+    document.getElementById('completeSection').style.display = 'none';
+    document.getElementById('restTimer').textContent = restTime;
 
-    speak(`Rest for ${restTime} seconds. Next exercise: ${nextExercise.name}`);
+    speak(`Rest for ${restTime} seconds. Next: ${nextExercise.name}`);
 
-    const restInterval = setInterval(() => {
+    restInterval = setInterval(() => {
         restTime--;
         document.getElementById('restTimer').textContent = restTime;
 
@@ -516,6 +421,10 @@ function startRestPeriod() {
 }
 
 function skipRest() {
+    if (restInterval) {
+        clearInterval(restInterval);
+        restInterval = null;
+    }
     document.getElementById('restScreen').style.display = 'none';
     loadExercise();
 }
@@ -558,7 +467,7 @@ function saveWorkoutToHistory() {
     const history = JSON.parse(localStorage.getItem('workoutHistory')) || [];
 
     history.push({
-        type: currentWorkout,
+        type: currentWorkoutType,
         date: new Date(),
         exercises: currentWorkoutData,
         duration: Math.floor((new Date() - workoutStartTime) / 1000)
@@ -567,12 +476,16 @@ function saveWorkoutToHistory() {
     localStorage.setItem('workoutHistory', JSON.stringify(history));
 }
 
+function finishAndGoHome() {
+    navigateTo('workouts');
+}
+
 function shareWorkout() {
     const exercises = currentWorkoutData.map(ex =>
         `${ex.name}: ${ex.weight} lbs${ex.failure ? ' ✓' : ''}`
     ).join('\n');
 
-    const text = `HIT Coach Pro Workout ${currentWorkout}\n${exercises}\n\nCompleted with HIT Coach Pro`;
+    const text = `HIT Coach Pro - Workout ${currentWorkoutType}\n${exercises}\n\nCompleted with HIT Coach Pro`;
 
     if (navigator.share) {
         navigator.share({
@@ -580,65 +493,108 @@ function shareWorkout() {
             text: text
         });
     } else {
-        // Fallback: copy to clipboard
         navigator.clipboard.writeText(text).then(() => {
             alert('Workout copied to clipboard!');
         });
     }
 }
 
-// ===== PROGRESS TRACKING =====
+// ===== STATS SCREEN =====
 
-function loadProgressHistory() {
+function loadStats() {
     const history = JSON.parse(localStorage.getItem('workoutHistory')) || [];
-    const progressList = document.getElementById('progressList');
+    const statsContent = document.getElementById('statsContent');
 
     if (history.length === 0) {
-        progressList.innerHTML = '<p style="text-align: center; color: var(--text-gray); padding: 2rem;">No workout history yet. Complete your first workout!</p>';
+        statsContent.innerHTML = `
+            <div class="stats-empty">
+                <div class="stats-empty-icon">📊</div>
+                <p>No workout data yet.<br>Complete your first workout to see stats!</p>
+            </div>
+        `;
         return;
     }
 
-    progressList.innerHTML = '';
+    // Calculate stats
+    const totalWorkouts = history.length;
+    const totalExercises = history.reduce((sum, w) => sum + w.exercises.length, 0);
+    const totalDuration = history.reduce((sum, w) => sum + (w.duration || 0), 0);
+    const totalFailures = history.reduce((sum, w) => sum + w.exercises.filter(e => e.failure).length, 0);
+
+    const avgDuration = Math.floor(totalDuration / totalWorkouts / 60);
+    const failureRate = Math.round((totalFailures / totalExercises) * 100);
+
+    statsContent.innerHTML = `
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">${totalWorkouts}</div>
+                <div class="stat-label">Workouts</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">${totalExercises}</div>
+                <div class="stat-label">Exercises</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">${avgDuration}m</div>
+                <div class="stat-label">Avg Duration</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">${failureRate}%</div>
+                <div class="stat-label">Failure Rate</div>
+            </div>
+        </div>
+    `;
+}
+
+// ===== LOG SCREEN =====
+
+function loadLog() {
+    const history = JSON.parse(localStorage.getItem('workoutHistory')) || [];
+    const logList = document.getElementById('logList');
+
+    if (history.length === 0) {
+        logList.innerHTML = '<p style="text-align: center; color: var(--text-gray); padding: 2rem;">No workout history yet.</p>';
+        return;
+    }
+
+    logList.innerHTML = '';
 
     // Reverse to show newest first
-    history.reverse().forEach((workout, index) => {
+    [...history].reverse().forEach((workout) => {
         const date = new Date(workout.date);
-        const dateStr = date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        const dateStr = date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
         const entry = document.createElement('div');
-        entry.className = 'progress-entry';
+        entry.className = 'log-entry';
         entry.dataset.workout = workout.type;
 
-        let exercisesHTML = '';
-        workout.exercises.forEach(ex => {
-            exercisesHTML += `
-                <div class="progress-exercise">
-                    <span class="progress-exercise-name">${ex.name}</span>
-                    <div>
-                        <span class="progress-exercise-weight">${ex.weight} lbs</span>
-                        ${ex.failure ? '<span class="progress-exercise-failure">✓ Failure</span>' : ''}
-                    </div>
-                </div>
-            `;
-        });
+        let exercisesHTML = workout.exercises.map(ex => `
+            <div class="log-exercise">
+                <span class="log-exercise-name">${ex.name}</span>
+                <span>
+                    <span class="log-exercise-weight">${ex.weight} lbs</span>
+                    ${ex.failure ? '<span class="log-exercise-failure">✓</span>' : ''}
+                </span>
+            </div>
+        `).join('');
 
         entry.innerHTML = `
-            <div class="progress-entry-header">
+            <div class="log-entry-header">
                 <h3>Workout ${workout.type}</h3>
-                <span class="progress-entry-date">${dateStr}</span>
+                <span class="log-entry-date">${dateStr}</span>
             </div>
             ${exercisesHTML}
         `;
 
-        progressList.appendChild(entry);
+        logList.appendChild(entry);
     });
 }
 
-function filterProgress(filter) {
-    document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+function filterLog(filter) {
+    document.querySelectorAll('.log-filters .filter-btn').forEach(btn => btn.classList.remove('active'));
     event.target.classList.add('active');
 
-    const entries = document.querySelectorAll('.progress-entry');
+    const entries = document.querySelectorAll('.log-entry');
     entries.forEach(entry => {
         if (filter === 'all' || entry.dataset.workout === filter) {
             entry.style.display = 'block';
@@ -651,116 +607,258 @@ function filterProgress(filter) {
 function clearProgress() {
     if (confirm('Are you sure you want to clear all workout history? This cannot be undone.')) {
         localStorage.removeItem('workoutHistory');
-        loadProgressHistory();
+        loadLog();
+        loadStats();
     }
 }
 
-// ===== WORKOUT SELECTION & UPGRADE PROMPTS =====
+// ===== SETTINGS =====
 
-function loadWorkout(workoutType) {
-    // Check if valid workout type
-    if (!WORKOUTS[workoutType]) {
-        console.error('Invalid workout type:', workoutType);
-        return;
-    }
+function loadSettings() {
+    const settings = JSON.parse(localStorage.getItem('hitCoachSettings')) || {
+        voiceEnabled: true,
+        voiceGender: 'female',
+        restDuration: 60,
+        theme: 'dark'
+    };
 
-    // Set current workout and start it
-    currentWorkout = workoutType;
+    voiceEnabled = settings.voiceEnabled;
+    voiceGender = settings.voiceGender;
 
-    // Switch to workout selection screen
-    showScreen('workoutScreen');
+    // Update rest duration input
+    const restInput = document.getElementById('restDuration');
+    if (restInput) restInput.value = settings.restDuration;
 
-    // Display workout details
-    document.getElementById('workoutType').textContent =
-        workoutType === 'FREE' ? 'Quick Start' : `Workout ${workoutType}`;
+    // Update theme buttons
+    updateThemeButtons(settings.theme);
+    applyTheme(settings.theme);
 
-    // Generate exercise list
-    const exerciseListHTML = WORKOUTS[workoutType].map((exercise, index) => {
-        return `
-            <div class="exercise-item" onclick="selectExercise(${index})">
-                <div class="exercise-icon">${exercise.icon}</div>
-                <div class="exercise-info">
-                    <div class="exercise-name">${exercise.name}</div>
-                    <div class="exercise-muscle">${exercise.muscle}</div>
-                </div>
-                <div class="exercise-number">${index + 1}</div>
-            </div>
-        `;
-    }).join('');
+    // Update voice buttons
+    updateVoiceButtons(settings.voiceGender);
 
-    document.getElementById('exerciseList').innerHTML = exerciseListHTML;
+    return settings;
+}
 
-    // Reset current exercise index
-    currentExerciseIndex = 0;
-    currentWorkoutData = [];
-    workoutStartTime = null;
+function saveSettings() {
+    const settings = {
+        voiceEnabled: voiceEnabled,
+        voiceGender: voiceGender,
+        restDuration: parseInt(document.getElementById('restDuration')?.value) || 60,
+        theme: getCurrentTheme()
+    };
+    localStorage.setItem('hitCoachSettings', JSON.stringify(settings));
+}
 
-    // Track workout start for free users (for upgrade prompts)
-    if (workoutType === 'FREE') {
-        trackFreeWorkoutStart();
+function getCurrentTheme() {
+    if (document.getElementById('themeLight')?.classList.contains('active')) return 'light';
+    if (document.getElementById('themeSystem')?.classList.contains('active')) return 'system';
+    return 'dark';
+}
+
+// ===== THEME =====
+
+function setTheme(theme) {
+    updateThemeButtons(theme);
+    applyTheme(theme);
+    saveSettings();
+}
+
+function updateThemeButtons(theme) {
+    document.getElementById('themeSystem')?.classList.toggle('active', theme === 'system');
+    document.getElementById('themeDark')?.classList.toggle('active', theme === 'dark');
+    document.getElementById('themeLight')?.classList.toggle('active', theme === 'light');
+}
+
+function applyTheme(theme) {
+    if (theme === 'light') {
+        document.body.classList.add('light-theme');
+    } else if (theme === 'system') {
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.body.classList.toggle('light-theme', !prefersDark);
+    } else {
+        document.body.classList.remove('light-theme');
     }
 }
 
-function trackFreeWorkoutStart() {
-    // Track number of free workouts completed
-    let freeWorkoutCount = parseInt(localStorage.getItem('freeWorkoutCount') || '0');
-    freeWorkoutCount++;
-    localStorage.setItem('freeWorkoutCount', freeWorkoutCount.toString());
+// ===== VOICE OPTIONS =====
 
-    // Show upgrade prompt after 3-5 workouts
-    if (freeWorkoutCount >= 3 && freeWorkoutCount % 2 === 1) {
-        // Show on workout 3, 5, 7, etc.
-        setTimeout(() => {
-            showUpgradePromptModal();
-        }, 2000); // Show after 2 seconds
+function setVoice(gender) {
+    voiceGender = gender;
+    updateVoiceButtons(gender);
+    saveSettings();
+    speak('Voice updated', true);
+}
+
+function updateVoiceButtons(gender) {
+    document.getElementById('voiceM')?.classList.toggle('active', gender === 'male');
+    document.getElementById('voiceF')?.classList.toggle('active', gender === 'female');
+    document.getElementById('voiceD')?.classList.toggle('active', gender === 'default');
+}
+
+// ===== VOICE SYNTHESIS =====
+
+function speak(text, priority = false) {
+    if (!voiceEnabled) return;
+
+    if (priority) {
+        synth.cancel();
     }
+
+    const utterance = new SpeechSynthesisUtterance(text);
+
+    // Set voice based on gender preference
+    const voices = synth.getVoices();
+    let preferredVoice = null;
+
+    if (voiceGender === 'male') {
+        preferredVoice = voices.find(voice =>
+            voice.name.toLowerCase().includes('male') ||
+            voice.name.toLowerCase().includes('daniel') ||
+            voice.name.toLowerCase().includes('alex')
+        );
+    } else if (voiceGender === 'female') {
+        preferredVoice = voices.find(voice =>
+            voice.name.toLowerCase().includes('female') ||
+            voice.name.toLowerCase().includes('samantha') ||
+            voice.name.toLowerCase().includes('victoria')
+        );
+    }
+
+    if (preferredVoice) {
+        utterance.voice = preferredVoice;
+    }
+
+    utterance.rate = 0.95;
+    utterance.pitch = 1.0;
+    utterance.volume = 1.0;
+
+    synth.speak(utterance);
 }
 
-function showUpgradePrompt(workoutType) {
-    // Show modal explaining this is a premium workout
-    const modal = document.getElementById('upgradeModal');
-    const modalContent = modal.querySelector('.upgrade-modal-content');
-
-    // Update modal content based on which locked workout was clicked
-    const workoutName = workoutType === 'A' ? 'Workout A (Push Focus)' : 'Workout B (Pull Focus)';
-
-    modalContent.querySelector('h2').textContent = `Unlock ${workoutName}`;
-
-    modal.classList.add('active');
-
-    // Close modal when clicking outside
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) {
-            closeUpgradeModal();
-        }
-    });
+function getMotivationalPhrase() {
+    const phrases = [
+        "You've got this!",
+        'Stay strong!',
+        'Perfect form!',
+        'Keep pushing!',
+        'Excellent work!',
+        'Stay focused!',
+        "You're crushing it!",
+        'Amazing control!',
+        'Build that strength!',
+        'Feel the burn!'
+    ];
+    return phrases[Math.floor(Math.random() * phrases.length)];
 }
 
-function showUpgradePromptModal() {
-    // Generic upgrade prompt for free users
-    const modal = document.getElementById('upgradeModal');
-    const modalContent = modal.querySelector('.upgrade-modal-content');
+// ===== PHASE TIMING CUSTOMIZATION =====
 
-    modalContent.querySelector('h2').textContent = 'Ready for More Variety?';
+function loadPhaseSettings() {
+    const savedPhases = JSON.parse(localStorage.getItem('phaseTimings')) || DEFAULT_PHASES;
 
-    modal.classList.add('active');
+    // Update input fields
+    const prepInput = document.getElementById('prepDuration');
+    const posInput = document.getElementById('positioningDuration');
+    const eccInput = document.getElementById('eccentricDuration');
+    const conInput = document.getElementById('concentricDuration');
+    const finInput = document.getElementById('finalEccentricDuration');
+
+    if (prepInput) prepInput.value = savedPhases.PREP;
+    if (posInput) posInput.value = savedPhases.POSITIONING;
+    if (eccInput) eccInput.value = savedPhases.ECCENTRIC;
+    if (conInput) conInput.value = savedPhases.CONCENTRIC;
+    if (finInput) finInput.value = savedPhases.FINAL_ECCENTRIC;
+
+    // Update TIMER_PHASES with custom durations
+    TIMER_PHASES.PREP.duration = savedPhases.PREP;
+    TIMER_PHASES.POSITIONING.duration = savedPhases.POSITIONING;
+    TIMER_PHASES.ECCENTRIC.duration = savedPhases.ECCENTRIC;
+    TIMER_PHASES.CONCENTRIC.duration = savedPhases.CONCENTRIC;
+    TIMER_PHASES.FINAL_ECCENTRIC.duration = savedPhases.FINAL_ECCENTRIC;
+
+    updateTotalPhaseTime();
+}
+
+function savePhaseSettings() {
+    const phases = {
+        PREP: parseInt(document.getElementById('prepDuration')?.value) || DEFAULT_PHASES.PREP,
+        POSITIONING: parseInt(document.getElementById('positioningDuration')?.value) || DEFAULT_PHASES.POSITIONING,
+        ECCENTRIC: parseInt(document.getElementById('eccentricDuration')?.value) || DEFAULT_PHASES.ECCENTRIC,
+        CONCENTRIC: parseInt(document.getElementById('concentricDuration')?.value) || DEFAULT_PHASES.CONCENTRIC,
+        FINAL_ECCENTRIC: parseInt(document.getElementById('finalEccentricDuration')?.value) || DEFAULT_PHASES.FINAL_ECCENTRIC
+    };
+
+    localStorage.setItem('phaseTimings', JSON.stringify(phases));
+
+    TIMER_PHASES.PREP.duration = phases.PREP;
+    TIMER_PHASES.POSITIONING.duration = phases.POSITIONING;
+    TIMER_PHASES.ECCENTRIC.duration = phases.ECCENTRIC;
+    TIMER_PHASES.CONCENTRIC.duration = phases.CONCENTRIC;
+    TIMER_PHASES.FINAL_ECCENTRIC.duration = phases.FINAL_ECCENTRIC;
+
+    updateTotalPhaseTime();
+}
+
+function updateTotalPhaseTime() {
+    const total =
+        parseInt(document.getElementById('prepDuration')?.value || 0) +
+        parseInt(document.getElementById('positioningDuration')?.value || 0) +
+        parseInt(document.getElementById('eccentricDuration')?.value || 0) +
+        parseInt(document.getElementById('concentricDuration')?.value || 0) +
+        parseInt(document.getElementById('finalEccentricDuration')?.value || 0);
+
+    const totalEl = document.getElementById('totalPhaseTime');
+    if (totalEl) totalEl.textContent = total;
+}
+
+function resetPhaseDefaults() {
+    const prepInput = document.getElementById('prepDuration');
+    const posInput = document.getElementById('positioningDuration');
+    const eccInput = document.getElementById('eccentricDuration');
+    const conInput = document.getElementById('concentricDuration');
+    const finInput = document.getElementById('finalEccentricDuration');
+
+    if (prepInput) prepInput.value = DEFAULT_PHASES.PREP;
+    if (posInput) posInput.value = DEFAULT_PHASES.POSITIONING;
+    if (eccInput) eccInput.value = DEFAULT_PHASES.ECCENTRIC;
+    if (conInput) conInput.value = DEFAULT_PHASES.CONCENTRIC;
+    if (finInput) finInput.value = DEFAULT_PHASES.FINAL_ECCENTRIC;
+
+    savePhaseSettings();
+    speak('Phase timings reset to defaults');
+}
+
+// ===== PROFILE =====
+
+function loadProfile() {
+    const profile = JSON.parse(localStorage.getItem('userProfile')) || {};
+
+    const nameInput = document.getElementById('profileName');
+    const ageInput = document.getElementById('profileAge');
+    const weightInput = document.getElementById('profileWeight');
+
+    if (nameInput) nameInput.value = profile.name || '';
+    if (ageInput) ageInput.value = profile.age || '';
+    if (weightInput) weightInput.value = profile.weight || '';
+}
+
+function saveProfile() {
+    const profile = {
+        name: document.getElementById('profileName')?.value || '',
+        age: document.getElementById('profileAge')?.value || '',
+        weight: document.getElementById('profileWeight')?.value || ''
+    };
+    localStorage.setItem('userProfile', JSON.stringify(profile));
+}
+
+// ===== UPGRADE MODAL =====
+
+function showUpgradeModal() {
+    document.getElementById('upgradeModal').classList.add('active');
 }
 
 function closeUpgradeModal() {
     document.getElementById('upgradeModal').classList.remove('active');
-}
-
-function selectExercise(index) {
-    currentExerciseIndex = index;
-    const exercise = WORKOUTS[currentWorkout][index];
-
-    // Update UI with selected exercise
-    document.getElementById('currentExercise').textContent = exercise.name;
-    document.getElementById('currentMuscle').textContent = exercise.muscle;
-    document.getElementById('exerciseIcon').textContent = exercise.icon;
-
-    // Show weight entry screen
-    showScreen('weightScreen');
 }
 
 // ===== PWA / SERVICE WORKER =====
@@ -781,7 +879,6 @@ if ('serviceWorker' in navigator) {
     });
 }
 
-// Detect iOS
 function detectIOS() {
     const ua = window.navigator.userAgent;
     const iOS = !!ua.match(/iPad/i) || !!ua.match(/iPhone/i);
@@ -790,63 +887,47 @@ function detectIOS() {
     return isIOSDevice;
 }
 
-// Check if app is already installed
 function isAppInstalled() {
-    // Check if running in standalone mode
     if (window.matchMedia('(display-mode: standalone)').matches) {
         return true;
     }
-    // Check for iOS standalone
     if (window.navigator.standalone === true) {
         return true;
     }
     return false;
 }
 
-// Show install prompt
 function showInstallPrompt() {
-    // Don't show if already installed
-    if (isAppInstalled()) {
-        return;
-    }
+    if (isAppInstalled()) return;
 
-    // Check if user dismissed it recently
     const dismissedTime = localStorage.getItem('installPromptDismissed');
     if (dismissedTime) {
         const daysSinceDismissed = (Date.now() - parseInt(dismissedTime)) / (1000 * 60 * 60 * 24);
-        if (daysSinceDismissed < 7) {
-            return; // Don't show again for 7 days
-        }
+        if (daysSinceDismissed < 7) return;
     }
 
-    // Show iOS-specific instructions for Safari
     if (detectIOS()) {
         setTimeout(() => {
             document.getElementById('iosInstallPrompt').style.display = 'flex';
-        }, 3000); // Show after 3 seconds
+        }, 3000);
     } else if (deferredPrompt) {
-        // Show banner for Android/Desktop
         document.getElementById('installBanner').style.display = 'block';
     }
 }
 
-// Capture install prompt event (Android/Desktop)
 window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     deferredPrompt = e;
     showInstallPrompt();
 });
 
-// Handle install button click
 document.addEventListener('DOMContentLoaded', () => {
     const installButton = document.getElementById('installButton');
     const dismissButton = document.getElementById('dismissInstall');
 
     if (installButton) {
         installButton.addEventListener('click', async () => {
-            if (!deferredPrompt) {
-                return;
-            }
+            if (!deferredPrompt) return;
 
             deferredPrompt.prompt();
             const { outcome } = await deferredPrompt.userChoice;
@@ -865,55 +946,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// Close iOS prompt
 function closeIOSPrompt() {
     document.getElementById('iosInstallPrompt').style.display = 'none';
     localStorage.setItem('installPromptDismissed', Date.now().toString());
 }
 
-// Track successful install
 window.addEventListener('appinstalled', () => {
     console.log('PWA installed successfully');
     document.getElementById('installBanner').style.display = 'none';
     document.getElementById('iosInstallPrompt').style.display = 'none';
 });
-
-// ===== INITIALIZATION =====
-
-document.addEventListener('DOMContentLoaded', () => {
-    loadSettings();
-    loadPhaseSettings();
-
-    // Load voices when available
-    if (speechSynthesis.onvoiceschanged !== undefined) {
-        speechSynthesis.onvoiceschanged = () => {
-            speechSynthesis.getVoices();
-        };
-    }
-
-    // Show settings button handler
-    document.getElementById('settingsBtn').addEventListener('click', () => {
-        showScreen('settingsScreen');
-    });
-
-    // Prevent screen sleep on mobile
-    if ('wakeLock' in navigator) {
-        navigator.wakeLock.request('screen').catch(err => {
-            console.log('Wake lock error:', err);
-        });
-    }
-
-    // Show install prompt after a delay
-    setTimeout(showInstallPrompt, 5000);
-});
-
-// ===== UTILITY FUNCTIONS =====
-
-function formatTime(seconds) {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins}:${String(secs).padStart(2, '0')}`;
-}
 
 // Prevent accidental page close during workout
 window.addEventListener('beforeunload', (e) => {

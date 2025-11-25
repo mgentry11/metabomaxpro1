@@ -2,69 +2,60 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
 
     <!-- PWA Meta Tags -->
     <meta name="application-name" content="HIT Coach Pro">
     <meta name="description" content="Voice-guided High-Intensity Training coach for building strength efficiently">
-    <meta name="theme-color" content="#F5A623">
+    <meta name="theme-color" content="#FFD700">
 
     <!-- iOS Meta Tags -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="HIT Coach">
 
-    <!-- iOS Splash Screens -->
-    <link rel="apple-touch-startup-image" href="/icons/splash-2048.png" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)">
-    <link rel="apple-touch-startup-image" href="/icons/splash-1668.png" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2)">
-    <link rel="apple-touch-startup-image" href="/icons/splash-1536.png" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2)">
-    <link rel="apple-touch-startup-image" href="/icons/splash-1242.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3)">
-    <link rel="apple-touch-startup-image" href="/icons/splash-1125.png" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)">
-    <link rel="apple-touch-startup-image" href="/icons/splash-750.png" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)">
-
-    <!-- Apple Touch Icons -->
-    <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-180.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152.png">
-    <link rel="apple-touch-icon" sizes="144x144" href="/icons/icon-144.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="/icons/icon-120.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="/icons/icon-114.png">
-    <link rel="apple-touch-icon" sizes="76x76" href="/icons/icon-76.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="/icons/icon-72.png">
-    <link rel="apple-touch-icon" sizes="60x60" href="/icons/icon-60.png">
-    <link rel="apple-touch-icon" sizes="57x57" href="/icons/icon-57.png">
-
     <!-- Favicon -->
     <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16.png">
-    <link rel="shortcut icon" href="/icons/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-180.png">
 
     <!-- Manifest -->
     <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
 
-    <!-- Windows Metro -->
-    <meta name="msapplication-TileColor" content="#F5A623">
-    <meta name="msapplication-TileImage" content="/icons/icon-144.png">
-
     <title>HIT Coach Pro</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/hitcoach_app.css') }}">
+
+    <!-- Premium CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/hitcoach_premium.css') }}">
 </head>
 <body class="app-body">
+    <!-- Skip Link for Accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
     <!-- App Header -->
-    <header class="app-header">
+    <header class="app-header" role="banner">
         <div class="app-header-content">
             <div class="app-logo">
-                <span class="logo-badge">HCP</span>
+                <span class="logo-badge" aria-hidden="true">HCP</span>
                 <span class="app-title">HIT Coach Pro</span>
             </div>
             <div class="header-actions">
-                <button class="settings-btn" id="settingsBtn" onclick="showScreen('settingsScreen')">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <button
+                    class="icon-btn"
+                    id="settingsBtn"
+                    onclick="showScreen('settingsScreen')"
+                    aria-label="Open settings"
+                >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                         <circle cx="12" cy="12" r="3"></circle>
                         <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
                     </svg>
                 </button>
-                <button class="profile-btn" id="profileBtn" onclick="showScreen('profileScreen')">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                <button
+                    class="icon-btn profile-btn"
+                    id="profileBtn"
+                    onclick="showScreen('profileScreen')"
+                    aria-label="Open profile"
+                >
+                    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                         <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
                     </svg>
                 </button>
@@ -72,67 +63,87 @@
         </div>
     </header>
 
-    <!-- Workout Tabs (visible on home screen) -->
-    <div class="workout-tabs" id="workoutTabs">
-        <button class="workout-tab active" id="tabA" onclick="switchWorkoutTab('A')">Workout A</button>
-        <button class="workout-tab" id="tabB" onclick="switchWorkoutTab('B')">Workout B</button>
+    <!-- Workout Tabs -->
+    <div class="workout-tabs" id="workoutTabs" role="tablist" aria-label="Workout selection">
+        <button
+            class="workout-tab active"
+            id="tabA"
+            role="tab"
+            aria-selected="true"
+            aria-controls="exerciseList"
+            onclick="switchWorkoutTab('A')"
+        >
+            Workout A
+        </button>
+        <button
+            class="workout-tab"
+            id="tabB"
+            role="tab"
+            aria-selected="false"
+            aria-controls="exerciseList"
+            onclick="switchWorkoutTab('B')"
+        >
+            Workout B
+        </button>
     </div>
 
-    <!-- Install Prompt Banner -->
-    <div class="install-banner" id="installBanner" style="display: none;">
+    <!-- Install Banner -->
+    <div class="install-banner" id="installBanner" style="display: none;" role="alert">
         <div class="install-content">
-            <div class="install-icon">📱</div>
+            <div class="install-icon" aria-hidden="true">📱</div>
             <div class="install-text">
                 <strong>Install HIT Coach Pro</strong>
-                <p>Add to home screen for best experience</p>
+                <p>Add to home screen for the best experience</p>
             </div>
             <button class="btn-install" id="installButton">Install</button>
-            <button class="btn-dismiss" id="dismissInstall">✕</button>
+            <button class="btn-dismiss" id="dismissInstall" aria-label="Dismiss">✕</button>
         </div>
     </div>
 
-    <!-- iOS Install Instructions (Safari) -->
-    <div class="ios-install-prompt" id="iosInstallPrompt" style="display: none;">
+    <!-- iOS Install Prompt -->
+    <div class="ios-install-prompt" id="iosInstallPrompt" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="ios-prompt-title">
         <div class="ios-prompt-content">
-            <button class="ios-close" onclick="closeIOSPrompt()">✕</button>
-            <h3>Install HIT Coach Pro</h3>
+            <button class="ios-close" onclick="closeIOSPrompt()" aria-label="Close">✕</button>
+            <h3 id="ios-prompt-title">Install HIT Coach Pro</h3>
             <p>Add this app to your home screen for quick access and offline use:</p>
             <ol class="ios-steps">
                 <li>Tap the <strong>Share</strong> button at the bottom of Safari</li>
                 <li>Scroll down and tap <strong>"Add to Home Screen"</strong></li>
                 <li>Tap <strong>"Add"</strong> in the top right corner</li>
             </ol>
-            <button class="btn btn-primary btn-large" onclick="closeIOSPrompt()">Got It</button>
+            <button class="btn-primary btn-large" onclick="closeIOSPrompt()">Got It</button>
         </div>
     </div>
 
-    <!-- Main Container -->
-    <div class="app-container">
+    <!-- Main Content -->
+    <main id="main-content" class="app-container">
         <!-- Home Screen (Exercise List) -->
-        <div class="screen active" id="homeScreen">
-            <div class="exercise-list" id="exerciseList">
-                <!-- Exercise items will be populated by JavaScript -->
+        <section class="screen active" id="homeScreen" role="tabpanel" aria-labelledby="tabA">
+            <div class="exercise-list" id="exerciseList" role="list" aria-label="Exercise list">
+                <!-- Populated by JavaScript -->
             </div>
-        </div>
+        </section>
 
         <!-- Active Workout Screen -->
-        <div class="screen" id="workoutScreen">
+        <section class="screen" id="workoutScreen" aria-label="Active workout">
             <div class="workout-header">
-                <button class="back-btn" onclick="exitWorkout()">← Back</button>
+                <button class="back-btn" onclick="exitWorkout()" aria-label="Exit workout">
+                    ← Back
+                </button>
                 <h2 class="workout-title" id="workoutTitle">Workout A</h2>
-                <span class="exercise-counter" id="exerciseCounter">1 / 8</span>
+                <span class="exercise-counter" id="exerciseCounter" aria-live="polite">1 / 8</span>
             </div>
 
             <div class="current-exercise">
                 <h1 id="exerciseName">Leg Press</h1>
-                <div class="exercise-icon-display" id="exerciseIconDisplay">🦵</div>
+                <div class="exercise-icon-display" id="exerciseIconDisplay" aria-hidden="true">🦵</div>
             </div>
 
             <!-- Timer Display -->
-            <div class="timer-section">
+            <div class="timer-section" role="timer" aria-live="polite">
                 <div class="phase-indicator" id="phaseIndicator">Ready</div>
-                <div class="timer-display" id="timerDisplay">00:00</div>
-                <div class="phase-progress">
+                <div class="timer-display" id="timerDisplay" aria-label="Time remaining">00:00</div>
+                <div class="phase-progress" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
                     <div class="progress-bar" id="progressBar"></div>
                 </div>
                 <div class="phase-description" id="phaseDescription">Tap START to begin</div>
@@ -141,24 +152,31 @@
             <!-- Weight Input -->
             <div class="weight-input-section">
                 <label for="weightInput">Weight Used (lbs)</label>
-                <input type="number" id="weightInput" placeholder="Enter weight" step="5">
-                <div class="last-weight" id="lastWeight"></div>
+                <input
+                    type="number"
+                    id="weightInput"
+                    placeholder="Enter weight"
+                    step="5"
+                    inputmode="numeric"
+                    aria-describedby="lastWeight"
+                >
+                <div class="last-weight" id="lastWeight" aria-live="polite"></div>
             </div>
 
             <!-- Control Buttons -->
             <div class="control-buttons">
-                <button class="btn btn-primary btn-large" id="startBtn" onclick="startExercise()">
+                <button class="btn-primary btn-large" id="startBtn" onclick="startExercise()">
                     START EXERCISE
                 </button>
-                <button class="btn btn-secondary btn-large" id="pauseBtn" onclick="pauseExercise()" style="display: none;">
+                <button class="btn-secondary btn-large" id="pauseBtn" onclick="pauseExercise()" style="display: none;">
                     PAUSE
                 </button>
-                <button class="btn btn-primary btn-large" id="resumeBtn" onclick="resumeExercise()" style="display: none;">
+                <button class="btn-primary btn-large" id="resumeBtn" onclick="resumeExercise()" style="display: none;">
                     RESUME
                 </button>
             </div>
 
-            <!-- Complete Exercise Section -->
+            <!-- Complete Section -->
             <div class="complete-section" id="completeSection" style="display: none;">
                 <h3>Exercise Complete!</h3>
                 <div class="failure-check">
@@ -168,101 +186,96 @@
                     </label>
                 </div>
                 <div class="complete-buttons">
-                    <button class="btn btn-primary" onclick="completeExercise()">
-                        NEXT →
-                    </button>
-                    <button class="btn btn-secondary" onclick="redoExercise()">
-                        REDO
-                    </button>
+                    <button class="btn-primary" onclick="completeExercise()">NEXT →</button>
+                    <button class="btn-secondary" onclick="redoExercise()">REDO</button>
                 </div>
             </div>
 
             <!-- Rest Timer -->
-            <div class="rest-screen" id="restScreen" style="display: none;">
+            <div class="rest-screen" id="restScreen" style="display: none;" role="timer" aria-live="polite">
                 <h2>Rest Period</h2>
-                <div class="rest-timer" id="restTimer">60</div>
+                <div class="rest-timer" id="restTimer" aria-label="Rest time remaining">60</div>
                 <p>Next: <span id="nextExercise"></span></p>
-                <button class="btn btn-secondary btn-large" onclick="skipRest()">SKIP REST</button>
+                <button class="btn-secondary btn-large" onclick="skipRest()">SKIP REST</button>
             </div>
-        </div>
+        </section>
 
         <!-- Stats Screen -->
-        <div class="screen" id="statsScreen">
+        <section class="screen" id="statsScreen" aria-label="Statistics">
             <div class="stats-header">
                 <h1 class="stats-title">Stats</h1>
             </div>
-
             <div id="statsContent">
-                <!-- Stats will be populated by JavaScript -->
+                <!-- Populated by JavaScript -->
             </div>
-        </div>
+        </section>
 
         <!-- Log Screen -->
-        <div class="screen" id="logScreen">
+        <section class="screen" id="logScreen" aria-label="Workout log">
             <div class="log-header">
                 <h1 class="log-title">Log</h1>
                 <button class="clear-btn" onclick="clearProgress()">Clear All</button>
             </div>
 
-            <div class="log-filters">
-                <button class="filter-btn active" onclick="filterLog('all')">All</button>
-                <button class="filter-btn" onclick="filterLog('A')">Workout A</button>
-                <button class="filter-btn" onclick="filterLog('B')">Workout B</button>
+            <div class="log-filters" role="group" aria-label="Filter workouts">
+                <button class="filter-btn active" onclick="filterLog('all')" aria-pressed="true">All</button>
+                <button class="filter-btn" onclick="filterLog('A')" aria-pressed="false">Workout A</button>
+                <button class="filter-btn" onclick="filterLog('B')" aria-pressed="false">Workout B</button>
             </div>
 
-            <div id="logList" class="log-list">
-                <!-- Log entries will be populated by JavaScript -->
+            <div id="logList" class="log-list" role="list">
+                <!-- Populated by JavaScript -->
             </div>
-        </div>
+        </section>
 
         <!-- Settings Screen -->
-        <div class="screen" id="settingsScreen">
+        <section class="screen" id="settingsScreen" aria-label="Settings">
             <div class="settings-header">
                 <h1 class="settings-title">Settings</h1>
                 <button class="done-btn" onclick="showScreen('homeScreen')">Done</button>
             </div>
 
-            <!-- Appearance Section -->
+            <!-- Appearance -->
             <div class="settings-section">
                 <h2 class="settings-section-title">Appearance</h2>
-                <div class="appearance-toggle">
-                    <button class="appearance-btn" onclick="setTheme('system')" id="themeSystem">System</button>
-                    <button class="appearance-btn active" onclick="setTheme('dark')" id="themeDark">Dark</button>
-                    <button class="appearance-btn" onclick="setTheme('light')" id="themeLight">Light</button>
+                <div class="appearance-toggle" role="group" aria-label="Theme selection">
+                    <button class="appearance-btn" onclick="setTheme('system')" id="themeSystem" aria-pressed="false">System</button>
+                    <button class="appearance-btn active" onclick="setTheme('dark')" id="themeDark" aria-pressed="true">Dark</button>
+                    <button class="appearance-btn" onclick="setTheme('light')" id="themeLight" aria-pressed="false">Light</button>
                 </div>
             </div>
 
-            <!-- Voice Options Section -->
+            <!-- Voice Options -->
             <div class="settings-section">
                 <h2 class="settings-section-title">Voice Options</h2>
 
                 <div class="voice-section">
                     <p class="voice-label">Standard Voices</p>
-                    <div class="voice-options">
-                        <button class="voice-btn" id="voiceM" onclick="setVoice('male')">M</button>
-                        <button class="voice-btn active" id="voiceF" onclick="setVoice('female')">F</button>
-                        <button class="voice-btn" id="voiceD" onclick="setVoice('default')">D</button>
+                    <div class="voice-options" role="group" aria-label="Voice selection">
+                        <button class="voice-btn" id="voiceM" onclick="setVoice('male')" aria-label="Male voice" aria-pressed="false">M</button>
+                        <button class="voice-btn active" id="voiceF" onclick="setVoice('female')" aria-label="Female voice" aria-pressed="true">F</button>
+                        <button class="voice-btn" id="voiceD" onclick="setVoice('default')" aria-label="Default voice" aria-pressed="false">D</button>
                     </div>
                 </div>
 
                 <div class="voice-section">
                     <p class="voice-label">Pro Voices <span class="pro-badge">PRO</span></p>
                     <div class="voice-options">
-                        <button class="voice-btn disabled" disabled>1</button>
-                        <button class="voice-btn disabled" disabled>2</button>
-                        <button class="voice-btn disabled" disabled>3</button>
+                        <button class="voice-btn disabled" disabled aria-label="Pro voice 1 (locked)">1</button>
+                        <button class="voice-btn disabled" disabled aria-label="Pro voice 2 (locked)">2</button>
+                        <button class="voice-btn disabled" disabled aria-label="Pro voice 3 (locked)">3</button>
                     </div>
                 </div>
             </div>
 
-            <!-- Phase Timing Customization -->
+            <!-- Phase Timing -->
             <div class="settings-section phase-settings">
                 <h2 class="settings-section-title">Phase Timing</h2>
 
                 <div class="phase-setting-item">
                     <label for="prepDuration">Prep Phase</label>
                     <div class="phase-input-group">
-                        <input type="number" id="prepDuration" value="10" min="0" max="60" step="5" onchange="savePhaseSettings()">
+                        <input type="number" id="prepDuration" value="10" min="0" max="60" step="5" onchange="savePhaseSettings()" inputmode="numeric">
                         <span class="phase-unit">seconds</span>
                     </div>
                 </div>
@@ -270,7 +283,7 @@
                 <div class="phase-setting-item">
                     <label for="positioningDuration">Positioning Phase</label>
                     <div class="phase-input-group">
-                        <input type="number" id="positioningDuration" value="5" min="0" max="30" step="5" onchange="savePhaseSettings()">
+                        <input type="number" id="positioningDuration" value="5" min="0" max="30" step="5" onchange="savePhaseSettings()" inputmode="numeric">
                         <span class="phase-unit">seconds</span>
                     </div>
                 </div>
@@ -278,7 +291,7 @@
                 <div class="phase-setting-item">
                     <label for="eccentricDuration">Eccentric Phase</label>
                     <div class="phase-input-group">
-                        <input type="number" id="eccentricDuration" value="30" min="10" max="60" step="5" onchange="savePhaseSettings()">
+                        <input type="number" id="eccentricDuration" value="30" min="10" max="60" step="5" onchange="savePhaseSettings()" inputmode="numeric">
                         <span class="phase-unit">seconds</span>
                     </div>
                 </div>
@@ -286,7 +299,7 @@
                 <div class="phase-setting-item">
                     <label for="concentricDuration">Concentric Phase</label>
                     <div class="phase-input-group">
-                        <input type="number" id="concentricDuration" value="20" min="10" max="60" step="5" onchange="savePhaseSettings()">
+                        <input type="number" id="concentricDuration" value="20" min="10" max="60" step="5" onchange="savePhaseSettings()" inputmode="numeric">
                         <span class="phase-unit">seconds</span>
                     </div>
                 </div>
@@ -294,7 +307,7 @@
                 <div class="phase-setting-item">
                     <label for="finalEccentricDuration">Final Eccentric Phase</label>
                     <div class="phase-input-group">
-                        <input type="number" id="finalEccentricDuration" value="40" min="20" max="90" step="5" onchange="savePhaseSettings()">
+                        <input type="number" id="finalEccentricDuration" value="40" min="20" max="90" step="5" onchange="savePhaseSettings()" inputmode="numeric">
                         <span class="phase-unit">seconds</span>
                     </div>
                 </div>
@@ -303,45 +316,65 @@
                     <strong>Total Time:</strong> <span id="totalPhaseTime">105</span> seconds
                 </div>
 
-                <button class="reset-btn" onclick="resetPhaseDefaults()">
-                    Reset to Defaults
-                </button>
+                <button class="reset-btn" onclick="resetPhaseDefaults()">Reset to Defaults</button>
             </div>
 
             <!-- Rest Duration -->
             <div class="settings-section">
                 <h2 class="settings-section-title">Rest Duration</h2>
                 <div class="phase-input-group">
-                    <input type="number" id="restDuration" value="60" min="30" max="180" step="10" onchange="saveSettings()">
+                    <input type="number" id="restDuration" value="60" min="30" max="180" step="10" onchange="saveSettings()" inputmode="numeric">
                     <span class="phase-unit">seconds</span>
                 </div>
             </div>
-        </div>
+        </section>
 
         <!-- Profile Screen -->
-        <div class="screen" id="profileScreen">
+        <section class="screen" id="profileScreen" aria-label="Your profile">
             <div class="profile-header">
-                <button class="profile-close" onclick="showScreen('homeScreen')">✕</button>
+                <button class="profile-close" onclick="showScreen('homeScreen')" aria-label="Close profile">✕</button>
                 <h1 class="profile-title">Your Profile</h1>
                 <button class="done-btn" onclick="saveProfile(); showScreen('homeScreen')">Done</button>
             </div>
 
             <div class="profile-section">
                 <h2 class="profile-section-title">Personal Info</h2>
-                <input type="text" class="profile-input" id="profileName" placeholder="Enter your name">
+                <input
+                    type="text"
+                    class="profile-input"
+                    id="profileName"
+                    placeholder="Enter your name"
+                    autocomplete="name"
+                    aria-label="Your name"
+                >
             </div>
 
             <div class="profile-section">
                 <h2 class="profile-section-title">Physical Stats</h2>
-                <input type="number" class="profile-input" id="profileAge" placeholder="0 years" style="margin-bottom: 1rem;">
-                <input type="number" class="profile-input" id="profileWeight" placeholder="Weight">
+                <input
+                    type="number"
+                    class="profile-input"
+                    id="profileAge"
+                    placeholder="Age (years)"
+                    inputmode="numeric"
+                    aria-label="Your age in years"
+                    style="margin-bottom: 1rem;"
+                >
+                <input
+                    type="number"
+                    class="profile-input"
+                    id="profileWeight"
+                    placeholder="Weight (lbs)"
+                    inputmode="decimal"
+                    aria-label="Your weight in pounds"
+                >
             </div>
-        </div>
+        </section>
 
-        <!-- Workout Summary Screen -->
-        <div class="screen" id="summaryScreen">
+        <!-- Summary Screen -->
+        <section class="screen" id="summaryScreen" aria-label="Workout summary">
             <div class="summary-content">
-                <div class="summary-icon">🎉</div>
+                <div class="summary-icon" aria-hidden="true">🎉</div>
                 <h1>Workout Complete!</h1>
                 <p class="summary-subtitle">Excellent work today</p>
 
@@ -361,54 +394,50 @@
                 </div>
 
                 <div class="summary-exercises" id="summaryExerciseList">
-                    <!-- Exercise summary will be inserted here -->
+                    <!-- Populated by JavaScript -->
                 </div>
 
                 <div class="summary-buttons">
-                    <button class="btn btn-primary btn-large" onclick="finishAndGoHome()">
-                        FINISH
-                    </button>
-                    <button class="btn btn-secondary btn-large" onclick="shareWorkout()">
-                        SHARE
-                    </button>
+                    <button class="btn-primary btn-large" onclick="finishAndGoHome()">FINISH</button>
+                    <button class="btn-secondary btn-large" onclick="shareWorkout()">SHARE</button>
                 </div>
             </div>
-        </div>
-    </div>
+        </section>
+    </main>
 
     <!-- Bottom Navigation -->
-    <nav class="bottom-nav" id="bottomNav">
-        <button class="nav-item active" id="navWorkouts" onclick="navigateTo('workouts')">
-            <span class="nav-icon">
+    <nav class="bottom-nav" id="bottomNav" role="navigation" aria-label="Main navigation">
+        <button class="nav-item active" id="navWorkouts" onclick="navigateTo('workouts')" aria-current="page">
+            <span class="nav-icon" aria-hidden="true">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M20.57 14.86L22 13.43 20.57 12 17 15.57 8.43 7 12 3.43 10.57 2 9.14 3.43 7.71 2 5.57 4.14 4.14 2.71 2.71 4.14l1.43 1.43L2 7.71l1.43 1.43L2 10.57 3.43 12 7 8.43 15.57 17 12 20.57 13.43 22l1.43-1.43L16.29 22l2.14-2.14 1.43 1.43 1.43-1.43-1.43-1.43L22 16.29z"/>
                 </svg>
             </span>
-            Workouts
+            <span>Workouts</span>
         </button>
         <button class="nav-item" id="navStats" onclick="navigateTo('stats')">
-            <span class="nav-icon">
+            <span class="nav-icon" aria-hidden="true">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M5 9.2h3V19H5zM10.6 5h2.8v14h-2.8zm5.6 8H19v6h-2.8z"/>
                 </svg>
             </span>
-            Stats
+            <span>Stats</span>
         </button>
         <button class="nav-item" id="navLog" onclick="navigateTo('log')">
-            <span class="nav-icon">
+            <span class="nav-icon" aria-hidden="true">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/>
                 </svg>
             </span>
-            Log
+            <span>Log</span>
         </button>
     </nav>
 
     <!-- Upgrade Modal -->
-    <div class="upgrade-modal" id="upgradeModal">
+    <div class="upgrade-modal" id="upgradeModal" role="dialog" aria-modal="true" aria-labelledby="upgrade-title">
         <div class="upgrade-modal-content">
-            <button class="upgrade-modal-close" onclick="closeUpgradeModal()">&times;</button>
-            <h2>Unlock Pro Features</h2>
+            <button class="upgrade-modal-close" onclick="closeUpgradeModal()" aria-label="Close">&times;</button>
+            <h2 id="upgrade-title">Unlock Pro Features</h2>
             <p>Upgrade to <strong>Pro</strong> to access premium voices, advanced analytics, and more.</p>
 
             <ul class="upgrade-modal-benefits">
@@ -420,15 +449,15 @@
             </ul>
 
             <div class="upgrade-modal-buttons">
-                <a href="#" class="btn btn-primary btn-large">Upgrade to Pro</a>
-                <button class="btn btn-secondary btn-large" onclick="closeUpgradeModal()">Maybe Later</button>
+                <a href="#" class="btn-primary btn-large">Upgrade to Pro</a>
+                <button class="btn-secondary btn-large" onclick="closeUpgradeModal()">Maybe Later</button>
             </div>
         </div>
     </div>
 
-    <!-- Audio element for voice (fallback) -->
     <audio id="audioPlayer"></audio>
 
+    <!-- Use the same JavaScript -->
     <script src="{{ url_for('static', filename='js/hitcoach_app.js') }}"></script>
 </body>
 </html>
