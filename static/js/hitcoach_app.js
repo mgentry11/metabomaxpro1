@@ -1,29 +1,68 @@
 // HIT Coach Pro Web App JavaScript - Redesigned
 
+// ===== SVG EXERCISE ICONS =====
+
+const EXERCISE_ICONS = {
+    legPress: `<svg viewBox="0 0 100 100" fill="currentColor"><path d="M25 70 L35 55 L45 65 L55 45 L50 35 L55 25 L60 25 L65 30 L60 40 L65 50 L75 40 L80 45 L70 60 L60 55 L50 70 L40 75 L25 70 Z M55 20 A8 8 0 1 1 55 21 Z"/><path d="M20 75 L30 80 L25 85 L15 80 Z"/><path d="M75 35 L90 25 L90 35 L75 45 Z" fill="currentColor" opacity="0.7"/></svg>`,
+
+    pulldown: `<svg viewBox="0 0 100 100" fill="currentColor"><path d="M50 18 A8 8 0 1 1 50 19 Z"/><path d="M50 26 L50 50 M35 65 L50 50 L65 65 M40 35 L50 30 L60 35 M30 25 L40 35 M70 25 L60 35"/><path d="M25 15 L75 15 L75 20 L25 20 Z" opacity="0.7"/><line x1="50" y1="15" x2="50" y2="26" stroke="currentColor" stroke-width="3"/><circle cx="50" cy="18" r="8"/><path d="M42 28 L42 50 L38 65 M58 28 L58 50 L62 65" stroke="currentColor" stroke-width="4" fill="none"/><path d="M30 20 L30 35 L40 30 M70 20 L70 35 L60 30" stroke="currentColor" stroke-width="3" fill="none"/></svg>`,
+
+    chestPress: `<svg viewBox="0 0 100 100" fill="currentColor"><rect x="15" y="45" width="70" height="8" rx="2"/><path d="M50 35 A7 7 0 1 1 50 36 Z"/><path d="M40 42 L40 60 L35 75 M60 42 L60 60 L65 75" stroke="currentColor" stroke-width="4" fill="none"/><path d="M40 50 L25 50 M60 50 L75 50" stroke="currentColor" stroke-width="4"/><ellipse cx="50" cy="60" rx="12" ry="6" opacity="0.5"/><rect x="10" y="42" width="8" height="14" rx="2"/><rect x="82" y="42" width="8" height="14" rx="2"/></svg>`,
+
+    overheadPress: `<svg viewBox="0 0 100 100" fill="currentColor"><path d="M50 30 A8 8 0 1 1 50 31 Z"/><rect x="20" y="15" width="60" height="6" rx="2"/><rect x="15" y="12" width="10" height="12" rx="2"/><rect x="75" y="12" width="10" height="12" rx="2"/><path d="M42 38 L42 60 L38 80 M58 38 L58 60 L62 80" stroke="currentColor" stroke-width="4" fill="none"/><path d="M42 38 L35 18 M58 38 L65 18" stroke="currentColor" stroke-width="3" fill="none"/></svg>`,
+
+    legCurl: `<svg viewBox="0 0 100 100" fill="currentColor"><path d="M65 35 A7 7 0 1 1 65 36 Z"/><path d="M20 50 L80 50 L80 60 L20 60 Z" opacity="0.5"/><path d="M55 42 L55 50 M75 50 L75 42" stroke="currentColor" stroke-width="4" fill="none"/><path d="M30 55 L30 75 L45 85" stroke="currentColor" stroke-width="5" fill="none"/><ellipse cx="48" cy="86" rx="5" ry="4"/><path d="M60 55 L75 55 L85 65" stroke="currentColor" stroke-width="4" fill="none" opacity="0.7"/></svg>`,
+
+    bicepCurl: `<svg viewBox="0 0 100 100" fill="currentColor"><path d="M50 22 A8 8 0 1 1 50 23 Z"/><path d="M42 30 L42 55 L38 75 M58 30 L58 55 L62 75" stroke="currentColor" stroke-width="4" fill="none"/><path d="M42 45 L30 55 L28 45" stroke="currentColor" stroke-width="3" fill="none"/><path d="M58 45 L70 35 L72 45" stroke="currentColor" stroke-width="3" fill="none"/><rect x="24" y="42" width="8" height="16" rx="2"/><rect x="68" y="32" width="8" height="16" rx="2"/></svg>`,
+
+    tricepExtension: `<svg viewBox="0 0 100 100" fill="currentColor"><path d="M50 25 A8 8 0 1 1 50 26 Z"/><path d="M42 33 L42 55 L38 75 M58 33 L58 55 L62 75" stroke="currentColor" stroke-width="4" fill="none"/><path d="M42 40 L50 20 L58 40" stroke="currentColor" stroke-width="3" fill="none"/><rect x="45" y="10" width="10" height="15" rx="2"/></svg>`,
+
+    calfRaise: `<svg viewBox="0 0 100 100" fill="currentColor"><path d="M50 20 A8 8 0 1 1 50 21 Z"/><path d="M45 28 L45 55 L42 70 L42 78 M55 28 L55 55 L58 70 L58 78" stroke="currentColor" stroke-width="4" fill="none"/><path d="M38 78 L42 85 L58 85 L62 78" stroke="currentColor" stroke-width="3" fill="none"/><rect x="30" y="85" width="40" height="6" rx="2" opacity="0.5"/><path d="M40 40 L50 35 L60 40" stroke="currentColor" stroke-width="3" fill="none"/></svg>`,
+
+    legExtension: `<svg viewBox="0 0 100 100" fill="currentColor"><path d="M35 35 A7 7 0 1 1 35 36 Z"/><path d="M20 45 L60 45 L60 55 L20 55 Z" opacity="0.5"/><path d="M30 42 L30 55 M45 42 L45 55" stroke="currentColor" stroke-width="4" fill="none"/><path d="M55 50 L80 40 L82 45 L58 55" stroke="currentColor" stroke-width="4" fill="none"/><ellipse cx="83" cy="42" rx="5" ry="4"/><rect x="15" y="55" width="10" height="25" rx="2" opacity="0.5"/></svg>`,
+
+    seatedRow: `<svg viewBox="0 0 100 100" fill="currentColor"><path d="M30 35 A7 7 0 1 1 30 36 Z"/><path d="M25 42 L25 55 L20 75 M35 42 L40 55 L45 75" stroke="currentColor" stroke-width="4" fill="none"/><path d="M35 50 L55 50 L70 45" stroke="currentColor" stroke-width="3" fill="none"/><rect x="70" y="40" width="15" height="8" rx="2"/><rect x="15" y="55" width="35" height="5" rx="2" opacity="0.5"/><path d="M25 48 L15 48 L15 55" stroke="currentColor" stroke-width="3" fill="none" opacity="0.7"/></svg>`,
+
+    inclinePress: `<svg viewBox="0 0 100 100" fill="currentColor"><path d="M55 30 A7 7 0 1 1 55 31 Z"/><path d="M20 75 L45 40 L70 75 Z" fill="none" stroke="currentColor" stroke-width="2" opacity="0.5"/><path d="M48 38 L48 55 L40 75 M62 38 L62 50 L70 70" stroke="currentColor" stroke-width="4" fill="none"/><path d="M48 45 L30 30 M62 45 L80 30" stroke="currentColor" stroke-width="3" fill="none"/><rect x="15" y="20" width="70" height="6" rx="2"/><rect x="10" y="18" width="10" height="10" rx="2"/><rect x="80" y="18" width="10" height="10" rx="2"/></svg>`,
+
+    lateralRaise: `<svg viewBox="0 0 100 100" fill="currentColor"><path d="M50 22 A8 8 0 1 1 50 23 Z"/><path d="M45 30 L45 55 L40 78 M55 30 L55 55 L60 78" stroke="currentColor" stroke-width="4" fill="none"/><path d="M45 40 L20 35 M55 40 L80 35" stroke="currentColor" stroke-width="3" fill="none"/><rect x="12" y="32" width="12" height="8" rx="2"/><rect x="76" y="32" width="12" height="8" rx="2"/></svg>`,
+
+    shrug: `<svg viewBox="0 0 100 100" fill="currentColor"><path d="M50 25 A8 8 0 1 1 50 26 Z"/><path d="M42 33 L42 60 L38 80 M58 33 L58 60 L62 80" stroke="currentColor" stroke-width="4" fill="none"/><path d="M42 40 L42 55 L30 55 L30 40" stroke="currentColor" stroke-width="3" fill="none"/><path d="M58 40 L58 55 L70 55 L70 40" stroke="currentColor" stroke-width="3" fill="none"/><rect x="25" y="55" width="10" height="25" rx="2"/><rect x="65" y="55" width="10" height="25" rx="2"/><path d="M35 33 L35 28 L42 33 M65 33 L65 28 L58 33" stroke="currentColor" stroke-width="2" fill="none"/></svg>`,
+
+    abCrunch: `<svg viewBox="0 0 100 100" fill="currentColor"><path d="M30 45 A7 7 0 1 1 30 46 Z"/><path d="M35 50 L55 60 L75 55" stroke="currentColor" stroke-width="5" fill="none"/><path d="M55 60 L50 75 L55 85 M55 60 L65 75 L60 85" stroke="currentColor" stroke-width="4" fill="none"/><path d="M25 52 L20 60" stroke="currentColor" stroke-width="3" fill="none"/><ellipse cx="50" cy="65" rx="15" ry="8" opacity="0.3"/></svg>`,
+
+    backExtension: `<svg viewBox="0 0 100 100" fill="currentColor"><path d="M70 35 A7 7 0 1 1 70 36 Z"/><path d="M65 42 L45 55 L25 52" stroke="currentColor" stroke-width="5" fill="none"/><path d="M45 55 L40 75 L45 85 M45 55 L55 72 L50 85" stroke="currentColor" stroke-width="4" fill="none"/><rect x="15" y="50" width="15" height="35" rx="3" opacity="0.5"/><path d="M75 40 L85 35" stroke="currentColor" stroke-width="3" fill="none"/></svg>`
+};
+
 // ===== DATA STRUCTURES =====
 
 const WORKOUTS = {
     A: [
-        { name: 'Leg Press', icon: '⬇️', muscle: 'Legs' },
-        { name: 'Pulldown', icon: '⬆️', muscle: 'Back' },
-        { name: 'Chest Press', icon: '➡️', muscle: 'Chest' },
-        { name: 'Overhead', icon: '🔼', muscle: 'Shoulders' },
-        { name: 'Leg Curl', icon: '🔄', muscle: 'Hamstrings' },
-        { name: 'Bicep Curl', icon: '⤴️', muscle: 'Biceps' },
-        { name: 'Tricep Extension', icon: '⤵️', muscle: 'Triceps' },
-        { name: 'Calf Raise', icon: '📈', muscle: 'Calves' }
+        { name: 'Leg Press', iconKey: 'legPress', muscle: 'Legs' },
+        { name: 'Pulldown', iconKey: 'pulldown', muscle: 'Back' },
+        { name: 'Chest Press', iconKey: 'chestPress', muscle: 'Chest' },
+        { name: 'Overhead', iconKey: 'overheadPress', muscle: 'Shoulders' },
+        { name: 'Leg Curl', iconKey: 'legCurl', muscle: 'Hamstrings' },
+        { name: 'Bicep Curl', iconKey: 'bicepCurl', muscle: 'Biceps' },
+        { name: 'Tricep Extension', iconKey: 'tricepExtension', muscle: 'Triceps' },
+        { name: 'Calf Raise', iconKey: 'calfRaise', muscle: 'Calves' }
     ],
     B: [
-        { name: 'Leg Extension', icon: '↗️', muscle: 'Quads' },
-        { name: 'Seated Row', icon: '⬅️', muscle: 'Back' },
-        { name: 'Incline Press', icon: '↖️', muscle: 'Upper Chest' },
-        { name: 'Lateral Raise', icon: '↔️', muscle: 'Shoulders' },
-        { name: 'Leg Curl', icon: '🔄', muscle: 'Hamstrings' },
-        { name: 'Shrug', icon: '⏫', muscle: 'Traps' },
-        { name: 'Ab Crunch', icon: '🎯', muscle: 'Abs' },
-        { name: 'Back Extension', icon: '↩️', muscle: 'Lower Back' }
+        { name: 'Leg Extension', iconKey: 'legExtension', muscle: 'Quads' },
+        { name: 'Seated Row', iconKey: 'seatedRow', muscle: 'Back' },
+        { name: 'Incline Press', iconKey: 'inclinePress', muscle: 'Upper Chest' },
+        { name: 'Lateral Raise', iconKey: 'lateralRaise', muscle: 'Shoulders' },
+        { name: 'Leg Curl', iconKey: 'legCurl', muscle: 'Hamstrings' },
+        { name: 'Shrug', iconKey: 'shrug', muscle: 'Traps' },
+        { name: 'Ab Crunch', iconKey: 'abCrunch', muscle: 'Abs' },
+        { name: 'Back Extension', iconKey: 'backExtension', muscle: 'Lower Back' }
     ]
 };
+
+// Helper function to get icon SVG
+function getExerciseIcon(iconKey) {
+    return EXERCISE_ICONS[iconKey] || '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="30" fill="currentColor"/></svg>';
+}
 
 // Default phase durations
 const DEFAULT_PHASES = {
@@ -94,7 +133,7 @@ function renderExerciseList() {
 
     list.innerHTML = exercises.map((exercise, index) => `
         <div class="exercise-item" onclick="showExerciseSetup(${index})">
-            <div class="exercise-icon">${exercise.icon}</div>
+            <div class="exercise-icon">${getExerciseIcon(exercise.iconKey)}</div>
             <div class="exercise-info">
                 <div class="exercise-name">${exercise.name}</div>
                 <div class="exercise-muscle">${exercise.muscle}</div>
@@ -192,7 +231,7 @@ function showExerciseSetup(exerciseIndex) {
     document.getElementById('setupTitle').textContent = `Setup - ${exercise.name}`;
     document.getElementById('setupCounter').textContent = `${currentExerciseIndex + 1} / ${exercises.length}`;
     document.getElementById('setupExerciseName').textContent = exercise.name;
-    document.getElementById('setupExerciseIcon').textContent = exercise.icon;
+    document.getElementById('setupExerciseIcon').innerHTML = getExerciseIcon(exercise.iconKey);
     document.getElementById('setupMuscle').textContent = exercise.muscle;
 
     // Update Siri phrase display
@@ -340,7 +379,7 @@ function loadExercise() {
 
     document.getElementById('exerciseName').textContent = exercise.name;
     document.getElementById('exerciseCounter').textContent = `${currentExerciseIndex + 1} / ${exercises.length}`;
-    document.getElementById('exerciseIconDisplay').textContent = exercise.icon;
+    document.getElementById('exerciseIconDisplay').innerHTML = getExerciseIcon(exercise.iconKey);
 
     // Load last weight for this exercise
     const lastWeight = getLastWeight(exercise.name);
