@@ -536,9 +536,17 @@ function startExercise() {
     document.getElementById('pauseBtn').style.display = 'block';
 
     const exercise = WORKOUTS[currentWorkoutType][currentExerciseIndex];
-    speak(`Starting ${exercise.name}. ${getMotivationalPhrase()}`, true);
 
-    startPhase('PREP');
+    // Play exercise name with commander voice
+    if (useCommanderVoice) {
+        playExerciseName(exercise.name);
+        setTimeout(() => {
+            startPhase('PREP');
+        }, 1500); // Wait for exercise name to finish
+    } else {
+        speak(`Starting ${exercise.name}. ${getMotivationalPhrase()}`, true);
+        startPhase('PREP');
+    }
 }
 
 function startPhase(phaseName) {
@@ -550,15 +558,30 @@ function startPhase(phaseName) {
     document.getElementById('phaseDescription').textContent = phase.description;
     updateTimerDisplay();
 
-    // Voice announcements
-    if (phaseName === 'POSITIONING') {
-        speak('Get into position', true);
-    } else if (phaseName === 'ECCENTRIC') {
-        speak('Begin eccentric. Slow and controlled.', true);
-    } else if (phaseName === 'CONCENTRIC') {
-        speak('Begin concentric. Powerful lift.', true);
-    } else if (phaseName === 'FINAL_ECCENTRIC') {
-        speak('Final eccentric. Push to failure.', true);
+    // Commander voice announcements
+    if (useCommanderVoice) {
+        if (phaseName === 'PREP') {
+            playAudio(AUDIO_FILES.phases.prep);
+        } else if (phaseName === 'POSITIONING') {
+            playAudio(AUDIO_FILES.cues.getPosition);
+        } else if (phaseName === 'ECCENTRIC') {
+            playAudio(AUDIO_FILES.phases.eccentric);
+        } else if (phaseName === 'CONCENTRIC') {
+            playAudio(AUDIO_FILES.phases.concentric);
+        } else if (phaseName === 'FINAL_ECCENTRIC') {
+            playAudio(AUDIO_FILES.phases.finalEccentric);
+        }
+    } else {
+        // Fallback TTS
+        if (phaseName === 'POSITIONING') {
+            speak('Get into position', true);
+        } else if (phaseName === 'ECCENTRIC') {
+            speak('Begin eccentric. Slow and controlled.', true);
+        } else if (phaseName === 'CONCENTRIC') {
+            speak('Begin concentric. Powerful lift.', true);
+        } else if (phaseName === 'FINAL_ECCENTRIC') {
+            speak('Final eccentric. Push to failure.', true);
+        }
     }
 
     runTimer();
@@ -574,19 +597,39 @@ function runTimer() {
         updateTimerDisplay();
         updateProgressBar(timeRemaining, totalDuration);
 
-        // Countdown announcements
-        if (timeRemaining === 5) speak('5');
-        else if (timeRemaining === 3) speak('3');
-        else if (timeRemaining === 2) speak('2');
-        else if (timeRemaining === 1) speak('1');
+        // Commander voice countdown and cues
+        if (useCommanderVoice) {
+            // Countdown at 5, 3, 2, 1
+            if (timeRemaining === 5) playNumber(5);
+            else if (timeRemaining === 3) playNumber(3);
+            else if (timeRemaining === 2) playNumber(2);
+            else if (timeRemaining === 1) playNumber(1);
 
-        // Motivational phrases at intervals
-        if (currentPhase === 'ECCENTRIC' && timeRemaining === 15) {
-            speak(getMotivationalPhrase());
-        } else if (currentPhase === 'FINAL_ECCENTRIC' && timeRemaining === 20) {
-            speak('Halfway there!');
-        } else if (currentPhase === 'FINAL_ECCENTRIC' && timeRemaining === 10) {
-            speak('10 seconds! Give it everything!');
+            // Phase-specific cues
+            if (currentPhase === 'ECCENTRIC' && timeRemaining === 15) {
+                playEccentricCue();
+            } else if (currentPhase === 'CONCENTRIC' && timeRemaining === 10) {
+                playConcentricCue();
+            } else if (currentPhase === 'FINAL_ECCENTRIC' && timeRemaining === 20) {
+                playAudio(AUDIO_FILES.time.halfway);
+            } else if (currentPhase === 'FINAL_ECCENTRIC' && timeRemaining === 10) {
+                playFinalCue();
+            }
+        } else {
+            // Fallback TTS countdown
+            if (timeRemaining === 5) speak('5');
+            else if (timeRemaining === 3) speak('3');
+            else if (timeRemaining === 2) speak('2');
+            else if (timeRemaining === 1) speak('1');
+
+            // Motivational phrases at intervals
+            if (currentPhase === 'ECCENTRIC' && timeRemaining === 15) {
+                speak(getMotivationalPhrase());
+            } else if (currentPhase === 'FINAL_ECCENTRIC' && timeRemaining === 20) {
+                speak('Halfway there!');
+            } else if (currentPhase === 'FINAL_ECCENTRIC' && timeRemaining === 10) {
+                speak('10 seconds! Give it everything!');
+            }
         }
 
         if (timeRemaining <= 0) {
@@ -977,18 +1020,285 @@ function updateVoiceButtons(gender) {
     document.getElementById('voiceD')?.classList.toggle('active', gender === 'default');
 }
 
-// ===== VOICE SYNTHESIS =====
+// ===== COMMANDER AUDIO SYSTEM =====
+
+const AUDIO_PATH = 'static/audio/commander/';
+let currentAudio = null;
+let audioQueue = [];
+let isPlayingAudio = false;
+let useCommanderVoice = true; // Toggle between commander voice and TTS
+
+// Audio file mappings
+const AUDIO_FILES = {
+    // Numbers 1-60
+    numbers: {},
+    // Phases
+    phases: {
+        prep: 'phase_get_ready.mp3',
+        position: 'phase_position.mp3',
+        eccentric: 'phase_eccentric.mp3',
+        concentric: 'phase_concentric.mp3',
+        finalEccentric: 'phase_final_eccentric.mp3',
+        complete: 'phase_complete.mp3',
+        rest: 'phase_rest.mp3'
+    },
+    // Exercise names
+    exercises: {
+        'Leg Press': 'ex_leg_press.mp3',
+        'Pulldown': 'ex_pulldown.mp3',
+        'Chest Press': 'ex_chest_press.mp3',
+        'Overhead': 'ex_overhead_press.mp3',
+        'Leg Curl': 'ex_leg_curl.mp3',
+        'Bicep Curl': 'ex_bicep_curl.mp3',
+        'Tricep Extension': 'ex_tricep_extension.mp3',
+        'Calf Raise': 'ex_calf_raise.mp3',
+        'Leg Extension': 'ex_leg_extension.mp3',
+        'Seated Row': 'ex_seated_row.mp3',
+        'Incline Press': 'ex_incline_press.mp3',
+        'Lateral Raise': 'ex_lateral_raise.mp3',
+        'Shrug': 'ex_shrug.mp3',
+        'Ab Crunch': 'ex_ab_crunch.mp3',
+        'Back Extension': 'ex_back_extension.mp3'
+    },
+    // Encouragement
+    encouragement: [
+        'enc_stay_strong.mp3',
+        'enc_perfect.mp3',
+        'enc_doing_great.mp3',
+        'enc_great_work.mp3',
+        'enc_excellent_form.mp3',
+        'enc_keep_going.mp3',
+        'enc_you_got_this.mp3',
+        'enc_fantastic.mp3',
+        'enc_almost_there.mp3',
+        'enc_push_through.mp3',
+        'enc_thats_it.mp3',
+        'enc_well_done.mp3'
+    ],
+    // Final eccentric cues
+    final: [
+        'final_slow.mp3',
+        'final_negative.mp3',
+        'final_max_tension.mp3',
+        'final_last_push.mp3',
+        'final_fight.mp3',
+        'final_dont_give_up.mp3',
+        'final_control.mp3',
+        'final_all_way.mp3'
+    ],
+    // Eccentric cues
+    eccentric: [
+        'ecc_smooth.mp3',
+        'ecc_feel_stretch.mp3',
+        'ecc_lower_slowly.mp3',
+        'ecc_control_weight.mp3',
+        'ecc_keep_tension.mp3',
+        'ecc_resist.mp3',
+        'ecc_nice_slow.mp3'
+    ],
+    // Concentric cues
+    concentric: [
+        'con_power.mp3',
+        'con_push_now.mp3',
+        'con_drive_up.mp3',
+        'con_squeeze.mp3',
+        'con_contract.mp3',
+        'con_strong_push.mp3',
+        'con_keep_pushing.mp3'
+    ],
+    // Time announcements
+    time: {
+        5: 'time_5_sec.mp3',
+        10: 'time_10_sec.mp3',
+        20: 'time_20_sec.mp3',
+        30: 'time_30_sec.mp3',
+        halfway: 'time_halfway.mp3',
+        almost: 'time_almost.mp3'
+    },
+    // Rest
+    rest: {
+        starting: 'rest_starting.mp3',
+        breathe: 'rest_breathe.mp3',
+        recover: 'rest_recover.mp3',
+        complete: 'rest_complete.mp3',
+        getReady: 'rest_get_ready.mp3',
+        nextComing: 'rest_next_coming.mp3',
+        sec15: 'rest_15_sec.mp3',
+        sec30: 'rest_30_sec.mp3'
+    },
+    // Workout
+    workout: {
+        starting: 'workout_starting.mp3',
+        complete: 'workout_complete.mp3',
+        greatSession: 'workout_great_session.mp3',
+        seeYou: 'workout_see_you.mp3',
+        begin: 'workout_begin.mp3',
+        crushed: 'workout_crushed.mp3'
+    },
+    // Transitions
+    trans: {
+        prepare: 'trans_prepare.mp3',
+        next: 'trans_next.mp3',
+        moving: 'trans_moving.mp3'
+    },
+    // Cues
+    cues: {
+        startingWeight: 'cue_starting_weight.mp3',
+        getPosition: 'cue_get_position.mp3',
+        grip: 'cue_grip.mp3',
+        posture: 'cue_posture.mp3',
+        control: 'cue_control.mp3'
+    }
+};
+
+// Initialize number audio files
+for (let i = 1; i <= 60; i++) {
+    AUDIO_FILES.numbers[i] = `num_${i}.mp3`;
+}
+
+// Play a single audio file
+function playAudio(filename, callback) {
+    if (!voiceEnabled || !useCommanderVoice) {
+        if (callback) callback();
+        return;
+    }
+
+    const audio = new Audio(AUDIO_PATH + filename);
+    currentAudio = audio;
+
+    audio.onended = () => {
+        currentAudio = null;
+        if (callback) callback();
+        playNextInQueue();
+    };
+
+    audio.onerror = () => {
+        console.log('Audio error:', filename);
+        currentAudio = null;
+        if (callback) callback();
+        playNextInQueue();
+    };
+
+    audio.play().catch(err => {
+        console.log('Audio play error:', err);
+        if (callback) callback();
+        playNextInQueue();
+    });
+}
+
+// Queue audio for sequential playback
+function queueAudio(filename) {
+    audioQueue.push(filename);
+    if (!isPlayingAudio) {
+        playNextInQueue();
+    }
+}
+
+function playNextInQueue() {
+    if (audioQueue.length === 0) {
+        isPlayingAudio = false;
+        return;
+    }
+
+    isPlayingAudio = true;
+    const filename = audioQueue.shift();
+    playAudio(filename);
+}
+
+// Stop current audio
+function stopAudio() {
+    if (currentAudio) {
+        currentAudio.pause();
+        currentAudio = null;
+    }
+    audioQueue = [];
+    isPlayingAudio = false;
+}
+
+// Play number countdown
+function playNumber(num) {
+    if (num >= 1 && num <= 60 && AUDIO_FILES.numbers[num]) {
+        playAudio(AUDIO_FILES.numbers[num]);
+    }
+}
+
+// Play exercise name
+function playExerciseName(exerciseName) {
+    if (AUDIO_FILES.exercises[exerciseName]) {
+        playAudio(AUDIO_FILES.exercises[exerciseName]);
+    }
+}
+
+// Play random encouragement
+function playEncouragement() {
+    const files = AUDIO_FILES.encouragement;
+    const file = files[Math.floor(Math.random() * files.length)];
+    playAudio(file);
+}
+
+// Play random eccentric cue
+function playEccentricCue() {
+    const files = AUDIO_FILES.eccentric;
+    const file = files[Math.floor(Math.random() * files.length)];
+    playAudio(file);
+}
+
+// Play random concentric cue
+function playConcentricCue() {
+    const files = AUDIO_FILES.concentric;
+    const file = files[Math.floor(Math.random() * files.length)];
+    playAudio(file);
+}
+
+// Play random final eccentric cue
+function playFinalCue() {
+    const files = AUDIO_FILES.final;
+    const file = files[Math.floor(Math.random() * files.length)];
+    playAudio(file);
+}
+
+// ===== VOICE SYNTHESIS (Fallback TTS) =====
 
 function speak(text, priority = false) {
     if (!voiceEnabled) return;
 
+    // Use commander voice if available
+    if (useCommanderVoice) {
+        // Map text to audio files
+        const textLower = text.toLowerCase();
+
+        // Check for numbers
+        const numMatch = text.match(/^(\d+)$/);
+        if (numMatch) {
+            playNumber(parseInt(numMatch[1]));
+            return;
+        }
+
+        // Check for specific phrases
+        if (textLower.includes('paused')) {
+            return; // No audio for pause
+        }
+        if (textLower.includes('resuming')) {
+            return; // No audio for resume
+        }
+        if (textLower.includes('exercise complete')) {
+            playAudio(AUDIO_FILES.phases.complete);
+            return;
+        }
+        if (textLower.includes('workout complete')) {
+            playAudio(AUDIO_FILES.workout.complete);
+            return;
+        }
+
+        // For other text, fall back to TTS
+    }
+
+    // Fallback to TTS
     if (priority) {
         synth.cancel();
     }
 
     const utterance = new SpeechSynthesisUtterance(text);
-
-    // Set voice based on gender preference
     const voices = synth.getVoices();
     let preferredVoice = null;
 
