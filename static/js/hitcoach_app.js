@@ -93,7 +93,7 @@ function renderExerciseList() {
     const exercises = WORKOUTS[currentWorkoutType];
 
     list.innerHTML = exercises.map((exercise, index) => `
-        <div class="exercise-item" onclick="startWorkoutFromExercise(${index})">
+        <div class="exercise-item" onclick="showExerciseSetup(${index})">
             <div class="exercise-icon">${exercise.icon}</div>
             <div class="exercise-info">
                 <div class="exercise-name">${exercise.name}</div>
@@ -162,7 +162,7 @@ function showScreen(screenId) {
     if (screenId === 'homeScreen') {
         workoutTabs.style.display = 'flex';
         bottomNav.style.display = 'flex';
-    } else if (screenId === 'workoutScreen' || screenId === 'summaryScreen') {
+    } else if (screenId === 'workoutScreen' || screenId === 'summaryScreen' || screenId === 'exerciseSetupScreen') {
         workoutTabs.style.display = 'none';
         bottomNav.style.display = 'none';
     } else if (screenId === 'settingsScreen' || screenId === 'profileScreen') {
@@ -175,6 +175,141 @@ function showScreen(screenId) {
 }
 
 // ===== WORKOUT MANAGEMENT =====
+
+function showExerciseSetup(exerciseIndex) {
+    currentExerciseIndex = exerciseIndex;
+
+    // Initialize workout data if starting fresh
+    if (workoutStartTime === null) {
+        workoutStartTime = new Date();
+        currentWorkoutData = [];
+    }
+
+    const exercises = WORKOUTS[currentWorkoutType];
+    const exercise = exercises[currentExerciseIndex];
+
+    // Update setup screen content
+    document.getElementById('setupTitle').textContent = `Setup - ${exercise.name}`;
+    document.getElementById('setupCounter').textContent = `${currentExerciseIndex + 1} / ${exercises.length}`;
+    document.getElementById('setupExerciseName').textContent = exercise.name;
+    document.getElementById('setupExerciseIcon').textContent = exercise.icon;
+    document.getElementById('setupMuscle').textContent = exercise.muscle;
+
+    // Update Siri phrase display
+    document.getElementById('siriExerciseName').textContent = exercise.name;
+    document.getElementById('siriWorkoutName').textContent = currentWorkoutType === 'A' ? 'push' : 'pull';
+
+    // Load last weight
+    const lastWeight = getLastWeight(exercise.name);
+    const setupWeightInput = document.getElementById('setupWeightInput');
+    const setupLastWeight = document.getElementById('setupLastWeight');
+
+    if (lastWeight) {
+        setupLastWeight.textContent = `Last time: ${lastWeight} lbs`;
+        setupWeightInput.value = lastWeight;
+    } else {
+        setupLastWeight.textContent = '';
+        setupWeightInput.value = '';
+    }
+
+    // Hide workout tabs, show setup screen
+    document.getElementById('workoutTabs').style.display = 'none';
+    document.getElementById('bottomNav').style.display = 'none';
+    showScreen('exerciseSetupScreen');
+}
+
+function startExerciseFromSetup() {
+    // Get weight from setup screen
+    const setupWeight = document.getElementById('setupWeightInput').value;
+
+    // Transfer to workout screen
+    document.getElementById('workoutTitle').textContent = `Workout ${currentWorkoutType}`;
+    showScreen('workoutScreen');
+    loadExercise();
+
+    // Pre-fill the weight from setup
+    if (setupWeight) {
+        document.getElementById('weightInput').value = setupWeight;
+    }
+
+    // Start the exercise automatically
+    startExercise();
+}
+
+function skipToNextExercise() {
+    const exercises = WORKOUTS[currentWorkoutType];
+
+    if (currentExerciseIndex < exercises.length - 1) {
+        currentExerciseIndex++;
+        showExerciseSetup(currentExerciseIndex);
+        speak('Skipping to next exercise');
+    } else {
+        // No more exercises, go back to home
+        speak('No more exercises in this workout');
+        navigateTo('workouts');
+    }
+}
+
+function addSiriShortcut(shortcutType) {
+    const exercise = WORKOUTS[currentWorkoutType][currentExerciseIndex];
+    let shortcutURL = '';
+    let shortcutTitle = '';
+    let shortcutPhrase = '';
+
+    // Get the base URL (current page URL without query params)
+    const baseURL = window.location.origin + window.location.pathname;
+
+    switch (shortcutType) {
+        case 'start-exercise':
+            shortcutURL = `${baseURL}?action=start-exercise-${currentWorkoutType.toLowerCase()}-${currentExerciseIndex}`;
+            shortcutTitle = `Start ${exercise.name}`;
+            shortcutPhrase = `Start ${exercise.name}`;
+            break;
+        case 'start-workout':
+            shortcutURL = `${baseURL}?action=start-workout-${currentWorkoutType.toLowerCase()}`;
+            shortcutTitle = `Start Workout ${currentWorkoutType}`;
+            shortcutPhrase = currentWorkoutType === 'A' ? 'Start my push workout' : 'Start my pull workout';
+            break;
+        case 'view-stats':
+            shortcutURL = `${baseURL}?action=view-stats`;
+            shortcutTitle = 'View Workout Stats';
+            shortcutPhrase = 'Show my workout stats';
+            break;
+    }
+
+    // Show instructions for adding to Siri
+    const instructions = `To add "${shortcutTitle}" to Siri Shortcuts:
+
+1. Open the Shortcuts app on your iPhone
+2. Tap the + button to create a new shortcut
+3. Search for "Open URL" and add it
+4. Enter this URL: ${shortcutURL}
+5. Tap the shortcut name and rename it
+6. Tap "Add to Siri" and record: "${shortcutPhrase}"
+
+Alternatively, you can bookmark this URL and say the phrase to Siri when the app is installed as a PWA.`;
+
+    // Check if we can use the Web Share API
+    if (navigator.share) {
+        navigator.share({
+            title: shortcutTitle,
+            text: `Open HIT Coach Pro and ${shortcutTitle.toLowerCase()}`,
+            url: shortcutURL
+        }).catch(() => {
+            // If share fails, show alert
+            alert(instructions);
+        });
+    } else {
+        // Copy URL to clipboard and show instructions
+        navigator.clipboard.writeText(shortcutURL).then(() => {
+            alert(`URL copied to clipboard!\n\n${instructions}`);
+        }).catch(() => {
+            alert(instructions);
+        });
+    }
+
+    speak(`Adding ${shortcutTitle} shortcut`);
+}
 
 function startWorkoutFromExercise(exerciseIndex) {
     currentExerciseIndex = exerciseIndex;

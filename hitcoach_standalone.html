@@ -52,6 +52,71 @@
             </div>
         </div>
 
+        <!-- Exercise Setup Screen -->
+        <div class="screen" id="exerciseSetupScreen">
+            <div class="workout-header">
+                <button class="back-btn" onclick="navigateTo('workouts')">← Back</button>
+                <h2 class="workout-title" id="setupTitle">Exercise Setup</h2>
+                <span class="exercise-counter" id="setupCounter">1 / 8</span>
+            </div>
+
+            <div class="current-exercise">
+                <h1 id="setupExerciseName">Leg Press</h1>
+                <div class="exercise-icon-display" id="setupExerciseIcon">⬇️</div>
+                <p style="color: var(--text-gray); margin-top: 0.5rem;" id="setupMuscle">Legs</p>
+            </div>
+
+            <!-- Weight Setup -->
+            <div class="settings-section">
+                <h2 class="settings-section-title">Set Your Weight</h2>
+                <div class="weight-input-section" style="margin-bottom: 0;">
+                    <input type="number" id="setupWeightInput" placeholder="Enter weight (lbs)" min="0" step="5">
+                    <p class="last-weight" id="setupLastWeight"></p>
+                </div>
+            </div>
+
+            <!-- Siri Shortcuts Section -->
+            <div class="settings-section">
+                <h2 class="settings-section-title">Siri Shortcuts</h2>
+                <div class="siri-shortcuts-list">
+                    <div class="siri-shortcut-item" onclick="addSiriShortcut('start-exercise')">
+                        <div class="siri-icon">🎙️</div>
+                        <div class="siri-info">
+                            <div class="siri-title">Start This Exercise</div>
+                            <div class="siri-phrase">"Hey Siri, start <span id="siriExerciseName">Leg Press</span>"</div>
+                        </div>
+                        <div class="siri-add">+</div>
+                    </div>
+                    <div class="siri-shortcut-item" onclick="addSiriShortcut('start-workout')">
+                        <div class="siri-icon">🏋️</div>
+                        <div class="siri-info">
+                            <div class="siri-title">Start Full Workout</div>
+                            <div class="siri-phrase">"Hey Siri, start my <span id="siriWorkoutName">push</span> workout"</div>
+                        </div>
+                        <div class="siri-add">+</div>
+                    </div>
+                    <div class="siri-shortcut-item" onclick="addSiriShortcut('view-stats')">
+                        <div class="siri-icon">📊</div>
+                        <div class="siri-info">
+                            <div class="siri-title">View My Stats</div>
+                            <div class="siri-phrase">"Hey Siri, show my workout stats"</div>
+                        </div>
+                        <div class="siri-add">+</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Start Button -->
+            <div class="control-buttons" style="margin-top: 1.5rem;">
+                <button class="btn btn-primary btn-large" onclick="startExerciseFromSetup()">
+                    START EXERCISE
+                </button>
+                <button class="btn btn-secondary btn-large" onclick="skipToNextExercise()">
+                    SKIP TO NEXT
+                </button>
+            </div>
+        </div>
+
         <!-- Active Workout Screen -->
         <div class="screen" id="workoutScreen">
             <div class="workout-header">

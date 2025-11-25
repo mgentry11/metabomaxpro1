@@ -1352,6 +1352,102 @@
     gap: 0.75rem;
 }
 
+/* Siri Shortcuts List */
+.siri-shortcuts-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.siri-shortcut-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--gray-bg);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 1px solid var(--light-gray);
+}
+
+.siri-shortcut-item:hover {
+    background: var(--light-gray);
+    border-color: var(--gold);
+}
+
+.siri-shortcut-item:active {
+    transform: scale(0.98);
+}
+
+.siri-icon {
+    width: 44px;
+    height: 44px;
+    background: var(--gold);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    flex-shrink: 0;
+}
+
+.siri-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.siri-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-white);
+    margin-bottom: 0.25rem;
+}
+
+.siri-phrase {
+    font-size: 0.85rem;
+    color: var(--text-gray);
+    font-style: italic;
+}
+
+.siri-phrase span {
+    color: var(--gold);
+}
+
+.siri-add {
+    width: 32px;
+    height: 32px;
+    background: var(--gold);
+    color: #000;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+/* Exercise Setup Screen specific styles */
+#exerciseSetupScreen .current-exercise {
+    margin-bottom: 1rem;
+}
+
+#exerciseSetupScreen .settings-section {
+    margin-bottom: 1.5rem;
+}
+
+#exerciseSetupScreen .weight-input-section input {
+    background: var(--gray-bg);
+    border: 2px solid var(--gold);
+    color: var(--gold);
+}
+
+#exerciseSetupScreen .weight-input-section input::placeholder {
+    color: var(--gold);
+    opacity: 0.6;
+}
+
 /* Light Theme */
 body.light-theme {
     --dark-bg: #f8f8f8;
