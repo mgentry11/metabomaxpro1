@@ -1036,7 +1036,106 @@ function processVoiceCommand(command) {
 // Initialize voice commands on load
 document.addEventListener('DOMContentLoaded', () => {
     initVoiceCommands();
+    initSiriShortcuts();
 });
+
+// ===== SIRI SHORTCUTS =====
+
+function initSiriShortcuts() {
+    // Check for Shortcuts support (iOS 12+ Safari)
+    if ('shortcuts' in navigator || window.webkit?.messageHandlers?.shortcuts) {
+        console.log('Siri Shortcuts may be available');
+        registerShortcuts();
+    }
+
+    // Handle URL scheme for Siri Shortcuts
+    handleShortcutURL();
+}
+
+function registerShortcuts() {
+    // Define available shortcuts
+    const shortcuts = [
+        {
+            id: 'start-workout-a',
+            title: 'Start Workout A',
+            phrase: 'Start my push workout',
+            action: () => { switchWorkoutTab('A'); startWorkoutFromExercise(0); }
+        },
+        {
+            id: 'start-workout-b',
+            title: 'Start Workout B',
+            phrase: 'Start my pull workout',
+            action: () => { switchWorkoutTab('B'); startWorkoutFromExercise(0); }
+        },
+        {
+            id: 'view-stats',
+            title: 'View Workout Stats',
+            phrase: 'Show my workout stats',
+            action: () => navigateTo('stats')
+        },
+        {
+            id: 'view-log',
+            title: 'View Workout Log',
+            phrase: 'Show my workout history',
+            action: () => navigateTo('log')
+        }
+    ];
+
+    // Store shortcuts for URL handling
+    window.hitCoachShortcuts = shortcuts;
+}
+
+function handleShortcutURL() {
+    // Handle deep links from Siri Shortcuts
+    // URL format: hitcoachpro://action/start-workout-a
+    const urlParams = new URLSearchParams(window.location.search);
+    const action = urlParams.get('action');
+
+    if (action) {
+        executeShortcutAction(action);
+    }
+
+    // Also check hash for PWA
+    if (window.location.hash) {
+        const hashAction = window.location.hash.replace('#', '');
+        executeShortcutAction(hashAction);
+    }
+}
+
+function executeShortcutAction(actionId) {
+    const shortcuts = window.hitCoachShortcuts || [];
+    const shortcut = shortcuts.find(s => s.id === actionId);
+
+    if (shortcut && shortcut.action) {
+        // Small delay to ensure app is loaded
+        setTimeout(() => {
+            shortcut.action();
+            speak(shortcut.title);
+        }, 500);
+    }
+}
+
+// Add to Home Screen with Shortcuts info
+function showShortcutsInfo() {
+    const info = `
+Available Siri Shortcuts:
+
+"Hey Siri, Start my push workout"
+→ Starts Workout A
+
+"Hey Siri, Start my pull workout"
+→ Starts Workout B
+
+"Hey Siri, Show my workout stats"
+→ Opens Stats screen
+
+"Hey Siri, Show my workout history"
+→ Opens Workout Log
+
+To add: Open Shortcuts app → Create New → Add Action → Search "HIT Coach Pro"
+    `;
+    alert(info);
+}
 
 // ===== UPGRADE MODAL =====
 
