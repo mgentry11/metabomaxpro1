@@ -92,18 +92,86 @@
             position: relative;
         }
 
+        /* iOS Status Bar */
+        .status-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 44px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 24px 0 24px;
+            z-index: 101;
+            font-size: 14px;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .status-time {
+            width: 54px;
+        }
+
+        .status-notch {
+            width: 95px;
+        }
+
+        .status-icons {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            width: 54px;
+            justify-content: flex-end;
+        }
+
+        .status-icons svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .battery-icon {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .battery-body {
+            width: 22px;
+            height: 11px;
+            border: 1.5px solid #fff;
+            border-radius: 3px;
+            position: relative;
+        }
+
+        .battery-level {
+            position: absolute;
+            left: 2px;
+            top: 2px;
+            bottom: 2px;
+            width: 70%;
+            background: #fff;
+            border-radius: 1px;
+        }
+
+        .battery-cap {
+            width: 2px;
+            height: 5px;
+            background: #fff;
+            border-radius: 0 1px 1px 0;
+        }
+
         /* Dynamic Island */
         .dynamic-island {
             position: absolute;
-            top: 12px;
+            top: 10px;
             left: 50%;
             transform: translateX(-50%);
-            width: 95px;
-            height: 28px;
+            width: 100px;
+            height: 32px;
             background: #000;
-            border-radius: 20px;
-            z-index: 100;
-            box-shadow: inset 0 0 3px rgba(255,255,255,0.1);
+            border-radius: 18px;
+            z-index: 102;
         }
 
         /* App content iframe */
@@ -127,13 +195,13 @@
         /* Home indicator */
         .home-indicator {
             position: absolute;
-            bottom: 8px;
+            bottom: 6px;
             left: 50%;
             transform: translateX(-50%);
-            width: 120px;
-            height: 4px;
-            background: rgba(255,255,255,0.3);
-            border-radius: 2px;
+            width: 134px;
+            height: 5px;
+            background: rgba(255,255,255,0.8);
+            border-radius: 3px;
             z-index: 100;
         }
 
@@ -278,6 +346,17 @@
             <div class="phone-label">Web App</div>
             <div class="iphone-frame">
                 <div class="screen-bezel">
+                    <div class="status-bar">
+                        <span class="status-time">9:41</span>
+                        <span class="status-notch"></span>
+                        <div class="status-icons">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.18L12 21z" opacity="0"/><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
+                            <div class="battery-icon">
+                                <div class="battery-body"><div class="battery-level"></div></div>
+                                <div class="battery-cap"></div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="dynamic-island"></div>
                     <iframe src="hitcoach_standalone.html" class="app-iframe"></iframe>
                     <div class="home-indicator"></div>
@@ -291,6 +370,17 @@
             <div class="phone-label">Native iOS</div>
             <div class="iphone-frame">
                 <div class="screen-bezel">
+                    <div class="status-bar">
+                        <span class="status-time">9:41</span>
+                        <span class="status-notch"></span>
+                        <div class="status-icons">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
+                            <div class="battery-icon">
+                                <div class="battery-body"><div class="battery-level"></div></div>
+                                <div class="battery-cap"></div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="dynamic-island"></div>
                     <iframe src="hitcoach_standalone.html" class="app-iframe"></iframe>
                     <div class="home-indicator"></div>

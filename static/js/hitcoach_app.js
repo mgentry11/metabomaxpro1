@@ -3,35 +3,143 @@
 // ===== SVG EXERCISE ICONS =====
 
 const EXERCISE_ICONS = {
-    legPress: `<svg viewBox="0 0 100 100" fill="currentColor"><path d="M25 70 L35 55 L45 65 L55 45 L50 35 L55 25 L60 25 L65 30 L60 40 L65 50 L75 40 L80 45 L70 60 L60 55 L50 70 L40 75 L25 70 Z M55 20 A8 8 0 1 1 55 21 Z"/><path d="M20 75 L30 80 L25 85 L15 80 Z"/><path d="M75 35 L90 25 L90 35 L75 45 Z" fill="currentColor" opacity="0.7"/></svg>`,
+    legPress: `<svg viewBox="0 0 100 100" fill="currentColor">
+        <circle cx="30" cy="35" r="10"/>
+        <path d="M30 45 L30 55 L55 70" stroke="currentColor" stroke-width="8" stroke-linecap="round" fill="none"/>
+        <path d="M55 70 L75 55" stroke="currentColor" stroke-width="8" stroke-linecap="round" fill="none"/>
+        <path d="M75 55 L85 45" stroke="currentColor" stroke-width="8" stroke-linecap="round" fill="none"/>
+        <rect x="80" y="30" width="12" height="35" rx="3" opacity="0.6"/>
+        <path d="M20 55 L20 75" stroke="currentColor" stroke-width="6" stroke-linecap="round" fill="none"/>
+    </svg>`,
 
-    pulldown: `<svg viewBox="0 0 100 100" fill="currentColor"><path d="M50 18 A8 8 0 1 1 50 19 Z"/><path d="M50 26 L50 50 M35 65 L50 50 L65 65 M40 35 L50 30 L60 35 M30 25 L40 35 M70 25 L60 35"/><path d="M25 15 L75 15 L75 20 L25 20 Z" opacity="0.7"/><line x1="50" y1="15" x2="50" y2="26" stroke="currentColor" stroke-width="3"/><circle cx="50" cy="18" r="8"/><path d="M42 28 L42 50 L38 65 M58 28 L58 50 L62 65" stroke="currentColor" stroke-width="4" fill="none"/><path d="M30 20 L30 35 L40 30 M70 20 L70 35 L60 30" stroke="currentColor" stroke-width="3" fill="none"/></svg>`,
+    pulldown: `<svg viewBox="0 0 100 100" fill="currentColor">
+        <rect x="20" y="10" width="60" height="8" rx="2"/>
+        <circle cx="50" cy="32" r="10"/>
+        <path d="M50 42 L50 65" stroke="currentColor" stroke-width="8" stroke-linecap="round" fill="none"/>
+        <path d="M50 65 L40 85 M50 65 L60 85" stroke="currentColor" stroke-width="7" stroke-linecap="round" fill="none"/>
+        <path d="M35 50 L25 18 M65 50 L75 18" stroke="currentColor" stroke-width="6" stroke-linecap="round" fill="none"/>
+    </svg>`,
 
-    chestPress: `<svg viewBox="0 0 100 100" fill="currentColor"><rect x="15" y="45" width="70" height="8" rx="2"/><path d="M50 35 A7 7 0 1 1 50 36 Z"/><path d="M40 42 L40 60 L35 75 M60 42 L60 60 L65 75" stroke="currentColor" stroke-width="4" fill="none"/><path d="M40 50 L25 50 M60 50 L75 50" stroke="currentColor" stroke-width="4"/><ellipse cx="50" cy="60" rx="12" ry="6" opacity="0.5"/><rect x="10" y="42" width="8" height="14" rx="2"/><rect x="82" y="42" width="8" height="14" rx="2"/></svg>`,
+    chestPress: `<svg viewBox="0 0 100 100" fill="currentColor">
+        <circle cx="25" cy="50" r="10"/>
+        <path d="M35 50 L70 50" stroke="currentColor" stroke-width="8" stroke-linecap="round" fill="none"/>
+        <path d="M70 50 L85 35 M70 50 L85 65" stroke="currentColor" stroke-width="6" stroke-linecap="round" fill="none"/>
+        <polygon points="80,35 92,35 86,28" fill="currentColor"/>
+        <polygon points="80,65 92,65 86,72" fill="currentColor"/>
+        <path d="M25 60 L25 80 L35 80" stroke="currentColor" stroke-width="6" stroke-linecap="round" fill="none"/>
+    </svg>`,
 
-    overheadPress: `<svg viewBox="0 0 100 100" fill="currentColor"><path d="M50 30 A8 8 0 1 1 50 31 Z"/><rect x="20" y="15" width="60" height="6" rx="2"/><rect x="15" y="12" width="10" height="12" rx="2"/><rect x="75" y="12" width="10" height="12" rx="2"/><path d="M42 38 L42 60 L38 80 M58 38 L58 60 L62 80" stroke="currentColor" stroke-width="4" fill="none"/><path d="M42 38 L35 18 M58 38 L65 18" stroke="currentColor" stroke-width="3" fill="none"/></svg>`,
+    overheadPress: `<svg viewBox="0 0 100 100" fill="currentColor">
+        <rect x="20" y="12" width="60" height="8" rx="2"/>
+        <rect x="12" y="8" width="12" height="16" rx="3"/>
+        <rect x="76" y="8" width="12" height="16" rx="3"/>
+        <circle cx="50" cy="38" r="10"/>
+        <path d="M50 48 L50 70" stroke="currentColor" stroke-width="8" stroke-linecap="round" fill="none"/>
+        <path d="M50 70 L40 90 M50 70 L60 90" stroke="currentColor" stroke-width="7" stroke-linecap="round" fill="none"/>
+        <path d="M38 48 L30 20 M62 48 L70 20" stroke="currentColor" stroke-width="6" stroke-linecap="round" fill="none"/>
+    </svg>`,
 
-    legCurl: `<svg viewBox="0 0 100 100" fill="currentColor"><path d="M65 35 A7 7 0 1 1 65 36 Z"/><path d="M20 50 L80 50 L80 60 L20 60 Z" opacity="0.5"/><path d="M55 42 L55 50 M75 50 L75 42" stroke="currentColor" stroke-width="4" fill="none"/><path d="M30 55 L30 75 L45 85" stroke="currentColor" stroke-width="5" fill="none"/><ellipse cx="48" cy="86" rx="5" ry="4"/><path d="M60 55 L75 55 L85 65" stroke="currentColor" stroke-width="4" fill="none" opacity="0.7"/></svg>`,
+    legCurl: `<svg viewBox="0 0 100 100" fill="currentColor">
+        <circle cx="70" cy="30" r="10"/>
+        <path d="M60 35 L35 50" stroke="currentColor" stroke-width="8" stroke-linecap="round" fill="none"/>
+        <rect x="15" y="45" width="50" height="10" rx="3" opacity="0.5"/>
+        <path d="M35 55 L25 75 L35 85" stroke="currentColor" stroke-width="7" stroke-linecap="round" fill="none"/>
+        <circle cx="38" cy="88" r="6"/>
+        <path d="M75 35 L85 50" stroke="currentColor" stroke-width="5" stroke-linecap="round" fill="none"/>
+    </svg>`,
 
-    bicepCurl: `<svg viewBox="0 0 100 100" fill="currentColor"><path d="M50 22 A8 8 0 1 1 50 23 Z"/><path d="M42 30 L42 55 L38 75 M58 30 L58 55 L62 75" stroke="currentColor" stroke-width="4" fill="none"/><path d="M42 45 L30 55 L28 45" stroke="currentColor" stroke-width="3" fill="none"/><path d="M58 45 L70 35 L72 45" stroke="currentColor" stroke-width="3" fill="none"/><rect x="24" y="42" width="8" height="16" rx="2"/><rect x="68" y="32" width="8" height="16" rx="2"/></svg>`,
+    bicepCurl: `<svg viewBox="0 0 100 100" fill="currentColor">
+        <circle cx="50" cy="22" r="10"/>
+        <path d="M50 32 L50 60" stroke="currentColor" stroke-width="8" stroke-linecap="round" fill="none"/>
+        <path d="M50 60 L40 85 M50 60 L60 85" stroke="currentColor" stroke-width="7" stroke-linecap="round" fill="none"/>
+        <path d="M38 40 L25 55 L25 40" stroke="currentColor" stroke-width="6" stroke-linecap="round" fill="none"/>
+        <path d="M62 40 L75 25 L75 40" stroke="currentColor" stroke-width="6" stroke-linecap="round" fill="none"/>
+        <rect x="18" y="35" width="12" height="18" rx="3"/>
+        <rect x="70" y="20" width="12" height="18" rx="3"/>
+    </svg>`,
 
-    tricepExtension: `<svg viewBox="0 0 100 100" fill="currentColor"><path d="M50 25 A8 8 0 1 1 50 26 Z"/><path d="M42 33 L42 55 L38 75 M58 33 L58 55 L62 75" stroke="currentColor" stroke-width="4" fill="none"/><path d="M42 40 L50 20 L58 40" stroke="currentColor" stroke-width="3" fill="none"/><rect x="45" y="10" width="10" height="15" rx="2"/></svg>`,
+    tricepExtension: `<svg viewBox="0 0 100 100" fill="currentColor">
+        <circle cx="50" cy="30" r="10"/>
+        <path d="M50 40 L50 65" stroke="currentColor" stroke-width="8" stroke-linecap="round" fill="none"/>
+        <path d="M50 65 L40 88 M50 65 L60 88" stroke="currentColor" stroke-width="7" stroke-linecap="round" fill="none"/>
+        <path d="M40 42 L50 15 L60 42" stroke="currentColor" stroke-width="6" stroke-linecap="round" fill="none"/>
+        <rect x="42" y="5" width="16" height="14" rx="3"/>
+    </svg>`,
 
-    calfRaise: `<svg viewBox="0 0 100 100" fill="currentColor"><path d="M50 20 A8 8 0 1 1 50 21 Z"/><path d="M45 28 L45 55 L42 70 L42 78 M55 28 L55 55 L58 70 L58 78" stroke="currentColor" stroke-width="4" fill="none"/><path d="M38 78 L42 85 L58 85 L62 78" stroke="currentColor" stroke-width="3" fill="none"/><rect x="30" y="85" width="40" height="6" rx="2" opacity="0.5"/><path d="M40 40 L50 35 L60 40" stroke="currentColor" stroke-width="3" fill="none"/></svg>`,
+    calfRaise: `<svg viewBox="0 0 100 100" fill="currentColor">
+        <circle cx="50" cy="18" r="10"/>
+        <path d="M50 28 L50 55" stroke="currentColor" stroke-width="8" stroke-linecap="round" fill="none"/>
+        <path d="M50 55 L45 75 L45 82 M50 55 L55 75 L55 82" stroke="currentColor" stroke-width="7" stroke-linecap="round" fill="none"/>
+        <path d="M40 82 L60 82" stroke="currentColor" stroke-width="6" stroke-linecap="round" fill="none"/>
+        <rect x="30" y="85" width="40" height="8" rx="2" opacity="0.5"/>
+        <path d="M38 35 L50 28 L62 35" stroke="currentColor" stroke-width="5" stroke-linecap="round" fill="none"/>
+    </svg>`,
 
-    legExtension: `<svg viewBox="0 0 100 100" fill="currentColor"><path d="M35 35 A7 7 0 1 1 35 36 Z"/><path d="M20 45 L60 45 L60 55 L20 55 Z" opacity="0.5"/><path d="M30 42 L30 55 M45 42 L45 55" stroke="currentColor" stroke-width="4" fill="none"/><path d="M55 50 L80 40 L82 45 L58 55" stroke="currentColor" stroke-width="4" fill="none"/><ellipse cx="83" cy="42" rx="5" ry="4"/><rect x="15" y="55" width="10" height="25" rx="2" opacity="0.5"/></svg>`,
+    legExtension: `<svg viewBox="0 0 100 100" fill="currentColor">
+        <circle cx="30" cy="30" r="10"/>
+        <path d="M30 40 L30 55 L45 55" stroke="currentColor" stroke-width="8" stroke-linecap="round" fill="none"/>
+        <rect x="15" y="50" width="40" height="12" rx="3" opacity="0.5"/>
+        <path d="M55 56 L80 45" stroke="currentColor" stroke-width="8" stroke-linecap="round" fill="none"/>
+        <circle cx="85" cy="42" r="7"/>
+        <rect x="10" y="62" width="12" height="28" rx="3" opacity="0.5"/>
+    </svg>`,
 
-    seatedRow: `<svg viewBox="0 0 100 100" fill="currentColor"><path d="M30 35 A7 7 0 1 1 30 36 Z"/><path d="M25 42 L25 55 L20 75 M35 42 L40 55 L45 75" stroke="currentColor" stroke-width="4" fill="none"/><path d="M35 50 L55 50 L70 45" stroke="currentColor" stroke-width="3" fill="none"/><rect x="70" y="40" width="15" height="8" rx="2"/><rect x="15" y="55" width="35" height="5" rx="2" opacity="0.5"/><path d="M25 48 L15 48 L15 55" stroke="currentColor" stroke-width="3" fill="none" opacity="0.7"/></svg>`,
+    seatedRow: `<svg viewBox="0 0 100 100" fill="currentColor">
+        <circle cx="30" cy="35" r="10"/>
+        <path d="M30 45 L35 60 L40 80" stroke="currentColor" stroke-width="7" stroke-linecap="round" fill="none"/>
+        <rect x="15" y="58" width="35" height="8" rx="2" opacity="0.5"/>
+        <path d="M40 45 L65 45 L80 40" stroke="currentColor" stroke-width="6" stroke-linecap="round" fill="none"/>
+        <rect x="78" y="32" width="14" height="16" rx="3"/>
+        <path d="M25 45 L15 45 L15 58" stroke="currentColor" stroke-width="5" stroke-linecap="round" fill="none" opacity="0.7"/>
+    </svg>`,
 
-    inclinePress: `<svg viewBox="0 0 100 100" fill="currentColor"><path d="M55 30 A7 7 0 1 1 55 31 Z"/><path d="M20 75 L45 40 L70 75 Z" fill="none" stroke="currentColor" stroke-width="2" opacity="0.5"/><path d="M48 38 L48 55 L40 75 M62 38 L62 50 L70 70" stroke="currentColor" stroke-width="4" fill="none"/><path d="M48 45 L30 30 M62 45 L80 30" stroke="currentColor" stroke-width="3" fill="none"/><rect x="15" y="20" width="70" height="6" rx="2"/><rect x="10" y="18" width="10" height="10" rx="2"/><rect x="80" y="18" width="10" height="10" rx="2"/></svg>`,
+    inclinePress: `<svg viewBox="0 0 100 100" fill="currentColor">
+        <rect x="20" y="15" width="60" height="8" rx="2"/>
+        <rect x="12" y="12" width="12" height="14" rx="3"/>
+        <rect x="76" y="12" width="12" height="14" rx="3"/>
+        <circle cx="50" cy="40" r="10"/>
+        <path d="M50 50 L50 68" stroke="currentColor" stroke-width="8" stroke-linecap="round" fill="none"/>
+        <path d="M50 68 L40 88 M50 68 L60 88" stroke="currentColor" stroke-width="7" stroke-linecap="round" fill="none"/>
+        <path d="M38 48 L28 23 M62 48 L72 23" stroke="currentColor" stroke-width="6" stroke-linecap="round" fill="none"/>
+    </svg>`,
 
-    lateralRaise: `<svg viewBox="0 0 100 100" fill="currentColor"><path d="M50 22 A8 8 0 1 1 50 23 Z"/><path d="M45 30 L45 55 L40 78 M55 30 L55 55 L60 78" stroke="currentColor" stroke-width="4" fill="none"/><path d="M45 40 L20 35 M55 40 L80 35" stroke="currentColor" stroke-width="3" fill="none"/><rect x="12" y="32" width="12" height="8" rx="2"/><rect x="76" y="32" width="12" height="8" rx="2"/></svg>`,
+    lateralRaise: `<svg viewBox="0 0 100 100" fill="currentColor">
+        <circle cx="50" cy="22" r="10"/>
+        <path d="M50 32 L50 60" stroke="currentColor" stroke-width="8" stroke-linecap="round" fill="none"/>
+        <path d="M50 60 L42 85 M50 60 L58 85" stroke="currentColor" stroke-width="7" stroke-linecap="round" fill="none"/>
+        <path d="M42 42 L15 35" stroke="currentColor" stroke-width="6" stroke-linecap="round" fill="none"/>
+        <path d="M58 42 L85 35" stroke="currentColor" stroke-width="6" stroke-linecap="round" fill="none"/>
+        <rect x="5" y="30" width="14" height="10" rx="3"/>
+        <rect x="81" y="30" width="14" height="10" rx="3"/>
+    </svg>`,
 
-    shrug: `<svg viewBox="0 0 100 100" fill="currentColor"><path d="M50 25 A8 8 0 1 1 50 26 Z"/><path d="M42 33 L42 60 L38 80 M58 33 L58 60 L62 80" stroke="currentColor" stroke-width="4" fill="none"/><path d="M42 40 L42 55 L30 55 L30 40" stroke="currentColor" stroke-width="3" fill="none"/><path d="M58 40 L58 55 L70 55 L70 40" stroke="currentColor" stroke-width="3" fill="none"/><rect x="25" y="55" width="10" height="25" rx="2"/><rect x="65" y="55" width="10" height="25" rx="2"/><path d="M35 33 L35 28 L42 33 M65 33 L65 28 L58 33" stroke="currentColor" stroke-width="2" fill="none"/></svg>`,
+    shrug: `<svg viewBox="0 0 100 100" fill="currentColor">
+        <circle cx="50" cy="25" r="10"/>
+        <path d="M50 35 L50 60" stroke="currentColor" stroke-width="8" stroke-linecap="round" fill="none"/>
+        <path d="M50 60 L42 85 M50 60 L58 85" stroke="currentColor" stroke-width="7" stroke-linecap="round" fill="none"/>
+        <path d="M40 40 L30 55 L30 80" stroke="currentColor" stroke-width="6" stroke-linecap="round" fill="none"/>
+        <path d="M60 40 L70 55 L70 80" stroke="currentColor" stroke-width="6" stroke-linecap="round" fill="none"/>
+        <rect x="24" y="70" width="12" height="20" rx="3"/>
+        <rect x="64" y="70" width="12" height="20" rx="3"/>
+        <path d="M35 25 L35 18 M65 25 L65 18" stroke="currentColor" stroke-width="4" stroke-linecap="round" fill="none"/>
+    </svg>`,
 
-    abCrunch: `<svg viewBox="0 0 100 100" fill="currentColor"><path d="M30 45 A7 7 0 1 1 30 46 Z"/><path d="M35 50 L55 60 L75 55" stroke="currentColor" stroke-width="5" fill="none"/><path d="M55 60 L50 75 L55 85 M55 60 L65 75 L60 85" stroke="currentColor" stroke-width="4" fill="none"/><path d="M25 52 L20 60" stroke="currentColor" stroke-width="3" fill="none"/><ellipse cx="50" cy="65" rx="15" ry="8" opacity="0.3"/></svg>`,
+    abCrunch: `<svg viewBox="0 0 100 100" fill="currentColor">
+        <circle cx="28" cy="40" r="10"/>
+        <path d="M38 45 L60 55 L80 50" stroke="currentColor" stroke-width="8" stroke-linecap="round" fill="none"/>
+        <path d="M60 55 L55 75 L60 90" stroke="currentColor" stroke-width="7" stroke-linecap="round" fill="none"/>
+        <path d="M60 55 L70 72 L65 90" stroke="currentColor" stroke-width="7" stroke-linecap="round" fill="none"/>
+        <path d="M20 48 L12 60" stroke="currentColor" stroke-width="5" stroke-linecap="round" fill="none"/>
+    </svg>`,
 
-    backExtension: `<svg viewBox="0 0 100 100" fill="currentColor"><path d="M70 35 A7 7 0 1 1 70 36 Z"/><path d="M65 42 L45 55 L25 52" stroke="currentColor" stroke-width="5" fill="none"/><path d="M45 55 L40 75 L45 85 M45 55 L55 72 L50 85" stroke="currentColor" stroke-width="4" fill="none"/><rect x="15" y="50" width="15" height="35" rx="3" opacity="0.5"/><path d="M75 40 L85 35" stroke="currentColor" stroke-width="3" fill="none"/></svg>`
+    backExtension: `<svg viewBox="0 0 100 100" fill="currentColor">
+        <circle cx="75" cy="30" r="10"/>
+        <path d="M65 35 L40 50 L20 48" stroke="currentColor" stroke-width="8" stroke-linecap="round" fill="none"/>
+        <path d="M40 50 L35 72 L40 90" stroke="currentColor" stroke-width="7" stroke-linecap="round" fill="none"/>
+        <path d="M40 50 L50 70 L45 90" stroke="currentColor" stroke-width="7" stroke-linecap="round" fill="none"/>
+        <rect x="10" y="45" width="18" height="40" rx="4" opacity="0.5"/>
+        <path d="M80 35 L90 28" stroke="currentColor" stroke-width="5" stroke-linecap="round" fill="none"/>
+    </svg>`
 };
 
 // ===== DATA STRUCTURES =====
