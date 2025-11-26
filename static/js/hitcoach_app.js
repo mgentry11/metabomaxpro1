@@ -1117,16 +1117,12 @@ function runTimer() {
                     speakWithCallback('Final ten! Give everything!', resumeAfterPause);
                 }
             }
-        } else if (!voiceCuePlaying && timeRemaining >= 1 && timeRemaining <= 60) {
-            // Normal counting (only when no cue is playing AND no audio playing)
+        } else if (!voiceCuePlaying && !cueAudio && timeRemaining >= 1 && timeRemaining <= 60) {
+            // Normal counting (only when no cue is playing)
             if (useCommanderVoice) {
-                if (!currentAudio && !cueAudio) {
-                    playNumber(timeRemaining);
-                }
-            } else {
-                if (!synth.speaking) {
-                    speak(String(timeRemaining));
-                }
+                playNumber(timeRemaining);
+            } else if (!synth.speaking) {
+                speak(String(timeRemaining));
             }
         }
 
@@ -1950,12 +1946,6 @@ for (let i = 1; i <= 60; i++) {
 // Play a single audio file
 function playAudio(filename, callback) {
     if (!voiceEnabled || !useCommanderVoice) {
-        if (callback) callback();
-        return;
-    }
-
-    // Don't play if we're in a pause period (cue just played)
-    if (Date.now() < noCountUntil) {
         if (callback) callback();
         return;
     }
