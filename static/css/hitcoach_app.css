@@ -32,21 +32,35 @@
     padding-bottom: 80px; /* Space for bottom nav */
 }
 
+/* Status Bar Spacer - fixed at top to prevent scroll overlap */
+.status-bar-spacer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 44px;
+    background: var(--dark-bg);
+    z-index: 200;
+}
+
 /* App Header */
 .app-header {
     background: var(--dark-bg);
     padding: 0.5rem 1rem;
-    margin-top: 40px; /* Push below iPhone status bar */
+    margin-top: 44px; /* Space for status bar spacer */
     position: sticky;
-    top: 40px;
-    z-index: 50;
+    top: 44px;
+    z-index: 150;
+    border-bottom: 1px solid var(--light-gray);
 }
 
-.app-header + .workout-tabs {
-    position: sticky;
-    top: 88px; /* Below header */
-    z-index: 49;
+.workout-tabs {
     background: var(--dark-bg);
+    position: sticky;
+    top: 88px; /* 44px spacer + 44px header */
+    z-index: 149;
+    border-bottom: 1px solid var(--light-gray);
+    margin-top: -1px; /* Prevent gap */
 }
 
 .app-header-content {
@@ -243,12 +257,16 @@
     margin: 0 auto;
     padding: 0 1rem 1rem;
     min-height: calc(100vh - 180px);
+    position: relative;
+    z-index: 1;
 }
 
 /* Screen Management */
 .screen {
     display: none;
     animation: fadeIn 0.3s ease;
+    position: relative;
+    z-index: 1;
 }
 
 .screen.active {
@@ -296,13 +314,13 @@
     justify-content: center;
     flex-shrink: 0;
     overflow: hidden;
+    background: transparent;
 }
 
 .exercise-icon-img {
-    width: 120%;
-    height: 120%;
-    object-fit: cover;
-    object-position: center;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
 }
 
 .exercise-icon-fallback {
@@ -624,12 +642,13 @@
 }
 
 .exercise-counter {
-    background: var(--gold);
-    color: #000;
-    padding: 0.4rem 0.75rem;
-    border-radius: 20px;
-    font-weight: 700;
-    font-size: 0.85rem;
+    background: transparent;
+    border: 2px solid var(--gold);
+    color: var(--gold);
+    padding: 0.3rem 0.6rem;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.8rem;
 }
 
 /* Current Exercise Display */
@@ -653,13 +672,13 @@
     justify-content: center;
     margin: 1rem auto;
     overflow: hidden;
+    background: transparent;
 }
 
 .exercise-icon-display img {
-    width: 120%;
-    height: 120%;
-    object-fit: cover;
-    object-position: center;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
 }
 
 /* Timer Section */
@@ -1521,17 +1540,30 @@
 
 #exerciseSetupScreen .settings-section {
     margin-bottom: 1.5rem;
+    display: block !important;
+}
+
+#exerciseSetupScreen .weight-input-section {
+    display: block !important;
 }
 
 #exerciseSetupScreen .weight-input-section input {
     background: var(--gray-bg);
     border: 2px solid var(--gold);
-    color: var(--gold);
+    color: var(--text-white);
+    font-size: 1.5rem;
+    padding: 1.25rem;
 }
 
 #exerciseSetupScreen .weight-input-section input::placeholder {
+    color: var(--text-gray);
+}
+
+#exerciseSetupScreen .settings-section-title {
     color: var(--gold);
-    opacity: 0.6;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 /* Light Theme */
@@ -1596,4 +1628,604 @@ body.light-theme .bottom-nav {
     .app-body {
         padding-bottom: calc(80px + env(safe-area-inset-bottom));
     }
+}
+
+/* ===== NEW SETTINGS & PROFILE SCREENS ===== */
+
+/* Screen Card Container */
+.screen-card {
+    background: var(--gray-bg);
+    border-radius: 24px;
+    padding: 1.25rem;
+    margin: 0.5rem 0;
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
+}
+
+.screen-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-white);
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.screen-card .settings-section {
+    margin-bottom: 1.25rem;
+}
+
+.screen-card .settings-section-title {
+    font-size: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.section-subtitle {
+    color: var(--text-gray);
+    font-size: 0.8rem;
+    margin-bottom: 0.75rem;
+}
+
+/* Voice Card Grid */
+.voice-card-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.voice-card {
+    background: var(--light-gray);
+    border: 2px solid transparent;
+    border-radius: 12px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.voice-card:hover {
+    border-color: var(--gold);
+}
+
+.voice-card.active {
+    border-color: var(--gold);
+    background: rgba(245, 166, 35, 0.1);
+}
+
+.voice-card-wide {
+    width: 100%;
+    max-width: 160px;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 0.5rem;
+    position: relative;
+    box-sizing: border-box;
+    padding: 0.75rem;
+}
+
+.voice-card-wide .voice-card-circle {
+    width: 36px;
+    height: 36px;
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+.voice-card-wide .pro-badge {
+    position: absolute;
+    top: 0.25rem;
+    right: 0.25rem;
+    font-size: 0.55rem;
+    padding: 0.1rem 0.3rem;
+}
+
+/* Voice Style Grid */
+.voice-style-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.voice-style-card {
+    background: var(--light-gray);
+    border: 2px solid transparent;
+    border-radius: 10px;
+    padding: 0.6rem 0.4rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.voice-style-card:hover {
+    border-color: var(--gold);
+}
+
+.voice-style-card.active {
+    border-color: var(--gold);
+    background: rgba(245, 166, 35, 0.15);
+}
+
+.voice-style-icon {
+    font-size: 1.25rem;
+}
+
+.voice-style-name {
+    color: var(--text-white);
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+.voice-style-card .pro-badge {
+    position: absolute;
+    top: 0.2rem;
+    right: 0.2rem;
+    font-size: 0.5rem;
+    padding: 0.1rem 0.25rem;
+}
+
+.voice-card-circle {
+    width: 48px;
+    height: 48px;
+    background: var(--gold);
+    color: #000;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.voice-card-label {
+    color: var(--text-white);
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+/* Toggle Group (for Rest Duration, Weight Units) */
+.toggle-group {
+    display: flex;
+    background: var(--light-gray);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.toggle-btn {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: var(--text-gray);
+    padding: 0.875rem 1rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.toggle-btn.active {
+    background: var(--gold);
+    color: #000;
+}
+
+.toggle-btn:hover:not(.active) {
+    color: var(--text-white);
+}
+
+/* Phase Timing Rows */
+.phase-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.65rem 0;
+    border-bottom: 1px solid var(--light-gray);
+}
+
+.phase-row:last-child {
+    border-bottom: none;
+}
+
+.phase-label {
+    color: var(--text-white);
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.phase-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.phase-btn {
+    width: 36px;
+    height: 36px;
+    background: var(--gold);
+    color: #000;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.phase-btn:hover {
+    background: var(--gold-light);
+}
+
+.phase-value {
+    color: var(--text-white);
+    font-size: 0.9rem;
+    font-weight: 600;
+    min-width: 36px;
+    text-align: center;
+}
+
+/* Profile Name Input */
+.profile-name-input {
+    width: 100%;
+    background: var(--light-gray);
+    border: 2px solid var(--gold);
+    color: var(--text-white);
+    padding: 1rem;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+.profile-name-input:focus {
+    outline: none;
+    border-color: var(--gold-light);
+}
+
+.profile-name-input::placeholder {
+    color: var(--text-gray);
+}
+
+/* Experience Cards */
+.experience-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.experience-card {
+    background: var(--light-gray);
+    border: 2px solid transparent;
+    border-radius: 12px;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: left;
+}
+
+.experience-card:hover {
+    border-color: var(--gold);
+}
+
+.experience-card.active {
+    border-color: var(--gold);
+    background: rgba(245, 166, 35, 0.1);
+}
+
+.experience-icon {
+    font-size: 1.5rem;
+}
+
+.experience-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.experience-title {
+    color: var(--text-white);
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.experience-card.active .experience-title {
+    color: var(--gold);
+}
+
+.experience-desc {
+    color: var(--text-gray);
+    font-size: 0.85rem;
+}
+
+/* Routine Card */
+.routine-card {
+    background: var(--light-gray);
+    border: 2px solid var(--gold);
+    border-radius: 12px;
+    padding: 1rem;
+}
+
+.routine-title {
+    display: block;
+    color: var(--gold);
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.routine-desc {
+    display: block;
+    color: var(--text-gray);
+    font-size: 0.85rem;
+}
+
+/* Siri Hint */
+.siri-hint {
+    color: var(--text-gray);
+    font-size: 0.85rem;
+    margin-top: 0.75rem;
+    text-align: center;
+}
+
+/* Danger Button */
+.btn-danger {
+    background: rgba(220, 53, 69, 0.2);
+    border: 2px solid #dc3545;
+    color: #dc3545;
+}
+
+.btn-danger:hover {
+    background: rgba(220, 53, 69, 0.3);
+}
+
+/* Siri Screen Styles */
+.siri-instructions {
+    background: var(--light-gray);
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.siri-instructions-title {
+    color: var(--gold);
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+}
+
+.siri-instructions .siri-steps {
+    color: var(--text-gray);
+    font-size: 0.85rem;
+    margin: 0;
+    padding-left: 1.25rem;
+}
+
+.siri-instructions .siri-steps li {
+    padding: 0.25rem 0;
+}
+
+.siri-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+#siriScreen .siri-shortcut-item {
+    background: var(--light-gray);
+    border-radius: 10px;
+    padding: 0.75rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+    border: 1px solid transparent;
+}
+
+#siriScreen .siri-shortcut-item:hover {
+    border-color: var(--gold);
+}
+
+.siri-shortcut-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    flex: 1;
+    min-width: 0;
+}
+
+.siri-shortcut-name {
+    color: var(--text-white);
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.siri-shortcut-phrase {
+    color: var(--text-gray);
+    font-size: 0.75rem;
+}
+
+.siri-add-btn {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+#siriScreen .screen-card {
+    padding: 1rem;
+}
+
+#siriScreen .screen-title {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+}
+
+#siriScreen .siri-instructions {
+    padding: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+#siriScreen .siri-instructions-title {
+    font-size: 0.85rem;
+    margin-bottom: 0.5rem;
+}
+
+#siriScreen .siri-steps {
+    font-size: 0.75rem;
+}
+
+#siriScreen .settings-section-title {
+    font-size: 0.7rem;
+    margin-top: 1rem !important;
+    margin-bottom: 0.5rem;
+}
+
+/* Add Exercise Button */
+.add-exercise-item {
+    border: 2px dashed var(--gold);
+    background: transparent;
+}
+
+.add-exercise-item:hover {
+    background: rgba(245, 166, 35, 0.1);
+}
+
+.add-exercise-icon {
+    background: transparent;
+    border: 2px solid var(--gold);
+}
+
+.add-icon {
+    color: var(--gold);
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+/* Exercise Selector List */
+.exercise-selector-list {
+    max-height: 50vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.exercise-selector-list .exercise-item {
+    margin: 0;
+}
+
+/* Profile Switcher */
+.profile-switcher {
+    position: fixed;
+    bottom: 70px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: none;
+    gap: 0.5rem;
+    background: var(--gray-bg);
+    padding: 0.5rem;
+    border-radius: 25px;
+    border: 2px solid var(--gold);
+    z-index: 90;
+}
+
+.profile-switcher.active {
+    display: flex;
+}
+
+.profile-tab {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: transparent;
+    border: none;
+    border-radius: 20px;
+    color: var(--text-gray);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.profile-tab.active {
+    background: var(--gold);
+    color: #000;
+}
+
+.profile-tab:hover:not(.active) {
+    color: var(--text-white);
+}
+
+.profile-avatar {
+    width: 28px;
+    height: 28px;
+    background: var(--light-gray);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.85rem;
+}
+
+.profile-tab.active .profile-avatar {
+    background: #000;
+    color: var(--gold);
+}
+
+.profile-name {
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+/* Toggle Switch */
+.toggle-switch {
+    width: 50px;
+    height: 28px;
+    background: var(--light-gray);
+    border-radius: 14px;
+    cursor: pointer;
+    position: relative;
+    transition: background 0.3s ease;
+}
+
+.toggle-switch.active {
+    background: var(--gold);
+}
+
+.toggle-slider {
+    width: 24px;
+    height: 24px;
+    background: white;
+    border-radius: 50%;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    transition: transform 0.3s ease;
+}
+
+.toggle-switch.active .toggle-slider {
+    transform: translateX(22px);
+}
+
+/* Profile Stat Row */
+.profile-stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0;
+}
+
+.profile-stat-label {
+    color: var(--text-white);
+    font-size: 0.95rem;
+}
+
+/* Duo Mode Names */
+.duo-names {
+    margin-top: 1rem;
 }

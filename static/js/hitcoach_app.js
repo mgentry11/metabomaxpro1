@@ -5,10 +5,14 @@
 
 const ICON_PATH = './static/images/icons/';
 
+// ===== EXERCISE DATABASE =====
+// Complete mapping of exercise keys to icon filenames
 const EXERCISE_ICONS = {
+    // Primary exercises
     legPress: 'leg_press.png',
     pulldown: 'pull_up.png',
     chestPress: 'bench_press.png',
+    benchPress: 'bench_press.png',
     overheadPress: 'overhead_press.png',
     legCurl: 'leg_curl.png',
     bicepCurl: 'bicep_curl.png',
@@ -20,33 +24,304 @@ const EXERCISE_ICONS = {
     lateralRaise: 'lateral_raise.png',
     shrug: 'shrug.png',
     abCrunch: 'crunch.png',
-    backExtension: 'good_morning.png'
+    backExtension: 'good_morning.png',
+    // Additional exercises
+    squat: 'squat.png',
+    deadlift: 'deadlift.png',
+    barbellRow: 'barbell_row.png',
+    pullUp: 'pull_up.png',
+    dip: 'dip.png',
+    lunge: 'lunge.png',
+    frontRaise: 'front_raise.png',
+    reverseFly: 'reverse_fly.png',
+    dumbbellPress: 'dumbbell_press.png',
+    declinePress: 'decline_press.png',
+    arnoldPress: 'arnold_press.png',
+    uprightRow: 'upright_row.png',
+    facePull: 'face_pull.png',
+    goodMorning: 'good_morning.png',
+    romanianDeadlift: 'romanian_deadlift.png',
+    sumoDeadlift: 'sumo_deadlift.png',
+    hackSquat: 'hack_squat.png',
+    bulgarianSplit: 'bulgarian_split.png',
+    gluteBridge: 'glute_bridge.png',
+    hipThrust: 'hip_thrust.png',
+    plank: 'plank.png',
+    crunch: 'crunch.png',
+    legRaise: 'leg_raise.png',
+    russianTwist: 'russian_twist.png',
+    woodchopper: 'woodchopper.png',
+    farmersWalk: 'farmers_walk.png',
+    kettlebellSwing: 'kettlebell_swing.png',
+    snatch: 'snatch.png',
+    cleanAndJerk: 'clean_and_jerk.png'
 };
 
 // ===== DATA STRUCTURES =====
 
 const WORKOUTS = {
     A: [
-        { name: 'Leg Press', iconKey: 'legPress', muscle: 'Legs' },
-        { name: 'Pulldown', iconKey: 'pulldown', muscle: 'Back' },
-        { name: 'Chest Press', iconKey: 'chestPress', muscle: 'Chest' },
-        { name: 'Overhead', iconKey: 'overheadPress', muscle: 'Shoulders' },
-        { name: 'Leg Curl', iconKey: 'legCurl', muscle: 'Hamstrings' },
-        { name: 'Bicep Curl', iconKey: 'bicepCurl', muscle: 'Biceps' },
-        { name: 'Tricep Extension', iconKey: 'tricepExtension', muscle: 'Triceps' },
-        { name: 'Calf Raise', iconKey: 'calfRaise', muscle: 'Calves' }
+        { id: 'legPress', name: 'Leg Press', iconKey: 'legPress', muscle: 'Legs' },
+        { id: 'pulldown', name: 'Pulldown', iconKey: 'pulldown', muscle: 'Back' },
+        { id: 'chestPress', name: 'Chest Press', iconKey: 'chestPress', muscle: 'Chest' },
+        { id: 'overheadPress', name: 'Overhead Press', iconKey: 'overheadPress', muscle: 'Shoulders' },
+        { id: 'legCurl', name: 'Leg Curl', iconKey: 'legCurl', muscle: 'Hamstrings' },
+        { id: 'bicepCurl', name: 'Bicep Curl', iconKey: 'bicepCurl', muscle: 'Biceps' },
+        { id: 'tricepExtension', name: 'Tricep Extension', iconKey: 'tricepExtension', muscle: 'Triceps' },
+        { id: 'calfRaise', name: 'Calf Raise', iconKey: 'calfRaise', muscle: 'Calves' }
     ],
     B: [
-        { name: 'Leg Extension', iconKey: 'legExtension', muscle: 'Quads' },
-        { name: 'Seated Row', iconKey: 'seatedRow', muscle: 'Back' },
-        { name: 'Incline Press', iconKey: 'inclinePress', muscle: 'Upper Chest' },
-        { name: 'Lateral Raise', iconKey: 'lateralRaise', muscle: 'Shoulders' },
-        { name: 'Leg Curl', iconKey: 'legCurl', muscle: 'Hamstrings' },
-        { name: 'Shrug', iconKey: 'shrug', muscle: 'Traps' },
-        { name: 'Ab Crunch', iconKey: 'abCrunch', muscle: 'Abs' },
-        { name: 'Back Extension', iconKey: 'backExtension', muscle: 'Lower Back' }
+        { id: 'legExtension', name: 'Leg Extension', iconKey: 'legExtension', muscle: 'Quads' },
+        { id: 'seatedRow', name: 'Seated Row', iconKey: 'seatedRow', muscle: 'Back' },
+        { id: 'inclinePress', name: 'Incline Press', iconKey: 'inclinePress', muscle: 'Upper Chest' },
+        { id: 'lateralRaise', name: 'Lateral Raise', iconKey: 'lateralRaise', muscle: 'Shoulders' },
+        { id: 'legCurlB', name: 'Leg Curl', iconKey: 'legCurl', muscle: 'Hamstrings' },
+        { id: 'shrug', name: 'Shrug', iconKey: 'shrug', muscle: 'Traps' },
+        { id: 'abCrunch', name: 'Ab Crunch', iconKey: 'abCrunch', muscle: 'Abs' },
+        { id: 'backExtension', name: 'Back Extension', iconKey: 'backExtension', muscle: 'Lower Back' }
     ]
 };
+
+// ===== DARDEN/HIT TRAINING LEVEL DATABASE =====
+// Based on Dr. Ellington Darden's High Intensity Training research
+
+const TRAINING_LEVELS = {
+    beginner: {
+        id: 'beginner',
+        name: 'Beginner',
+        icon: '🌱',
+        description: 'New to HIT training (0-6 months)',
+        weeklyFrequency: '2x per week',
+        restBetweenWorkouts: '3-4 days',
+        principles: [
+            'Learn proper form before adding intensity',
+            'Focus on mind-muscle connection',
+            'Use lighter weights to master tempo',
+            'Single set per exercise to near-failure'
+        ],
+        phaseTimings: {
+            prep: 10,
+            eccentric: 10,      // Slower eccentric for beginners
+            concentric: 10,     // Slower concentric for control
+            finalEccentric: 15  // Shorter final negative
+        },
+        restDuration: 90,
+        routines: {
+            A: [
+                { id: 'legPress', name: 'Leg Press', iconKey: 'legPress', muscle: 'Legs', sets: 1, notes: 'Focus on full range of motion' },
+                { id: 'chestPress', name: 'Chest Press', iconKey: 'chestPress', muscle: 'Chest', sets: 1, notes: 'Keep shoulders back' },
+                { id: 'seatedRow', name: 'Seated Row', iconKey: 'seatedRow', muscle: 'Back', sets: 1, notes: 'Squeeze shoulder blades' },
+                { id: 'overheadPress', name: 'Overhead Press', iconKey: 'overheadPress', muscle: 'Shoulders', sets: 1, notes: 'Control the negative' }
+            ],
+            B: [
+                { id: 'legCurl', name: 'Leg Curl', iconKey: 'legCurl', muscle: 'Hamstrings', sets: 1, notes: 'Full contraction at top' },
+                { id: 'pulldown', name: 'Pulldown', iconKey: 'pulldown', muscle: 'Back', sets: 1, notes: 'Lead with elbows' },
+                { id: 'inclinePress', name: 'Incline Press', iconKey: 'inclinePress', muscle: 'Upper Chest', sets: 1, notes: 'Controlled movement' },
+                { id: 'bicepCurl', name: 'Bicep Curl', iconKey: 'bicepCurl', muscle: 'Biceps', sets: 1, notes: 'No swinging' }
+            ]
+        }
+    },
+    intermediate: {
+        id: 'intermediate',
+        name: 'Intermediate',
+        icon: '💪',
+        description: '6+ months HIT experience',
+        weeklyFrequency: '2-3x per week',
+        restBetweenWorkouts: '2-3 days',
+        principles: [
+            'Increase time under tension',
+            'Push closer to true muscular failure',
+            'Add pre-exhaust techniques',
+            'Longer negative phases for more stimulus'
+        ],
+        phaseTimings: {
+            prep: 10,
+            eccentric: 30,      // Standard Darden protocol
+            concentric: 20,     // Powerful but controlled
+            finalEccentric: 40  // Extended negative to failure
+        },
+        restDuration: 60,
+        routines: {
+            A: [
+                { id: 'legPress', name: 'Leg Press', iconKey: 'legPress', muscle: 'Legs', sets: 1, notes: 'Deep range, 30-20-40 protocol' },
+                { id: 'legCurl', name: 'Leg Curl', iconKey: 'legCurl', muscle: 'Hamstrings', sets: 1, notes: 'Pre-exhaust for legs' },
+                { id: 'pulldown', name: 'Pulldown', iconKey: 'pulldown', muscle: 'Back', sets: 1, notes: 'Full stretch at top' },
+                { id: 'chestPress', name: 'Chest Press', iconKey: 'chestPress', muscle: 'Chest', sets: 1, notes: 'Pause at bottom' },
+                { id: 'overheadPress', name: 'Overhead Press', iconKey: 'overheadPress', muscle: 'Shoulders', sets: 1, notes: 'Strict form' },
+                { id: 'bicepCurl', name: 'Bicep Curl', iconKey: 'bicepCurl', muscle: 'Biceps', sets: 1, notes: 'Squeeze at top' },
+                { id: 'tricepExtension', name: 'Tricep Extension', iconKey: 'tricepExtension', muscle: 'Triceps', sets: 1, notes: 'Full lockout' },
+                { id: 'calfRaise', name: 'Calf Raise', iconKey: 'calfRaise', muscle: 'Calves', sets: 1, notes: 'Pause at stretch' }
+            ],
+            B: [
+                { id: 'legExtension', name: 'Leg Extension', iconKey: 'legExtension', muscle: 'Quads', sets: 1, notes: 'Pre-exhaust' },
+                { id: 'squat', name: 'Squat', iconKey: 'squat', muscle: 'Legs', sets: 1, notes: 'After pre-exhaust' },
+                { id: 'seatedRow', name: 'Seated Row', iconKey: 'seatedRow', muscle: 'Back', sets: 1, notes: 'Hold contraction' },
+                { id: 'inclinePress', name: 'Incline Press', iconKey: 'inclinePress', muscle: 'Upper Chest', sets: 1, notes: 'Upper chest focus' },
+                { id: 'lateralRaise', name: 'Lateral Raise', iconKey: 'lateralRaise', muscle: 'Shoulders', sets: 1, notes: 'Controlled tempo' },
+                { id: 'shrug', name: 'Shrug', iconKey: 'shrug', muscle: 'Traps', sets: 1, notes: 'Hold at top 2 sec' },
+                { id: 'abCrunch', name: 'Ab Crunch', iconKey: 'abCrunch', muscle: 'Abs', sets: 1, notes: 'Slow and controlled' },
+                { id: 'backExtension', name: 'Back Extension', iconKey: 'backExtension', muscle: 'Lower Back', sets: 1, notes: 'No hyperextension' }
+            ]
+        }
+    },
+    advanced: {
+        id: 'advanced',
+        name: 'Advanced',
+        icon: '🔥',
+        description: '2+ years HIT experience',
+        weeklyFrequency: '2x per week',
+        restBetweenWorkouts: '3-4 days (more recovery needed)',
+        principles: [
+            'Maximum time under tension',
+            'True muscular failure on every set',
+            '30-10-30 Darden protocol',
+            'Negative-accentuated training',
+            'Inroad deeply into muscle reserves'
+        ],
+        phaseTimings: {
+            prep: 10,
+            eccentric: 30,      // 30-second negative (Darden 30-10-30)
+            concentric: 10,     // 10 controlled reps
+            finalEccentric: 30  // 30-second final negative
+        },
+        restDuration: 45,
+        routines: {
+            A: [
+                { id: 'legExtension', name: 'Leg Extension', iconKey: 'legExtension', muscle: 'Quads', sets: 1, notes: 'Pre-exhaust, 30-10-30' },
+                { id: 'legPress', name: 'Leg Press', iconKey: 'legPress', muscle: 'Legs', sets: 1, notes: 'Immediately after extension' },
+                { id: 'legCurl', name: 'Leg Curl', iconKey: 'legCurl', muscle: 'Hamstrings', sets: 1, notes: '30-10-30 protocol' },
+                { id: 'pulldown', name: 'Pulldown', iconKey: 'pulldown', muscle: 'Back', sets: 1, notes: 'Negative accentuated' },
+                { id: 'seatedRow', name: 'Seated Row', iconKey: 'seatedRow', muscle: 'Back', sets: 1, notes: 'Compound back' },
+                { id: 'chestPress', name: 'Chest Press', iconKey: 'chestPress', muscle: 'Chest', sets: 1, notes: '30-10-30' },
+                { id: 'overheadPress', name: 'Overhead Press', iconKey: 'overheadPress', muscle: 'Shoulders', sets: 1, notes: 'Strict form' },
+                { id: 'bicepCurl', name: 'Bicep Curl', iconKey: 'bicepCurl', muscle: 'Biceps', sets: 1, notes: 'Negative focus' },
+                { id: 'tricepExtension', name: 'Tricep Extension', iconKey: 'tricepExtension', muscle: 'Triceps', sets: 1, notes: '30-10-30' },
+                { id: 'calfRaise', name: 'Calf Raise', iconKey: 'calfRaise', muscle: 'Calves', sets: 1, notes: 'Deep stretch' }
+            ],
+            B: [
+                { id: 'hipThrust', name: 'Hip Thrust', iconKey: 'hipThrust', muscle: 'Glutes', sets: 1, notes: 'Glute activation' },
+                { id: 'deadlift', name: 'Deadlift', iconKey: 'deadlift', muscle: 'Back/Legs', sets: 1, notes: 'Controlled negative' },
+                { id: 'legCurl', name: 'Leg Curl', iconKey: 'legCurl', muscle: 'Hamstrings', sets: 1, notes: 'After deadlift' },
+                { id: 'inclinePress', name: 'Incline Press', iconKey: 'inclinePress', muscle: 'Upper Chest', sets: 1, notes: '30-10-30' },
+                { id: 'dip', name: 'Dip', iconKey: 'dip', muscle: 'Chest/Triceps', sets: 1, notes: 'Negative accentuated' },
+                { id: 'barbellRow', name: 'Barbell Row', iconKey: 'barbellRow', muscle: 'Back', sets: 1, notes: 'Squeeze at top' },
+                { id: 'lateralRaise', name: 'Lateral Raise', iconKey: 'lateralRaise', muscle: 'Shoulders', sets: 1, notes: 'Pre-exhaust' },
+                { id: 'shrug', name: 'Shrug', iconKey: 'shrug', muscle: 'Traps', sets: 1, notes: 'Heavy, controlled' },
+                { id: 'abCrunch', name: 'Ab Crunch', iconKey: 'abCrunch', muscle: 'Abs', sets: 1, notes: 'Weighted' },
+                { id: 'backExtension', name: 'Back Extension', iconKey: 'backExtension', muscle: 'Lower Back', sets: 1, notes: 'Hold contraction' }
+            ]
+        }
+    }
+};
+
+// Darden's 30-10-30 Protocol explanation
+const DARDEN_PROTOCOLS = {
+    '30-10-30': {
+        name: '30-10-30',
+        description: 'Dr. Darden\'s signature protocol',
+        phases: [
+            '30-second negative (lowering)',
+            '10 controlled reps (normal tempo)',
+            '30-second final negative to failure'
+        ],
+        benefits: [
+            'Maximum time under tension',
+            'Deep muscle fiber recruitment',
+            'Enhanced muscle growth stimulus',
+            'Efficient - one set to failure'
+        ]
+    },
+    'negative-accentuated': {
+        name: 'Negative Accentuated',
+        description: 'Emphasizes the eccentric phase',
+        phases: [
+            '1-second positive (concentric)',
+            '4-6 second negative (eccentric)',
+            'Repeat to failure'
+        ],
+        benefits: [
+            'Greater muscle damage for growth',
+            'Increased strength gains',
+            'Improved muscle control'
+        ]
+    },
+    'pre-exhaust': {
+        name: 'Pre-Exhaust',
+        description: 'Isolation before compound',
+        phases: [
+            'Isolation exercise to fatigue target muscle',
+            'Immediately follow with compound movement',
+            'No rest between exercises'
+        ],
+        benefits: [
+            'Deeper fatigue in target muscle',
+            'Less weight needed on compound',
+            'Reduced joint stress'
+        ]
+    }
+};
+
+// Get routine based on user's experience level
+function getRoutineForLevel(level, workoutType) {
+    const levelData = TRAINING_LEVELS[level];
+    if (levelData && levelData.routines && levelData.routines[workoutType]) {
+        return levelData.routines[workoutType];
+    }
+    return TRAINING_LEVELS.intermediate.routines[workoutType]; // Default
+}
+
+// Apply level settings to app
+function applyLevelSettings(level) {
+    const levelData = TRAINING_LEVELS[level];
+    if (!levelData) return;
+
+    // Update phase timings
+    const settings = JSON.parse(localStorage.getItem('hitCoachSettings')) || {};
+    settings.phases = levelData.phaseTimings;
+    settings.restDuration = levelData.restDuration;
+    localStorage.setItem('hitCoachSettings', JSON.stringify(settings));
+
+    // Update WORKOUTS with level-appropriate routines
+    WORKOUTS.A = levelData.routines.A;
+    WORKOUTS.B = levelData.routines.B;
+
+    // Save to profile
+    const profile = JSON.parse(localStorage.getItem('hitCoachProfile')) || {};
+    profile.experience = level;
+    localStorage.setItem('hitCoachProfile', JSON.stringify(profile));
+
+    // Reload UI
+    loadPhaseSettings();
+    renderExerciseList();
+}
+
+// All available exercises for adding to workouts
+const ALL_EXERCISES = [
+    { id: 'legPress', name: 'Leg Press', iconKey: 'legPress', muscle: 'Legs' },
+    { id: 'squat', name: 'Squat', iconKey: 'squat', muscle: 'Legs' },
+    { id: 'deadlift', name: 'Deadlift', iconKey: 'deadlift', muscle: 'Back/Legs' },
+    { id: 'benchPress', name: 'Bench Press', iconKey: 'benchPress', muscle: 'Chest' },
+    { id: 'inclinePress', name: 'Incline Press', iconKey: 'inclinePress', muscle: 'Upper Chest' },
+    { id: 'overheadPress', name: 'Overhead Press', iconKey: 'overheadPress', muscle: 'Shoulders' },
+    { id: 'pullUp', name: 'Pull-up', iconKey: 'pullUp', muscle: 'Back' },
+    { id: 'barbellRow', name: 'Barbell Row', iconKey: 'barbellRow', muscle: 'Back' },
+    { id: 'bicepCurl', name: 'Bicep Curl', iconKey: 'bicepCurl', muscle: 'Biceps' },
+    { id: 'tricepExtension', name: 'Tricep Extension', iconKey: 'tricepExtension', muscle: 'Triceps' },
+    { id: 'lateralRaise', name: 'Lateral Raise', iconKey: 'lateralRaise', muscle: 'Shoulders' },
+    { id: 'legCurl', name: 'Leg Curl', iconKey: 'legCurl', muscle: 'Hamstrings' },
+    { id: 'legExtension', name: 'Leg Extension', iconKey: 'legExtension', muscle: 'Quads' },
+    { id: 'calfRaise', name: 'Calf Raise', iconKey: 'calfRaise', muscle: 'Calves' },
+    { id: 'shrug', name: 'Shrug', iconKey: 'shrug', muscle: 'Traps' },
+    { id: 'dip', name: 'Dip', iconKey: 'dip', muscle: 'Chest/Triceps' },
+    { id: 'lunge', name: 'Lunge', iconKey: 'lunge', muscle: 'Legs' },
+    { id: 'hipThrust', name: 'Hip Thrust', iconKey: 'hipThrust', muscle: 'Glutes' },
+    { id: 'crunch', name: 'Crunch', iconKey: 'crunch', muscle: 'Abs' },
+    { id: 'plank', name: 'Plank', iconKey: 'plank', muscle: 'Core' },
+    { id: 'goodMorning', name: 'Good Morning', iconKey: 'goodMorning', muscle: 'Lower Back' },
+    { id: 'facePull', name: 'Face Pull', iconKey: 'facePull', muscle: 'Rear Delts' },
+    { id: 'kettlebellSwing', name: 'Kettlebell Swing', iconKey: 'kettlebellSwing', muscle: 'Full Body' },
+    { id: 'farmersWalk', name: "Farmer's Walk", iconKey: 'farmersWalk', muscle: 'Full Body' }
+];
 
 // Helper function to get icon image
 function getExerciseIcon(iconKey) {
@@ -89,7 +364,230 @@ let workoutStartTime = null;
 let currentWorkoutData = [];
 let voiceEnabled = true;
 let voiceGender = 'female';
+let currentVoiceStyle = 'commander';
 let synth = window.speechSynthesis;
+
+// ===== VOICE/TRAINING STYLE DATABASE =====
+const VOICE_STYLES = {
+    commander: {
+        id: 'commander',
+        name: 'Commander',
+        description: 'Intense military-style coaching',
+        icon: '🎖️',
+        isPro: true,
+        hasAudio: true,
+        phrases: {
+            startWorkout: "Let's get to work, soldier!",
+            prep: "Prepare yourself. Focus.",
+            positioning: "Get into position. Lock it in.",
+            eccentric: "Begin eccentric. Slow and controlled. Fight the weight.",
+            concentric: "Drive it up! Power through!",
+            finalEccentric: "Final eccentric. This is where champions are made. Push to failure!",
+            complete: "Outstanding work. Exercise complete.",
+            restStart: "Rest period. Recover and prepare.",
+            restEnd: "Rest complete. Back to battle.",
+            workoutComplete: "Mission accomplished. Excellent performance.",
+            motivation: [
+                "Pain is weakness leaving the body!",
+                "Dig deep! Find that inner strength!",
+                "This is what separates winners!",
+                "Your body wants to quit. Your mind says no!",
+                "Embrace the burn!"
+            ]
+        }
+    },
+    zen: {
+        id: 'zen',
+        name: 'Zen Master',
+        description: 'Calm, mindful guidance',
+        icon: '🧘',
+        isPro: true,
+        hasAudio: false,
+        phrases: {
+            startWorkout: "Let us begin. Breathe deeply.",
+            prep: "Center yourself. Find your balance.",
+            positioning: "Settle into position. Feel the connection.",
+            eccentric: "Lower with intention. Feel every fiber.",
+            concentric: "Rise with purpose. Breathe out.",
+            finalEccentric: "Final descent. Stay present. Embrace it.",
+            complete: "Well done. Take a breath.",
+            restStart: "Rest now. Let your body recover.",
+            restEnd: "Return to presence. We continue.",
+            workoutComplete: "Your practice is complete. Namaste.",
+            motivation: [
+                "The mind leads, the body follows.",
+                "In stillness, we find strength.",
+                "Each rep is a meditation.",
+                "Be present in this moment.",
+                "Strength flows from inner peace."
+            ]
+        }
+    },
+    hype: {
+        id: 'hype',
+        name: 'Hype Coach',
+        description: 'High-energy motivation',
+        icon: '🔥',
+        isPro: true,
+        hasAudio: false,
+        phrases: {
+            startWorkout: "LET'S GOOO! Time to crush it!",
+            prep: "Get hyped! This is YOUR moment!",
+            positioning: "Lock it in! You got this!",
+            eccentric: "Down we go! Control it! YEAHHH!",
+            concentric: "PUSH IT! EXPLODE! LET'S GO!",
+            finalEccentric: "FINAL REP! EVERYTHING YOU GOT!",
+            complete: "YESSSS! Crushed it! Beast mode!",
+            restStart: "Quick breather! Stay fired up!",
+            restEnd: "Back at it! Energy UP!",
+            workoutComplete: "INCREDIBLE! You're a MACHINE!",
+            motivation: [
+                "You're KILLING IT!",
+                "Nobody can stop you!",
+                "This is greatness!",
+                "UNSTOPPABLE!",
+                "Pure FIRE right now!"
+            ]
+        }
+    },
+    technical: {
+        id: 'technical',
+        name: 'Technical',
+        description: 'Precise, form-focused',
+        icon: '📐',
+        isPro: false,
+        hasAudio: false,
+        phrases: {
+            startWorkout: "Beginning workout. Focus on form.",
+            prep: "Prepare. Check posture and grip.",
+            positioning: "Position set. Engage core.",
+            eccentric: "Eccentric phase. 3-second descent.",
+            concentric: "Concentric phase. Drive through.",
+            finalEccentric: "Final eccentric. Maintain form.",
+            complete: "Exercise complete. Good execution.",
+            restStart: "Rest interval initiated.",
+            restEnd: "Rest complete. Next exercise.",
+            workoutComplete: "Workout complete.",
+            motivation: [
+                "Perfect form, perfect results.",
+                "Quality over quantity.",
+                "Control is strength.",
+                "Precision builds power.",
+                "Master the basics."
+            ]
+        }
+    },
+    friendly: {
+        id: 'friendly',
+        name: 'Friendly',
+        description: 'Encouraging and supportive',
+        icon: '😊',
+        isPro: false,
+        hasAudio: false,
+        phrases: {
+            startWorkout: "Ready for a great workout?",
+            prep: "Take your time, get comfortable.",
+            positioning: "Looking good! Get set up.",
+            eccentric: "Nice and slow. You're doing great!",
+            concentric: "And push! Awesome job!",
+            finalEccentric: "Last one! You can do it!",
+            complete: "Fantastic! You did it!",
+            restStart: "Take a breather. You earned it!",
+            restEnd: "Ready? Let's keep going!",
+            workoutComplete: "Amazing workout! So proud!",
+            motivation: [
+                "You're doing amazing!",
+                "Every rep counts!",
+                "I believe in you!",
+                "Stronger than you think!",
+                "Keep it up!"
+            ]
+        }
+    },
+    male: {
+        id: 'male',
+        name: 'Male',
+        description: 'Standard male voice',
+        icon: 'M',
+        isPro: false,
+        hasAudio: false,
+        usesTTS: true,
+        ttsVoice: 'male',
+        phrases: null
+    },
+    female: {
+        id: 'female',
+        name: 'Female',
+        description: 'Standard female voice',
+        icon: 'F',
+        isPro: false,
+        hasAudio: false,
+        usesTTS: true,
+        ttsVoice: 'female',
+        phrases: null
+    }
+};
+
+// Get phrase for current voice style
+function getVoicePhrase(phraseKey) {
+    const style = VOICE_STYLES[currentVoiceStyle];
+    if (style && style.phrases && style.phrases[phraseKey]) {
+        return style.phrases[phraseKey];
+    }
+    return VOICE_STYLES.friendly.phrases[phraseKey] || '';
+}
+
+// Get random motivation phrase
+function getMotivationalPhrase() {
+    const style = VOICE_STYLES[currentVoiceStyle];
+    if (style && style.phrases && style.phrases.motivation) {
+        const phrases = style.phrases.motivation;
+        return phrases[Math.floor(Math.random() * phrases.length)];
+    }
+    return "Keep going!";
+}
+
+// Set voice style
+function setVoiceStyle(styleId) {
+    if (VOICE_STYLES[styleId]) {
+        currentVoiceStyle = styleId;
+        const settings = JSON.parse(localStorage.getItem('hitCoachSettings')) || {};
+        settings.voiceStyle = styleId;
+        localStorage.setItem('hitCoachSettings', JSON.stringify(settings));
+        updateVoiceStyleUI();
+
+        // Enable/disable commander voice based on selection
+        if (styleId === 'commander') {
+            useCommanderVoice = true;
+            // Try to play commander audio sample, fall back to TTS
+            const audio = new Audio(AUDIO_PATH + AUDIO_FILES.workout.begin);
+            audio.play().then(() => {
+                console.log('Commander audio playing');
+            }).catch(err => {
+                console.log('Commander audio failed, using TTS:', err);
+                speakTTS("Commander voice activated. Let's get to work, soldier!", true);
+            });
+        } else {
+            useCommanderVoice = false;
+            // Speak the style's start phrase as a sample
+            const style = VOICE_STYLES[styleId];
+            const samplePhrase = style.phrases ? style.phrases.startWorkout : `${style.name} voice selected`;
+            speakTTS(samplePhrase, true);
+        }
+
+        console.log(`Voice style set to: ${styleId}`);
+    }
+}
+
+// Update voice style UI
+function updateVoiceStyleUI() {
+    document.querySelectorAll('.voice-style-card').forEach(card => {
+        card.classList.toggle('active', card.dataset.style === currentVoiceStyle);
+    });
+
+    // Also update the old commander card if it exists
+    document.getElementById('voiceCommanderCard')?.classList.toggle('active', currentVoiceStyle === 'commander');
+}
 
 // ===== INITIALIZATION =====
 
@@ -97,6 +595,9 @@ document.addEventListener('DOMContentLoaded', () => {
     loadSettings();
     loadPhaseSettings();
     loadProfile();
+    loadCustomWorkouts();
+    loadProfiles();
+    loadDuoModeSetting();
     renderExerciseList();
     loadStats();
     loadLog();
@@ -125,7 +626,7 @@ function renderExerciseList() {
     const list = document.getElementById('exerciseList');
     const exercises = WORKOUTS[currentWorkoutType];
 
-    list.innerHTML = exercises.map((exercise, index) => `
+    let html = exercises.map((exercise, index) => `
         <div class="exercise-item" onclick="showExerciseSetup(${index})">
             <div class="exercise-icon">${getExerciseIcon(exercise.iconKey)}</div>
             <div class="exercise-info">
@@ -135,6 +636,79 @@ function renderExerciseList() {
             <div class="exercise-chevron">›</div>
         </div>
     `).join('');
+
+    // Add "Add Exercise" card
+    html += `
+        <div class="exercise-item add-exercise-item" onclick="showAddExercise()">
+            <div class="exercise-icon add-exercise-icon">
+                <span class="add-icon">+</span>
+            </div>
+            <div class="exercise-info">
+                <div class="exercise-name">Add Exercise</div>
+                <div class="exercise-muscle">Customize your workout</div>
+            </div>
+            <div class="exercise-chevron">›</div>
+        </div>
+    `;
+
+    list.innerHTML = html;
+}
+
+// Show add exercise modal
+function showAddExercise() {
+    const modal = document.getElementById('addExerciseModal');
+    if (modal) {
+        populateExerciseSelector();
+        modal.classList.add('active');
+    }
+}
+
+function closeAddExerciseModal() {
+    const modal = document.getElementById('addExerciseModal');
+    if (modal) modal.classList.remove('active');
+}
+
+function populateExerciseSelector() {
+    const list = document.getElementById('exerciseSelectorList');
+    if (!list) return;
+
+    // Filter out exercises already in current workout
+    const currentExerciseIds = WORKOUTS[currentWorkoutType].map(e => e.id);
+    const availableExercises = ALL_EXERCISES.filter(e => !currentExerciseIds.includes(e.id));
+
+    list.innerHTML = availableExercises.map(exercise => `
+        <div class="exercise-item" onclick="addExerciseToWorkout('${exercise.id}')">
+            <div class="exercise-icon">${getExerciseIcon(exercise.iconKey)}</div>
+            <div class="exercise-info">
+                <div class="exercise-name">${exercise.name}</div>
+                <div class="exercise-muscle">${exercise.muscle}</div>
+            </div>
+            <div class="exercise-chevron">+</div>
+        </div>
+    `).join('');
+}
+
+function addExerciseToWorkout(exerciseId) {
+    const exercise = ALL_EXERCISES.find(e => e.id === exerciseId);
+    if (exercise) {
+        WORKOUTS[currentWorkoutType].push({ ...exercise });
+        saveCustomWorkouts();
+        renderExerciseList();
+        closeAddExerciseModal();
+    }
+}
+
+function saveCustomWorkouts() {
+    localStorage.setItem('hitCoachCustomWorkouts', JSON.stringify(WORKOUTS));
+}
+
+function loadCustomWorkouts() {
+    const saved = localStorage.getItem('hitCoachCustomWorkouts');
+    if (saved) {
+        const customWorkouts = JSON.parse(saved);
+        WORKOUTS.A = customWorkouts.A || WORKOUTS.A;
+        WORKOUTS.B = customWorkouts.B || WORKOUTS.B;
+    }
 }
 
 // ===== WORKOUT TAB SWITCHING =====
@@ -176,6 +750,21 @@ function navigateTo(section) {
             workoutTabs.style.display = 'none';
             loadLog();
             showScreen('logScreen');
+            break;
+        case 'settings':
+            workoutTabs.style.display = 'none';
+            loadSettingsUI();
+            showScreen('settingsScreen');
+            break;
+        case 'profile':
+            workoutTabs.style.display = 'none';
+            loadProfileUI();
+            showScreen('profileScreen');
+            break;
+        case 'siri':
+            workoutTabs.style.display = 'none';
+            loadSiriShortcuts();
+            showScreen('siriScreen');
             break;
     }
 }
@@ -901,14 +1490,305 @@ function setVoice(gender) {
 }
 
 function updateVoiceButtons(gender) {
+    // Update old buttons if they exist
     document.getElementById('voiceM')?.classList.toggle('active', gender === 'male');
     document.getElementById('voiceF')?.classList.toggle('active', gender === 'female');
     document.getElementById('voiceD')?.classList.toggle('active', gender === 'default');
+
+    // Update new voice cards
+    document.getElementById('voiceMaleCard')?.classList.toggle('active', gender === 'male');
+    document.getElementById('voiceFemaleCard')?.classList.toggle('active', gender === 'female');
+    document.getElementById('voiceCommanderCard')?.classList.toggle('active', gender === 'commander');
+}
+
+// ===== NEW SETTINGS UI FUNCTIONS =====
+
+function loadSettingsUI() {
+    const settings = JSON.parse(localStorage.getItem('hitCoachSettings')) || {};
+
+    // Update voice style selection
+    currentVoiceStyle = settings.voiceStyle || 'commander';
+    document.querySelectorAll('.voice-style-card').forEach(card => {
+        card.classList.toggle('active', card.dataset.style === currentVoiceStyle);
+    });
+
+    // Update basic voice selection
+    updateVoiceButtons(settings.voiceGender || 'female');
+
+    // Update rest duration
+    const restDuration = settings.restDuration || 90;
+    document.getElementById('rest60')?.classList.toggle('active', restDuration === 60);
+    document.getElementById('rest90')?.classList.toggle('active', restDuration === 90);
+    document.getElementById('rest120')?.classList.toggle('active', restDuration === 120);
+
+    // Update phase timing display
+    const phases = settings.phases || { prep: 10, eccentric: 30, concentric: 20, finalEccentric: 40 };
+    document.getElementById('prepValue').textContent = phases.prep + 's';
+    document.getElementById('eccentricValue').textContent = phases.eccentric + 's';
+    document.getElementById('concentricValue').textContent = phases.concentric + 's';
+    document.getElementById('finalEccentricValue').textContent = phases.finalEccentric + 's';
+}
+
+function setRestDuration(seconds) {
+    document.getElementById('rest60')?.classList.toggle('active', seconds === 60);
+    document.getElementById('rest90')?.classList.toggle('active', seconds === 90);
+    document.getElementById('rest120')?.classList.toggle('active', seconds === 120);
+
+    const settings = JSON.parse(localStorage.getItem('hitCoachSettings')) || {};
+    settings.restDuration = seconds;
+    localStorage.setItem('hitCoachSettings', JSON.stringify(settings));
+}
+
+function adjustPhase(phase, delta) {
+    const settings = JSON.parse(localStorage.getItem('hitCoachSettings')) || {};
+    const defaults = { prep: 10, eccentric: 30, concentric: 20, finalEccentric: 40 };
+    const phases = settings.phases || defaults;
+
+    const currentVal = phases[phase] || defaults[phase] || 10;
+    phases[phase] = Math.max(5, Math.min(90, currentVal + delta));
+    settings.phases = phases;
+    localStorage.setItem('hitCoachSettings', JSON.stringify(settings));
+
+    // Update display
+    document.getElementById(phase + 'Value').textContent = phases[phase] + 's';
+}
+
+// ===== NEW PROFILE UI FUNCTIONS =====
+
+function loadProfileUI() {
+    const profile = JSON.parse(localStorage.getItem('hitCoachProfile')) || {};
+
+    // Load name
+    const nameInput = document.getElementById('profileName');
+    if (nameInput) nameInput.value = profile.name || '';
+
+    // Load experience
+    const experience = profile.experience || 'intermediate';
+    document.getElementById('expBeginner')?.classList.toggle('active', experience === 'beginner');
+    document.getElementById('expIntermediate')?.classList.toggle('active', experience === 'intermediate');
+    document.getElementById('expAdvanced')?.classList.toggle('active', experience === 'advanced');
+
+    // Load weight unit
+    const weightUnit = profile.weightUnit || 'lbs';
+    document.getElementById('unitLbs')?.classList.toggle('active', weightUnit === 'lbs');
+    document.getElementById('unitKg')?.classList.toggle('active', weightUnit === 'kg');
+}
+
+function setExperience(level) {
+    document.getElementById('expBeginner')?.classList.toggle('active', level === 'beginner');
+    document.getElementById('expIntermediate')?.classList.toggle('active', level === 'intermediate');
+    document.getElementById('expAdvanced')?.classList.toggle('active', level === 'advanced');
+
+    // Apply Darden-based level settings
+    applyLevelSettings(level);
+
+    // Update recommended routine display
+    updateRecommendedRoutine(level);
+}
+
+function updateRecommendedRoutine(level) {
+    const levelData = TRAINING_LEVELS[level];
+    if (!levelData) return;
+
+    const routineTitle = document.querySelector('.routine-title');
+    const routineDesc = document.querySelector('.routine-desc');
+
+    if (routineTitle && routineDesc) {
+        const exerciseCount = levelData.routines.A.length;
+        routineTitle.textContent = `Full Body A/B Split (${exerciseCount} exercises)`;
+        routineDesc.textContent = `${levelData.weeklyFrequency}, ${levelData.restBetweenWorkouts} rest`;
+    }
+}
+
+function setWeightUnit(unit) {
+    document.getElementById('unitLbs')?.classList.toggle('active', unit === 'lbs');
+    document.getElementById('unitKg')?.classList.toggle('active', unit === 'kg');
+
+    const profile = JSON.parse(localStorage.getItem('hitCoachProfile')) || {};
+    profile.weightUnit = unit;
+    localStorage.setItem('hitCoachProfile', JSON.stringify(profile));
+}
+
+function saveProfile() {
+    const profile = JSON.parse(localStorage.getItem('hitCoachProfile')) || {};
+    profile.name = document.getElementById('profileName')?.value || '';
+    localStorage.setItem('hitCoachProfile', JSON.stringify(profile));
+
+    // Save duo names if duo mode is enabled
+    if (duoModeEnabled) {
+        saveDuoNames();
+    }
+}
+
+function confirmResetData() {
+    if (confirm('Are you sure you want to reset all data? This cannot be undone.')) {
+        localStorage.removeItem('hitCoachProgress');
+        localStorage.removeItem('hitCoachProfile');
+        localStorage.removeItem('hitCoachSettings');
+        alert('All data has been reset.');
+        navigateTo('workouts');
+    }
+}
+
+// ===== SIRI SHORTCUTS =====
+
+function loadSiriShortcuts() {
+    const workoutAList = document.getElementById('siriWorkoutAList');
+    const workoutBList = document.getElementById('siriWorkoutBList');
+
+    if (workoutAList) {
+        workoutAList.innerHTML = WORKOUTS.A.map(ex => `
+            <div class="siri-shortcut-item" onclick="addSiriShortcut('${ex.id}', 'A')">
+                <div class="siri-shortcut-info">
+                    <span class="siri-shortcut-name">${ex.name} A</span>
+                    <span class="siri-shortcut-phrase">Say: "Start ${ex.name.toLowerCase()} A"</span>
+                </div>
+                <button class="btn btn-primary siri-add-btn">+ Add to Siri</button>
+            </div>
+        `).join('');
+    }
+
+    if (workoutBList) {
+        workoutBList.innerHTML = WORKOUTS.B.map(ex => `
+            <div class="siri-shortcut-item" onclick="addSiriShortcut('${ex.id}', 'B')">
+                <div class="siri-shortcut-info">
+                    <span class="siri-shortcut-name">${ex.name} B</span>
+                    <span class="siri-shortcut-phrase">Say: "Start ${ex.name.toLowerCase()} B"</span>
+                </div>
+                <button class="btn btn-primary siri-add-btn">+ Add to Siri</button>
+            </div>
+        `).join('');
+    }
+}
+
+// ===== MULTI-PROFILE SUPPORT =====
+
+let activeProfile = 1;
+let profiles = {
+    1: { name: 'Lifter 1', weights: {}, progress: [] },
+    2: { name: 'Lifter 2', weights: {}, progress: [] }
+};
+
+function loadProfiles() {
+    const saved = localStorage.getItem('hitCoachProfiles');
+    if (saved) {
+        profiles = JSON.parse(saved);
+    }
+    updateProfileDisplay();
+}
+
+function saveProfiles() {
+    localStorage.setItem('hitCoachProfiles', JSON.stringify(profiles));
+}
+
+function switchActiveProfile(profileNum) {
+    activeProfile = profileNum;
+
+    // Update UI
+    document.getElementById('profile1Tab')?.classList.toggle('active', profileNum === 1);
+    document.getElementById('profile2Tab')?.classList.toggle('active', profileNum === 2);
+
+    // Announce switch
+    speak(`Switched to ${profiles[profileNum].name}`);
+
+    // Re-render exercise list to show correct weights
+    renderExerciseList();
+}
+
+function updateProfileDisplay() {
+    document.getElementById('profile1Name').textContent = profiles[1].name || 'Lifter 1';
+    document.getElementById('profile2Name').textContent = profiles[2].name || 'Lifter 2';
+}
+
+function enableDuoMode() {
+    document.getElementById('profileSwitcher')?.classList.add('active');
+}
+
+function disableDuoMode() {
+    document.getElementById('profileSwitcher')?.classList.remove('active');
+    activeProfile = 1;
+}
+
+function setProfileName(profileNum, name) {
+    profiles[profileNum].name = name;
+    saveProfiles();
+    updateProfileDisplay();
+}
+
+let duoModeEnabled = false;
+
+function toggleDuoMode() {
+    duoModeEnabled = !duoModeEnabled;
+
+    const toggle = document.getElementById('duoModeToggle');
+    const namesSection = document.getElementById('duoNamesSection');
+
+    toggle?.classList.toggle('active', duoModeEnabled);
+
+    if (namesSection) {
+        namesSection.style.display = duoModeEnabled ? 'block' : 'none';
+    }
+
+    if (duoModeEnabled) {
+        enableDuoMode();
+        // Load existing names
+        document.getElementById('lifter1Name').value = profiles[1].name || '';
+        document.getElementById('lifter2Name').value = profiles[2].name || '';
+    } else {
+        disableDuoMode();
+    }
+
+    // Save setting
+    localStorage.setItem('hitCoachDuoMode', duoModeEnabled);
+}
+
+function loadDuoModeSetting() {
+    duoModeEnabled = localStorage.getItem('hitCoachDuoMode') === 'true';
+    if (duoModeEnabled) {
+        document.getElementById('duoModeToggle')?.classList.add('active');
+        document.getElementById('duoNamesSection').style.display = 'block';
+        enableDuoMode();
+    }
+}
+
+function saveDuoNames() {
+    const name1 = document.getElementById('lifter1Name')?.value || 'Lifter 1';
+    const name2 = document.getElementById('lifter2Name')?.value || 'Lifter 2';
+    setProfileName(1, name1);
+    setProfileName(2, name2);
+}
+
+// Override getLastWeight to use active profile
+function getLastWeightForProfile(exerciseName) {
+    return profiles[activeProfile]?.weights?.[exerciseName] || null;
+}
+
+// Override saveWeight to use active profile
+function saveWeightForProfile(exerciseName, weight) {
+    if (!profiles[activeProfile].weights) {
+        profiles[activeProfile].weights = {};
+    }
+    profiles[activeProfile].weights[exerciseName] = weight;
+    saveProfiles();
+}
+
+function addSiriShortcut(exerciseId, workout) {
+    // Generate URL scheme for the app
+    const url = `hitcoach://start/${workout}/${exerciseId}`;
+
+    // Copy to clipboard
+    navigator.clipboard.writeText(url).then(() => {
+        alert('URL copied! Opening Shortcuts app...\n\nPaste the URL in "Open URL" action.');
+        // Try to open Shortcuts app
+        window.location.href = 'shortcuts://';
+    }).catch(() => {
+        alert('URL: ' + url + '\n\nCopy this and add it to Shortcuts app.');
+    });
 }
 
 // ===== COMMANDER AUDIO SYSTEM =====
 
-const AUDIO_PATH = './static/audio/commander/';
+const AUDIO_PATH = './static/audio/commander/commander/';
 let currentAudio = null;
 let audioQueue = [];
 let isPlayingAudio = false;
@@ -917,7 +1797,9 @@ let useCommanderVoice = true; // Toggle between commander voice and TTS
 // Audio file mappings
 const AUDIO_FILES = {
     // Numbers 1-60
-    numbers: {},
+    numbers: Object.fromEntries(
+        Array.from({ length: 60 }, (_, i) => [i + 1, `num_${i + 1}.mp3`])
+    ),
     // Phases
     phases: {
         prep: 'phase_get_ready.mp3',
@@ -1144,6 +2026,43 @@ function playFinalCue() {
 }
 
 // ===== VOICE SYNTHESIS (Fallback TTS) =====
+
+// TTS-only speak function (bypasses commander audio)
+function speakTTS(text, priority = false) {
+    if (!voiceEnabled) return;
+
+    if (priority) {
+        synth.cancel();
+    }
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    const voices = synth.getVoices();
+    let preferredVoice = null;
+
+    if (voiceGender === 'male') {
+        preferredVoice = voices.find(voice =>
+            voice.name.toLowerCase().includes('male') ||
+            voice.name.toLowerCase().includes('daniel') ||
+            voice.name.toLowerCase().includes('alex')
+        );
+    } else if (voiceGender === 'female') {
+        preferredVoice = voices.find(voice =>
+            voice.name.toLowerCase().includes('female') ||
+            voice.name.toLowerCase().includes('samantha') ||
+            voice.name.toLowerCase().includes('victoria')
+        );
+    }
+
+    if (preferredVoice) {
+        utterance.voice = preferredVoice;
+    }
+
+    utterance.rate = 0.95;
+    utterance.pitch = 1.0;
+    utterance.volume = 1.0;
+
+    synth.speak(utterance);
+}
 
 function speak(text, priority = false) {
     if (!voiceEnabled) return;
