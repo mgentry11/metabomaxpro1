@@ -15,24 +15,11 @@
     <header class="app-header">
         <div class="app-header-content">
             <div class="app-logo">
-                <span class="logo-badge">HCP</span>
                 <span class="app-title">HIT Coach Pro</span>
             </div>
             <div class="header-actions">
-                <button class="voice-command-btn" id="voiceCommandBtn" onclick="toggleVoiceCommands()" title="Voice Commands">
-                    🎙️
-                </button>
-                <button class="settings-btn" id="settingsBtn" onclick="showScreen('settingsScreen')">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="12" r="3"></circle>
-                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-                    </svg>
-                </button>
-                <button class="profile-btn" id="profileBtn" onclick="showScreen('profileScreen')">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                    </svg>
-                </button>
+                <button class="settings-btn" onclick="navigateTo('settings')">⚙️</button>
+                <button class="profile-btn" onclick="navigateTo('profile')">👤</button>
             </div>
         </div>
     </header>
@@ -313,36 +300,67 @@
                 <h1 class="profile-title">Your Profile</h1>
                 <button class="done-btn" onclick="saveProfile(); showScreen('homeScreen')">Done</button>
             </div>
+
             <div class="profile-section">
                 <h2 class="profile-section-title">Personal Info</h2>
-                <input type="text" class="profile-input" id="profileName" placeholder="Your name" style="margin-bottom: 0.75rem;">
-                <select class="profile-input" id="profileGender">
-                    <option value="prefer-not">Prefer not to say</option>
-                    <option value="male">Male</option>
-                    <option value="female">Female</option>
-                    <option value="other">Other</option>
-                </select>
+                <input type="text" class="profile-input" id="profileName" placeholder="Enter your name">
             </div>
+
             <div class="profile-section">
                 <h2 class="profile-section-title">Physical Stats</h2>
-                <input type="number" class="profile-input" id="profileAge" placeholder="Age (years)" style="margin-bottom: 0.75rem;">
-                <input type="number" class="profile-input" id="profileHeight" placeholder="Height (inches)" style="margin-bottom: 0.75rem;">
-                <input type="number" class="profile-input" id="profileWeight" placeholder="Weight (lbs)">
+                <div class="profile-stat-row">
+                    <label class="profile-stat-label">Age</label>
+                    <input type="number" class="profile-input profile-stat-input" id="profileAge" placeholder="0 years">
+                </div>
+                <div class="profile-stat-row">
+                    <label class="profile-stat-label">Weight</label>
+                    <input type="number" class="profile-input profile-stat-input" id="profileWeight" placeholder="Weight">
+                </div>
+                <div class="profile-stat-row">
+                    <label class="profile-stat-label">Height</label>
+                    <input type="number" class="profile-input profile-stat-input" id="profileHeight" placeholder="Height (in)">
+                </div>
+                <div class="profile-stat-row">
+                    <label class="profile-stat-label">Gender</label>
+                    <select class="profile-input profile-stat-input" id="profileGender">
+                        <option value="prefer-not">Prefer not to say</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
             </div>
+
             <div class="profile-section">
-                <h2 class="profile-section-title">Training Goals</h2>
-                <select class="profile-input" id="profileGoal" style="margin-bottom: 0.75rem;">
-                    <option value="strength">Build Strength</option>
-                    <option value="muscle">Build Muscle</option>
-                    <option value="endurance">Improve Endurance</option>
-                    <option value="weight-loss">Weight Loss</option>
-                    <option value="maintenance">Maintenance</option>
-                </select>
-                <select class="profile-input" id="profileExperience">
-                    <option value="beginner">Beginner (0-1 years)</option>
-                    <option value="intermediate">Intermediate (1-3 years)</option>
-                    <option value="advanced">Advanced (3+ years)</option>
-                </select>
+                <h2 class="profile-section-title">Training</h2>
+                <div class="profile-stat-row">
+                    <label class="profile-stat-label">Goal</label>
+                    <select class="profile-input profile-stat-input" id="profileGoal">
+                        <option value="strength">Build Strength</option>
+                        <option value="muscle">Build Muscle</option>
+                        <option value="endurance">Improve Endurance</option>
+                        <option value="weight-loss">Weight Loss</option>
+                        <option value="maintenance">Maintenance</option>
+                    </select>
+                </div>
+                <div class="profile-stat-row">
+                    <label class="profile-stat-label">Experience</label>
+                    <select class="profile-input profile-stat-input" id="profileExperience">
+                        <option value="beginner">Beginner (0-1 years)</option>
+                        <option value="intermediate">Intermediate (1-3 years)</option>
+                        <option value="advanced">Advanced (3+ years)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="profile-section">
+                <h2 class="profile-section-title">Voice</h2>
+                <div class="profile-stat-row">
+                    <label class="profile-stat-label">Commander Voice</label>
+                    <div class="toggle-switch" id="commanderVoiceToggle" onclick="toggleCommanderVoice()">
+                        <div class="toggle-slider active"></div>
+                    </div>
+                </div>
             </div>
         </div>
 

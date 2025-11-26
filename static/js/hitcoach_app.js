@@ -1,145 +1,26 @@
 // HIT Coach Pro Web App JavaScript - Redesigned
 
-// ===== SVG EXERCISE ICONS =====
+// ===== EXERCISE ICON IMAGES =====
+// Gold circle icons with black silhouettes from Gemini
+
+const ICON_PATH = './static/images/icons/';
 
 const EXERCISE_ICONS = {
-    legPress: `<svg viewBox="0 0 100 100" fill="currentColor">
-        <circle cx="30" cy="35" r="10"/>
-        <path d="M30 45 L30 55 L55 70" stroke="currentColor" stroke-width="8" stroke-linecap="round" fill="none"/>
-        <path d="M55 70 L75 55" stroke="currentColor" stroke-width="8" stroke-linecap="round" fill="none"/>
-        <path d="M75 55 L85 45" stroke="currentColor" stroke-width="8" stroke-linecap="round" fill="none"/>
-        <rect x="80" y="30" width="12" height="35" rx="3" opacity="0.6"/>
-        <path d="M20 55 L20 75" stroke="currentColor" stroke-width="6" stroke-linecap="round" fill="none"/>
-    </svg>`,
-
-    pulldown: `<svg viewBox="0 0 100 100" fill="currentColor">
-        <rect x="20" y="10" width="60" height="8" rx="2"/>
-        <circle cx="50" cy="32" r="10"/>
-        <path d="M50 42 L50 65" stroke="currentColor" stroke-width="8" stroke-linecap="round" fill="none"/>
-        <path d="M50 65 L40 85 M50 65 L60 85" stroke="currentColor" stroke-width="7" stroke-linecap="round" fill="none"/>
-        <path d="M35 50 L25 18 M65 50 L75 18" stroke="currentColor" stroke-width="6" stroke-linecap="round" fill="none"/>
-    </svg>`,
-
-    chestPress: `<svg viewBox="0 0 100 100" fill="currentColor">
-        <circle cx="25" cy="50" r="10"/>
-        <path d="M35 50 L70 50" stroke="currentColor" stroke-width="8" stroke-linecap="round" fill="none"/>
-        <path d="M70 50 L85 35 M70 50 L85 65" stroke="currentColor" stroke-width="6" stroke-linecap="round" fill="none"/>
-        <polygon points="80,35 92,35 86,28" fill="currentColor"/>
-        <polygon points="80,65 92,65 86,72" fill="currentColor"/>
-        <path d="M25 60 L25 80 L35 80" stroke="currentColor" stroke-width="6" stroke-linecap="round" fill="none"/>
-    </svg>`,
-
-    overheadPress: `<svg viewBox="0 0 100 100" fill="currentColor">
-        <rect x="20" y="12" width="60" height="8" rx="2"/>
-        <rect x="12" y="8" width="12" height="16" rx="3"/>
-        <rect x="76" y="8" width="12" height="16" rx="3"/>
-        <circle cx="50" cy="38" r="10"/>
-        <path d="M50 48 L50 70" stroke="currentColor" stroke-width="8" stroke-linecap="round" fill="none"/>
-        <path d="M50 70 L40 90 M50 70 L60 90" stroke="currentColor" stroke-width="7" stroke-linecap="round" fill="none"/>
-        <path d="M38 48 L30 20 M62 48 L70 20" stroke="currentColor" stroke-width="6" stroke-linecap="round" fill="none"/>
-    </svg>`,
-
-    legCurl: `<svg viewBox="0 0 100 100" fill="currentColor">
-        <circle cx="70" cy="30" r="10"/>
-        <path d="M60 35 L35 50" stroke="currentColor" stroke-width="8" stroke-linecap="round" fill="none"/>
-        <rect x="15" y="45" width="50" height="10" rx="3" opacity="0.5"/>
-        <path d="M35 55 L25 75 L35 85" stroke="currentColor" stroke-width="7" stroke-linecap="round" fill="none"/>
-        <circle cx="38" cy="88" r="6"/>
-        <path d="M75 35 L85 50" stroke="currentColor" stroke-width="5" stroke-linecap="round" fill="none"/>
-    </svg>`,
-
-    bicepCurl: `<svg viewBox="0 0 100 100" fill="currentColor">
-        <circle cx="50" cy="22" r="10"/>
-        <path d="M50 32 L50 60" stroke="currentColor" stroke-width="8" stroke-linecap="round" fill="none"/>
-        <path d="M50 60 L40 85 M50 60 L60 85" stroke="currentColor" stroke-width="7" stroke-linecap="round" fill="none"/>
-        <path d="M38 40 L25 55 L25 40" stroke="currentColor" stroke-width="6" stroke-linecap="round" fill="none"/>
-        <path d="M62 40 L75 25 L75 40" stroke="currentColor" stroke-width="6" stroke-linecap="round" fill="none"/>
-        <rect x="18" y="35" width="12" height="18" rx="3"/>
-        <rect x="70" y="20" width="12" height="18" rx="3"/>
-    </svg>`,
-
-    tricepExtension: `<svg viewBox="0 0 100 100" fill="currentColor">
-        <circle cx="50" cy="30" r="10"/>
-        <path d="M50 40 L50 65" stroke="currentColor" stroke-width="8" stroke-linecap="round" fill="none"/>
-        <path d="M50 65 L40 88 M50 65 L60 88" stroke="currentColor" stroke-width="7" stroke-linecap="round" fill="none"/>
-        <path d="M40 42 L50 15 L60 42" stroke="currentColor" stroke-width="6" stroke-linecap="round" fill="none"/>
-        <rect x="42" y="5" width="16" height="14" rx="3"/>
-    </svg>`,
-
-    calfRaise: `<svg viewBox="0 0 100 100" fill="currentColor">
-        <circle cx="50" cy="18" r="10"/>
-        <path d="M50 28 L50 55" stroke="currentColor" stroke-width="8" stroke-linecap="round" fill="none"/>
-        <path d="M50 55 L45 75 L45 82 M50 55 L55 75 L55 82" stroke="currentColor" stroke-width="7" stroke-linecap="round" fill="none"/>
-        <path d="M40 82 L60 82" stroke="currentColor" stroke-width="6" stroke-linecap="round" fill="none"/>
-        <rect x="30" y="85" width="40" height="8" rx="2" opacity="0.5"/>
-        <path d="M38 35 L50 28 L62 35" stroke="currentColor" stroke-width="5" stroke-linecap="round" fill="none"/>
-    </svg>`,
-
-    legExtension: `<svg viewBox="0 0 100 100" fill="currentColor">
-        <circle cx="30" cy="30" r="10"/>
-        <path d="M30 40 L30 55 L45 55" stroke="currentColor" stroke-width="8" stroke-linecap="round" fill="none"/>
-        <rect x="15" y="50" width="40" height="12" rx="3" opacity="0.5"/>
-        <path d="M55 56 L80 45" stroke="currentColor" stroke-width="8" stroke-linecap="round" fill="none"/>
-        <circle cx="85" cy="42" r="7"/>
-        <rect x="10" y="62" width="12" height="28" rx="3" opacity="0.5"/>
-    </svg>`,
-
-    seatedRow: `<svg viewBox="0 0 100 100" fill="currentColor">
-        <circle cx="30" cy="35" r="10"/>
-        <path d="M30 45 L35 60 L40 80" stroke="currentColor" stroke-width="7" stroke-linecap="round" fill="none"/>
-        <rect x="15" y="58" width="35" height="8" rx="2" opacity="0.5"/>
-        <path d="M40 45 L65 45 L80 40" stroke="currentColor" stroke-width="6" stroke-linecap="round" fill="none"/>
-        <rect x="78" y="32" width="14" height="16" rx="3"/>
-        <path d="M25 45 L15 45 L15 58" stroke="currentColor" stroke-width="5" stroke-linecap="round" fill="none" opacity="0.7"/>
-    </svg>`,
-
-    inclinePress: `<svg viewBox="0 0 100 100" fill="currentColor">
-        <rect x="20" y="15" width="60" height="8" rx="2"/>
-        <rect x="12" y="12" width="12" height="14" rx="3"/>
-        <rect x="76" y="12" width="12" height="14" rx="3"/>
-        <circle cx="50" cy="40" r="10"/>
-        <path d="M50 50 L50 68" stroke="currentColor" stroke-width="8" stroke-linecap="round" fill="none"/>
-        <path d="M50 68 L40 88 M50 68 L60 88" stroke="currentColor" stroke-width="7" stroke-linecap="round" fill="none"/>
-        <path d="M38 48 L28 23 M62 48 L72 23" stroke="currentColor" stroke-width="6" stroke-linecap="round" fill="none"/>
-    </svg>`,
-
-    lateralRaise: `<svg viewBox="0 0 100 100" fill="currentColor">
-        <circle cx="50" cy="22" r="10"/>
-        <path d="M50 32 L50 60" stroke="currentColor" stroke-width="8" stroke-linecap="round" fill="none"/>
-        <path d="M50 60 L42 85 M50 60 L58 85" stroke="currentColor" stroke-width="7" stroke-linecap="round" fill="none"/>
-        <path d="M42 42 L15 35" stroke="currentColor" stroke-width="6" stroke-linecap="round" fill="none"/>
-        <path d="M58 42 L85 35" stroke="currentColor" stroke-width="6" stroke-linecap="round" fill="none"/>
-        <rect x="5" y="30" width="14" height="10" rx="3"/>
-        <rect x="81" y="30" width="14" height="10" rx="3"/>
-    </svg>`,
-
-    shrug: `<svg viewBox="0 0 100 100" fill="currentColor">
-        <circle cx="50" cy="25" r="10"/>
-        <path d="M50 35 L50 60" stroke="currentColor" stroke-width="8" stroke-linecap="round" fill="none"/>
-        <path d="M50 60 L42 85 M50 60 L58 85" stroke="currentColor" stroke-width="7" stroke-linecap="round" fill="none"/>
-        <path d="M40 40 L30 55 L30 80" stroke="currentColor" stroke-width="6" stroke-linecap="round" fill="none"/>
-        <path d="M60 40 L70 55 L70 80" stroke="currentColor" stroke-width="6" stroke-linecap="round" fill="none"/>
-        <rect x="24" y="70" width="12" height="20" rx="3"/>
-        <rect x="64" y="70" width="12" height="20" rx="3"/>
-        <path d="M35 25 L35 18 M65 25 L65 18" stroke="currentColor" stroke-width="4" stroke-linecap="round" fill="none"/>
-    </svg>`,
-
-    abCrunch: `<svg viewBox="0 0 100 100" fill="currentColor">
-        <circle cx="28" cy="40" r="10"/>
-        <path d="M38 45 L60 55 L80 50" stroke="currentColor" stroke-width="8" stroke-linecap="round" fill="none"/>
-        <path d="M60 55 L55 75 L60 90" stroke="currentColor" stroke-width="7" stroke-linecap="round" fill="none"/>
-        <path d="M60 55 L70 72 L65 90" stroke="currentColor" stroke-width="7" stroke-linecap="round" fill="none"/>
-        <path d="M20 48 L12 60" stroke="currentColor" stroke-width="5" stroke-linecap="round" fill="none"/>
-    </svg>`,
-
-    backExtension: `<svg viewBox="0 0 100 100" fill="currentColor">
-        <circle cx="75" cy="30" r="10"/>
-        <path d="M65 35 L40 50 L20 48" stroke="currentColor" stroke-width="8" stroke-linecap="round" fill="none"/>
-        <path d="M40 50 L35 72 L40 90" stroke="currentColor" stroke-width="7" stroke-linecap="round" fill="none"/>
-        <path d="M40 50 L50 70 L45 90" stroke="currentColor" stroke-width="7" stroke-linecap="round" fill="none"/>
-        <rect x="10" y="45" width="18" height="40" rx="4" opacity="0.5"/>
-        <path d="M80 35 L90 28" stroke="currentColor" stroke-width="5" stroke-linecap="round" fill="none"/>
-    </svg>`
+    legPress: 'leg_press.png',
+    pulldown: 'pull_up.png',
+    chestPress: 'bench_press.png',
+    overheadPress: 'overhead_press.png',
+    legCurl: 'leg_curl.png',
+    bicepCurl: 'bicep_curl.png',
+    tricepExtension: 'tricep_extension.png',
+    calfRaise: 'calf_raise.png',
+    legExtension: 'leg_raise.png',
+    seatedRow: 'barbell_row.png',
+    inclinePress: 'incline_press.png',
+    lateralRaise: 'lateral_raise.png',
+    shrug: 'shrug.png',
+    abCrunch: 'crunch.png',
+    backExtension: 'good_morning.png'
 };
 
 // ===== DATA STRUCTURES =====
@@ -167,9 +48,14 @@ const WORKOUTS = {
     ]
 };
 
-// Helper function to get icon SVG
+// Helper function to get icon image
 function getExerciseIcon(iconKey) {
-    return EXERCISE_ICONS[iconKey] || '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="30" fill="currentColor"/></svg>';
+    const iconFile = EXERCISE_ICONS[iconKey];
+    if (iconFile) {
+        return `<img src="${ICON_PATH}${iconFile}" alt="${iconKey}" class="exercise-icon-img">`;
+    }
+    // Fallback gold circle
+    return '<div class="exercise-icon-fallback"></div>';
 }
 
 // Default phase durations
@@ -1022,7 +908,7 @@ function updateVoiceButtons(gender) {
 
 // ===== COMMANDER AUDIO SYSTEM =====
 
-const AUDIO_PATH = 'static/audio/commander/';
+const AUDIO_PATH = './static/audio/commander/';
 let currentAudio = null;
 let audioQueue = [];
 let isPlayingAudio = false;
@@ -1432,6 +1318,7 @@ function loadProfile() {
     const genderSelect = document.getElementById('profileGender');
     const goalSelect = document.getElementById('profileGoal');
     const experienceSelect = document.getElementById('profileExperience');
+    const commanderToggle = document.getElementById('commanderVoiceToggle');
 
     if (nameInput) nameInput.value = profile.name || '';
     if (ageInput) ageInput.value = profile.age || '';
@@ -1440,6 +1327,14 @@ function loadProfile() {
     if (genderSelect) genderSelect.value = profile.gender || 'prefer-not';
     if (goalSelect) goalSelect.value = profile.goal || 'strength';
     if (experienceSelect) experienceSelect.value = profile.experience || 'beginner';
+
+    // Load commander voice preference
+    if (profile.commanderVoice !== undefined) {
+        useCommanderVoice = profile.commanderVoice;
+    }
+    if (commanderToggle) {
+        commanderToggle.classList.toggle('active', useCommanderVoice);
+    }
 }
 
 function saveProfile() {
@@ -1450,9 +1345,30 @@ function saveProfile() {
         height: document.getElementById('profileHeight')?.value || '',
         gender: document.getElementById('profileGender')?.value || 'prefer-not',
         goal: document.getElementById('profileGoal')?.value || 'strength',
-        experience: document.getElementById('profileExperience')?.value || 'beginner'
+        experience: document.getElementById('profileExperience')?.value || 'beginner',
+        commanderVoice: useCommanderVoice
     };
     localStorage.setItem('userProfile', JSON.stringify(profile));
+}
+
+// Toggle commander voice on/off
+function toggleCommanderVoice() {
+    useCommanderVoice = !useCommanderVoice;
+
+    const toggle = document.getElementById('commanderVoiceToggle');
+    if (toggle) {
+        toggle.classList.toggle('active', useCommanderVoice);
+    }
+
+    // Save preference
+    saveProfile();
+
+    // Play feedback
+    if (useCommanderVoice) {
+        playAudio(AUDIO_FILES.encouragement[0]);
+    } else {
+        speak('Commander voice disabled');
+    }
 }
 
 // ===== SIRI / VOICE COMMANDS =====
