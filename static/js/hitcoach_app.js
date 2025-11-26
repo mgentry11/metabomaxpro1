@@ -360,6 +360,7 @@ let timerInterval = null;
 let restInterval = null;
 let timeRemaining = 0;
 let isPaused = false;
+let voiceCuePlaying = false; // Track when a cue is playing
 let workoutStartTime = null;
 let currentWorkoutData = [];
 let voiceEnabled = true;
@@ -1073,52 +1074,57 @@ function runTimer() {
         updateProgressBar(timeRemaining, totalDuration);
 
         // Continuous countdown for all voice styles
-        // Skip 3 seconds after a cue to prevent any overlap
+        // Check for cue moments
         const isCueMoment = (
             (currentPhase === 'ECCENTRIC' && timeRemaining === 15) ||
             (currentPhase === 'CONCENTRIC' && timeRemaining === 10) ||
             (currentPhase === 'FINAL_ECCENTRIC' && timeRemaining === 20) ||
             (currentPhase === 'FINAL_ECCENTRIC' && timeRemaining === 10)
         );
-        const isSkipMoment = (
-            // Skip 3 seconds after each cue for no overlap
-            (currentPhase === 'ECCENTRIC' && [14, 13, 12].includes(timeRemaining)) ||
-            (currentPhase === 'CONCENTRIC' && [9, 8, 7].includes(timeRemaining)) ||
-            (currentPhase === 'FINAL_ECCENTRIC' && [19, 18, 17].includes(timeRemaining)) ||
-            (currentPhase === 'FINAL_ECCENTRIC' && [9, 8, 7].includes(timeRemaining))
-        );
 
         if (isCueMoment) {
-            // Play cue only (no number) - gives full second for cue
+            // Play cue and pause counting until done + 2 seconds
+            voiceCuePlaying = true;
+
             if (currentPhase === 'ECCENTRIC' && timeRemaining === 15) {
                 if (useCommanderVoice) {
                     playEccentricCue();
+                    setTimeout(() => { voiceCuePlaying = false; }, 3000); // 1s audio + 2s pause
                 } else {
-                    speak(getMotivationalPhrase());
+                    speakWithCallback(getMotivationalPhrase(), () => {
+                        setTimeout(() => { voiceCuePlaying = false; }, 2000);
+                    });
                 }
             } else if (currentPhase === 'CONCENTRIC' && timeRemaining === 10) {
                 if (useCommanderVoice) {
                     playConcentricCue();
+                    setTimeout(() => { voiceCuePlaying = false; }, 3000);
                 } else {
-                    speak('Push! Drive it up!');
+                    speakWithCallback('Push! Drive it up!', () => {
+                        setTimeout(() => { voiceCuePlaying = false; }, 2000);
+                    });
                 }
             } else if (currentPhase === 'FINAL_ECCENTRIC' && timeRemaining === 20) {
                 if (useCommanderVoice) {
                     playAudio(AUDIO_FILES.time.halfway);
+                    setTimeout(() => { voiceCuePlaying = false; }, 3000);
                 } else {
-                    speak('Halfway there!');
+                    speakWithCallback('Halfway there!', () => {
+                        setTimeout(() => { voiceCuePlaying = false; }, 2000);
+                    });
                 }
             } else if (currentPhase === 'FINAL_ECCENTRIC' && timeRemaining === 10) {
                 if (useCommanderVoice) {
                     playFinalCue();
+                    setTimeout(() => { voiceCuePlaying = false; }, 3000);
                 } else {
-                    speak('Final ten! Give everything!');
+                    speakWithCallback('Final ten! Give everything!', () => {
+                        setTimeout(() => { voiceCuePlaying = false; }, 2000);
+                    });
                 }
             }
-        } else if (isSkipMoment) {
-            // Skip this count to let cue finish (no overlap)
-        } else if (timeRemaining >= 1 && timeRemaining <= 60) {
-            // Normal counting
+        } else if (!voiceCuePlaying && timeRemaining >= 1 && timeRemaining <= 60) {
+            // Normal counting (only when no cue is playing)
             if (useCommanderVoice) {
                 playNumber(timeRemaining);
             } else {
@@ -2079,6 +2085,48 @@ function speakTTS(text, priority = false) {
     utterance.rate = 0.95;
     utterance.pitch = 1.0;
     utterance.volume = 1.0;
+
+    synth.speak(utterance);
+}
+
+// TTS with callback when speech ends
+function speakWithCallback(text, callback) {
+    if (!voiceEnabled) {
+        if (callback) callback();
+        return;
+    }
+
+    synth.cancel();
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    const voices = synth.getVoices();
+    let preferredVoice = null;
+
+    if (voiceGender === 'male') {
+        preferredVoice = voices.find(voice =>
+            voice.name.toLowerCase().includes('male') ||
+            voice.name.toLowerCase().includes('daniel') ||
+            voice.name.toLowerCase().includes('alex')
+        );
+    } else if (voiceGender === 'female') {
+        preferredVoice = voices.find(voice =>
+            voice.name.toLowerCase().includes('female') ||
+            voice.name.toLowerCase().includes('samantha') ||
+            voice.name.toLowerCase().includes('victoria')
+        );
+    }
+
+    if (preferredVoice) {
+        utterance.voice = preferredVoice;
+    }
+
+    utterance.rate = 0.95;
+    utterance.pitch = 1.0;
+    utterance.volume = 1.0;
+
+    utterance.onend = () => {
+        if (callback) callback();
+    };
 
     synth.speak(utterance);
 }
