@@ -47,20 +47,22 @@
 .app-header {
     background: var(--dark-bg);
     padding: 0.5rem 1rem;
-    margin-top: 44px; /* Space for status bar spacer */
-    position: sticky;
+    position: fixed;
     top: 44px;
+    left: 0;
+    right: 0;
     z-index: 150;
     border-bottom: 1px solid var(--light-gray);
 }
 
 .workout-tabs {
     background: var(--dark-bg);
-    position: sticky;
+    position: fixed;
     top: 88px; /* 44px spacer + 44px header */
+    left: 0;
+    right: 0;
     z-index: 149;
     border-bottom: 1px solid var(--light-gray);
-    margin-top: -1px; /* Prevent gap */
 }
 
 .app-header-content {
@@ -267,6 +269,7 @@
     animation: fadeIn 0.3s ease;
     position: relative;
     z-index: 1;
+    padding-top: 140px; /* Space for fixed header elements */
 }
 
 .screen.active {
@@ -308,7 +311,7 @@
 .exercise-icon {
     width: 48px;
     height: 48px;
-    border-radius: 8px;
+    border-radius: 8px !important;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -666,7 +669,7 @@
 .exercise-icon-display {
     width: 80px;
     height: 80px;
-    border-radius: 12px;
+    border-radius: 12px !important;
     display: flex;
     align-items: center;
     justify-content: center;
