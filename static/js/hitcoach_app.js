@@ -1073,35 +1073,53 @@ function runTimer() {
         updateProgressBar(timeRemaining, totalDuration);
 
         // Continuous countdown for all voice styles
-        if (useCommanderVoice) {
-            // Play number every second (commander audio files 1-60)
-            if (timeRemaining >= 1 && timeRemaining <= 60) {
+        // Check for phase-specific cues first (these replace the number for that second)
+        let playedCue = false;
+
+        if (currentPhase === 'ECCENTRIC' && timeRemaining === 15) {
+            if (useCommanderVoice) {
+                playNumber(15);
+                setTimeout(() => playEccentricCue(), 500);
+            } else {
+                speak('15');
+                setTimeout(() => speak(getMotivationalPhrase()), 600);
+            }
+            playedCue = true;
+        } else if (currentPhase === 'CONCENTRIC' && timeRemaining === 10) {
+            if (useCommanderVoice) {
+                playNumber(10);
+                setTimeout(() => playConcentricCue(), 500);
+            } else {
+                speak('10');
+                setTimeout(() => speak('Push!'), 600);
+            }
+            playedCue = true;
+        } else if (currentPhase === 'FINAL_ECCENTRIC' && timeRemaining === 20) {
+            if (useCommanderVoice) {
+                playNumber(20);
+                setTimeout(() => playAudio(AUDIO_FILES.time.halfway), 500);
+            } else {
+                speak('20');
+                setTimeout(() => speak('Halfway!'), 600);
+            }
+            playedCue = true;
+        } else if (currentPhase === 'FINAL_ECCENTRIC' && timeRemaining === 10) {
+            if (useCommanderVoice) {
+                playNumber(10);
+                setTimeout(() => playFinalCue(), 500);
+            } else {
+                speak('10');
+                setTimeout(() => speak('Final push!'), 600);
+            }
+            playedCue = true;
+        }
+
+        // If no cue was played, just count the number
+        if (!playedCue && timeRemaining >= 1 && timeRemaining <= 60) {
+            if (useCommanderVoice) {
                 playNumber(timeRemaining);
-            }
-
-            // Phase-specific cues at key moments (play after number)
-            if (currentPhase === 'ECCENTRIC' && timeRemaining === 15) {
-                setTimeout(() => playEccentricCue(), 600);
-            } else if (currentPhase === 'CONCENTRIC' && timeRemaining === 10) {
-                setTimeout(() => playConcentricCue(), 600);
-            } else if (currentPhase === 'FINAL_ECCENTRIC' && timeRemaining === 20) {
-                setTimeout(() => playAudio(AUDIO_FILES.time.halfway), 600);
-            } else if (currentPhase === 'FINAL_ECCENTRIC' && timeRemaining === 10) {
-                setTimeout(() => playFinalCue(), 600);
-            }
-        } else {
-            // TTS countdown every second
-            if (timeRemaining >= 1 && timeRemaining <= 60) {
+            } else {
                 speak(String(timeRemaining));
-            }
-
-            // Motivational phrases at intervals
-            if (currentPhase === 'ECCENTRIC' && timeRemaining === 15) {
-                setTimeout(() => speak(getMotivationalPhrase()), 500);
-            } else if (currentPhase === 'FINAL_ECCENTRIC' && timeRemaining === 20) {
-                setTimeout(() => speak('Halfway there!'), 500);
-            } else if (currentPhase === 'FINAL_ECCENTRIC' && timeRemaining === 10) {
-                setTimeout(() => speak('Give it everything!'), 500);
             }
         }
 
