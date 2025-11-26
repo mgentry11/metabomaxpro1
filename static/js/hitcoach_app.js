@@ -1084,44 +1084,49 @@ function runTimer() {
         );
 
         if (isCueMoment) {
-            // Play cue - this will set noCountUntil to pause counting
+            // Play cue and pause counting until audio ends + 2 seconds
+            voiceCuePlaying = true;
+
+            // Callback to resume counting after audio ends + 2 sec pause
+            const resumeAfterPause = () => {
+                setTimeout(() => { voiceCuePlaying = false; }, 2000);
+            };
+
             if (currentPhase === 'ECCENTRIC' && timeRemaining === 15) {
                 if (useCommanderVoice) {
-                    playCueAudio(AUDIO_FILES.eccentric[Math.floor(Math.random() * AUDIO_FILES.eccentric.length)]);
+                    playEccentricCue(resumeAfterPause);
                 } else {
-                    speak(getMotivationalPhrase());
-                    noCountUntil = Date.now() + 3000; // Pause for TTS too
+                    speakWithCallback(getMotivationalPhrase(), resumeAfterPause);
                 }
             } else if (currentPhase === 'CONCENTRIC' && timeRemaining === 10) {
                 if (useCommanderVoice) {
-                    playCueAudio(AUDIO_FILES.concentric[Math.floor(Math.random() * AUDIO_FILES.concentric.length)]);
+                    playConcentricCue(resumeAfterPause);
                 } else {
-                    speak('Push! Drive it up!');
-                    noCountUntil = Date.now() + 3000;
+                    speakWithCallback('Push! Drive it up!', resumeAfterPause);
                 }
             } else if (currentPhase === 'FINAL_ECCENTRIC' && timeRemaining === 20) {
                 if (useCommanderVoice) {
-                    playCueAudio(AUDIO_FILES.time.halfway);
+                    playCueAudio(AUDIO_FILES.time.halfway, resumeAfterPause);
                 } else {
-                    speak('Halfway there!');
-                    noCountUntil = Date.now() + 3000;
+                    speakWithCallback('Halfway there!', resumeAfterPause);
                 }
             } else if (currentPhase === 'FINAL_ECCENTRIC' && timeRemaining === 10) {
                 if (useCommanderVoice) {
-                    playCueAudio(AUDIO_FILES.final[Math.floor(Math.random() * AUDIO_FILES.final.length)]);
+                    playFinalCue(resumeAfterPause);
                 } else {
-                    speak('Final ten! Give everything!');
-                    noCountUntil = Date.now() + 3000;
+                    speakWithCallback('Final ten! Give everything!', resumeAfterPause);
                 }
             }
-        } else if (Date.now() < noCountUntil) {
-            // Still in pause period after a cue - stay silent
-        } else if (timeRemaining >= 1 && timeRemaining <= 60) {
-            // Normal counting - only if not in pause period
+        } else if (!voiceCuePlaying && timeRemaining >= 1 && timeRemaining <= 60) {
+            // Normal counting (only when no cue is playing AND no audio playing)
             if (useCommanderVoice) {
-                playNumber(timeRemaining);
-            } else if (!synth.speaking) {
-                speak(String(timeRemaining));
+                if (!currentAudio && !cueAudio) {
+                    playNumber(timeRemaining);
+                }
+            } else {
+                if (!synth.speaking) {
+                    speak(String(timeRemaining));
+                }
             }
         }
 
