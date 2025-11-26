@@ -1949,6 +1949,18 @@ function playAudio(filename, callback) {
         return;
     }
 
+    // Don't play if we're in a pause period (cue just played)
+    if (Date.now() < noCountUntil) {
+        if (callback) callback();
+        return;
+    }
+
+    // Don't play if a cue is currently playing
+    if (cueAudio) {
+        if (callback) callback();
+        return;
+    }
+
     const audio = new Audio(AUDIO_PATH + filename);
     currentAudio = audio;
 
@@ -2035,8 +2047,14 @@ function playCueAudio(filename, callback) {
         cueAudio = null;
     }
 
-    // Pause counting for 3 seconds after cue starts
-    noCountUntil = Date.now() + 3000;
+    // Stop any currently playing number audio
+    if (currentAudio) {
+        currentAudio.pause();
+        currentAudio = null;
+    }
+
+    // Pause counting for 4 seconds after cue starts
+    noCountUntil = Date.now() + 4000;
 
     cueAudio = new Audio(AUDIO_PATH + filename);
 
