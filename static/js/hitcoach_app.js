@@ -362,6 +362,7 @@ let timeRemaining = 0;
 let isPaused = false;
 let voiceCuePlaying = false; // Track when a cue is playing
 let cueAudio = null; // Track cue audio separately from number audio
+let noCountUntil = 0; // Timestamp - don't count until after this time
 let workoutStartTime = null;
 let currentWorkoutData = [];
 let voiceEnabled = true;
@@ -1074,7 +1075,7 @@ function runTimer() {
         updateTimerDisplay();
         updateProgressBar(timeRemaining, totalDuration);
 
-        // Continuous countdown - explicit skip list to prevent overlap
+        // Check if it's time for a motivational cue
         const isCueMoment = (
             (currentPhase === 'ECCENTRIC' && timeRemaining === 15) ||
             (currentPhase === 'CONCENTRIC' && timeRemaining === 10) ||
@@ -1082,45 +1083,41 @@ function runTimer() {
             (currentPhase === 'FINAL_ECCENTRIC' && timeRemaining === 10)
         );
 
-        // Skip 5 seconds after each cue - no counting during this time
-        const isSkipMoment = (
-            (currentPhase === 'ECCENTRIC' && [14, 13, 12, 11, 10].includes(timeRemaining)) ||
-            (currentPhase === 'CONCENTRIC' && [9, 8, 7, 6, 5].includes(timeRemaining)) ||
-            (currentPhase === 'FINAL_ECCENTRIC' && [19, 18, 17, 16, 15].includes(timeRemaining)) ||
-            (currentPhase === 'FINAL_ECCENTRIC' && [9, 8, 7, 6, 5].includes(timeRemaining))
-        );
-
         if (isCueMoment) {
-            // Play cue only - no number
+            // Play cue - this will set noCountUntil to pause counting
             if (currentPhase === 'ECCENTRIC' && timeRemaining === 15) {
                 if (useCommanderVoice) {
                     playCueAudio(AUDIO_FILES.eccentric[Math.floor(Math.random() * AUDIO_FILES.eccentric.length)]);
                 } else {
                     speak(getMotivationalPhrase());
+                    noCountUntil = Date.now() + 3000; // Pause for TTS too
                 }
             } else if (currentPhase === 'CONCENTRIC' && timeRemaining === 10) {
                 if (useCommanderVoice) {
                     playCueAudio(AUDIO_FILES.concentric[Math.floor(Math.random() * AUDIO_FILES.concentric.length)]);
                 } else {
                     speak('Push! Drive it up!');
+                    noCountUntil = Date.now() + 3000;
                 }
             } else if (currentPhase === 'FINAL_ECCENTRIC' && timeRemaining === 20) {
                 if (useCommanderVoice) {
                     playCueAudio(AUDIO_FILES.time.halfway);
                 } else {
                     speak('Halfway there!');
+                    noCountUntil = Date.now() + 3000;
                 }
             } else if (currentPhase === 'FINAL_ECCENTRIC' && timeRemaining === 10) {
                 if (useCommanderVoice) {
                     playCueAudio(AUDIO_FILES.final[Math.floor(Math.random() * AUDIO_FILES.final.length)]);
                 } else {
                     speak('Final ten! Give everything!');
+                    noCountUntil = Date.now() + 3000;
                 }
             }
-        } else if (isSkipMoment) {
-            // Silence - let cue finish playing
+        } else if (Date.now() < noCountUntil) {
+            // Still in pause period after a cue - stay silent
         } else if (timeRemaining >= 1 && timeRemaining <= 60) {
-            // Normal counting
+            // Normal counting - only if not in pause period
             if (useCommanderVoice) {
                 playNumber(timeRemaining);
             } else if (!synth.speaking) {
@@ -2037,6 +2034,9 @@ function playCueAudio(filename, callback) {
         cueAudio.pause();
         cueAudio = null;
     }
+
+    // Pause counting for 3 seconds after cue starts
+    noCountUntil = Date.now() + 3000;
 
     cueAudio = new Audio(AUDIO_PATH + filename);
 
