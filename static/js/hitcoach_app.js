@@ -1083,44 +1083,37 @@ function runTimer() {
         );
 
         if (isCueMoment) {
-            // Play cue and pause counting until done + 2 seconds
+            // Play cue and pause counting until audio ends + 2 seconds
             voiceCuePlaying = true;
+
+            // Callback to resume counting after audio ends + 2 sec pause
+            const resumeAfterPause = () => {
+                setTimeout(() => { voiceCuePlaying = false; }, 2000);
+            };
 
             if (currentPhase === 'ECCENTRIC' && timeRemaining === 15) {
                 if (useCommanderVoice) {
-                    playEccentricCue();
-                    setTimeout(() => { voiceCuePlaying = false; }, 5000); // audio + 2s pause
+                    playEccentricCue(resumeAfterPause);
                 } else {
-                    speakWithCallback(getMotivationalPhrase(), () => {
-                        setTimeout(() => { voiceCuePlaying = false; }, 2000);
-                    });
+                    speakWithCallback(getMotivationalPhrase(), resumeAfterPause);
                 }
             } else if (currentPhase === 'CONCENTRIC' && timeRemaining === 10) {
                 if (useCommanderVoice) {
-                    playConcentricCue();
-                    setTimeout(() => { voiceCuePlaying = false; }, 5000);
+                    playConcentricCue(resumeAfterPause);
                 } else {
-                    speakWithCallback('Push! Drive it up!', () => {
-                        setTimeout(() => { voiceCuePlaying = false; }, 2000);
-                    });
+                    speakWithCallback('Push! Drive it up!', resumeAfterPause);
                 }
             } else if (currentPhase === 'FINAL_ECCENTRIC' && timeRemaining === 20) {
                 if (useCommanderVoice) {
-                    playAudio(AUDIO_FILES.time.halfway);
-                    setTimeout(() => { voiceCuePlaying = false; }, 5000);
+                    playAudio(AUDIO_FILES.time.halfway, resumeAfterPause);
                 } else {
-                    speakWithCallback('Halfway there!', () => {
-                        setTimeout(() => { voiceCuePlaying = false; }, 2000);
-                    });
+                    speakWithCallback('Halfway there!', resumeAfterPause);
                 }
             } else if (currentPhase === 'FINAL_ECCENTRIC' && timeRemaining === 10) {
                 if (useCommanderVoice) {
-                    playFinalCue();
-                    setTimeout(() => { voiceCuePlaying = false; }, 5000);
+                    playFinalCue(resumeAfterPause);
                 } else {
-                    speakWithCallback('Final ten! Give everything!', () => {
-                        setTimeout(() => { voiceCuePlaying = false; }, 2000);
-                    });
+                    speakWithCallback('Final ten! Give everything!', resumeAfterPause);
                 }
             }
         } else if (!voiceCuePlaying && timeRemaining >= 1 && timeRemaining <= 60) {
@@ -2030,24 +2023,24 @@ function playEncouragement() {
 }
 
 // Play random eccentric cue
-function playEccentricCue() {
+function playEccentricCue(callback) {
     const files = AUDIO_FILES.eccentric;
     const file = files[Math.floor(Math.random() * files.length)];
-    playAudio(file);
+    playAudio(file, callback);
 }
 
 // Play random concentric cue
-function playConcentricCue() {
+function playConcentricCue(callback) {
     const files = AUDIO_FILES.concentric;
     const file = files[Math.floor(Math.random() * files.length)];
-    playAudio(file);
+    playAudio(file, callback);
 }
 
 // Play random final eccentric cue
-function playFinalCue() {
+function playFinalCue(callback) {
     const files = AUDIO_FILES.final;
     const file = files[Math.floor(Math.random() * files.length)];
-    playAudio(file);
+    playAudio(file, callback);
 }
 
 // ===== VOICE SYNTHESIS (Fallback TTS) =====
