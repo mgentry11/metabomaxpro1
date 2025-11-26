@@ -1073,7 +1073,7 @@ function runTimer() {
         updateProgressBar(timeRemaining, totalDuration);
 
         // Continuous countdown for all voice styles
-        // Skip 2 seconds after a cue to prevent any overlap
+        // Skip 3 seconds after a cue to prevent any overlap
         const isCueMoment = (
             (currentPhase === 'ECCENTRIC' && timeRemaining === 15) ||
             (currentPhase === 'CONCENTRIC' && timeRemaining === 10) ||
@@ -1081,11 +1081,11 @@ function runTimer() {
             (currentPhase === 'FINAL_ECCENTRIC' && timeRemaining === 10)
         );
         const isSkipMoment = (
-            // Skip 2 seconds after each cue
-            (currentPhase === 'ECCENTRIC' && (timeRemaining === 14 || timeRemaining === 13)) ||
-            (currentPhase === 'CONCENTRIC' && (timeRemaining === 9 || timeRemaining === 8)) ||
-            (currentPhase === 'FINAL_ECCENTRIC' && (timeRemaining === 19 || timeRemaining === 18)) ||
-            (currentPhase === 'FINAL_ECCENTRIC' && (timeRemaining === 9 || timeRemaining === 8))
+            // Skip 3 seconds after each cue for no overlap
+            (currentPhase === 'ECCENTRIC' && [14, 13, 12].includes(timeRemaining)) ||
+            (currentPhase === 'CONCENTRIC' && [9, 8, 7].includes(timeRemaining)) ||
+            (currentPhase === 'FINAL_ECCENTRIC' && [19, 18, 17].includes(timeRemaining)) ||
+            (currentPhase === 'FINAL_ECCENTRIC' && [9, 8, 7].includes(timeRemaining))
         );
 
         if (isCueMoment) {
