@@ -1089,7 +1089,7 @@ function runTimer() {
             if (currentPhase === 'ECCENTRIC' && timeRemaining === 15) {
                 if (useCommanderVoice) {
                     playEccentricCue();
-                    setTimeout(() => { voiceCuePlaying = false; }, 3000); // 1s audio + 2s pause
+                    setTimeout(() => { voiceCuePlaying = false; }, 5000); // audio + 2s pause
                 } else {
                     speakWithCallback(getMotivationalPhrase(), () => {
                         setTimeout(() => { voiceCuePlaying = false; }, 2000);
@@ -1098,7 +1098,7 @@ function runTimer() {
             } else if (currentPhase === 'CONCENTRIC' && timeRemaining === 10) {
                 if (useCommanderVoice) {
                     playConcentricCue();
-                    setTimeout(() => { voiceCuePlaying = false; }, 3000);
+                    setTimeout(() => { voiceCuePlaying = false; }, 5000);
                 } else {
                     speakWithCallback('Push! Drive it up!', () => {
                         setTimeout(() => { voiceCuePlaying = false; }, 2000);
@@ -1107,7 +1107,7 @@ function runTimer() {
             } else if (currentPhase === 'FINAL_ECCENTRIC' && timeRemaining === 20) {
                 if (useCommanderVoice) {
                     playAudio(AUDIO_FILES.time.halfway);
-                    setTimeout(() => { voiceCuePlaying = false; }, 3000);
+                    setTimeout(() => { voiceCuePlaying = false; }, 5000);
                 } else {
                     speakWithCallback('Halfway there!', () => {
                         setTimeout(() => { voiceCuePlaying = false; }, 2000);
@@ -1116,7 +1116,7 @@ function runTimer() {
             } else if (currentPhase === 'FINAL_ECCENTRIC' && timeRemaining === 10) {
                 if (useCommanderVoice) {
                     playFinalCue();
-                    setTimeout(() => { voiceCuePlaying = false; }, 3000);
+                    setTimeout(() => { voiceCuePlaying = false; }, 5000);
                 } else {
                     speakWithCallback('Final ten! Give everything!', () => {
                         setTimeout(() => { voiceCuePlaying = false; }, 2000);
