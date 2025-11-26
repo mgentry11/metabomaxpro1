@@ -1074,8 +1074,7 @@ function runTimer() {
         updateTimerDisplay();
         updateProgressBar(timeRemaining, totalDuration);
 
-        // Continuous countdown for all voice styles
-        // Check for cue moments
+        // Continuous countdown - explicit skip list to prevent overlap
         const isCueMoment = (
             (currentPhase === 'ECCENTRIC' && timeRemaining === 15) ||
             (currentPhase === 'CONCENTRIC' && timeRemaining === 10) ||
@@ -1083,13 +1082,16 @@ function runTimer() {
             (currentPhase === 'FINAL_ECCENTRIC' && timeRemaining === 10)
         );
 
+        // Skip 5 seconds after each cue - no counting during this time
+        const isSkipMoment = (
+            (currentPhase === 'ECCENTRIC' && [14, 13, 12, 11, 10].includes(timeRemaining)) ||
+            (currentPhase === 'CONCENTRIC' && [9, 8, 7, 6, 5].includes(timeRemaining)) ||
+            (currentPhase === 'FINAL_ECCENTRIC' && [19, 18, 17, 16, 15].includes(timeRemaining)) ||
+            (currentPhase === 'FINAL_ECCENTRIC' && [9, 8, 7, 6, 5].includes(timeRemaining))
+        );
+
         if (isCueMoment) {
-            // Play cue and pause counting for fixed 6 seconds (no callbacks)
-            voiceCuePlaying = true;
-
-            // Fixed 6 second pause - covers audio + buffer
-            setTimeout(() => { voiceCuePlaying = false; }, 6000);
-
+            // Play cue only - no number
             if (currentPhase === 'ECCENTRIC' && timeRemaining === 15) {
                 if (useCommanderVoice) {
                     playCueAudio(AUDIO_FILES.eccentric[Math.floor(Math.random() * AUDIO_FILES.eccentric.length)]);
@@ -1115,8 +1117,10 @@ function runTimer() {
                     speak('Final ten! Give everything!');
                 }
             }
-        } else if (!voiceCuePlaying && timeRemaining >= 1 && timeRemaining <= 60) {
-            // Normal counting (only when no cue playing)
+        } else if (isSkipMoment) {
+            // Silence - let cue finish playing
+        } else if (timeRemaining >= 1 && timeRemaining <= 60) {
+            // Normal counting
             if (useCommanderVoice) {
                 playNumber(timeRemaining);
             } else if (!synth.speaking) {
