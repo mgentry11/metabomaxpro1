@@ -1072,38 +1072,36 @@ function runTimer() {
         updateTimerDisplay();
         updateProgressBar(timeRemaining, totalDuration);
 
-        // Commander voice countdown and cues
+        // Continuous countdown for all voice styles
         if (useCommanderVoice) {
-            // Countdown at 5, 3, 2, 1
-            if (timeRemaining === 5) playNumber(5);
-            else if (timeRemaining === 3) playNumber(3);
-            else if (timeRemaining === 2) playNumber(2);
-            else if (timeRemaining === 1) playNumber(1);
+            // Play number every second (commander audio files 1-60)
+            if (timeRemaining >= 1 && timeRemaining <= 60) {
+                playNumber(timeRemaining);
+            }
 
-            // Phase-specific cues
+            // Phase-specific cues at key moments (play after number)
             if (currentPhase === 'ECCENTRIC' && timeRemaining === 15) {
-                playEccentricCue();
+                setTimeout(() => playEccentricCue(), 600);
             } else if (currentPhase === 'CONCENTRIC' && timeRemaining === 10) {
-                playConcentricCue();
+                setTimeout(() => playConcentricCue(), 600);
             } else if (currentPhase === 'FINAL_ECCENTRIC' && timeRemaining === 20) {
-                playAudio(AUDIO_FILES.time.halfway);
+                setTimeout(() => playAudio(AUDIO_FILES.time.halfway), 600);
             } else if (currentPhase === 'FINAL_ECCENTRIC' && timeRemaining === 10) {
-                playFinalCue();
+                setTimeout(() => playFinalCue(), 600);
             }
         } else {
-            // Fallback TTS countdown
-            if (timeRemaining === 5) speak('5');
-            else if (timeRemaining === 3) speak('3');
-            else if (timeRemaining === 2) speak('2');
-            else if (timeRemaining === 1) speak('1');
+            // TTS countdown every second
+            if (timeRemaining >= 1 && timeRemaining <= 60) {
+                speak(String(timeRemaining));
+            }
 
             // Motivational phrases at intervals
             if (currentPhase === 'ECCENTRIC' && timeRemaining === 15) {
-                speak(getMotivationalPhrase());
+                setTimeout(() => speak(getMotivationalPhrase()), 500);
             } else if (currentPhase === 'FINAL_ECCENTRIC' && timeRemaining === 20) {
-                speak('Halfway there!');
+                setTimeout(() => speak('Halfway there!'), 500);
             } else if (currentPhase === 'FINAL_ECCENTRIC' && timeRemaining === 10) {
-                speak('10 seconds! Give it everything!');
+                setTimeout(() => speak('Give it everything!'), 500);
             }
         }
 
