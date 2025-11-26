@@ -361,6 +361,7 @@ let restInterval = null;
 let timeRemaining = 0;
 let isPaused = false;
 let voiceCuePlaying = false; // Track when a cue is playing
+let cueAudio = null; // Track cue audio separately from number audio
 let workoutStartTime = null;
 let currentWorkoutData = [];
 let voiceEnabled = true;
@@ -1105,7 +1106,7 @@ function runTimer() {
                 }
             } else if (currentPhase === 'FINAL_ECCENTRIC' && timeRemaining === 20) {
                 if (useCommanderVoice) {
-                    playAudio(AUDIO_FILES.time.halfway, resumeAfterPause);
+                    playCueAudio(AUDIO_FILES.time.halfway, resumeAfterPause);
                 } else {
                     speakWithCallback('Halfway there!', resumeAfterPause);
                 }
@@ -1116,11 +1117,11 @@ function runTimer() {
                     speakWithCallback('Final ten! Give everything!', resumeAfterPause);
                 }
             }
-        } else if (!voiceCuePlaying && timeRemaining >= 1 && timeRemaining <= 60) {
-            // Normal counting (only when no cue is playing)
+        } else if (!voiceCuePlaying && !cueAudio && timeRemaining >= 1 && timeRemaining <= 60) {
+            // Normal counting (only when no cue playing)
             if (useCommanderVoice) {
                 playNumber(timeRemaining);
-            } else {
+            } else if (!synth.speaking) {
                 speak(String(timeRemaining));
             }
         }
@@ -2022,25 +2023,58 @@ function playEncouragement() {
     playAudio(file);
 }
 
+// Play cue audio with tracking and fallback timeout
+function playCueAudio(filename, callback) {
+    if (!voiceEnabled || !useCommanderVoice) {
+        if (callback) callback();
+        return;
+    }
+
+    // Stop any current cue audio
+    if (cueAudio) {
+        cueAudio.pause();
+        cueAudio = null;
+    }
+
+    cueAudio = new Audio(AUDIO_PATH + filename);
+
+    let callbackFired = false;
+    const fireCallback = () => {
+        if (!callbackFired) {
+            callbackFired = true;
+            cueAudio = null;
+            if (callback) callback();
+        }
+    };
+
+    cueAudio.onended = fireCallback;
+    cueAudio.onerror = fireCallback;
+
+    // Fallback timeout in case audio never ends (5 seconds max)
+    setTimeout(fireCallback, 5000);
+
+    cueAudio.play().catch(fireCallback);
+}
+
 // Play random eccentric cue
 function playEccentricCue(callback) {
     const files = AUDIO_FILES.eccentric;
     const file = files[Math.floor(Math.random() * files.length)];
-    playAudio(file, callback);
+    playCueAudio(file, callback);
 }
 
 // Play random concentric cue
 function playConcentricCue(callback) {
     const files = AUDIO_FILES.concentric;
     const file = files[Math.floor(Math.random() * files.length)];
-    playAudio(file, callback);
+    playCueAudio(file, callback);
 }
 
 // Play random final eccentric cue
 function playFinalCue(callback) {
     const files = AUDIO_FILES.final;
     const file = files[Math.floor(Math.random() * files.length)];
-    playAudio(file, callback);
+    playCueAudio(file, callback);
 }
 
 // ===== VOICE SYNTHESIS (Fallback TTS) =====

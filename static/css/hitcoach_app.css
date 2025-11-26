@@ -317,7 +317,7 @@
     justify-content: center;
     flex-shrink: 0;
     overflow: hidden;
-    background: transparent;
+    background: var(--gold);
 }
 
 .exercise-icon-img {
@@ -675,7 +675,7 @@
     justify-content: center;
     margin: 1rem auto;
     overflow: hidden;
-    background: transparent;
+    background: var(--gold);
 }
 
 .exercise-icon-display img {
