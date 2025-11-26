@@ -1117,17 +1117,11 @@ function runTimer() {
                 }
             }
         } else if (!voiceCuePlaying && timeRemaining >= 1 && timeRemaining <= 60) {
-            // Normal counting (only when no cue is playing AND no audio playing)
+            // Normal counting (only when no cue is playing)
             if (useCommanderVoice) {
-                // Only play number if no audio is currently playing
-                if (!currentAudio) {
-                    playNumber(timeRemaining);
-                }
+                playNumber(timeRemaining);
             } else {
-                // Only speak if synth is not currently speaking
-                if (!synth.speaking) {
-                    speak(String(timeRemaining));
-                }
+                speak(String(timeRemaining));
             }
         }
 
