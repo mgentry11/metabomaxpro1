@@ -318,10 +318,10 @@
 }
 
 .exercise-icon-img {
-    width: 120%;
-    height: 120%;
+    width: 140%;
+    height: 140%;
     object-fit: cover;
-    margin: -10%;
+    margin: -20%;
 }
 
 .exercise-icon-fallback {
@@ -677,10 +677,10 @@
 }
 
 .exercise-icon-display img {
-    width: 120%;
-    height: 120%;
+    width: 140%;
+    height: 140%;
     object-fit: cover;
-    margin: -10%;
+    margin: -20%;
 }
 
 /* Timer Section */
