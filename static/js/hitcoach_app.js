@@ -1073,49 +1073,52 @@ function runTimer() {
         updateProgressBar(timeRemaining, totalDuration);
 
         // Continuous countdown for all voice styles
-        // Check for phase-specific cues first (these replace the number for that second)
-        let playedCue = false;
+        // Skip counting right after a cue to prevent overlap
+        const skipAfterCue = [14, 9, 19, 9]; // Skip these counts (after 15, 10, 20, 10 cues)
+        const isCueMoment = (
+            (currentPhase === 'ECCENTRIC' && timeRemaining === 15) ||
+            (currentPhase === 'CONCENTRIC' && timeRemaining === 10) ||
+            (currentPhase === 'FINAL_ECCENTRIC' && timeRemaining === 20) ||
+            (currentPhase === 'FINAL_ECCENTRIC' && timeRemaining === 10)
+        );
+        const isSkipMoment = (
+            (currentPhase === 'ECCENTRIC' && timeRemaining === 14) ||
+            (currentPhase === 'CONCENTRIC' && timeRemaining === 9) ||
+            (currentPhase === 'FINAL_ECCENTRIC' && timeRemaining === 19) ||
+            (currentPhase === 'FINAL_ECCENTRIC' && timeRemaining === 9)
+        );
 
-        if (currentPhase === 'ECCENTRIC' && timeRemaining === 15) {
-            if (useCommanderVoice) {
-                playNumber(15);
-                setTimeout(() => playEccentricCue(), 500);
-            } else {
-                speak('15');
-                setTimeout(() => speak(getMotivationalPhrase()), 600);
+        if (isCueMoment) {
+            // Play cue only (no number) - gives full second for cue
+            if (currentPhase === 'ECCENTRIC' && timeRemaining === 15) {
+                if (useCommanderVoice) {
+                    playEccentricCue();
+                } else {
+                    speak(getMotivationalPhrase());
+                }
+            } else if (currentPhase === 'CONCENTRIC' && timeRemaining === 10) {
+                if (useCommanderVoice) {
+                    playConcentricCue();
+                } else {
+                    speak('Push! Drive it up!');
+                }
+            } else if (currentPhase === 'FINAL_ECCENTRIC' && timeRemaining === 20) {
+                if (useCommanderVoice) {
+                    playAudio(AUDIO_FILES.time.halfway);
+                } else {
+                    speak('Halfway there!');
+                }
+            } else if (currentPhase === 'FINAL_ECCENTRIC' && timeRemaining === 10) {
+                if (useCommanderVoice) {
+                    playFinalCue();
+                } else {
+                    speak('Final ten! Give everything!');
+                }
             }
-            playedCue = true;
-        } else if (currentPhase === 'CONCENTRIC' && timeRemaining === 10) {
-            if (useCommanderVoice) {
-                playNumber(10);
-                setTimeout(() => playConcentricCue(), 500);
-            } else {
-                speak('10');
-                setTimeout(() => speak('Push!'), 600);
-            }
-            playedCue = true;
-        } else if (currentPhase === 'FINAL_ECCENTRIC' && timeRemaining === 20) {
-            if (useCommanderVoice) {
-                playNumber(20);
-                setTimeout(() => playAudio(AUDIO_FILES.time.halfway), 500);
-            } else {
-                speak('20');
-                setTimeout(() => speak('Halfway!'), 600);
-            }
-            playedCue = true;
-        } else if (currentPhase === 'FINAL_ECCENTRIC' && timeRemaining === 10) {
-            if (useCommanderVoice) {
-                playNumber(10);
-                setTimeout(() => playFinalCue(), 500);
-            } else {
-                speak('10');
-                setTimeout(() => speak('Final push!'), 600);
-            }
-            playedCue = true;
-        }
-
-        // If no cue was played, just count the number
-        if (!playedCue && timeRemaining >= 1 && timeRemaining <= 60) {
+        } else if (isSkipMoment) {
+            // Skip this count to let cue finish (no overlap)
+        } else if (timeRemaining >= 1 && timeRemaining <= 60) {
+            // Normal counting
             if (useCommanderVoice) {
                 playNumber(timeRemaining);
             } else {
