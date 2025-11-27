@@ -8,23 +8,23 @@ const ICON_PATH = './static/images/icons/';
 // ===== EXERCISE DATABASE =====
 // Complete mapping of exercise keys to icon filenames
 const EXERCISE_ICONS = {
-    // Primary exercises
-    legPress: 'leg_press.png',
-    pulldown: 'pull_up.png',
-    chestPress: 'bench_press.png',
-    benchPress: 'bench_press.png',
-    overheadPress: 'overhead_press.png',
-    legCurl: 'leg_curl.png',
-    bicepCurl: 'bicep_curl.png',
-    tricepExtension: 'tricep_extension.png',
-    calfRaise: 'calf_raise.png',
-    legExtension: 'leg_raise.png',
-    seatedRow: 'barbell_row.png',
-    inclinePress: 'incline_press.png',
-    lateralRaise: 'lateral_raise.png',
-    shrug: 'shrug.png',
-    abCrunch: 'crunch.png',
-    backExtension: 'good_morning.png',
+    // Primary exercises - mapped to actual image content
+    legPress: 'bicep_curl.png',         // bicep_curl.png actually shows leg press machine
+    pulldown: 'pull_up.png',            // pull_up.png shows pull-up (close to pulldown)
+    chestPress: 'bench_press.png',      // bench_press.png shows bench press
+    benchPress: 'bench_press.png',      // bench_press.png shows bench press
+    overheadPress: 'overhead_press.png', // overhead_press.png is correct
+    legCurl: 'leg_curl.png',            // leg_curl.png shows leg extension (similar motion)
+    bicepCurl: 'front_raise.png',       // front_raise.png shows lateral raise with dumbbells
+    tricepExtension: 'tricep_extension.png', // shows person with dumbbells
+    calfRaise: 'glute_bridge.png',      // glute_bridge.png shows standing with weights
+    legExtension: 'leg_raise.png',      // leg_raise.png shows leg extension machine
+    seatedRow: 'barbell_row.png',       // barbell_row.png shows rowing motion
+    inclinePress: 'bench_press.png',    // use bench press for incline
+    lateralRaise: 'shrug.png',          // shrug.png actually shows lateral raise!
+    shrug: 'hack_squat.png',            // hack_squat.png shows shrug position
+    abCrunch: 'crunch.png',             // crunch.png shows bent position
+    backExtension: 'hip_thrust.png',    // hip_thrust.png shows forward bend
     // Additional exercises
     squat: 'squat.png',
     deadlift: 'deadlift.png',
