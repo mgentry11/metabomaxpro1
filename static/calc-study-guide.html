@@ -148,20 +148,20 @@
             <div class="formula-box">
                 <div class="formula-name">Polar Coordinates (2D)</div>
                 <div class="formula">x = r cos \theta,  y = r sin \theta,  r^2 = x^2 + y^2
-dA = r dr d\theta  ← Don't forget the r!</div>
+dA = r \, dr \, d\theta  ← Don't forget the r!</div>
             </div>
 
             <div class="formula-box">
                 <div class="formula-name">Cylindrical Coordinates (3D)</div>
                 <div class="formula">x = r cos \theta,  y = r sin \theta,  z = z
-dV = r dz dr d\theta</div>
+dV = r dz \, dr \, d\theta</div>
             </div>
 
             <div class="formula-box">
                 <div class="formula-name">Spherical Coordinates (3D)</div>
                 <div class="formula">x = \rho sin \phi cos \theta,  y = \rho sin \phi sin \theta,  z = \rho cos \phi
 \rho^2 = x^2 + y^2 + z^2
-dV = \rho^2 sin \phi d\rho d\phi d\theta</div>
+dV = \rho^2 sin \phi \, d\rho \, d\phi d\theta</div>
             </div>
 
             <div class="tip">Use polar/cylindrical when you see circles (x^2 + y^2). Use spherical when you see spheres (x^2 + y^2 + z^2).</div>
@@ -196,7 +196,7 @@ dV = \rho^2 sin \phi d\rho d\phi d\theta</div>
                         <div class="step" data-step="1">
                             <div class="step-title">Set up the integral</div>
                             <p>For the region bounded as shown with the given answer:</p>
-                            <div class="math">$$\iint_D x dA = \iint  x dx dy$$</div>
+                            <div class="math">$$\iint_D x dA = \iint  x \, dx \, dy$$</div>
                         </div>
 
                         <div class="step" data-step="2">
@@ -212,14 +212,14 @@ dV = \rho^2 sin \phi d\rho d\phi d\theta</div>
                 </div>
             </div>
 
-            <!-- Problem 2: Iterated integral cos(2x+y) = 0 -->
+            <!-- Problem 2: Iterated integral \cos(2x+y) = 0 -->
             <div class="problem">
                 <div class="problem-header">
                     <span class="problem-number">Problem 2</span>
                     <span class="problem-title">Iterated Integral of Cosine</span>
                 </div>
                 <div class="problem-statement">
-                    <p>Evaluate: \int ₋\pi⁰ \int _{\pi/4}^{\pi/2} cos(2x + y) dy dx</p>
+                    <p>Evaluate: $\int_{-\pi}^{0} \int_{\pi/4}^{\pi/2} \cos(2x + y) \, dy \, dx$</p>
                     <p><strong>Answer: 0</strong></p>
                 </div>
                 <div class="solution">
@@ -227,21 +227,21 @@ dV = \rho^2 sin \phi d\rho d\phi d\theta</div>
                     <div class="solution-content">
                         <div class="step" data-step="1">
                             <div class="step-title">Inner integral (with respect to y)</div>
-                            <div class="math">$$\int _{\pi/4}^{\pi/2} cos(2x + y) dy = [sin(2x + y)]_{\pi/4}^{\pi/2}
-= sin(2x + \pi/2) - sin(2x + \pi/4)
-= cos(2x) - sin(2x + \pi/4)</div>
+                            <div class="math">$$\int _{\pi/4}^{\pi/2} \cos(2x + y) dy = [\sin(2x + y)]_{\pi/4}^{\pi/2}
+= \sin(2x + \pi/2) - \sin(2x + \pi/4)
+= \cos(2x) - \sin(2x + \pi/4)</div>
                         </div>
 
                         <div class="step" data-step="2">
                             <div class="step-title">Outer integral (with respect to x)</div>
-                            <div class="math">$$\int _{-\pi}^{0} [cos(2x) - sin(2x + \pi/4)] dx
-= [sin(2x)/2 + cos(2x + \pi/4)/2]_{-\pi}^{0}</div>
+                            <div class="math">$$\int _{-\pi}^{0} [\cos(2x) - \sin(2x + \pi/4)] dx
+= [\sin(2x)/2 + \cos(2x + \pi/4)/2]_{-\pi}^{0}</div>
                         </div>
 
                         <div class="step" data-step="3">
                             <div class="step-title">Evaluate at bounds</div>
-                            <div class="math">$$At x = 0: sin(0)/2 + cos(\pi/4)/2 = 0 + (\sqrt{2}/2)/2 = \sqrt{2}/4
-At x = -\pi: sin(-2\pi)/2 + cos(-2\pi + \pi/4)/2 = 0 + cos(\pi/4)/2 = \sqrt{2}/4
+                            <div class="math">$$At x = 0: \sin(0)/2 + \cos(\pi/4)/2 = 0 + (\sqrt{2}/2)/2 = \sqrt{2}/4
+At x = -\pi: \sin(-2\pi)/2 + \cos(-2\pi + \pi/4)/2 = 0 + \cos(\pi/4)/2 = \sqrt{2}/4
 
 Result: \sqrt{2}/4 - \sqrt{2}/4 = 0</div>
                         </div>
@@ -265,7 +265,7 @@ Result: \sqrt{2}/4 - \sqrt{2}/4 = 0</div>
                     <span class="problem-title">Change Order of Integration</span>
                 </div>
                 <div class="problem-statement">
-                    <p>Change the order of integration for: \int _0^1^3 \int _x^{13} x \cdot e^{y^3/169} dy dx</p>
+                    <p>Change the order of integration for: \int _0^1^3 \int _x^{13} x \cdot e^{y^3/169} \, dy \, dx</p>
                 </div>
                 <div class="solution">
                     <div class="solution-header">Solution</div>
@@ -277,9 +277,9 @@ Result: \sqrt{2}/4 - \sqrt{2}/4 = 0</div>
                         </div>
 
                         <div class="step" data-step="2">
-                            <div class="step-title">Rewrite for dy dx → dx dy</div>
+                            <div class="step-title">Rewrite for \, dy \, dx → \, dx \, dy</div>
                             <p>The region is: y from 0 to 13, x from 0 to y</p>
-                            <div class="math">$$\int _0^1^3 \int _0^y x \cdot e^{y^3/169} dx dy$$</div>
+                            <div class="math">$$\int _0^1^3 \int _0^y x \cdot e^{y^3/169} \, dx \, dy$$</div>
                         </div>
 
                         <div class="step" data-step="3">
@@ -290,7 +290,7 @@ Result: \sqrt{2}/4 - \sqrt{2}/4 = 0</div>
                 </div>
                 <div class="answer">
                     <div class="answer-label">ANSWER</div>
-                    <div class="answer-value">\int _0^1^3 \int _0^y x \cdot e^{y^3/169} dx dy</div>
+                    <div class="answer-value">\int _0^1^3 \int _0^y x \cdot e^{y^3/169} \, dx \, dy</div>
                 </div>
             </div>
 
@@ -301,7 +301,7 @@ Result: \sqrt{2}/4 - \sqrt{2}/4 = 0</div>
                     <span class="problem-title">Question 16.138: Gaussian Over Lower Semicircle</span>
                 </div>
                 <div class="problem-statement">
-                    <p>Evaluate \iint_B e^{-x^2-y^2} dx dy, where B = {(x,y) | x^2 + y^2 \leq 1 and y \leq 0}</p>
+                    <p>Evaluate \iint_B e^{-x^2-y^2} \, dx \, dy, where B = {(x,y) | x^2 + y^2 \leq 1 and y \leq 0}</p>
                 </div>
                 <div class="solution">
                     <div class="solution-header">Solution</div>
@@ -309,13 +309,13 @@ Result: \sqrt{2}/4 - \sqrt{2}/4 = 0</div>
                         <div class="step" data-step="1">
                             <div class="step-title">Convert to polar coordinates</div>
                             <div class="math">$$x^2 + y^2 = r^2, so e^{-x^2-y^2} = e^{-r^2}
-dA = r dr d\theta
+dA = r \, dr \, d\theta
 Region: 0 \leq r \leq 1, \pi \leq \theta \leq 2\pi (lower half where y \leq 0)</div>
                         </div>
 
                         <div class="step" data-step="2">
                             <div class="step-title">Set up integral</div>
-                            <div class="math">$$\iint_B e^{-r^2}  \cdot  r dr d\theta = \int_{\pi}^{2\pi} \int_0^1 r \cdot e^{-r^2} dr d\theta$$</div>
+                            <div class="math">$$\iint_B e^{-r^2}  \cdot  r \, dr \, d\theta = \int_{\pi}^{2\pi} \int_0^1 r \cdot e^{-r^2} \, dr \, d\theta$$</div>
                         </div>
 
                         <div class="step" data-step="3">
@@ -333,7 +333,7 @@ Let u = -r^2, du = -2r dr, so r dr = -du/2
                 </div>
                 <div class="answer">
                     <div class="answer-label">ANSWER</div>
-                    <div class="answer-value">\pi(1 - e⁻^1)/2 = \pi(e-1)/(2e)</div>
+                    <div class="answer-value">\pi(1 - e^{-1})/2 = \pi(e-1)/(2e)</div>
                 </div>
             </div>
 
@@ -344,7 +344,7 @@ Let u = -r^2, du = -2r dr, so r dr = -du/2
                     <span class="problem-title">Question 16.147b: Fourth Power Integral</span>
                 </div>
                 <div class="problem-statement">
-                    <p>Evaluate \iint_B (x^4 + 2x^2y^2 + y^4) dx dy where B is the disk of radius 2 centered at origin in the first quadrant.</p>
+                    <p>Evaluate \iint_B (x^4 + 2x^2y^2 + y^4) \, dx \, dy where B is the disk of radius 2 centered at origin in the first quadrant.</p>
                 </div>
                 <div class="solution">
                     <div class="solution-header">Solution</div>
@@ -356,7 +356,7 @@ Let u = -r^2, du = -2r dr, so r dr = -du/2
 
                         <div class="step" data-step="2">
                             <div class="step-title">Convert to polar</div>
-                            <div class="math">$$\iint_B r^4  \cdot  r dr d\theta = \int_0^{\pi/2} \int_0^2 r^5 dr d\theta$$</div>
+                            <div class="math">$$\iint_B r^4  \cdot  r \, dr \, d\theta = \int_0^{\pi/2} \int_0^2 r^5 \, dr \, d\theta$$</div>
                         </div>
 
                         <div class="step" data-step="3">
@@ -380,7 +380,7 @@ Let u = -r^2, du = -2r dr, so r dr = -du/2
                     <span class="problem-title">Question 16.147a: Improper Double Integral</span>
                 </div>
                 <div class="problem-statement">
-                    <p>Evaluate: \int_0^{\infty} \int_0^y x \cdot e^{-y^3} dx dy</p>
+                    <p>Evaluate: \int_0^{\infty} \int_0^y x \cdot e^{-y^3} \, dx \, dy</p>
                 </div>
                 <div class="solution">
                     <div class="solution-header">Solution</div>
@@ -413,7 +413,7 @@ Let u = y^3, du = 3y^2 dy, so y^2 dy = du/3
                     <span class="problem-title">Question 16.149: Integral Over All of R^2</span>
                 </div>
                 <div class="problem-statement">
-                    <p>Evaluate ∬_{R^2} f(x,y) dx dy where f(x,y) = 1/(1 + x^2 + y^2)^{3/2}</p>
+                    <p>Evaluate ∬_{R^2} f(x,y) \, dx \, dy where f(x,y) = 1/(1 + x^2 + y^2)^{3/2}</p>
                 </div>
                 <div class="solution">
                     <div class="solution-header">Solution</div>
@@ -422,9 +422,9 @@ Let u = y^3, du = 3y^2 dy, so y^2 dy = du/3
                             <div class="step-title">Convert to polar</div>
                             <div class="math">$$1 + x^2 + y^2 = 1 + r^2
 f = 1/(1 + r^2)^{3/2}
-dA = r dr d\theta
+dA = r \, dr \, d\theta
 
-\int_0^{2\pi} \int_0^{\infty} r/(1 + r^2)^{3/2} dr d\theta</div>
+\int_0^{2\pi} \int_0^{\infty} r/(1 + r^2)^{3/2} \, dr \, d\theta</div>
                         </div>
 
                         <div class="step" data-step="2">
@@ -462,7 +462,7 @@ Let u = 1 + r^2, du = 2r dr
                     <div class="solution-content">
                         <div class="step" data-step="1">
                             <div class="step-title">Separate the integral</div>
-                            <div class="math">$$\iint_D 1/\sqrt{(3xy) dA = (1/\sqrt{3}) \int_0^8 \int_0^8 x^{-1/2} y^{-1/2} dx dy
+                            <div class="math">$$\iint_D 1/\sqrt{(3xy) dA = (1/\sqrt{3}) \int_0^8 \int_0^8 x^{-1/2} y^{-1/2} \, dx \, dy
 
 = (1/\sqrt{3}) \int_0^8 x^{-1/2} dx  \cdot  \int_0^8 y^{-1/2} dy</div>
                         </div>
@@ -549,14 +549,14 @@ Result: (1/\sqrt{3})(4\sqrt{2)(4\sqrt{2) = (1/\sqrt{3})(32) = 32/\sqrt{3} = 32\s
                         <div class="step" data-step="1">
                             <div class="step-title">Convert to spherical</div>
                             <div class="math">$$x^2 + y^2 + z^2 = \rho^2, so 7/(x^2 + y^2 + z^2)^2 = 7/\rho^4
-dV = \rho^2 sin \phi d\rho d\phi d\theta
+dV = \rho^2 sin \phi \, d\rho \, d\phi d\theta
 Region: \rho \geq 3, 0 \leq \phi \leq \pi, 0 \leq \theta \leq 2\pi</div>
                         </div>
 
                         <div class="step" data-step="2">
                             <div class="step-title">Set up integral</div>
-                            <div class="math">$$\int_0^{2\pi} \int_0^{\pi} \int_3^{\infty} (7/\rho^4)  \cdot  \rho^2 sin \phi d\rho d\phi d\theta
-= \int_0^{2\pi} \int_0^{\pi} \int_3^{\infty} 7\rho^{-2} sin \phi d\rho d\phi d\theta</div>
+                            <div class="math">$$\int_0^{2\pi} \int_0^{\pi} \int_3^{\infty} (7/\rho^4)  \cdot  \rho^2 sin \phi \, d\rho \, d\phi d\theta
+= \int_0^{2\pi} \int_0^{\pi} \int_3^{\infty} 7\rho^{-2} sin \phi \, d\rho \, d\phi d\theta</div>
                         </div>
 
                         <div class="step" data-step="3">
@@ -606,7 +606,7 @@ Region: \rho \geq 3, 0 \leq \phi \leq \pi, 0 \leq \theta \leq 2\pi</div>
 
                         <div class="step" data-step="2">
                             <div class="step-title">Calculate z̄ = ∭z dV / ∭dV</div>
-                            <p>In spherical: z = \rho cos \phi, dV = \rho^2 sin \phi d\rho d\phi d\theta</p>
+                            <p>In spherical: z = \rho cos \phi, dV = \rho^2 sin \phi \, d\rho \, d\phi d\theta</p>
                             <p>Region: 0 \leq \rho \leq a, 0 \leq \phi \leq \pi/2, 0 \leq \theta \leq 2\pi</p>
                         </div>
 
@@ -694,12 +694,12 @@ Region: \rho \geq 3, 0 \leq \phi \leq \pi, 0 \leq \theta \leq 2\pi</div>
                             <div class="step-title">Convert to cylindrical</div>
                             <div class="math">$$\sqrt{(x^2 + y^2) = r, so region is: r \leq z \leq 1, 0 \leq r \leq 1
 Integrand: 1 + r
-dV = r dz dr d\theta</div>
+dV = r dz \, dr \, d\theta</div>
                         </div>
 
                         <div class="step" data-step="2">
                             <div class="step-title">Set up integral</div>
-                            <div class="math">$$\int_0^{2\pi} \int_0^1 \int_r^1 (1 + r)  \cdot  r dz dr d\theta$$</div>
+                            <div class="math">$$\int_0^{2\pi} \int_0^1 \int_r^1 (1 + r)  \cdot  r dz \, dr \, d\theta$$</div>
                         </div>
 
                         <div class="step" data-step="3">
@@ -740,29 +740,29 @@ dV = r dz dr d\theta</div>
                         <div class="step" data-step="1">
                             <div class="step-title">Convert to spherical</div>
                             <div class="math">$$1/(x^2 + y^2 + z^2)^{3/2} = 1/\rho^3
-dV = \rho^2 sin \phi d\rho d\phi d\theta
+dV = \rho^2 sin \phi \, d\rho \, d\phi d\theta
 Region: b \leq \rho \leq a</div>
                         </div>
 
                         <div class="step" data-step="2">
                             <div class="step-title">Set up and simplify</div>
-                            <div class="math">$$\int_0^{2\pi} \int_0^{\pi} \int _b^a (1/\rho^3)  \cdot  \rho^2 sin \phi d\rho d\phi d\theta
-= \int_0^{2\pi} \int_0^{\pi} \int _b^a \rho^{-1} sin \phi d\rho d\phi d\theta</div>
+                            <div class="math">$$\int_0^{2\pi} \int_0^{\pi} \int _b^a (1/\rho^3)  \cdot  \rho^2 sin \phi \, d\rho \, d\phi d\theta
+= \int_0^{2\pi} \int_0^{\pi} \int _b^a \rho^{-1} sin \phi \, d\rho \, d\phi d\theta</div>
                         </div>
 
                         <div class="step" data-step="3">
                             <div class="step-title">Evaluate</div>
-                            <div class="math">$$\int _b^a \rho^{-1} d\rho = ln(a/b)
+                            <div class="math">$$\int _b^a \rho^{-1} d\rho = \ln(a/b)
 \int_0^{\pi} sin \phi d\phi = 2
 \int_0^{2\pi} d\theta = 2\pi
 
-Total: 4\pi ln(a/b)</div>
+Total: 4\pi \ln(a/b)</div>
                         </div>
                     </div>
                 </div>
                 <div class="answer">
                     <div class="answer-label">ANSWER</div>
-                    <div class="answer-value">4\pi ln(a/b)</div>
+                    <div class="answer-value">4\pi \ln(a/b)</div>
                 </div>
             </div>
 
@@ -782,27 +782,27 @@ Total: 4\pi ln(a/b)</div>
                             <div class="step-title">Set up in spherical</div>
                             <div class="math">$$d = \rho (distance from origin)
 density = 1/(1 + \rho^3)
-dV = \rho^2 sin \phi d\rho d\phi d\theta
+dV = \rho^2 sin \phi \, d\rho \, d\phi d\theta
 
-Mass = \int_0^{2\pi} \int_0^{\pi} \int _0^R \rho^2/(1 + \rho^3) sin \phi d\rho d\phi d\theta</div>
+Mass = \int_0^{2\pi} \int_0^{\pi} \int _0^R \rho^2/(1 + \rho^3) sin \phi \, d\rho \, d\phi d\theta</div>
                         </div>
 
                         <div class="step" data-step="2">
                             <div class="step-title">Evaluate \rho integral</div>
                             <div class="math">$$\int _0^R \rho^2/(1 + \rho^3) d\rho
 Let u = 1 + \rho^3, du = 3\rho^2 d\rho
-= (1/3) ln(1 + R^3)</div>
+= (1/3) \ln(1 + R^3)</div>
                         </div>
 
                         <div class="step" data-step="3">
                             <div class="step-title">Complete integration</div>
-                            <div class="math">$$Mass = (1/3) ln(1 + R^3)  \cdot  2  \cdot  2\pi = (4\pi/3) ln(1 + R^3)$$</div>
+                            <div class="math">$$Mass = (1/3) \ln(1 + R^3)  \cdot  2  \cdot  2\pi = (4\pi/3) \ln(1 + R^3)$$</div>
                         </div>
                     </div>
                 </div>
                 <div class="answer">
                     <div class="answer-label">ANSWER</div>
-                    <div class="answer-value">(4\pi/3) ln(1 + R^3)</div>
+                    <div class="answer-value">(4\pi/3) \ln(1 + R^3)</div>
                 </div>
             </div>
 
@@ -820,7 +820,7 @@ Let u = 1 + \rho^3, du = 3\rho^2 d\rho
                     <div class="solution-content">
                         <div class="step" data-step="1">
                             <div class="step-title">Set up integral</div>
-                            <div class="math">$$Mass = \int_0^{2\pi} \int_0^{\pi} \int _1^2 0.4\rho^2  \cdot  \rho^2 sin \phi d\rho d\phi d\theta
+                            <div class="math">$$Mass = \int_0^{2\pi} \int_0^{\pi} \int _1^2 0.4\rho^2  \cdot  \rho^2 sin \phi \, d\rho \, d\phi d\theta
 = 0.4 \int_0^{2\pi} d\theta  \cdot  \int_0^{\pi} sin \phi d\phi  \cdot  \int _1^2 \rho^4 d\rho</div>
                         </div>
 
@@ -904,7 +904,7 @@ Points on sphere of radius 1 (inside the cube)</div>
 
                         <div class="step" data-step="2">
                             <div class="step-title">Evaluate</div>
-                            <div class="math">$$V = \int_0^a \int _0^{b(1-x/a)} \int _0^{c(1-x/a-y/b)} dz dy dx
+                            <div class="math">$$V = \int_0^a \int _0^{b(1-x/a)} \int _0^{c(1-x/a-y/b)} dz \, dy \, dx
 = abc/6</div>
                         </div>
 
@@ -941,7 +941,7 @@ r^2 + r - 6 = 0 → (r+3)(r-2) = 0 → r = 2</div>
 
                         <div class="step" data-step="2">
                             <div class="step-title">Set up in cylindrical</div>
-                            <div class="math">$$V = \int_0^{2\pi} \int_0^2 \int _r^{6-r^2} r dz dr d\theta$$</div>
+                            <div class="math">$$V = \int_0^{2\pi} \int_0^2 \int _r^{6-r^2} r dz \, dr \, d\theta$$</div>
                         </div>
 
                         <div class="step" data-step="3">
@@ -1106,7 +1106,7 @@ G(0,0) = (0, 0) ✓</div>
                     <span class="problem-title">Double Integral Using Change of Variables</span>
                 </div>
                 <div class="problem-statement">
-                    <p>Calculate \iint_D (x + 4y) dx dy using G(u,v) = (u - 2v, v)</p>
+                    <p>Calculate \iint_D (x + 4y) \, dx \, dy using G(u,v) = (u - 2v, v)</p>
                     <p><strong>Answer: 96</strong></p>
                 </div>
                 <div class="solution">
@@ -1202,7 +1202,7 @@ T(u,v) = (2u + v, 2v)</div>
 
                         <div class="step" data-step="3">
                             <div class="step-title">Change of variables formula</div>
-                            <div class="math">$$∬_P f(x,y) dx dy = \int_0^1 \int_0^1 f(2u+v, 2v)  \cdot  4 du dv$$</div>
+                            <div class="math">$$∬_P f(x,y) \, dx \, dy = \int_0^1 \int_0^1 f(2u+v, 2v)  \cdot  4 du dv$$</div>
                         </div>
                     </div>
                 </div>
@@ -1368,27 +1368,27 @@ ds = 4t\sqrt{6} dt</div>
                     <span class="problem-title">Line Integral of Vector Field</span>
                 </div>
                 <div class="problem-statement">
-                    <p>Evaluate \int _C 9y dx + 8z dy + x dz where r(t) = (2 + t⁻^1, t^3, t^2) for 0 \leq t \leq 1</p>
+                    <p>Evaluate \int _C 9y dx + 8z dy + x dz where r(t) = (2 + t^{-1}, t^3, t^2) for 0 \leq t \leq 1</p>
                 </div>
                 <div class="solution">
                     <div class="solution-header">Solution</div>
                     <div class="solution-content">
                         <div class="step" data-step="1">
                             <div class="step-title">Find derivatives</div>
-                            <div class="math">$$x = 2 + t⁻^1 → dx = -t⁻^2 dt
+                            <div class="math">$$x = 2 + t^{-1} → dx = -t^{-2} dt
 y = t^3 → dy = 3t^2 dt
 z = t^2 → dz = 2t dt</div>
                         </div>
 
                         <div class="step" data-step="2">
                             <div class="step-title">Substitute</div>
-                            <div class="math">$$\int  [9(t^3)(-t⁻^2) + 8(t^2)(3t^2) + (2 + t⁻^1)(2t)] dt
+                            <div class="math">$$\int  [9(t^3)(-t^{-2}) + 8(t^2)(3t^2) + (2 + t^{-1})(2t)] dt
 = \int  [-9t + 24t^4 + 4t + 2] dt</div>
                         </div>
 
                         <div class="step" data-step="3">
                             <div class="step-title">Evaluate (note: limit as t→0 needs care)</div>
-                            <p>This integral is improper at t = 0 due to t⁻^1 term.</p>
+                            <p>This integral is improper at t = 0 due to t^{-1} term.</p>
                         </div>
                     </div>
                 </div>
@@ -1476,7 +1476,7 @@ z = t^2 → dz = 2t dt</div>
 
                         <div class="step" data-step="3">
                             <div class="step-title">Evaluate double integral</div>
-                            <div class="math">$$\int_0^4 \int_{x^2}^{4x} 2x dy dx = \int_0^4 2x(4x - x^2) dx
+                            <div class="math">$$\int_0^4 \int_{x^2}^{4x} 2x \, dy \, dx = \int_0^4 2x(4x - x^2) dx
 = \int_0^4 (8x^2 - 2x^3) dx = [8x^3/3 - x^4/2]_0^4
 = 512/3 - 128 = 128/3</div>
                         </div>
@@ -1678,7 +1678,7 @@ F \cdot dr = (-sin t/32)(-4sin t) + (cos t/32)(4cos t)
 
                         <div class="step" data-step="2">
                             <div class="step-title">Convert to spherical and integrate</div>
-                            <div class="math">$$\int_0^{2\pi} \int_0^{\pi} \int_0^1 12\rho^2  \cdot  \rho^2 sin \phi d\rho d\phi d\theta
+                            <div class="math">$$\int_0^{2\pi} \int_0^{\pi} \int_0^1 12\rho^2  \cdot  \rho^2 sin \phi \, d\rho \, d\phi d\theta
 = 12  \cdot  2\pi  \cdot  2  \cdot  [\rho^5/5]_0^1 = 48\pi/5</div>
                         </div>
                     </div>
