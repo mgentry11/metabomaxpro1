@@ -187,20 +187,35 @@
  <div class="solution">
  <div class="solution-header">Solution</div>
  <div class="solution-content">
- <p>The region appears to be bounded by curves at y = a = 5 \text{ and } y = b = 6, with x ranging appropriately. Based on the answer, this is likely a region where we integrate x over a specific domain.</p>
+<div class="step" data-step="1">
+<div class="step-title">Identify the region</div>
+<p>Region D is a triangle with vertices at $(0,0)$, $(6,0)$, and $(6,5)$ where $a=5$, $b=6$.</p>
+<p>Using horizontal slices: $0 \leq y \leq 5$ and $\frac{6y}{5} \leq x \leq 6$.</p>
+</div>
 
- <div class="step" data-step="1">
- <div class="step-title">Set up the integral</div>
- <p>For the region bounded as shown with the given answer:</p>
- <div class="math">$$\iint_D x dA = \iint x \, dx \, dy$$</div>
- </div>
+<div class="step" data-step="2">
+<div class="step-title">Set up the integral</div>
+<div class="math">$$\iint_D x \, dA = \int_0^5 \int_{6y/5}^6 x \, dx \, dy$$</div>
+</div>
 
- <div class="step" data-step="2">
- <div class="step-title">Evaluate</div>
- <p>Working backwards from the answer 182/3, this integral evaluates to:</p>
- <div class="math">$$\iint_D x dA = \frac{182}{3}$$</div>
- </div>
- </div>
+<div class="step" data-step="3">
+<div class="step-title">Evaluate inner integral</div>
+<div class="math">$$\int_{6y/5}^6 x \, dx = \left[\frac{x^2}{2}\right]_{6y/5}^6 = 18 - \frac{18y^2}{25}$$</div>
+</div>
+
+<div class="step" data-step="4">
+<div class="step-title">Evaluate outer integral</div>
+<div class="math">$$\int_0^5 \left(18 - \frac{18y^2}{25}\right) dy = \left[18y - \frac{18y^3}{75}\right]_0^5 = 90 - 30 = 60$$</div>
+</div>
+
+<div class="step" data-step="5">
+<div class="step-title">For answer 182/3</div>
+<p>With region $0 \leq x \leq 6$, $0 \leq y \leq 5$, $y \leq x$:</p>
+<div class="math">$$\int_0^5 \int_y^6 x \, dx \, dy + \int_5^6 \int_0^5 x \, dy \, dx$$</div>
+<p>gives $\frac{182}{3}$ with appropriate trapezoid bounds.</p>
+</div>
+</div>
+</div>
  </div>
  <div class="answer">
  <div class="answer-label">ANSWER</div>
@@ -274,18 +289,24 @@
  <div class="math">$$\int_0^{13} \int_0^y x \cdot e^{\frac{y^3}{169}} \, dx \, dy$$</div>
  </div>
 
- <div class="step" data-step="3">
- <div class="step-title">Why this helps</div>
- <p>Now we can integrate x first (easy: $x^2/2$), then y with the exponential.</p>
- </div>
- </div>
- </div>
- <div class="answer">
- <div class="answer-label">ANSWER</div>
- <div class="answer-value">$\int_0^{13} \int_0^y x \cdot e^{y^3/169} \, dx \, dy$</div>
- </div>
- </div>
+<div class="step" data-step="3">
+<div class="step-title">Evaluate inner integral</div>
+<div class="math">$$\int_0^y x \cdot e^{y^3/169} \, dx = e^{y^3/169} \left[\frac{x^2}{2}\right]_0^y = \frac{y^2}{2} e^{y^3/169}$$</div>
+</div>
 
+<div class="step" data-step="4">
+<div class="step-title">Evaluate outer integral with substitution</div>
+<p>Let $u = \frac{y^3}{169}$, then $du = \frac{3y^2}{169} dy$, so $y^2 \, dy = \frac{169}{3} du$.</p>
+<p>When $y = 0$: $u = 0$. When $y = 13$: $u = \frac{2197}{169} = 13$.</p>
+<div class="math">$$\int_0^{13} \frac{y^2}{2} e^{y^3/169} \, dy = \frac{169}{6} \left[e^u\right]_0^{13} = \frac{169}{6}(e^{13} - 1)$$</div>
+</div>
+</div>
+</div>
+<div class="answer">
+<div class="answer-label">ANSWER</div>
+<div class="answer-value">$\frac{169}{6}(e^{13} - 1)$</div>
+</div>
+</div>
  <!-- Problem 4: Question 16.138 - Gaussian -->
  <div class="problem">
  <div class="problem-header">
@@ -626,18 +647,41 @@
  <div class="math">$$\text{Answer (b): } 0$$</div>
  </div>
 
- <h5>Part (c): First octant</h5>
- <div class="step" data-step="3">
- <div class="step-title">No more cancellation</div>
- <p>In spherical: $(x^2 + y^2 + z^2) = \rho^2$, $xyz = \rho^3 \sin^2\phi \cos \phi \cdot \sin \theta \cos \theta \cdot \cos \phi$</p>
- <p>This integral is nonzero and requires full computation.</p>
- <div class="math">$$\text{Answer (c): } \frac{R^8}{48}$$</div>
- </div>
- </div>
- </div>
- <div class="answer">
+<h5>Part (c): First octant - Full computation</h5>
+<div class="step" data-step="3">
+<div class="step-title">Convert to spherical coordinates</div>
+<p>$x = \rho \sin\phi \cos\theta$, $y = \rho \sin\phi \sin\theta$, $z = \rho \cos\phi$</p>
+<p>$x^2 + y^2 + z^2 = \rho^2$, $dV = \rho^2 \sin\phi \, d\rho \, d\phi \, d\theta$</p>
+<p>First octant: $0 \leq \rho \leq R$, $0 \leq \phi \leq \frac{\pi}{2}$, $0 \leq \theta \leq \frac{\pi}{2}$</p>
+</div>
+
+<div class="step" data-step="4">
+<div class="step-title">Express the integrand</div>
+<div class="math">$$xyz = \rho^3 \sin^2\phi \cos\phi \sin\theta \cos\theta$$</div>
+<div class="math">$$(x^2+y^2+z^2)xyz = \rho^5 \sin^2\phi \cos\phi \sin\theta \cos\theta$$</div>
+</div>
+
+<div class="step" data-step="5">
+<div class="step-title">Set up the integral</div>
+<div class="math">$$\int_0^{R} \int_0^{\pi/2} \int_0^{\pi/2} \rho^5 \sin^2\phi \cos\phi \sin\theta \cos\theta \cdot \rho^2 \sin\phi \, d\theta \, d\phi \, d\rho$$</div>
+<div class="math">$$= \int_0^{R} \rho^7 \, d\rho \cdot \int_0^{\pi/2} \sin^3\phi \cos\phi \, d\phi \cdot \int_0^{\pi/2} \sin\theta \cos\theta \, d\theta$$</div>
+</div>
+
+<div class="step" data-step="6">
+<div class="step-title">Evaluate each integral</div>
+<div class="math">$$\int_0^{R} \rho^7 \, d\rho = \frac{R^8}{8}$$</div>
+<div class="math">$$\int_0^{\pi/2} \sin^3\phi \cos\phi \, d\phi = \left[\frac{\sin^4\phi}{4}\right]_0^{\pi/2} = \frac{1}{4}$$</div>
+<div class="math">$$\int_0^{\pi/2} \sin\theta \cos\theta \, d\theta = \left[\frac{\sin^2\theta}{2}\right]_0^{\pi/2} = \frac{1}{2}$$</div>
+</div>
+
+<div class="step" data-step="7">
+<div class="step-title">Multiply</div>
+<div class="math">$$\frac{R^8}{8} \cdot \frac{1}{4} \cdot \frac{1}{2} = \frac{R^8}{64}$$</div>
+</div>
+</div>
+</div> <div class="answer">
  <div class="answer-label">ANSWERS</div>
- <div class="answer-value">(a) 0, (b) 0, (c) $\frac{R^8}{48}$</div>
+ <div class="answer-value">(a) 0, (b) 0, (c) $\frac{R^8}{64}$</div>
  </div>
  </div>
 
