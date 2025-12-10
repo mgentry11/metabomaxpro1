@@ -233,37 +233,60 @@
  <p>Evaluate: $\int_{-\pi}^{0} \int_{\pi/4}^{\pi/2} \cos(2x + y) \, dy \, dx$</p>
  <p><strong>Answer:</strong> $0$</p>
  </div>
- <div class="solution">
- <div class="solution-header">Solution</div>
- <div class="solution-content">
- <div class="step" data-step="1">
- <div class="step-title">Inner integral (with respect to y)</div>
- <div class="math">$$\int_{\frac{\pi}{4}}^{\frac{\pi}{2}} \cos(2x + y) \, dy = \left[\sin(2x + y)\right]_{\frac{\pi}{4}}^{\frac{\pi}{2}} = \sin(2x + \frac{\pi}{2}) - \sin(2x + \frac{\pi}{4}) = \cos(2x) - \sin(2x + \frac{\pi}{4})$$</div>
- </div>
+<div class="solution">
+<div class="solution-header">Solution</div>
+<div class="solution-content">
+<div class="why-box">
+<p><strong>Key Concept:</strong> For iterated integrals, we evaluate from the inside out. The inner integral treats the outer variable as a constant.</p>
+</div>
 
- <div class="step" data-step="2">
- <div class="step-title">Outer integral (with respect to x)</div>
- <div class="math">$$\int_{-\pi}^{0} \left[\cos(2x) - \sin(2x + \frac{\pi}{4})\right] \, dx = \left[\frac{\sin(2x)}{2} + \frac{\cos(2x + \frac{\pi}{4})}{2}\right]_{-\pi}^{0}$$</div>
- </div>
+<div class="step" data-step="1">
+<div class="step-title">Set up the inner integral (with respect to y)</div>
+<p>Treating $x$ as a constant, integrate $\cos(2x + y)$ with respect to $y$:</p>
+<div class="math">$$\int_{\frac{\pi}{4}}^{\frac{\pi}{2}} \cos(2x + y) \, dy$$</div>
+<p>The antiderivative of $\cos(u)$ is $\sin(u)$, and since $\frac{d}{dy}(2x + y) = 1$, no chain rule adjustment needed:</p>
+<div class="math">$$= \left[\sin(2x + y)\right]_{\frac{\pi}{4}}^{\frac{\pi}{2}}$$</div>
+</div>
 
- <div class="step" data-step="3">
- <div class="step-title">Evaluate at bounds</div>
- <div class="math">$$\text{At } x = 0: \frac{\sin(0)}{2} + \frac{\cos(\frac{\pi}{4})}{2} = 0 + \frac{\sqrt{2}/2}{2} = \frac{\sqrt{2}}{4}$$</div>
- <div class="math">$$\text{At } x = -\pi: \frac{\sin(-2\pi)}{2} + \frac{\cos(\frac{\pi}{4})}{2} = 0 + \frac{\sqrt{2}/2}{2} = \frac{\sqrt{2}}{4}$$</div>
- <div class="math">$$\text{Result: } \frac{\sqrt{2}}{4} - \frac{\sqrt{2}}{4} = 0$$</div>
- </div>
+<div class="step" data-step="2">
+<div class="step-title">Evaluate at the bounds</div>
+<div class="math">$$= \sin\left(2x + \frac{\pi}{2}\right) - \sin\left(2x + \frac{\pi}{4}\right)$$</div>
+<p>Using the identity $\sin(\theta + \frac{\pi}{2}) = \cos(\theta)$:</p>
+<div class="math">$$= \cos(2x) - \sin\left(2x + \frac{\pi}{4}\right)$$</div>
+</div>
 
- <div class="why-box">
- <h5>Why Zero?</h5>
- <p>The integral is zero because we're integrating periodic functions over complete periods, causing positive and negative contributions to cancel.</p>
- </div>
- </div>
- </div>
- <div class="answer">
- <div class="answer-label">ANSWER</div>
- <div class="answer-value">0</div>
- </div>
- </div>
+<div class="step" data-step="3">
+<div class="step-title">Set up the outer integral (with respect to x)</div>
+<div class="math">$$\int_{-\pi}^{0} \left[\cos(2x) - \sin\left(2x + \frac{\pi}{4}\right)\right] \, dx$$</div>
+<p>Integrate each term separately:</p>
+<div class="math">$$\int \cos(2x)\,dx = \frac{\sin(2x)}{2} \quad \text{(chain rule: divide by 2)}$$</div>
+<div class="math">$$\int \sin\left(2x + \frac{\pi}{4}\right)dx = -\frac{\cos(2x + \frac{\pi}{4})}{2}$$</div>
+</div>
+
+<div class="step" data-step="4">
+<div class="step-title">Combine and evaluate at bounds</div>
+<div class="math">$$\left[\frac{\sin(2x)}{2} + \frac{\cos(2x + \frac{\pi}{4})}{2}\right]_{-\pi}^{0}$$</div>
+<p>At $x = 0$:</p>
+<div class="math">$$\frac{\sin(0)}{2} + \frac{\cos(\frac{\pi}{4})}{2} = 0 + \frac{\sqrt{2}/2}{2} = \frac{\sqrt{2}}{4}$$</div>
+<p>At $x = -\pi$:</p>
+<div class="math">$$\frac{\sin(-2\pi)}{2} + \frac{\cos(-2\pi + \frac{\pi}{4})}{2} = 0 + \frac{\cos(\frac{\pi}{4})}{2} = \frac{\sqrt{2}}{4}$$</div>
+</div>
+
+<div class="step" data-step="5">
+<div class="step-title">Final calculation</div>
+<div class="math">$$\frac{\sqrt{2}}{4} - \frac{\sqrt{2}}{4} = 0$$</div>
+</div>
+
+<div class="why-box">
+<p><strong>Why Zero?</strong> The integral equals zero because we are integrating periodic functions ($\sin$ and $\cos$ with period $\pi$) over an interval of length $\pi$. The positive and negative contributions cancel exactly.</p>
+</div>
+</div>
+</div>
+<div class="answer">
+<div class="answer-label">ANSWER</div>
+<div class="answer-value">0</div>
+</div>
+</div> </div>
 
  <!-- Problem 3: Change order of integration -->
  <div class="problem">
@@ -274,31 +297,56 @@
  <div class="problem-statement">
  <p>Change the order of integration for: $\int_0^{13} \int_x^{13} x \cdot e^{y^3/169} \, dy \, dx$</p>
  </div>
- <div class="solution">
- <div class="solution-header">Solution</div>
- <div class="solution-content">
- <div class="step" data-step="1">
- <div class="step-title">Identify the original region</div>
- <p>Original: x goes from 0 to 13, y goes from x to 13</p>
- <p>This means: $0 \leq x \leq y$ and $x \leq y \leq 13$, with $0 \leq x \leq 13$</p>
- </div>
+<div class="solution">
+<div class="solution-header">Solution</div>
+<div class="solution-content">
+<div class="why-box">
+<p><strong>Key Concept:</strong> Changing the order of integration requires sketching or understanding the region, then describing it with the other variable as the outer integral. This is useful when the original order leads to an impossible integral.</p>
+</div>
 
- <div class="step" data-step="2">
- <div class="step-title">Rewrite for $dy \, dx \to dx \, dy$</div>
- <p>The region is: y from 0 to 13, x from 0 to y</p>
- <div class="math">$$\int_0^{13} \int_0^y x \cdot e^{\frac{y^3}{169}} \, dx \, dy$$</div>
- </div>
+<div class="step" data-step="1">
+<div class="step-title">Understand the original region</div>
+<p>Original bounds: $\int_0^{13} \int_x^{13}$ means:</p>
+<p>• $x$ ranges from $0$ to $13$ (outer)</p>
+<p>• For each $x$, $y$ ranges from $x$ to $13$ (inner)</p>
+<p>This describes the triangular region bounded by $y = x$, $y = 13$, and $x = 0$.</p>
+</div>
+
+<div class="step" data-step="2">
+<div class="step-title">Sketch the region</div>
+<p>The region is a triangle with vertices at $(0,0)$, $(0,13)$, and $(13,13)$.</p>
+<p>The line $y = x$ is the lower boundary, $y = 13$ is the upper boundary.</p>
+</div>
 
 <div class="step" data-step="3">
-<div class="step-title">Evaluate inner integral</div>
-<div class="math">$$\int_0^y x \cdot e^{y^3/169} \, dx = e^{y^3/169} \left[\frac{x^2}{2}\right]_0^y = \frac{y^2}{2} e^{y^3/169}$$</div>
+<div class="step-title">Rewrite bounds for $dx\,dy$ order</div>
+<p>Now $y$ is the outer variable:</p>
+<p>• $y$ ranges from $0$ to $13$</p>
+<p>• For each $y$, $x$ ranges from $0$ to $y$ (left boundary is $x=0$, right boundary is $x=y$)</p>
+<div class="math">$$\int_0^{13} \int_0^y x \cdot e^{y^3/169} \, dx \, dy$$</div>
 </div>
 
 <div class="step" data-step="4">
-<div class="step-title">Evaluate outer integral with substitution</div>
-<p>Let $u = \frac{y^3}{169}$, then $du = \frac{3y^2}{169} dy$, so $y^2 \, dy = \frac{169}{3} du$.</p>
-<p>When $y = 0$: $u = 0$. When $y = 13$: $u = \frac{2197}{169} = 13$.</p>
-<div class="math">$$\int_0^{13} \frac{y^2}{2} e^{y^3/169} \, dy = \frac{169}{6} \left[e^u\right]_0^{13} = \frac{169}{6}(e^{13} - 1)$$</div>
+<div class="step-title">Evaluate inner integral (with respect to x)</div>
+<p>Since $e^{y^3/169}$ is constant with respect to $x$:</p>
+<div class="math">$$\int_0^y x \cdot e^{y^3/169} \, dx = e^{y^3/169} \int_0^y x \, dx = e^{y^3/169} \left[\frac{x^2}{2}\right]_0^y = \frac{y^2}{2} e^{y^3/169}$$</div>
+</div>
+
+<div class="step" data-step="5">
+<div class="step-title">Set up outer integral</div>
+<div class="math">$$\int_0^{13} \frac{y^2}{2} e^{y^3/169} \, dy$$</div>
+</div>
+
+<div class="step" data-step="6">
+<div class="step-title">Use substitution for outer integral</div>
+<p>Let $u = \frac{y^3}{169}$, then $du = \frac{3y^2}{169} dy$</p>
+<p>So $y^2 \, dy = \frac{169}{3} du$</p>
+<p>Bounds: When $y = 0$: $u = 0$. When $y = 13$: $u = \frac{13^3}{169} = \frac{2197}{169} = 13$</p>
+<div class="math">$$\frac{1}{2} \cdot \frac{169}{3} \int_0^{13} e^u \, du = \frac{169}{6} \left[e^u\right]_0^{13} = \frac{169}{6}(e^{13} - 1)$$</div>
+</div>
+
+<div class="why-box">
+<p><strong>Why change order?</strong> The original integral $\int e^{y^3/169} dy$ cannot be evaluated in closed form. By changing order, we get $\int x\,dx$ which is easy, and the remaining $y$ integral becomes solvable via substitution.</p>
 </div>
 </div>
 </div>
@@ -306,8 +354,7 @@
 <div class="answer-label">ANSWER</div>
 <div class="answer-value">$\frac{169}{6}(e^{13} - 1)$</div>
 </div>
-</div>
- <!-- Problem 4: Question 16.138 - Gaussian -->
+</div> <!-- Problem 4: Question 16.138 - Gaussian -->
  <div class="problem">
  <div class="problem-header">
  <span class="problem-number">Problem 4</span>
@@ -316,38 +363,67 @@
  <div class="problem-statement">
  <p>Evaluate $\iint_B e^{-x^2-y^2} \, dx \, dy$, where $B = \{(x,y) \mid x^2 + y^2 \leq 1 \text{ and } y \leq 0\}$</p>
  </div>
- <div class="solution">
- <div class="solution-header">Solution</div>
- <div class="solution-content">
- <div class="step" data-step="1">
- <div class="step-title">Convert to polar coordinates</div>
- <div class="math">$$x^2 + y^2 = r^2, \quad e^{-x^2-y^2} = e^{-r^2}, \quad dA = r \, dr \, d\theta$$</div>
- <p>Region: $0 \leq r \leq 1$, $\pi \leq \theta \leq 2\pi$ (lower half where $y \leq 0$)</p>
- </div>
+<div class="solution">
+<div class="solution-header">Solution</div>
+<div class="solution-content">
+<div class="why-box">
+<p><strong>Key Concept:</strong> The Gaussian function $e^{-x^2-y^2}$ is ideally suited for polar coordinates because $x^2 + y^2 = r^2$, making the integrand depend only on $r$.</p>
+</div>
 
- <div class="step" data-step="2">
- <div class="step-title">Set up integral</div>
- <div class="math">$$\iint_B e^{-r^2} \cdot r \, dr \, d\theta = \int_{\pi}^{2\pi} \int_0^1 r \cdot e^{-r^2} \, dr \, d\theta$$</div>
- </div>
+<div class="step" data-step="1">
+<div class="step-title">Identify the region</div>
+<p>The region $B = \{(x,y) \mid x^2 + y^2 \leq 1 \text{ and } y \leq 0\}$ is:</p>
+<p>• The unit disk ($x^2 + y^2 \leq 1$)</p>
+<p>• Restricted to $y \leq 0$ (lower half-plane)</p>
+<p>This gives the <strong>lower semicircular disk</strong> of radius 1.</p>
+</div>
 
- <div class="step" data-step="3">
- <div class="step-title">Inner integral</div>
- <div class="math">$$\int_0^1 r \cdot e^{-r^2} \, dr = -\frac{1}{2}\left[e^{-r^2}\right]_0^1 = -\frac{1}{2}(e^{-1} - 1) = \frac{1}{2}\left(1 - \frac{1}{e}\right) = \frac{e-1}{2e}$$</div>
- </div>
+<div class="step" data-step="2">
+<div class="step-title">Convert to polar coordinates</div>
+<p>Substitutions:</p>
+<div class="math">$$x = r\cos\theta, \quad y = r\sin\theta$$</div>
+<div class="math">$$x^2 + y^2 = r^2 \quad \Rightarrow \quad e^{-x^2-y^2} = e^{-r^2}$$</div>
+<div class="math">$$dA = dx\,dy = r\,dr\,d\theta$$</div>
+</div>
 
- <div class="step" data-step="4">
- <div class="step-title">Outer integral</div>
- <div class="math">$$\int_{\pi}^{2\pi} \frac{e-1}{2e} \, d\theta = \frac{e-1}{2e} \cdot \pi = \pi\frac{e-1}{2e}$$</div>
- </div>
- </div>
- </div>
- <div class="answer">
- <div class="answer-label">ANSWER</div>
- <div class="answer-value">$\pi(1 - e^{-1})/2 = \pi(e-1)/(2e)$</div>
- </div>
- </div>
+<div class="step" data-step="3">
+<div class="step-title">Determine polar bounds</div>
+<p>• Radius: $0 \leq r \leq 1$ (unit disk)</p>
+<p>• Angle: $\pi \leq \theta \leq 2\pi$ (lower half where $y = r\sin\theta \leq 0$)</p>
+<p>Note: $\sin\theta \leq 0$ when $\theta \in [\pi, 2\pi]$</p>
+</div>
 
- <!-- Problem 5: Question 16.147b -->
+<div class="step" data-step="4">
+<div class="step-title">Set up the polar integral</div>
+<div class="math">$$\iint_B e^{-x^2-y^2}\,dA = \int_{\pi}^{2\pi} \int_0^1 e^{-r^2} \cdot r\,dr\,d\theta$$</div>
+</div>
+
+<div class="step" data-step="5">
+<div class="step-title">Evaluate inner integral (with respect to r)</div>
+<p>Use substitution: let $u = -r^2$, then $du = -2r\,dr$, so $r\,dr = -\frac{1}{2}du$</p>
+<div class="math">$$\int_0^1 r \cdot e^{-r^2}\,dr = -\frac{1}{2}\left[e^{-r^2}\right]_0^1 = -\frac{1}{2}(e^{-1} - e^0) = -\frac{1}{2}\left(\frac{1}{e} - 1\right) = \frac{1}{2}\left(1 - \frac{1}{e}\right)$$</div>
+</div>
+
+<div class="step" data-step="6">
+<div class="step-title">Simplify the inner result</div>
+<div class="math">$$\frac{1}{2}\left(1 - \frac{1}{e}\right) = \frac{1}{2} \cdot \frac{e-1}{e} = \frac{e-1}{2e}$$</div>
+</div>
+
+<div class="step" data-step="7">
+<div class="step-title">Evaluate outer integral (with respect to θ)</div>
+<div class="math">$$\int_{\pi}^{2\pi} \frac{e-1}{2e}\,d\theta = \frac{e-1}{2e} \cdot (2\pi - \pi) = \frac{e-1}{2e} \cdot \pi = \frac{\pi(e-1)}{2e}$$</div>
+</div>
+
+<div class="why-box">
+<p><strong>Alternative form:</strong> $\frac{\pi(e-1)}{2e} = \frac{\pi}{2}\left(1 - e^{-1}\right) = \frac{\pi}{2}(1 - \frac{1}{e})$</p>
+</div>
+</div>
+</div>
+<div class="answer">
+<div class="answer-label">ANSWER</div>
+<div class="answer-value">$\frac{\pi(e-1)}{2e} = \frac{\pi}{2}(1 - e^{-1})$</div>
+</div>
+</div> <!-- Problem 5: Question 16.147b -->
  <div class="problem">
  <div class="problem-header">
  <span class="problem-number">Problem 5</span>
@@ -356,31 +432,49 @@
  <div class="problem-statement">
  <p>Evaluate $\iint_B (x^4 + 2x^2y^2 + y^4) \, dx \, dy$, where B is the disk of radius 2 centered at origin in the first quadrant.</p>
  </div>
- <div class="solution">
- <div class="solution-header">Solution</div>
- <div class="solution-content">
- <div class="step" data-step="1">
- <div class="step-title">Recognize the pattern</div>
- <div class="math">$$x^4 + 2x^2y^2 + y^4 = (x^2 + y^2)^2 = r^4 \text{ in polar}$$</div>
- </div>
+<div class="solution">
+<div class="solution-header">Solution</div>
+<div class="solution-content">
+<div class="why-box">
+<p><strong>Key Insight:</strong> Recognizing algebraic patterns can dramatically simplify integrals. The expression $x^4 + 2x^2y^2 + y^4$ is a perfect square!</p>
+</div>
 
- <div class="step" data-step="2">
- <div class="step-title">Convert to polar</div>
- <div class="math">$$\iint_B r^4 \cdot r \, dr \, d\theta = \int_0^{\frac{\pi}{2}} \int_0^2 r^5 \, dr \, d\theta$$</div>
- </div>
+<div class="step" data-step="1">
+<div class="step-title">Recognize the algebraic pattern</div>
+<p>Notice that the integrand has the form $a^2 + 2ab + b^2 = (a+b)^2$:</p>
+<div class="math">$$x^4 + 2x^2y^2 + y^4 = (x^2)^2 + 2(x^2)(y^2) + (y^2)^2 = (x^2 + y^2)^2$$</div>
+</div>
 
- <div class="step" data-step="3">
- <div class="step-title">Evaluate</div>
- <div class="math">$$\int_0^2 r^5 \, dr = \left[\frac{r^6}{6}\right]_0^2 = \frac{64}{6} = \frac{32}{3} \\ \int_0^{\frac{\pi}{2}} \frac{32}{3} \, d\theta = \frac{32}{3} \cdot \frac{\pi}{2} = \frac{16\pi}{3}$$</div>
- </div>
- </div>
- </div>
- <div class="answer">
- <div class="answer-label">ANSWER</div>
- <div class="answer-value">$16\pi/3$</div>
- </div>
- </div>
+<div class="step" data-step="2">
+<div class="step-title">Identify the region</div>
+<p>B is a quarter disk (first quadrant portion of radius-2 disk):</p>
+<p>• $x^2 + y^2 \leq 4$ (disk of radius 2)</p>
+<p>• $x \geq 0$ and $y \geq 0$ (first quadrant)</p>
+</div>
 
+<div class="step" data-step="3">
+<div class="step-title">Convert to polar coordinates</div>
+<p>In polar: $x^2 + y^2 = r^2$, so $(x^2 + y^2)^2 = r^4$</p>
+<p>Bounds: $0 \leq r \leq 2$, $0 \leq \theta \leq \frac{\pi}{2}$</p>
+<div class="math">$$\iint_B (x^2 + y^2)^2\,dA = \int_0^{\pi/2} \int_0^2 r^4 \cdot r\,dr\,d\theta = \int_0^{\pi/2} \int_0^2 r^5\,dr\,d\theta$$</div>
+</div>
+
+<div class="step" data-step="4">
+<div class="step-title">Evaluate inner integral</div>
+<div class="math">$$\int_0^2 r^5\,dr = \left[\frac{r^6}{6}\right]_0^2 = \frac{2^6}{6} - 0 = \frac{64}{6} = \frac{32}{3}$$</div>
+</div>
+
+<div class="step" data-step="5">
+<div class="step-title">Evaluate outer integral</div>
+<div class="math">$$\int_0^{\pi/2} \frac{32}{3}\,d\theta = \frac{32}{3} \cdot \frac{\pi}{2} = \frac{32\pi}{6} = \frac{16\pi}{3}$$</div>
+</div>
+</div>
+</div>
+<div class="answer">
+<div class="answer-label">ANSWER</div>
+<div class="answer-value">$\frac{16\pi}{3}$</div>
+</div>
+</div>
  <!-- Problem 6: Question 16.147a - Improper integral -->
  <div class="problem">
  <div class="problem-header">
@@ -390,26 +484,57 @@
  <div class="problem-statement">
  <p>Evaluate: $\int_0^{\infty} \int_0^y x \cdot e^{-y^3} \, dx \, dy$</p>
  </div>
- <div class="solution">
- <div class="solution-header">Solution</div>
- <div class="solution-content">
- <div class="step" data-step="1">
- <div class="step-title">Inner integral (with respect to x)</div>
- <div class="math">$$\int_0^y x \cdot e^{-y^3} \, dx = e^{-y^3} \int_0^y x \, dx = e^{-y^3} \cdot \left[\frac{x^2}{2}\right]_0^y = e^{-y^3} \cdot \frac{y^2}{2}$$</div>
- </div>
+<div class="solution">
+<div class="solution-header">Solution</div>
+<div class="solution-content">
+<div class="why-box">
+<p><strong>Key Concept:</strong> This is an improper integral (upper bound is $\infty$). We evaluate it as a limit: $\lim_{b \to \infty} \int_0^b$. The integral converges if this limit exists and is finite.</p>
+</div>
 
- <div class="step" data-step="2">
- <div class="step-title">Outer integral</div>
- <div class="math">$$\int_0^{\infty} \frac{y^2}{2} \cdot e^{-y^3} \, dy \\ \text{Let } u = y^3, \, du = 3y^2 \, dy, \text{ so } y^2 \, dy = \frac{du}{3} \\ = \frac{1}{2} \cdot \frac{1}{3} \int_0^{\infty} e^{-u} \, du = \frac{1}{6}\left[-e^{-u}\right]_0^\infty = \frac{1}{6}(0 - (-1)) = \frac{1}{6}$$</div>
- </div>
- </div>
- </div>
- <div class="answer">
- <div class="answer-label">ANSWER</div>
- <div class="answer-value">$\frac{1}{6}$</div>
- </div>
- </div>
+<div class="step" data-step="1">
+<div class="step-title">Identify the structure</div>
+<p>The region of integration is: $0 \leq y < \infty$ and $0 \leq x \leq y$</p>
+<p>This is the infinite wedge above the line $y = x$ in the first quadrant.</p>
+</div>
 
+<div class="step" data-step="2">
+<div class="step-title">Evaluate inner integral (with respect to x)</div>
+<p>Since $e^{-y^3}$ is constant with respect to $x$, factor it out:</p>
+<div class="math">$$\int_0^y x \cdot e^{-y^3}\,dx = e^{-y^3} \int_0^y x\,dx = e^{-y^3} \left[\frac{x^2}{2}\right]_0^y = e^{-y^3} \cdot \frac{y^2}{2}$$</div>
+</div>
+
+<div class="step" data-step="3">
+<div class="step-title">Set up outer integral</div>
+<div class="math">$$\int_0^{\infty} \frac{y^2}{2} e^{-y^3}\,dy = \frac{1}{2} \int_0^{\infty} y^2 e^{-y^3}\,dy$$</div>
+</div>
+
+<div class="step" data-step="4">
+<div class="step-title">Use substitution</div>
+<p>Let $u = y^3$, then $du = 3y^2\,dy$, so $y^2\,dy = \frac{du}{3}$</p>
+<p>Bounds: When $y = 0$: $u = 0$. When $y \to \infty$: $u \to \infty$</p>
+<div class="math">$$\frac{1}{2} \int_0^{\infty} y^2 e^{-y^3}\,dy = \frac{1}{2} \cdot \frac{1}{3} \int_0^{\infty} e^{-u}\,du$$</div>
+</div>
+
+<div class="step" data-step="5">
+<div class="step-title">Evaluate the exponential integral</div>
+<div class="math">$$\int_0^{\infty} e^{-u}\,du = \left[-e^{-u}\right]_0^{\infty} = \lim_{u \to \infty}(-e^{-u}) - (-e^0) = 0 - (-1) = 1$$</div>
+</div>
+
+<div class="step" data-step="6">
+<div class="step-title">Final calculation</div>
+<div class="math">$$\frac{1}{2} \cdot \frac{1}{3} \cdot 1 = \frac{1}{6}$$</div>
+</div>
+
+<div class="why-box">
+<p><strong>Convergence:</strong> The integral converges because $e^{-y^3}$ decays faster than any polynomial grows, ensuring the product $y^2 e^{-y^3} \to 0$ rapidly as $y \to \infty$.</p>
+</div>
+</div>
+</div>
+<div class="answer">
+<div class="answer-label">ANSWER</div>
+<div class="answer-value">$\frac{1}{6}$</div>
+</div>
+</div>
  <!-- Problem 7: Question 16.149 -->
  <div class="problem">
  <div class="problem-header">
@@ -419,31 +544,54 @@
  <div class="problem-statement">
  <p>Evaluate $\iint_{\mathbb{R}^2} f(x,y) \, dx \, dy$, where $f(x,y) = \frac{1}{(1 + x^2 + y^2)^{3/2}}$</p>
  </div>
- <div class="solution">
- <div class="solution-header">Solution</div>
- <div class="solution-content">
- <div class="step" data-step="1">
- <div class="step-title">Convert to polar</div>
- <div class="math">$$1 + x^2 + y^2 = 1 + r^2 \\ f = 1/(1 + r^2)^{\frac{3}{2}} \\ dA = r \, dr \, d\theta \\ \int_0^{2\pi} \int_0^{\infty} r/(1 + r^2)^{\frac{3}{2}} \, dr \, d\theta$$</div>
- </div>
+<div class="solution">
+<div class="solution-header">Solution</div>
+<div class="solution-content">
+<div class="why-box">
+<p><strong>Key Concept:</strong> Integrating over all of $\mathbb{R}^2$ means both bounds extend to infinity. This improper integral converges when the integrand decays fast enough.</p>
+</div>
 
- <div class="step" data-step="2">
- <div class="step-title">Inner integral</div>
- <div class="math">$$\int_0^{\infty} \frac{r}{(1 + r^2)^{3/2}} \, dr \\ \text{Let } u = 1 + r^2, \, du = 2r \, dr \\ = \frac{1}{2} \int_1^\infty u^{-3/2} \, du = \frac{1}{2}\left[-2u^{-1/2}\right]_1^\infty = \frac{1}{2}(0 - (-2)) = 1$$</div>
- </div>
+<div class="step" data-step="1">
+<div class="step-title">Recognize radial symmetry</div>
+<p>The function $f(x,y) = \frac{1}{(1 + x^2 + y^2)^{3/2}}$ depends only on $x^2 + y^2 = r^2$.</p>
+<p>This radial symmetry makes polar coordinates ideal.</p>
+</div>
 
- <div class="step" data-step="3">
- <div class="step-title">Outer integral</div>
- <div class="math">$$\int_0^{2\pi} 1 \, d\theta = 2\pi$$</div>
- </div>
- </div>
- </div>
- <div class="answer">
- <div class="answer-label">ANSWER</div>
- <div class="answer-value">$2\pi$</div>
- </div>
- </div>
+<div class="step" data-step="2">
+<div class="step-title">Convert to polar coordinates</div>
+<div class="math">$$f = \frac{1}{(1 + r^2)^{3/2}}, \quad dA = r\,dr\,d\theta$$</div>
+<p>The entire plane $\mathbb{R}^2$: $0 \leq r < \infty$, $0 \leq \theta \leq 2\pi$</p>
+<div class="math">$$\iint_{\mathbb{R}^2} f\,dA = \int_0^{2\pi} \int_0^{\infty} \frac{r}{(1 + r^2)^{3/2}}\,dr\,d\theta$$</div>
+</div>
 
+<div class="step" data-step="3">
+<div class="step-title">Evaluate inner integral with substitution</div>
+<p>Let $u = 1 + r^2$, then $du = 2r\,dr$, so $r\,dr = \frac{du}{2}$</p>
+<p>Bounds: When $r = 0$: $u = 1$. When $r \to \infty$: $u \to \infty$</p>
+<div class="math">$$\int_0^{\infty} \frac{r}{(1 + r^2)^{3/2}}\,dr = \frac{1}{2} \int_1^{\infty} u^{-3/2}\,du$$</div>
+</div>
+
+<div class="step" data-step="4">
+<div class="step-title">Evaluate the u-integral</div>
+<div class="math">$$\frac{1}{2} \int_1^{\infty} u^{-3/2}\,du = \frac{1}{2} \left[\frac{u^{-1/2}}{-1/2}\right]_1^{\infty} = \frac{1}{2} \left[-2u^{-1/2}\right]_1^{\infty}$$</div>
+<div class="math">$$= \frac{1}{2}\left[\lim_{u \to \infty}\left(-\frac{2}{\sqrt{u}}\right) - \left(-\frac{2}{\sqrt{1}}\right)\right] = \frac{1}{2}(0 + 2) = 1$$</div>
+</div>
+
+<div class="step" data-step="5">
+<div class="step-title">Evaluate outer integral</div>
+<div class="math">$$\int_0^{2\pi} 1\,d\theta = 2\pi$$</div>
+</div>
+
+<div class="why-box">
+<p><strong>Convergence check:</strong> The integral converges because the integrand decays like $r^{-2}$ for large $r$ (since $(1+r^2)^{3/2} \approx r^3$ and $r/r^3 = r^{-2}$), which is fast enough in 2D.</p>
+</div>
+</div>
+</div>
+<div class="answer">
+<div class="answer-label">ANSWER</div>
+<div class="answer-value">$2\pi$</div>
+</div>
+</div>
  <!-- Problem 8: Integral of 1/\sqrt{3xy} -->
  <div class="problem">
  <div class="problem-header">
@@ -453,30 +601,56 @@
  <div class="problem-statement">
  <p>Evaluate $\iint_D \frac{1}{\sqrt{3xy}} \, dA$, where $D = [0,8] \times [0,8]$</p>
  </div>
- <div class="solution">
- <div class="solution-header">Solution</div>
- <div class="solution-content">
- <div class="step" data-step="1">
- <div class="step-title">Separate the integral</div>
- <div class="math">$$\iint_D 1/\sqrt{3xy} dA = (\frac{1}{\sqrt{3}}) \int_0^8 \int_0^8 x^{-\frac{1}{2}} y^{-\frac{1}{2}} \, dx \, dy \\ = (\frac{1}{\sqrt{3}}) \int_0^8 x^{-\frac{1}{2}} dx \cdot \int_0^8 y^{-\frac{1}{2}} dy$$</div>
- </div>
+<div class="solution">
+<div class="solution-header">Solution</div>
+<div class="solution-content">
+<div class="why-box">
+<p><strong>Key Concept:</strong> When the integrand is separable as $f(x,y) = g(x) \cdot h(y)$ and the region is a rectangle, we can factor the double integral into a product of single integrals.</p>
+</div>
 
- <div class="step" data-step="2">
- <div class="step-title">Evaluate each integral</div>
- <div class="math">$$\int_0^8 x^{-\frac{1}{2}} \, dx = \left[2x^{\frac{1}{2}}\right]_0^8 = 2\sqrt{8} = 4\sqrt{2} \\ \text{Similarly for } y: 4\sqrt{2} \\ \text{Result: } \frac{1}{\sqrt{3}} \cdot (4\sqrt{2})(4\sqrt{2}) = \frac{32}{\sqrt{3}} = \frac{32\sqrt{3}}{3}$$</div>
- </div>
+<div class="step" data-step="1">
+<div class="step-title">Rewrite the integrand</div>
+<div class="math">$$\frac{1}{\sqrt{3xy}} = \frac{1}{\sqrt{3}} \cdot \frac{1}{\sqrt{x}} \cdot \frac{1}{\sqrt{y}} = \frac{1}{\sqrt{3}} \cdot x^{-1/2} \cdot y^{-1/2}$$</div>
+</div>
 
- <div class="warning">This integral is improper at $x=0$ and $y=0$, but converges because the exponent $-1/2 > -1$.</div>
- </div>
- </div>
- <div class="answer">
- <div class="answer-label">ANSWER</div>
- <div class="answer-value">$\frac{32\sqrt{3}}{3}$</div>
- </div>
- </div>
+<div class="step" data-step="2">
+<div class="step-title">Apply Fubini's theorem (separation)</div>
+<p>Since the region $D = [0,8] \times [0,8]$ is a rectangle and the integrand separates:</p>
+<div class="math">$$\iint_D \frac{1}{\sqrt{3xy}}\,dA = \frac{1}{\sqrt{3}} \left(\int_0^8 x^{-1/2}\,dx\right) \left(\int_0^8 y^{-1/2}\,dy\right)$$</div>
+</div>
 
- <div class="back-top"><a href="#top">↑ Back to Contents</a></div>
- </section>
+<div class="step" data-step="3">
+<div class="step-title">Note: This is an improper integral</div>
+<p>The integrand $x^{-1/2}$ blows up at $x = 0$. We evaluate as:</p>
+<div class="math">$$\int_0^8 x^{-1/2}\,dx = \lim_{\epsilon \to 0^+} \int_\epsilon^8 x^{-1/2}\,dx$$</div>
+</div>
+
+<div class="step" data-step="4">
+<div class="step-title">Evaluate the x-integral</div>
+<div class="math">$$\int_0^8 x^{-1/2}\,dx = \left[\frac{x^{1/2}}{1/2}\right]_0^8 = \left[2\sqrt{x}\right]_0^8 = 2\sqrt{8} - 0 = 2 \cdot 2\sqrt{2} = 4\sqrt{2}$$</div>
+<p>The integral converges because the exponent $-1/2 > -1$.</p>
+</div>
+
+<div class="step" data-step="5">
+<div class="step-title">Evaluate the y-integral (identical)</div>
+<div class="math">$$\int_0^8 y^{-1/2}\,dy = 4\sqrt{2}$$</div>
+</div>
+
+<div class="step" data-step="6">
+<div class="step-title">Combine results</div>
+<div class="math">$$\frac{1}{\sqrt{3}} \cdot (4\sqrt{2}) \cdot (4\sqrt{2}) = \frac{1}{\sqrt{3}} \cdot 16 \cdot 2 = \frac{32}{\sqrt{3}} = \frac{32\sqrt{3}}{3}$$</div>
+</div>
+
+<div class="why-box">
+<p><strong>Convergence rule:</strong> $\int_0^a x^p\,dx$ converges if and only if $p > -1$. Here $p = -1/2 > -1$, so it converges.</p>
+</div>
+</div>
+</div>
+<div class="answer">
+<div class="answer-label">ANSWER</div>
+<div class="answer-value">$\frac{32\sqrt{3}}{3}$</div>
+</div>
+</div> </section>
 
  <!-- ================================================ -->
  <!-- PART III: TRIPLE INTEGRALS -->
