@@ -671,32 +671,51 @@
  <p>Evaluate $\iiint_W 9x \, dV$, for region W: $x^2 + y^2 \leq z \leq 81$</p>
  <p><strong>Answer:</strong> $0$</p>
  </div>
- <div class="solution">
- <div class="solution-header">Solution</div>
- <div class="solution-content">
- <div class="step" data-step="1">
- <div class="step-title">Identify symmetry</div>
- <p>The region W is symmetric about the yz-plane (if you replace x with -x, you get the same region).</p>
- <p>The function f(x,y,z) = 9x is <strong>odd in x</strong>: f(-x,y,z) = -9x = -f(x,y,z)</p>
- </div>
+<div class="solution">
+<div class="solution-header">Solution</div>
+<div class="solution-content">
+<div class="why-box">
+<p><strong>Key Concept:</strong> Symmetry arguments can save enormous computation. If a function is odd in one variable and the region is symmetric about that variable's coordinate plane, the integral is zero.</p>
+</div>
 
- <div class="step" data-step="2">
- <div class="step-title">Apply symmetry principle</div>
- <p>When integrating an odd function over a symmetric region, the integral is zero.</p>
- </div>
+<div class="step" data-step="1">
+<div class="step-title">Understand the region W</div>
+<p>The region $W$ is defined by $x^2 + y^2 \leq z \leq 81$:</p>
+<p>• Lower boundary: the paraboloid $z = x^2 + y^2$</p>
+<p>• Upper boundary: the plane $z = 81$</p>
+<p>• The paraboloid opens upward with vertex at origin</p>
+</div>
 
- <div class="why-box">
- <h5>The Symmetry Shortcut</h5>
- <p>For every point (x,y,z) contributing +9x, there's a point (-x,y,z) contributing -9x. They cancel!</p>
- </div>
- </div>
- </div>
- <div class="answer">
- <div class="answer-label">ANSWER</div>
- <div class="answer-value">0</div>
- </div>
- </div>
+<div class="step" data-step="2">
+<div class="step-title">Check symmetry of the region</div>
+<p>Replace $x$ with $-x$ in the region definition:</p>
+<p>$(-x)^2 + y^2 \leq z \leq 81$ becomes $x^2 + y^2 \leq z \leq 81$</p>
+<p>The region is <strong>unchanged</strong>, so W is symmetric about the $yz$-plane.</p>
+</div>
 
+<div class="step" data-step="3">
+<div class="step-title">Check if the integrand is odd in x</div>
+<p>The integrand is $f(x,y,z) = 9x$</p>
+<p>$f(-x,y,z) = 9(-x) = -9x = -f(x,y,z)$</p>
+<p>Yes, $f$ is an <strong>odd function</strong> in $x$.</p>
+</div>
+
+<div class="step" data-step="4">
+<div class="step-title">Apply the symmetry principle</div>
+<p><strong>Theorem:</strong> If $f$ is odd in $x$ and the region is symmetric about the $yz$-plane, then $\iiint f\,dV = 0$.</p>
+<p>Proof idea: For every point $(x,y,z)$ in $W$, there is a corresponding point $(-x,y,z)$ also in $W$. The contributions $f(x,y,z)$ and $f(-x,y,z) = -f(x,y,z)$ cancel.</p>
+</div>
+
+<div class="why-box">
+<p><strong>Power of symmetry:</strong> Without this argument, we would need to set up a complicated triple integral in cylindrical coordinates over a paraboloid. Symmetry gives the answer instantly!</p>
+</div>
+</div>
+</div>
+<div class="answer">
+<div class="answer-label">ANSWER</div>
+<div class="answer-value">$0$</div>
+</div>
+</div>
  <!-- Problem 10: Improper integral 28\pi/3 -->
  <div class="problem">
  <div class="problem-header">
@@ -867,45 +886,56 @@
  </div>
  <div class="problem-statement">
  <p>Let C be the cone-shaped region $\{(x,y,z) \mid \sqrt{x^2 + y^2} \leq z \leq 1\}$. Evaluate $\iiint_C (1 + \sqrt{x^2 + y^2}) \, dV$</p>
- </div>
- <div class="solution">
- <div class="solution-header">Solution</div>
- <div class="solution-content">
- <div class="step" data-step="1">
- <div class="step-title">Convert to cylindrical</div>
- <div class="math">$$\sqrt{x^2 + y^2} = r, \text{ so } \text{region is: } r \leq z \leq 1, 0 \leq r \leq 1 \\ \text{Integrand: } 1 + r \\ dV = r dz \, dr \, d\theta$$</div>
- </div>
+<div class="solution">
+<div class="solution-header">Solution</div>
+<div class="solution-content">
+<div class="why-box">
+<p><strong>Key Concept:</strong> Cylindrical coordinates are ideal for regions with circular cross-sections and when $\sqrt{x^2 + y^2}$ appears in bounds or integrand.</p>
+</div>
 
- <div class="step" data-step="2">
- <div class="step-title">Set up integral</div>
- <div class="math">$$\int_0^{2\pi} \int_0^1 \int_r^1 (1 + r) \cdot r dz \, dr \, d\theta$$</div>
- </div>
+<div class="step" data-step="1">
+<div class="step-title">Understand the cone region</div>
+<p>The region C is defined by $\sqrt{x^2 + y^2} \leq z \leq 1$:</p>
+<p>• Lower boundary: the cone $z = \sqrt{x^2 + y^2}$ (45° cone)</p>
+<p>• Upper boundary: the plane $z = 1$</p>
+<p>• This creates an ice cream cone shape with vertex at origin, capped at $z = 1$</p>
+</div>
 
- <div class="step" data-step="3">
- <div class="step-title">Inner integral (z)</div>
- <div class="math">$$\int_r^1 dz = 1 - r$$</div>
- </div>
+<div class="step" data-step="2">
+<div class="step-title">Convert to cylindrical coordinates</div>
+<p>In cylindrical: $x = r\cos\theta$, $y = r\sin\theta$, $z = z$</p>
+<p>$\sqrt{x^2 + y^2} = r$, so the integrand becomes $1 + r$</p>
+<p>$dV = r\,dz\,dr\,d\theta$</p>
+<p>Region bounds: $r \leq z \leq 1$, $0 \leq r \leq 1$, $0 \leq \theta \leq 2\pi$</p>
+</div>
 
- <div class="step" data-step="4">
- <div class="step-title">Middle integral (r)</div>
- <div class="math">$$\int_0^1 (1 + r) \cdot r \cdot (1 - r) \, dr = \int_0^1 (r + r^2 - r^2 - r^3) \, dr = \int_0^1 (r - r^3) \, dr \\ = \left[\frac{r^2}{2} - \frac{r^4}{4}\right]_0^1 = \frac{1}{2} - \frac{1}{4} = \frac{1}{4}$$</div>
- </div>
+<div class="step" data-step="3">
+<div class="step-title">Set up the triple integral</div>
+<div class="math">$$\iiint_C (1 + r)\,dV = \int_0^{2\pi} \int_0^1 \int_r^1 (1 + r) \cdot r\,dz\,dr\,d\theta$$</div>
+</div>
 
- <div class="step" data-step="5">
- <div class="step-title">Outer integral (θ)</div>
- <div class="math">$$\int_0^{2\pi} (\frac{1}{4}) \, d\theta = \frac{\pi}{2}$$</div>
- </div>
- </div>
- </div>
- <div class="answer">
- <div class="answer-label">ANSWER</div>
- <div class="answer-value">$\pi/2$</div>
- </div>
- </div>
+<div class="step" data-step="4">
+<div class="step-title">Evaluate inner integral (z)</div>
+<p>$(1 + r) \cdot r$ is constant with respect to $z$:</p>
+<div class="math">$$\int_r^1 (1 + r) \cdot r\,dz = (1 + r) \cdot r \cdot (1 - r) = r(1 + r)(1 - r) = r(1 - r^2)$$</div>
+</div>
 
- <!-- Problem 14: Question 16.139 -->
- <div class="problem">
- <div class="problem-header">
+<div class="step" data-step="5">
+<div class="step-title">Expand and evaluate middle integral (r)</div>
+<div class="math">$$\int_0^1 r(1 - r^2)\,dr = \int_0^1 (r - r^3)\,dr = \left[\frac{r^2}{2} - \frac{r^4}{4}\right]_0^1 = \frac{1}{2} - \frac{1}{4} = \frac{1}{4}$$</div>
+</div>
+
+<div class="step" data-step="6">
+<div class="step-title">Evaluate outer integral (θ)</div>
+<div class="math">$$\int_0^{2\pi} \frac{1}{4}\,d\theta = \frac{1}{4} \cdot 2\pi = \frac{\pi}{2}$$</div>
+</div>
+</div>
+</div>
+<div class="answer">
+<div class="answer-label">ANSWER</div>
+<div class="answer-value">$\frac{\pi}{2}$</div>
+</div>
+</div> <div class="problem-header">
  <span class="problem-number">Problem 14</span>
  <span class="problem-title">Question 16.139: Integral Between Two Spheres</span>
  </div>
