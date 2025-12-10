@@ -1622,31 +1622,59 @@
  <div class="problem-statement">
  <p>Find surface area of cone $x^2 + y^2 = z^2$ between $z = 3$ and $z = 8$.</p>
  </div>
- <div class="solution">
- <div class="solution-header">Solution</div>
- <div class="solution-content">
- <div class="step" data-step="1">
- <div class="step-title">Parameterize</div>
- <div class="math">$$z = z, x = z \cos \theta, y = z \sin \theta \\ 3 \leq z \leq 8, 0 \leq \theta \leq 2\pi$$</div>
- </div>
+<div class="solution">
+<div class="solution-header">Solution</div>
+<div class="solution-content">
+<div class="why-box">
+<p><strong>Key Concept:</strong> Surface area is computed as $\iint_S dS$ where $dS = |\mathbf{r}_u \times \mathbf{r}_v|\,du\,dv$ for a parameterization $\mathbf{r}(u,v)$. For a cone, using cylindrical-style coordinates simplifies the calculation.</p>
+</div>
 
- <div class="step" data-step="2">
- <div class="step-title">Surface element</div>
- <div class="math">$$dS = \sqrt{2} \cdot z dz \, d\theta (for cone z = \sqrt{x^2+y^2})$$</div>
- </div>
+<div class="step" data-step="1">
+<div class="step-title">Understand the cone geometry</div>
+<p>The cone $x^2 + y^2 = z^2$ (equivalently $z = \sqrt{x^2 + y^2}$) opens upward with a 45° angle. We want the portion between $z = 3$ and $z = 8$.</p>
+<p>At $z = 3$: the circular cross-section has radius 3</p>
+<p>At $z = 8$: the circular cross-section has radius 8</p>
+</div>
 
- <div class="step" data-step="3">
- <div class="step-title">Integrate</div>
- <div class="math">$$\int_0^{2\pi} \int_3^8 \sqrt{2} \, z \, dz \, d\theta = 2\pi\sqrt{2} \left[\frac{z^2}{2}\right]_3^8 \\ = \pi\sqrt{2} (64 - 9) = 55\pi\sqrt{2}$$</div>
- </div>
- </div>
- </div>
- <div class="answer">
- <div class="answer-label">ANSWER</div>
- <div class="answer-value">$55\pi\sqrt{2}$</div>
- </div>
- </div>
+<div class="step" data-step="2">
+<div class="step-title">Parameterize the surface</div>
+<p>Use $z$ and $\theta$ as parameters. Since $x^2 + y^2 = z^2$, we have radius $r = z$:</p>
+<div class="math">$$\mathbf{r}(z, \theta) = (z\cos\theta, z\sin\theta, z)$$</div>
+<p>Parameter bounds: $3 \leq z \leq 8$, $0 \leq \theta \leq 2\pi$</p>
+</div>
 
+<div class="step" data-step="3">
+<div class="step-title">Compute partial derivatives</div>
+<div class="math">$$\mathbf{r}_z = (\cos\theta, \sin\theta, 1)$$</div>
+<div class="math">$$\mathbf{r}_\theta = (-z\sin\theta, z\cos\theta, 0)$$</div>
+</div>
+
+<div class="step" data-step="4">
+<div class="step-title">Compute cross product $\mathbf{r}_z \times \mathbf{r}_\theta$</div>
+<div class="math">$$\mathbf{r}_z \times \mathbf{r}_\theta = \begin{vmatrix} \mathbf{i} \& \mathbf{j} \& \mathbf{k} \\ \cos\theta \& \sin\theta \& 1 \\ -z\sin\theta \& z\cos\theta \& 0 \end{vmatrix}$$</div>
+<div class="math">$$= (0 - z\cos\theta)\mathbf{i} - (0 + z\sin\theta)\mathbf{j} + (z\cos^2\theta + z\sin^2\theta)\mathbf{k}$$</div>
+<div class="math">$$= (-z\cos\theta, -z\sin\theta, z)$$</div>
+</div>
+
+<div class="step" data-step="5">
+<div class="step-title">Find magnitude $|\mathbf{r}_z \times \mathbf{r}_\theta|$</div>
+<div class="math">$$|\mathbf{r}_z \times \mathbf{r}_\theta| = \sqrt{z^2\cos^2\theta + z^2\sin^2\theta + z^2} = \sqrt{z^2 + z^2} = z\sqrt{2}$$</div>
+<p>So $dS = z\sqrt{2}\,dz\,d\theta$</p>
+</div>
+
+<div class="step" data-step="6">
+<div class="step-title">Set up and evaluate the integral</div>
+<div class="math">$$\text{Surface Area} = \iint_S dS = \int_0^{2\pi} \int_3^8 z\sqrt{2}\,dz\,d\theta$$</div>
+<div class="math">$$= \sqrt{2} \int_0^{2\pi} d\theta \cdot \int_3^8 z\,dz = \sqrt{2} \cdot 2\pi \cdot \left[\frac{z^2}{2}\right]_3^8$$</div>
+<div class="math">$$= 2\pi\sqrt{2} \cdot \frac{1}{2}(64 - 9) = \pi\sqrt{2} \cdot 55 = 55\pi\sqrt{2}$$</div>
+</div>
+</div>
+</div>
+<div class="answer">
+<div class="answer-label">ANSWER</div>
+<div class="answer-value">$55\pi\sqrt{2}$</div>
+</div>
+</div>
  <!-- Problem 38: Hot air balloon -->
  <div class="problem">
  <div class="problem-header">
@@ -1656,26 +1684,63 @@
  <div class="problem-statement">
  <p>$\mathbf{V} = \nabla \times \mathbf{\Phi}$ where $\mathbf{\Phi} = -y\mathbf{i} + x\mathbf{j}$, $R = 13$. Compute volume flow rate through surface.</p>
  </div>
- <div class="solution">
- <div class="solution-header">Solution</div>
- <div class="solution-content">
- <div class="step" data-step="1">
- <div class="step-title">Compute curl</div>
- <div class="math">$$\nabla \times Φ = (0, 0, \frac{\partial x}{\partial x} - \partial(-y)/\partial y) = (0, 0, 2) = 2k$$</div>
- </div>
+<div class="solution">
+<div class="solution-header">Solution</div>
+<div class="solution-content">
+<div class="why-box">
+<p><strong>Key Concept:</strong> When a velocity field is given as a curl ($\mathbf{V} = \nabla \times \mathbf{\Phi}$), we can use Stokes' Theorem to relate the flux through a surface to a line integral around the boundary.</p>
+</div>
 
- <div class="step" data-step="2">
- <div class="step-title">Flux through surface</div>
- <p>The flux of a constant vertical field through a closed surface depends on the geometry.</p>
- </div>
- </div>
- </div>
- <div class="answer">
- <div class="answer-label">ANSWER</div>
- <div class="answer-value">(depends on exact surface geometry)</div>
- </div>
- </div>
+<div class="step" data-step="1">
+<div class="step-title">Identify the vector potential</div>
+<p>Given $\mathbf{\Phi} = -y\mathbf{i} + x\mathbf{j} + 0\mathbf{k} = (-y, x, 0)$</p>
+<p>The velocity field is $\mathbf{V} = \nabla \times \mathbf{\Phi}$</p>
+</div>
 
+<div class="step" data-step="2">
+<div class="step-title">Compute the curl $\nabla \times \mathbf{\Phi}$</div>
+<div class="math">$$\nabla \times \mathbf{\Phi} = \begin{vmatrix} \mathbf{i} \& \mathbf{j} \& \mathbf{k} \\ \frac{\partial}{\partial x} \& \frac{\partial}{\partial y} \& \frac{\partial}{\partial z} \\ -y \& x \& 0 \end{vmatrix}$$</div>
+<div class="math">$$= \left(\frac{\partial(0)}{\partial y} - \frac{\partial(x)}{\partial z}\right)\mathbf{i} - \left(\frac{\partial(0)}{\partial x} - \frac{\partial(-y)}{\partial z}\right)\mathbf{j} + \left(\frac{\partial(x)}{\partial x} - \frac{\partial(-y)}{\partial y}\right)\mathbf{k}$$</div>
+<div class="math">$$= (0 - 0)\mathbf{i} - (0 - 0)\mathbf{j} + (1 - (-1))\mathbf{k} = 2\mathbf{k}$$</div>
+<p>So $\mathbf{V} = (0, 0, 2)$ — a constant upward velocity field!</p>
+</div>
+
+<div class="step" data-step="3">
+<div class="step-title">Apply Stokes' Theorem</div>
+<p>For a surface $S$ with boundary curve $C$:</p>
+<div class="math">$$\iint_S (\nabla \times \mathbf{\Phi}) \cdot d\mathbf{S} = \oint_C \mathbf{\Phi} \cdot d\mathbf{r}$$</div>
+<p>If the surface is a hemisphere of radius $R = 13$ with boundary circle in the $xy$-plane:</p>
+</div>
+
+<div class="step" data-step="4">
+<div class="step-title">Parameterize the boundary circle</div>
+<p>The boundary is a circle of radius 13 in the $xy$-plane:</p>
+<div class="math">$$\mathbf{r}(t) = (13\cos t, 13\sin t, 0), \quad 0 \leq t \leq 2\pi$$</div>
+<div class="math">$$d\mathbf{r} = (-13\sin t, 13\cos t, 0)\,dt$$</div>
+</div>
+
+<div class="step" data-step="5">
+<div class="step-title">Evaluate $\mathbf{\Phi}$ on the boundary</div>
+<p>On the circle: $x = 13\cos t$, $y = 13\sin t$</p>
+<div class="math">$$\mathbf{\Phi} = (-y, x, 0) = (-13\sin t, 13\cos t, 0)$$</div>
+</div>
+
+<div class="step" data-step="6">
+<div class="step-title">Compute the line integral</div>
+<div class="math">$$\oint_C \mathbf{\Phi} \cdot d\mathbf{r} = \int_0^{2\pi} (-13\sin t, 13\cos t, 0) \cdot (-13\sin t, 13\cos t, 0)\,dt$$</div>
+<div class="math">$$= \int_0^{2\pi} (169\sin^2 t + 169\cos^2 t)\,dt = \int_0^{2\pi} 169\,dt = 169 \cdot 2\pi = 338\pi$$</div>
+</div>
+
+<div class="why-box">
+<p><strong>Physical interpretation:</strong> The volume flow rate through the surface is $338\pi$ cubic units per unit time. This represents how much fluid passes through the balloon surface.</p>
+</div>
+</div>
+</div>
+<div class="answer">
+<div class="answer-label">ANSWER</div>
+<div class="answer-value">$338\pi$</div>
+</div>
+</div>
  <!-- Problem 39: Surface integral of F over unit sphere -->
  <div class="problem">
  <div class="problem-header">
