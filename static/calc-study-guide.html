@@ -729,9 +729,16 @@
  <div class="solution">
  <div class="solution-header">Solution</div>
  <div class="solution-content">
+<div class="why-box">
+<p><strong>Key Concept:</strong> This is an improper integral over an unbounded region ($\rho \to \infty$). The integral converges if the integrand decays fast enough. In spherical coordinates, we need the radial integral $\int_a^\infty \rho^n\,d\rho$ to converge, which requires $n < -1$.</p>
+</div>
+
  <div class="step" data-step="1">
- <div class="step-title">Convert to spherical</div>
- <div class="math">$$x^2 + y^2 + z^2 = \rho^2, \text{ so } 7/(x^2 + y^2 + z^2)^2 = 7/\rho^4 \\ dV = \rho^2 \sin \phi \, d\rho \, d\phi \, d\theta \\ \text{Region: } \rho \geq 3, 0 \leq \phi \leq \pi, 0 \leq \theta \leq 2\pi$$</div>
+ <div class="step-title">Convert to spherical coordinates</div>
+<p>Since the region is defined by $x^2 + y^2 + z^2 \geq 9$ (outside a sphere), spherical coordinates are natural:</p>
+ <div class="math">$$x^2 + y^2 + z^2 = \rho^2, \text{ so } \frac{7}{(x^2 + y^2 + z^2)^2} = \frac{7}{\rho^4}$$</div>
+<div class="math">$$dV = \rho^2 \sin \phi \, d\rho \, d\phi \, d\theta$$</div>
+<p>Region D: $\rho \geq 3$, $0 \leq \phi \leq \pi$, $0 \leq \theta \leq 2\pi$ (all of space outside the sphere of radius 3)</p>
  </div>
 
  <div class="step" data-step="2">
@@ -756,13 +763,17 @@
 
  <div class="step" data-step="6">
  <div class="step-title">Combine</div>
- <div class="math">$$(\frac{7}{3}) \times 2 \times 2\pi = \frac{28\pi}{3}$$</div>
+ <div class="math">$$\frac{7}{3} \times 2 \times 2\pi = \frac{28\pi}{3}$$</div>
  </div>
+
+<div class="why-box">
+<p><strong>Convergence check:</strong> The integrand $\frac{7}{\rho^4} \cdot \rho^2 = 7\rho^{-2}$ behaves like $\rho^{-2}$ as $\rho \to \infty$. Since $-2 < -1$, the integral $\int_3^\infty \rho^{-2}\,d\rho$ converges. Physically, this represents the total "weight" of a field that decays like $r^{-4}$ outside a sphere—the rapid decay ensures a finite total.</p>
+</div>
  </div>
  </div>
  <div class="answer">
  <div class="answer-label">ANSWER</div>
- <div class="answer-value">$28\pi/3$</div>
+ <div class="answer-value">$\frac{28\pi}{3}$</div>
  </div>
  </div>
 
@@ -945,20 +956,43 @@
  <div class="solution">
  <div class="solution-header">Solution</div>
  <div class="solution-content">
+<div class="why-box">
+<p><strong>Key Concept:</strong> The region between two concentric spheres (a "spherical shell") is perfectly suited for spherical coordinates. The integrand $1/r^3$ in 3D is significant in physics—it describes the potential energy density of a point charge.</p>
+</div>
+
  <div class="step" data-step="1">
- <div class="step-title">Convert to spherical</div>
- <div class="math">$$1/(x^2 + y^2 + z^2)^{\frac{3}{2}} = 1/\rho^3 \\ dV = \rho^2 \sin \phi \, d\rho \, d\phi \, d\theta \\ \text{Region: } b \leq \rho \leq a$$</div>
+ <div class="step-title">Identify the region and convert to spherical</div>
+<p>The region S is a spherical shell: all points between the inner sphere (radius $b$) and outer sphere (radius $a$).</p>
+<p>In spherical coordinates:</p>
+ <div class="math">$$\frac{1}{(x^2 + y^2 + z^2)^{3/2}} = \frac{1}{\rho^3}$$</div>
+<div class="math">$$dV = \rho^2 \sin \phi \, d\rho \, d\phi \, d\theta$$</div>
+<p>Bounds: $b \leq \rho \leq a$, $0 \leq \phi \leq \pi$, $0 \leq \theta \leq 2\pi$</p>
  </div>
 
  <div class="step" data-step="2">
- <div class="step-title">Set up and simplify</div>
- <div class="math">$$\int_0^{2\pi} \int_0^{\pi} \int_b^a (1/\rho^3) \cdot \rho^2 \sin \phi \, d\rho \, d\phi \, d\theta \\ = \int_0^{2\pi} \int_0^{\pi} \int_b^a \rho^{-1} \sin \phi \, d\rho \, d\phi \, d\theta$$</div>
+ <div class="step-title">Set up and simplify the integrand</div>
+<p>Combine the integrand with the volume element:</p>
+ <div class="math">$$\frac{1}{\rho^3} \cdot \rho^2 \sin \phi = \rho^{-1} \sin \phi$$</div>
+<p>The integral becomes:</p>
+<div class="math">$$\int_0^{2\pi} \int_0^{\pi} \int_b^a \rho^{-1} \sin \phi \, d\rho \, d\phi \, d\theta$$</div>
  </div>
 
  <div class="step" data-step="3">
- <div class="step-title">Evaluate</div>
- <div class="math">$$\int_b^a \rho^{-1} \, d\rho = \ln(a/b) \\ \int_0^{\pi} \sin \phi \, d\phi = 2 \\ \int_0^{2\pi} \, d\theta = 2\pi \\ \text{Total: } 4\pi \ln(a/b)$$</div>
+ <div class="step-title">Evaluate each integral separately (separable!)</div>
+<p>Since the integrand factors as $\rho^{-1} \cdot \sin\phi \cdot 1$:</p>
+ <div class="math">$$\int_b^a \rho^{-1} \, d\rho = [\ln\rho]_b^a = \ln a - \ln b = \ln\frac{a}{b}$$</div>
+<div class="math">$$\int_0^{\pi} \sin \phi \, d\phi = [-\cos\phi]_0^{\pi} = -(-1) - (-1) = 2$$</div>
+<div class="math">$$\int_0^{2\pi} d\theta = 2\pi$$</div>
  </div>
+
+<div class="step" data-step="4">
+<div class="step-title">Multiply the results</div>
+<div class="math">$$\ln\frac{a}{b} \cdot 2 \cdot 2\pi = 4\pi \ln\frac{a}{b}$$</div>
+</div>
+
+<div class="why-box">
+<p><strong>Physical interpretation:</strong> This integral arises when computing the "gravitational potential energy" or "electrostatic energy" stored in a spherical shell. The logarithmic dependence on the ratio $a/b$ (not the individual radii) reflects a scale invariance property.</p>
+</div>
  </div>
  </div>
  <div class="answer">
@@ -979,25 +1013,49 @@
  <div class="solution">
  <div class="solution-header">Solution</div>
  <div class="solution-content">
+<div class="why-box">
+<p><strong>Key Concept:</strong> Total mass = $\iiint \rho(x,y,z)\,dV$ where $\rho$ is density. When density depends only on distance from center, use spherical coordinates where that distance is simply $\rho$.</p>
+</div>
+
  <div class="step" data-step="1">
- <div class="step-title">Set up in spherical</div>
- <div class="math">$$d = \rho \text{(distance from origin)} \\ density = 1/(1 + \rho^3) \\ dV = \rho^2 \sin \phi \, d\rho \, d\phi \, d\theta \\ Mass = \int_0^{2\pi} \int_0^{\pi} \int_0^R \rho^2/(1 + \rho^3) \sin \phi \, d\rho \, d\phi \, d\theta$$</div>
+ <div class="step-title">Identify the setup</div>
+<p>The density is $\delta = \frac{1}{1 + d^3}$ where $d$ is distance from center.</p>
+<p>In spherical coordinates, $d = \rho$ (the radial coordinate).</p>
+<div class="math">$$\text{density} = \frac{1}{1 + \rho^3}$$</div>
+<div class="math">$$dV = \rho^2 \sin \phi \, d\rho \, d\phi \, d\theta$$</div>
  </div>
 
- <div class="step" data-step="2">
- <div class="step-title">Evaluate ρ integral</div>
- <div class="math">$$\int_0^R \rho^2/(1 + \rho^3) \, d\rho \\ \text{Let } u = 1 + \rho^3, du = 3\rho^2 \, d\rho \\ = (\frac{1}{3}) \ln(1 + R^3)$$</div>
- </div>
+<div class="step" data-step="2">
+<div class="step-title">Set up the mass integral</div>
+<div class="math">$$\text{Mass} = \iiint_{\text{sphere}} \frac{1}{1 + \rho^3}\,dV = \int_0^{2\pi} \int_0^{\pi} \int_0^R \frac{\rho^2}{1 + \rho^3} \sin \phi \, d\rho \, d\phi \, d\theta$$</div>
+</div>
 
  <div class="step" data-step="3">
- <div class="step-title">Complete integration</div>
- <div class="math">$$Mass = (\frac{1}{3}) \ln(1 + R^3) \cdot 2 \cdot 2\pi = (\frac{4\pi}{3}) \ln(1 + R^3)$$</div>
+ <div class="step-title">Evaluate the ρ integral using substitution</div>
+<p>Let $u = 1 + \rho^3$, then $du = 3\rho^2\,d\rho$, so $\rho^2\,d\rho = \frac{du}{3}$</p>
+<p>When $\rho = 0$: $u = 1$. When $\rho = R$: $u = 1 + R^3$</p>
+ <div class="math">$$\int_0^R \frac{\rho^2}{1 + \rho^3} \, d\rho = \frac{1}{3}\int_1^{1+R^3} \frac{du}{u} = \frac{1}{3}[\ln u]_1^{1+R^3} = \frac{1}{3} \ln(1 + R^3)$$</div>
  </div>
+
+<div class="step" data-step="4">
+<div class="step-title">Evaluate the angular integrals</div>
+<div class="math">$$\int_0^{\pi} \sin \phi \, d\phi = [-\cos\phi]_0^{\pi} = 2$$</div>
+<div class="math">$$\int_0^{2\pi} d\theta = 2\pi$$</div>
+</div>
+
+ <div class="step" data-step="5">
+ <div class="step-title">Combine all parts</div>
+ <div class="math">$$\text{Mass} = \frac{1}{3} \ln(1 + R^3) \cdot 2 \cdot 2\pi = \frac{4\pi}{3} \ln(1 + R^3)$$</div>
+ </div>
+
+<div class="why-box">
+<p><strong>Note:</strong> This density decreases as you move away from center (since $1+\rho^3$ increases). The mass depends logarithmically on $R^3$, not linearly—the sphere gets "less dense" faster than it grows.</p>
+</div>
  </div>
  </div>
  <div class="answer">
  <div class="answer-label">ANSWER</div>
- <div class="answer-value">$(4\pi/3) \ln(1 + R^3)$</div>
+ <div class="answer-value">$\frac{4\pi}{3} \ln(1 + R^3)$</div>
  </div>
  </div>
 
@@ -1013,22 +1071,41 @@
  <div class="solution">
  <div class="solution-header">Solution</div>
  <div class="solution-content">
+<div class="why-box">
+<p><strong>Key Concept:</strong> A spherical shell (hollow sphere) has bounds $a \leq \rho \leq b$ in spherical coordinates. When density depends on distance from center, the entire integrand depends only on $\rho$, making the integral separable.</p>
+</div>
+
  <div class="step" data-step="1">
- <div class="step-title">Set up integral</div>
- <div class="math">$$Mass = \int_0^{2\pi} \int_0^{\pi} \int_1^2 0.4\rho^2 \cdot \rho^2 \sin \phi \, d\rho \, d\phi \, d\theta \\ = 0.4 \int_0^{2\pi} \, d\theta \cdot \int_0^{\pi} \sin \phi \, d\phi \cdot \int_1^2 \rho^4 \, d\rho$$</div>
+ <div class="step-title">Set up the mass integral</div>
+<p>Density $\delta = 0.4\rho^2$ where $\rho$ is distance from center.</p>
+<p>Spherical shell: $1 \leq \rho \leq 2$, all angles.</p>
+ <div class="math">$$\text{Mass} = \iiint_{\text{shell}} 0.4\rho^2 \,dV = \int_0^{2\pi} \int_0^{\pi} \int_1^2 0.4\rho^2 \cdot \rho^2 \sin \phi \, d\rho \, d\phi \, d\theta$$</div>
  </div>
 
- <div class="step" data-step="2">
- <div class="step-title">Evaluate</div>
- <div class="math">$$= 0.4 \cdot 2\pi \cdot 2 \cdot \left[\frac{\rho^5}{5}\right]_1^2 \\ = 0.4 \cdot 4\pi \cdot (32 - 1)/5 \\ = 0.4 \cdot 4\pi \cdot \frac{31}{5} = 9.92\pi$$</div>
+<div class="step" data-step="2">
+<div class="step-title">Factor and simplify</div>
+<p>The integrand $0.4\rho^4 \sin\phi$ factors into functions of single variables:</p>
+ <div class="math">$$= 0.4 \int_0^{2\pi} d\theta \cdot \int_0^{\pi} \sin \phi \, d\phi \cdot \int_1^2 \rho^4 \, d\rho$$</div>
+</div>
+
+<div class="step" data-step="3">
+<div class="step-title">Evaluate each integral</div>
+<div class="math">$$\int_0^{2\pi} d\theta = 2\pi$$</div>
+<div class="math">$$\int_0^{\pi} \sin \phi \, d\phi = 2$$</div>
+<div class="math">$$\int_1^2 \rho^4 \, d\rho = \left[\frac{\rho^5}{5}\right]_1^2 = \frac{32}{5} - \frac{1}{5} = \frac{31}{5}$$</div>
+</div>
+
+ <div class="step" data-step="4">
+ <div class="step-title">Combine</div>
+ <div class="math">$$\text{Mass} = 0.4 \cdot 2\pi \cdot 2 \cdot \frac{31}{5} = 0.4 \cdot \frac{124\pi}{5} = \frac{49.6\pi}{5} = 9.92\pi$$</div>
  </div>
 
- <div class="warning">Note: Units need to be consistent (convert m to cm if density is in g/cm^3)</div>
+ <div class="warning">Note: Units need to be consistent. If radii are in meters and density is in g/cm³, convert appropriately before computing.</div>
  </div>
  </div>
  <div class="answer">
  <div class="answer-label">ANSWER</div>
- <div class="answer-value">$9.92\pi (with consistent units)$</div>
+ <div class="answer-value">$9.92\pi$ (with consistent units)</div>
  </div>
  </div>
 
@@ -1046,27 +1123,51 @@
  <div class="solution">
  <div class="solution-header">Solution</div>
  <div class="solution-content">
- <h5>Part (a)</h5>
+<div class="why-box">
+<p><strong>Key Concept:</strong> Average value of $f$ over region $R$ is $\frac{1}{\text{Vol}(R)}\iiint_R f\,dV$. For symmetric regions and symmetric integrands, exploit $\iiint (x^2 + y^2 + z^2)\,dV = 3\iiint x^2\,dV$.</p>
+</div>
+
+ <h5>Part (a): Average Temperature</h5>
  <div class="step" data-step="1">
- <div class="step-title">Set up average</div>
- <div class="math">$$T_{\text{avg}} = (1/V) \iiint_C 32(x^2 + y^2 + z^2) dV \\ V = 2^3 = 8$$</div>
+ <div class="step-title">Set up the average value formula</div>
+<p>The cube $C = \{-1 \leq x,y,z \leq 1\}$ has side length 2.</p>
+<div class="math">$$V = 2^3 = 8$$</div>
+<p>Temperature is $T = 32d^2 = 32(x^2 + y^2 + z^2)$.</p>
+ <div class="math">$$T_{\text{avg}} = \frac{1}{V} \iiint_C T\,dV = \frac{1}{8} \iiint_C 32(x^2 + y^2 + z^2)\,dV$$</div>
  </div>
 
  <div class="step" data-step="2">
- <div class="step-title">Evaluate</div>
- <div class="math">$$\iiint_C (x^2 + y^2 + z^2) dV = 3 \iiint_C x^2 dV \text{(by symmetry)} \\ = 3 \cdot 8 \cdot \int_{-1}^1 x^2 dx / 2 = 3 \cdot 8 \cdot (\frac{2}{3})/2 = 8 \\ T_{\text{avg}} = (32 \cdot 8)/8 = 32$$</div>
+ <div class="step-title">Use symmetry to simplify</div>
+<p>By symmetry of the cube, $\iiint_C x^2\,dV = \iiint_C y^2\,dV = \iiint_C z^2\,dV$.</p>
+<p>Therefore:</p>
+ <div class="math">$$\iiint_C (x^2 + y^2 + z^2)\,dV = 3 \iiint_C x^2\,dV$$</div>
  </div>
 
- <h5>Part (b)</h5>
- <div class="step" data-step="3">
- <div class="step-title">Find points</div>
- <div class="math">$$32d^2 = 32 \to d^2 = 1 \to d = 1 \\ Points on sphere of radius 1 (inside the cube)$$</div>
+<div class="step" data-step="3">
+<div class="step-title">Evaluate $\iiint_C x^2\,dV$</div>
+<p>The integral factors over the cube:</p>
+<div class="math">$$\iiint_C x^2\,dV = \int_{-1}^1 x^2\,dx \cdot \int_{-1}^1 dy \cdot \int_{-1}^1 dz = \frac{2}{3} \cdot 2 \cdot 2 = \frac{8}{3}$$</div>
+<p>So $\iiint_C (x^2 + y^2 + z^2)\,dV = 3 \cdot \frac{8}{3} = 8$.</p>
+</div>
+
+<div class="step" data-step="4">
+<div class="step-title">Compute average temperature</div>
+<div class="math">$$T_{\text{avg}} = \frac{32 \cdot 8}{8} = 32$$</div>
+</div>
+
+ <h5>Part (b): Find points where $T = T_{\text{avg}}$</h5>
+ <div class="step" data-step="5">
+ <div class="step-title">Solve for the isothermal surface</div>
+<p>We need $T = 32$:</p>
+ <div class="math">$$32d^2 = 32 \implies d^2 = 1 \implies d = 1$$</div>
+<p>The points are those at distance 1 from the origin, i.e., the unit sphere $x^2 + y^2 + z^2 = 1$.</p>
+<p>This sphere is entirely contained within the cube (the cube extends to $\sqrt{3} \approx 1.73$ at corners).</p>
  </div>
  </div>
  </div>
  <div class="answer">
  <div class="answer-label">ANSWERS</div>
- <div class="answer-value">(a) 32, (b) Sphere $x^2 + y^2 + z^2 = 1$</div>
+ <div class="answer-value">(a) $T_{\text{avg}} = 32$, (b) Points on sphere $x^2 + y^2 + z^2 = 1$</div>
  </div>
  </div>
 
@@ -1082,19 +1183,44 @@
  <div class="solution">
  <div class="solution-header">Solution</div>
  <div class="solution-content">
+<div class="why-box">
+<p><strong>Key Concept:</strong> The plane $\frac{x}{a} + \frac{y}{b} + \frac{z}{c} = 1$ intercepts the axes at $(a,0,0)$, $(0,b,0)$, $(0,0,c)$. Together with the coordinate planes, this forms a tetrahedron.</p>
+</div>
+
  <div class="step" data-step="1">
- <div class="step-title">Set up bounds</div>
- <div class="math">$$0 \leq x \leq a \\ 0 \leq y \leq b(1 - x/a) \\ 0 \leq z \leq c(1 - x/a - y/b)$$</div>
+ <div class="step-title">Identify the region (tetrahedron)</div>
+<p>Vertices: $(0,0,0)$, $(a,0,0)$, $(0,b,0)$, $(0,0,c)$</p>
+<p>The region is the first-octant portion below the slanted plane.</p>
  </div>
 
- <div class="step" data-step="2">
- <div class="step-title">Evaluate</div>
- <div class="math">$$V = \int_0^a \int_0^{b(1-x/a)} \int_0^{c(1-x/a-y/b)} dz \, dy \, dx \\ = ab\frac{c}{6}$$</div>
+<div class="step" data-step="2">
+<div class="step-title">Determine integration bounds</div>
+<p>For each $x$, the $y$-bound comes from setting $z = 0$ in the plane equation:</p>
+<div class="math">$$\frac{x}{a} + \frac{y}{b} = 1 \implies y = b\left(1 - \frac{x}{a}\right)$$</div>
+<p>For each $(x,y)$, the $z$-bound is:</p>
+<div class="math">$$z = c\left(1 - \frac{x}{a} - \frac{y}{b}\right)$$</div>
+ <div class="math">$$0 \leq x \leq a, \quad 0 \leq y \leq b\left(1 - \frac{x}{a}\right), \quad 0 \leq z \leq c\left(1 - \frac{x}{a} - \frac{y}{b}\right)$$</div>
  </div>
+
+ <div class="step" data-step="3">
+ <div class="step-title">Evaluate the z-integral</div>
+ <div class="math">$$\int_0^{c(1-x/a-y/b)} dz = c\left(1 - \frac{x}{a} - \frac{y}{b}\right)$$</div>
+ </div>
+
+<div class="step" data-step="4">
+<div class="step-title">Evaluate the y-integral</div>
+<p>Let $u = 1 - \frac{x}{a}$ (constant with respect to $y$). Then:</p>
+<div class="math">$$\int_0^{bu} c\left(u - \frac{y}{b}\right)dy = c\left[uy - \frac{y^2}{2b}\right]_0^{bu} = c\left(u \cdot bu - \frac{b^2u^2}{2b}\right) = c \cdot \frac{bu^2}{2}$$</div>
+</div>
+
+<div class="step" data-step="5">
+<div class="step-title">Evaluate the x-integral</div>
+<p>With $u = 1 - \frac{x}{a}$, we have $du = -\frac{1}{a}dx$, so $dx = -a\,du$. When $x = 0$: $u = 1$; when $x = a$: $u = 0$.</p>
+<div class="math">$$V = \int_0^a \frac{bc}{2}\left(1 - \frac{x}{a}\right)^2 dx = \frac{bc}{2} \int_1^0 u^2 \cdot (-a)\,du = \frac{abc}{2} \int_0^1 u^2\,du = \frac{abc}{2} \cdot \frac{1}{3} = \frac{abc}{6}$$</div>
+</div>
 
  <div class="why-box">
- <h5>Classic Result</h5>
- <p>A tetrahedron with vertices at origin and (a,0,0), (0,b,0), (0,0,c) has volume abc/6.</p>
+ <p><strong>Classic Result:</strong> A tetrahedron with vertices at the origin and $(a,0,0)$, $(0,b,0)$, $(0,0,c)$ has volume $\frac{abc}{6}$. This is $\frac{1}{6}$ of the rectangular box $[0,a] \times [0,b] \times [0,c]$.</p>
  </div>
  </div>
  </div>
@@ -1116,25 +1242,43 @@
  <div class="solution">
  <div class="solution-header">Solution</div>
  <div class="solution-content">
+<div class="why-box">
+<p><strong>Key Concept:</strong> The region is bounded above by a paraboloid (opening down) and below by a cone (opening up). Use cylindrical coordinates since both surfaces have circular symmetry: $z = 6 - r^2$ and $z = r$.</p>
+</div>
+
  <div class="step" data-step="1">
- <div class="step-title">Find intersection</div>
- <div class="math">$$\sqrt{x^2 + y^2} = 6 - x^2 - y^2 \\ \text{Let } r = \sqrt{x^2 + y^2}: r = 6 - r^2 \\ r^2 + r - 6 = 0 \to (r+3)(r-2) = 0 \to r = 2$$</div>
+ <div class="step-title">Find where the surfaces intersect</div>
+<p>Set the two $z$-expressions equal:</p>
+ <div class="math">$$r = 6 - r^2 \implies r^2 + r - 6 = 0 \implies (r+3)(r-2) = 0$$</div>
+<p>Since $r \geq 0$, we have $r = 2$. The surfaces intersect along a circle of radius 2 at height $z = 2$.</p>
  </div>
 
  <div class="step" data-step="2">
- <div class="step-title">Set up in cylindrical</div>
- <div class="math">$$V = \int_0^{2\pi} \int_0^2 \int_r^{6-r^2} r dz \, dr \, d\theta$$</div>
+ <div class="step-title">Set up in cylindrical coordinates</div>
+<p>The region: $0 \leq \theta \leq 2\pi$, $0 \leq r \leq 2$, and for each $r$: $r \leq z \leq 6 - r^2$.</p>
+ <div class="math">$$V = \int_0^{2\pi} \int_0^2 \int_r^{6-r^2} r\,dz\,dr\,d\theta$$</div>
  </div>
 
- <div class="step" data-step="3">
- <div class="step-title">Evaluate</div>
- <div class="math">$$\int_r^{6-r^2} dz = 6 - r^2 - r \\ \int_0^2 (6 - r^2 - r) \cdot r \, dr = \int_0^2 (6r - r^3 - r^2) \, dr \\ = \left[3r^2 - \frac{r^4}{4} - \frac{r^3}{3}\right]_0^2 = 12 - 4 - \frac{8}{3} = \frac{16}{3} \\ V = 2\pi \cdot \frac{16}{3} = \frac{32\pi}{3}$$</div>
- </div>
+<div class="step" data-step="3">
+<div class="step-title">Evaluate the z-integral</div>
+<div class="math">$$\int_r^{6-r^2} dz = (6 - r^2) - r = 6 - r^2 - r$$</div>
+</div>
+
+<div class="step" data-step="4">
+<div class="step-title">Evaluate the r-integral</div>
+ <div class="math">$$\int_0^2 (6 - r^2 - r) \cdot r \, dr = \int_0^2 (6r - r^3 - r^2) \, dr$$</div>
+<div class="math">$$= \left[3r^2 - \frac{r^4}{4} - \frac{r^3}{3}\right]_0^2 = 12 - 4 - \frac{8}{3} = 8 - \frac{8}{3} = \frac{24 - 8}{3} = \frac{16}{3}$$</div>
+</div>
+
+<div class="step" data-step="5">
+<div class="step-title">Evaluate the θ-integral and combine</div>
+<div class="math">$$V = \int_0^{2\pi} \frac{16}{3}\,d\theta = \frac{16}{3} \cdot 2\pi = \frac{32\pi}{3}$$</div>
+</div>
  </div>
  </div>
  <div class="answer">
  <div class="answer-label">ANSWER</div>
- <div class="answer-value">$32\pi/3$</div>
+ <div class="answer-value">$\frac{32\pi}{3}$</div>
  </div>
  </div>
 
@@ -1150,22 +1294,51 @@
  <div class="solution">
  <div class="solution-header">Solution</div>
  <div class="solution-content">
+<div class="why-box">
+<p><strong>Key Concept:</strong> This is the famous "napkin ring" problem! A cylinder drilled through a sphere leaves a ring-shaped solid. Remarkably, the volume depends only on the height of the ring, not on the sphere's radius.</p>
+</div>
+
  <div class="step" data-step="1">
- <div class="step-title">Set up</div>
- <div class="math">$$\text{Sphere: } x^2 + y^2 + z^2 \leq 4 \\ \text{Cylinder removed: } x^2 + y^2 \leq \frac{1}{4} \\ \text{In cylindrical: } \frac{1}{2} \leq r \leq \sqrt{4-z^2}, -\sqrt{\frac{15}{4}} \leq z \leq \sqrt{\frac{15}{4}}$$</div>
+ <div class="step-title">Identify the geometry</div>
+<p>Sphere: $x^2 + y^2 + z^2 = 4$ (radius $R = 2$)</p>
+<p>Cylinder: $x^2 + y^2 = \frac{1}{4}$ (radius $a = \frac{1}{2}$, axis along $z$)</p>
+<p>Find where cylinder meets sphere: $\frac{1}{4} + z^2 = 4 \implies z^2 = \frac{15}{4} \implies z = \pm\frac{\sqrt{15}}{2}$</p>
  </div>
 
- <div class="step" data-step="2">
- <div class="step-title">Alternative: Sphere volume minus cylinder + caps</div>
- <div class="math">$$V_{\text{sphere}} = (\frac{4}{3})\pi(8) = \frac{32\pi}{3} \\ V_{\text{remaining}} = V_{\text{sphere}} - V_{\text{cylinder inside}}$$</div>
- </div>
+<div class="step" data-step="2">
+<div class="step-title">Set up in cylindrical coordinates</div>
+<p>The remaining solid is the sphere minus the cylinder. In cylindrical:</p>
+<div class="math">$$V = \int_0^{2\pi} \int_{-\sqrt{15}/2}^{\sqrt{15}/2} \int_{1/2}^{\sqrt{4-z^2}} r\,dr\,dz\,d\theta$$</div>
+<p>Here $r$ ranges from $\frac{1}{2}$ (inner cylinder wall) to $\sqrt{4-z^2}$ (outer sphere surface).</p>
+</div>
 
- <p>This is a classic "napkin ring" problem. The remaining volume depends only on the height of the remaining ring.</p>
+<div class="step" data-step="3">
+<div class="step-title">Evaluate the r-integral</div>
+<div class="math">$$\int_{1/2}^{\sqrt{4-z^2}} r\,dr = \left[\frac{r^2}{2}\right]_{1/2}^{\sqrt{4-z^2}} = \frac{4-z^2}{2} - \frac{1}{8} = \frac{4-z^2}{2} - \frac{1}{8}$$</div>
+</div>
+
+<div class="step" data-step="4">
+<div class="step-title">Evaluate the z-integral</div>
+<p>Using symmetry ($z$ integrand is even):</p>
+<div class="math">$$\int_{-\sqrt{15}/2}^{\sqrt{15}/2} \left(\frac{4-z^2}{2} - \frac{1}{8}\right)dz = 2\int_0^{\sqrt{15}/2} \left(2 - \frac{z^2}{2} - \frac{1}{8}\right)dz$$</div>
+<div class="math">$$= 2\int_0^{\sqrt{15}/2} \left(\frac{15}{8} - \frac{z^2}{2}\right)dz = 2\left[\frac{15z}{8} - \frac{z^3}{6}\right]_0^{\sqrt{15}/2}$$</div>
+<div class="math">$$= 2\left(\frac{15 \cdot \sqrt{15}}{16} - \frac{(\sqrt{15})^3}{48}\right) = 2\left(\frac{15\sqrt{15}}{16} - \frac{15\sqrt{15}}{48}\right)$$</div>
+<div class="math">$$= 2 \cdot 15\sqrt{15}\left(\frac{1}{16} - \frac{1}{48}\right) = 30\sqrt{15} \cdot \frac{2}{48} = \frac{5\sqrt{15}}{4}$$</div>
+</div>
+
+<div class="step" data-step="5">
+<div class="step-title">Multiply by θ-integral</div>
+<div class="math">$$V = 2\pi \cdot \frac{5\sqrt{15}}{4} = \frac{5\sqrt{15}\pi}{2}$$</div>
+</div>
+
+<div class="why-box">
+<p><strong>Napkin Ring Theorem:</strong> If you drill a cylinder through a sphere such that the remaining ring has height $h$, the volume is always $\frac{\pi h^3}{6}$—independent of the original sphere's radius! Here $h = \sqrt{15}$, so $V = \frac{\pi \cdot 15^{3/2}}{6} = \frac{5\sqrt{15}\pi}{2}$.</p>
+</div>
  </div>
  </div>
  <div class="answer">
  <div class="answer-label">ANSWER</div>
- <div class="answer-value">$(4\pi/3)(15)^{3/2}/4 = (5\sqrt{15})\pi/2$</div>
+ <div class="answer-value">$\frac{5\sqrt{15}\pi}{2}$</div>
  </div>
  </div>
 
@@ -1199,14 +1372,28 @@
  <div class="solution">
  <div class="solution-header">Solution</div>
  <div class="solution-content">
+<div class="why-box">
+<p><strong>Key Concept:</strong> The Jacobian determinant $\frac{\partial(x,y)}{\partial(u,v)} = \begin{vmatrix} \frac{\partial x}{\partial u} & \frac{\partial x}{\partial v} \\ \frac{\partial y}{\partial u} & \frac{\partial y}{\partial v} \end{vmatrix}$ measures how areas change under the transformation. It's the 2D analogue of the derivative.</p>
+</div>
+
  <div class="step" data-step="1">
- <div class="step-title">Find partial derivatives</div>
- <div class="math">$$x = 3ue^v, y = 7 + 3e^u \\ \frac{\partial x}{\partial u} = 3e^v, \frac{\partial x}{\partial v} = 3ue^v \\ \frac{\partial y}{\partial u} = 3e^u, \frac{\partial y}{\partial v} = 0$$</div>
+ <div class="step-title">Identify the transformation components</div>
+<p>The transformation $G(u,v) = (x,y)$ gives:</p>
+ <div class="math">$$x = 3ue^v, \quad y = 7 + 3e^u$$</div>
  </div>
 
- <div class="step" data-step="2">
- <div class="step-title">Calculate determinant</div>
- <div class="math">$$\text{Jac} = \begin{vmatrix} 3e^v & 3ue^v \\ 3e^u & 0 \end{vmatrix} = (3e^v)(0) - (3ue^v)(3e^u) = -9ue^{u+v}$$</div>
+<div class="step" data-step="2">
+<div class="step-title">Find all four partial derivatives</div>
+<div class="math">$$\frac{\partial x}{\partial u} = 3e^v \quad \text{(differentiate } 3ue^v \text{ w.r.t. } u)$$</div>
+<div class="math">$$\frac{\partial x}{\partial v} = 3ue^v \quad \text{(differentiate } 3ue^v \text{ w.r.t. } v)$$</div>
+<div class="math">$$\frac{\partial y}{\partial u} = 3e^u \quad \text{(differentiate } 7 + 3e^u \text{ w.r.t. } u)$$</div>
+<div class="math">$$\frac{\partial y}{\partial v} = 0 \quad \text{(} y \text{ has no } v)$$</div>
+</div>
+
+ <div class="step" data-step="3">
+ <div class="step-title">Calculate the determinant</div>
+ <div class="math">$$\text{Jac} = \begin{vmatrix} 3e^v & 3ue^v \\ 3e^u & 0 \end{vmatrix} = (3e^v)(0) - (3ue^v)(3e^u)$$</div>
+<div class="math">$$= 0 - 9ue^v \cdot e^u = -9ue^{u+v}$$</div>
  </div>
  </div>
  </div>
@@ -1272,12 +1459,22 @@
  <div class="solution">
  <div class="solution-header">Solution</div>
  <div class="solution-content">
- <div class="math">$$G(u,v) = u(-9,3) + v(8,2) = (-9u + 8v, 3u + 2v)$$</div>
+<div class="step" data-step="1">
+<div class="step-title">Apply the linear map formula</div>
+<p>For spanning vectors $\mathbf{a} = (-9, 3)$ and $\mathbf{b} = (8, 2)$:</p>
+ <div class="math">$$G(u,v) = u\mathbf{a} + v\mathbf{b} = u(-9,3) + v(8,2) = (-9u + 8v, 3u + 2v)$$</div>
+</div>
+
+<div class="step" data-step="2">
+<div class="step-title">Compute the Jacobian (area scaling factor)</div>
+<div class="math">$$\text{Jac} = \begin{vmatrix} -9 & 8 \\ 3 & 2 \end{vmatrix} = (-9)(2) - (8)(3) = -18 - 24 = -42$$</div>
+<p>The absolute value $|{-42}| = 42$ is the factor by which areas are scaled.</p>
+</div>
  </div>
  </div>
  <div class="answer">
  <div class="answer-label">ANSWER</div>
- <div class="answer-value">$G(u,v) = (-9u + 8v, 3u + 2v)$</div>
+ <div class="answer-value">$G(u,v) = (-9u + 8v, 3u + 2v)$, $|\text{Jac}| = 42$</div>
  </div>
  </div>
 
@@ -1294,25 +1491,39 @@
  <div class="solution">
  <div class="solution-header">Solution</div>
  <div class="solution-content">
+<div class="why-box">
+<p><strong>Key Concept:</strong> When using change of variables, transform three things: (1) the integrand, (2) the region, (3) multiply by $|\text{Jac}|$.</p>
+</div>
+
  <div class="step" data-step="1">
- <div class="step-title">Find Jacobian</div>
- <div class="math">$$x = u - 2v, \quad y = v \\ \text{Jac} = \begin{vmatrix} 1 & -2 \\ 0 & 1 \end{vmatrix} = (1)(1) - (-2)(0) = 1$$</div>
+ <div class="step-title">Find the Jacobian</div>
+<p>From $G(u,v) = (u - 2v, v)$: $x = u - 2v$, $y = v$</p>
+ <div class="math">$$\text{Jac} = \begin{vmatrix} \frac{\partial x}{\partial u} & \frac{\partial x}{\partial v} \\ \frac{\partial y}{\partial u} & \frac{\partial y}{\partial v} \end{vmatrix} = \begin{vmatrix} 1 & -2 \\ 0 & 1 \end{vmatrix} = (1)(1) - (-2)(0) = 1$$</div>
+<p>Since $|\text{Jac}| = 1$, areas are preserved.</p>
  </div>
 
  <div class="step" data-step="2">
- <div class="step-title">Transform integrand</div>
+ <div class="step-title">Transform the integrand</div>
+<p>Express $x + 4y$ in terms of $u, v$:</p>
  <div class="math">$$x + 4y = (u - 2v) + 4v = u + 2v$$</div>
  </div>
 
  <div class="step" data-step="3">
- <div class="step-title">New region and evaluate</div>
- <div class="math">$$\int_1^3 \int_6^{10} (u + 2v) du dv = 96$$</div>
+ <div class="step-title">Identify the new region</div>
+<p>The problem specifies the $(u,v)$ region: $1 \leq v \leq 3$, $6 \leq u \leq 10$ (a rectangle).</p>
  </div>
+
+<div class="step" data-step="4">
+<div class="step-title">Evaluate the transformed integral</div>
+ <div class="math">$$\iint_D (x+4y)\,dA = \int_1^3 \int_6^{10} (u + 2v) \cdot 1\,du\,dv$$</div>
+<div class="math">$$= \int_1^3 \left[\frac{u^2}{2} + 2vu\right]_6^{10}\,dv = \int_1^3 \left[(50 + 20v) - (18 + 12v)\right]dv$$</div>
+<div class="math">$$= \int_1^3 (32 + 8v)\,dv = [32v + 4v^2]_1^3 = (96 + 36) - (32 + 4) = 132 - 36 = 96$$</div>
+</div>
  </div>
  </div>
  <div class="answer">
  <div class="answer-label">ANSWER</div>
- <div class="answer-value">96</div>
+ <div class="answer-value">$96$</div>
  </div>
  </div>
 
@@ -1328,26 +1539,38 @@
  <div class="solution">
  <div class="solution-header">Solution</div>
  <div class="solution-content">
+<div class="why-box">
+<p><strong>Key Concept:</strong> When the boundary curves are level sets of $u$ and $v$, the new region in $(u,v)$-space becomes a rectangle! This is why we choose coordinates that match the boundary curves.</p>
+</div>
+
  <div class="step" data-step="1">
- <div class="step-title">New region</div>
- <div class="math">$$1 \leq u \leq 4, 1 \leq v \leq 3 (rectangle!)$$</div>
+ <div class="step-title">Transform the region to $(u,v)$-space</div>
+<p>The boundary curves become:</p>
+<p>• $xy = 1 \to v = 1$, $xy = 3 \to v = 3$</p>
+<p>• $x^2 - y^2 = 1 \to u = 1$, $x^2 - y^2 = 4 \to u = 4$</p>
+ <div class="math">$$\text{New region: } 1 \leq u \leq 4, \quad 1 \leq v \leq 3 \quad \text{(a rectangle!)}$$</div>
  </div>
 
  <div class="step" data-step="2">
- <div class="step-title">Find Jacobian</div>
- <p>Need to find \partial(x,y)/\partial(u,v) or its inverse \partial(u,v)/\partial(x,y)</p>
- <div class="math">$$\frac{\partial u}{\partial x} = 2x, \frac{\partial u}{\partial y} = -2y \\ \frac{\partial v}{\partial x} = y, \frac{\partial v}{\partial y} = x \\ \partial(u,v)/\partial(x,y) = 2x \cdot x - (-2y) \cdot y = 2x^2 + 2y^2 = 2(x^2 + y^2) \\ \text{So }\left|\frac{\partial(x,y)}{\partial(u,v)}\right| = 1/(2(x^2 + y^2))$$</div>
+ <div class="step-title">Find the Jacobian using the inverse</div>
+ <p>It's easier to compute $\frac{\partial(u,v)}{\partial(x,y)}$ and take the reciprocal:</p>
+ <div class="math">$$\frac{\partial u}{\partial x} = 2x, \quad \frac{\partial u}{\partial y} = -2y, \quad \frac{\partial v}{\partial x} = y, \quad \frac{\partial v}{\partial y} = x$$</div>
+<div class="math">$$\frac{\partial(u,v)}{\partial(x,y)} = \begin{vmatrix} 2x & -2y \\ y & x \end{vmatrix} = 2x \cdot x - (-2y) \cdot y = 2x^2 + 2y^2 = 2(x^2 + y^2)$$</div>
+<p>Therefore:</p>
+<div class="math">$$\left|\frac{\partial(x,y)}{\partial(u,v)}\right| = \frac{1}{2(x^2 + y^2)}$$</div>
  </div>
 
  <div class="step" data-step="3">
- <div class="step-title">Transform integral</div>
- <div class="math">$$\iint_B (x^2 + y^2) \cdot 1/(2(x^2 + y^2)) du dv = (\frac{1}{2}) \int_1^4 \int_1^3 du dv = (\frac{1}{2})(3)(2) = 3$$</div>
+ <div class="step-title">Transform and evaluate the integral</div>
+<p>The integrand $(x^2 + y^2)$ cancels beautifully with the Jacobian!</p>
+ <div class="math">$$\iint_B (x^2 + y^2) \,dA = \iint_{R} (x^2 + y^2) \cdot \frac{1}{2(x^2 + y^2)} \,du\,dv = \frac{1}{2} \iint_R du\,dv$$</div>
+<div class="math">$$= \frac{1}{2} \int_1^4 \int_1^3 du\,dv = \frac{1}{2}(4-1)(3-1) = \frac{1}{2} \cdot 3 \cdot 2 = 3$$</div>
  </div>
  </div>
  </div>
  <div class="answer">
  <div class="answer-label">ANSWER</div>
- <div class="answer-value">3</div>
+ <div class="answer-value">$3$</div>
  </div>
  </div>
 
