@@ -157,7 +157,7 @@
 
  <div class="formula-box">
  <div class="formula-name">Spherical Coordinates (3D)</div>
- <div class="formula">$$x = \rho \sin \phi \cos \theta, y = \rho \sin \phi \sin \theta, z = \rho \cos \phi \\ \rho^2 = x^2 + y^2 + z^2 \\ dV = \rho^2 \sin \phi \, d\rho \, d\phi d\theta$$</div>
+ <div class="formula">$$x = \rho \sin \phi \cos \theta, y = \rho \sin \phi \sin \theta, z = \rho \cos \phi \\ \rho^2 = x^2 + y^2 + z^2 \\ dV = \rho^2 \sin \phi \, d\rho \, d\phi \, d\theta$$</div>
  </div>
 
  <div class="tip">Use polar/cylindrical when you see circles ($x^2 + y^2$). Use spherical when you see spheres ($x^2 + y^2 + z^2$).</div>
@@ -223,12 +223,12 @@
  <div class="solution-content">
  <div class="step" data-step="1">
  <div class="step-title">Inner integral (with respect to y)</div>
- <div class="math">$$\int_{\frac{\pi}{4}}^{\frac{\pi}{2}} \cos(2x + y) \, dy = [\sin(2x + y)]_{\frac{\pi}{4}}^{\frac{\pi}{2}} = \sin(2x + \frac{\pi}{2}) - \sin(2x + \frac{\pi}{4}) = \cos(2x) - \sin(2x + \frac{\pi}{4})$$</div>
+ <div class="math">$$\int_{\frac{\pi}{4}}^{\frac{\pi}{2}} \cos(2x + y) \, dy = \left[\sin(2x + y)\right]_{\frac{\pi}{4}}^{\frac{\pi}{2}} = \sin(2x + \frac{\pi}{2}) - \sin(2x + \frac{\pi}{4}) = \cos(2x) - \sin(2x + \frac{\pi}{4})$$</div>
  </div>
 
  <div class="step" data-step="2">
  <div class="step-title">Outer integral (with respect to x)</div>
- <div class="math">$$\int_{-\pi}^{0} [\cos(2x) - \sin(2x + \frac{\pi}{4})] \, dx = \left[\frac{\sin(2x)}{2} + \frac{\cos(2x + \frac{\pi}{4})}{2}\right]_{-\pi}^{0}$$</div>
+ <div class="math">$$\int_{-\pi}^{0} \left[\cos(2x) - \sin(2x + \frac{\pi}{4})\right] \, dx = \left[\frac{\sin(2x)}{2} + \frac{\cos(2x + \frac{\pi}{4})}{2}\right]_{-\pi}^{0}$$</div>
  </div>
 
  <div class="step" data-step="3">
@@ -311,12 +311,12 @@
 
  <div class="step" data-step="3">
  <div class="step-title">Inner integral</div>
- <div class="math">$$\int_0^1 r \cdot e^{-r^2} \, dr = -\frac{1}{2}[e^{-r^2}]_0^1 = -\frac{1}{2}(e^{-1} - 1) = \frac{1}{2}\left(1 - \frac{1}{e}\right) = \frac{e-1}{2e}$$</div>
+ <div class="math">$$\int_0^1 r \cdot e^{-r^2} \, dr = -\frac{1}{2}\left[e^{-r^2}\right]_0^1 = -\frac{1}{2}(e^{-1} - 1) = \frac{1}{2}\left(1 - \frac{1}{e}\right) = \frac{e-1}{2e}$$</div>
  </div>
 
  <div class="step" data-step="4">
  <div class="step-title">Outer integral</div>
- <div class="math">$$\int_{\pi}^{2\pi} \frac{e-1}{2e} d\theta = \frac{e-1}{2e} \cdot \pi = \pi\frac{e-1}{2e}$$</div>
+ <div class="math">$$\int_{\pi}^{2\pi} \frac{e-1}{2e} \, d\theta = \frac{e-1}{2e} \cdot \pi = \pi\frac{e-1}{2e}$$</div>
  </div>
  </div>
  </div>
@@ -379,7 +379,7 @@
 
  <div class="step" data-step="2">
  <div class="step-title">Outer integral</div>
- <div class="math">$$\int_0^{\infty} (\frac{y^2}{2}) \cdot e^{-y^3} dy \\ \text{Let } u = y^3, du = 3y^2 dy, \text{ so } y^2 dy = \frac{du}{3} \\ = (\frac{1}{2}) \cdot (\frac{1}{3}) \int_0^{\infty} e^{-u} du = (\frac{1}{6})[-e^{-u}]_0^\infty = (\frac{1}{6})(0 - (-1)) = \frac{1}{6}$$</div>
+ <div class="math">$$\int_0^{\infty} \frac{y^2}{2} \cdot e^{-y^3} \, dy \\ \text{Let } u = y^3, \, du = 3y^2 \, dy, \text{ so } y^2 \, dy = \frac{du}{3} \\ = \frac{1}{2} \cdot \frac{1}{3} \int_0^{\infty} e^{-u} \, du = \frac{1}{6}\left[-e^{-u}\right]_0^\infty = \frac{1}{6}(0 - (-1)) = \frac{1}{6}$$</div>
  </div>
  </div>
  </div>
@@ -408,12 +408,12 @@
 
  <div class="step" data-step="2">
  <div class="step-title">Inner integral</div>
- <div class="math">$$\int_0^{\infty} r/(1 + r^2)^{\frac{3}{2}} dr \\ \text{Let } u = 1 + r^2, du = 2r dr \\ = (\frac{1}{2}) \int_1^\infty u^{-\frac{3}{2}} du = (\frac{1}{2})[-2u^{-\frac{1}{2}}]_1^\infty = (\frac{1}{2})(0 - (-2)) = 1$$</div>
+ <div class="math">$$\int_0^{\infty} \frac{r}{(1 + r^2)^{3/2}} \, dr \\ \text{Let } u = 1 + r^2, \, du = 2r \, dr \\ = \frac{1}{2} \int_1^\infty u^{-3/2} \, du = \frac{1}{2}\left[-2u^{-1/2}\right]_1^\infty = \frac{1}{2}(0 - (-2)) = 1$$</div>
  </div>
 
  <div class="step" data-step="3">
  <div class="step-title">Outer integral</div>
- <div class="math">$$\int_0^{2\pi} 1 d\theta = 2\pi$$</div>
+ <div class="math">$$\int_0^{2\pi} 1 \, d\theta = 2\pi$$</div>
  </div>
  </div>
  </div>
@@ -442,15 +442,15 @@
 
  <div class="step" data-step="2">
  <div class="step-title">Evaluate each integral</div>
- <div class="math">$$\int_0^8 x^{-\frac{1}{2}} dx = [2x^{\frac{1}{2}}]_0^8 = 2\sqrt{8} = 4\sqrt{2} \\ \text{Similarly for } y: 4\sqrt{2} \\ \text{Result: } (\frac{1}{\sqrt{3}})(4\sqrt{2})(4\sqrt{2}) = (\frac{1}{\sqrt{3}})(32) = 3\frac{2}{\sqrt{3}} = 32\sqrt{3}/3$$</div>
+ <div class="math">$$\int_0^8 x^{-\frac{1}{2}} \, dx = \left[2x^{\frac{1}{2}}\right]_0^8 = 2\sqrt{8} = 4\sqrt{2} \\ \text{Similarly for } y: 4\sqrt{2} \\ \text{Result: } \frac{1}{\sqrt{3}} \cdot (4\sqrt{2})(4\sqrt{2}) = \frac{32}{\sqrt{3}} = \frac{32\sqrt{3}}{3}$$</div>
  </div>
 
- <div class="warning">This integral is improper at x=0 \text{ and } y=0, but converges because the exponent -1/2 > -1.</div>
+ <div class="warning">This integral is improper at $x=0$ and $y=0$, but converges because the exponent $-1/2 > -1$.</div>
  </div>
  </div>
  <div class="answer">
  <div class="answer-label">ANSWER</div>
- <div class="answer-value">$32\sqrt{3}/3$</div>
+ <div class="answer-value">$\frac{32\sqrt{3}}{3}$</div>
  </div>
  </div>
 
@@ -517,27 +517,27 @@
  <div class="solution-content">
  <div class="step" data-step="1">
  <div class="step-title">Convert to spherical</div>
- <div class="math">$$x^2 + y^2 + z^2 = \rho^2, \text{ so } 7/(x^2 + y^2 + z^2)^2 = 7/\rho^4 \\ dV = \rho^2 \sin \phi \, d\rho \, d\phi d\theta \\ \text{Region: } \rho \geq 3, 0 \leq \phi \leq \pi, 0 \leq \theta \leq 2\pi$$</div>
+ <div class="math">$$x^2 + y^2 + z^2 = \rho^2, \text{ so } 7/(x^2 + y^2 + z^2)^2 = 7/\rho^4 \\ dV = \rho^2 \sin \phi \, d\rho \, d\phi \, d\theta \\ \text{Region: } \rho \geq 3, 0 \leq \phi \leq \pi, 0 \leq \theta \leq 2\pi$$</div>
  </div>
 
  <div class="step" data-step="2">
  <div class="step-title">Set up integral</div>
- <div class="math">$$\int_0^{2\pi} \int_0^{\pi} \int_3^{\infty} (7/\rho^4) \cdot \rho^2 \sin \phi \, d\rho \, d\phi d\theta \\ = \int_0^{2\pi} \int_0^{\pi} \int_3^{\infty} 7\rho^{-2} \sin \phi \, d\rho \, d\phi d\theta$$</div>
+ <div class="math">$$\int_0^{2\pi} \int_0^{\pi} \int_3^{\infty} (7/\rho^4) \cdot \rho^2 \sin \phi \, d\rho \, d\phi \, d\theta \\ = \int_0^{2\pi} \int_0^{\pi} \int_3^{\infty} 7\rho^{-2} \sin \phi \, d\rho \, d\phi \, d\theta$$</div>
  </div>
 
  <div class="step" data-step="3">
  <div class="step-title">Evaluate ρ integral</div>
- <div class="math">$$\int_3^{\infty} 7\rho^{-2} d\rho = 7[-\rho^{-1}]_3^\infty = 7(0 + \frac{1}{3}) = \frac{7}{3}$$</div>
+ <div class="math">$$\int_3^{\infty} 7\rho^{-2} \, d\rho = 7\left[-\rho^{-1}\right]_3^\infty = 7\left(0 + \frac{1}{3}\right) = \frac{7}{3}$$</div>
  </div>
 
  <div class="step" data-step="4">
  <div class="step-title">Evaluate φ integral</div>
- <div class="math">$$\int_0^{\pi} \sin \phi d\phi = [-\cos \phi]_0^\pi = 1 + 1 = 2$$</div>
+ <div class="math">$$\int_0^{\pi} \sin \phi \, d\phi = \left[-\cos \phi\right]_0^\pi = 1 + 1 = 2$$</div>
  </div>
 
  <div class="step" data-step="5">
  <div class="step-title">Evaluate θ integral</div>
- <div class="math">$$\int_0^{2\pi} d\theta = 2\pi$$</div>
+ <div class="math">$$\int_0^{2\pi} \, d\theta = 2\pi$$</div>
  </div>
 
  <div class="step" data-step="6">
@@ -582,7 +582,7 @@
 
  <div class="step" data-step="4">
  <div class="step-title">Calculate $\iiint z dV$</div>
- <div class="math">$$\int_0^{2\pi} d\theta \cdot \int_0^{\frac{\pi}{2}} \cos \phi \sin \phi \, d\phi \cdot \int_0^a \rho^3 \, d\rho \\ = 2\pi \cdot \left[\frac{\sin^2\phi}{2}\right]_0^{\frac{\pi}{2}} \cdot \left[\frac{\rho^4}{4}\right]_0^a \\ = 2\pi \cdot \frac{1}{2} \cdot \frac{a^4}{4} = \frac{\pi a^4}{4}$$</div>
+ <div class="math">$$\int_0^{2\pi} \, d\theta \cdot \int_0^{\frac{\pi}{2}} \cos \phi \sin \phi \, d\phi \cdot \int_0^a \rho^3 \, d\rho \\ = 2\pi \cdot \left[\frac{\sin^2\phi}{2}\right]_0^{\frac{\pi}{2}} \cdot \left[\frac{\rho^4}{4}\right]_0^a \\ = 2\pi \cdot \frac{1}{2} \cdot \frac{a^4}{4} = \frac{\pi a^4}{4}$$</div>
  </div>
 
  <div class="step" data-step="5">
@@ -675,7 +675,7 @@
 
  <div class="step" data-step="5">
  <div class="step-title">Outer integral (θ)</div>
- <div class="math">$$\int_0^{2\pi} (\frac{1}{4}) d\theta = \frac{\pi}{2}$$</div>
+ <div class="math">$$\int_0^{2\pi} (\frac{1}{4}) \, d\theta = \frac{\pi}{2}$$</div>
  </div>
  </div>
  </div>
@@ -699,17 +699,17 @@
  <div class="solution-content">
  <div class="step" data-step="1">
  <div class="step-title">Convert to spherical</div>
- <div class="math">$$1/(x^2 + y^2 + z^2)^{\frac{3}{2}} = 1/\rho^3 \\ dV = \rho^2 \sin \phi \, d\rho \, d\phi d\theta \\ \text{Region: } b \leq \rho \leq a$$</div>
+ <div class="math">$$1/(x^2 + y^2 + z^2)^{\frac{3}{2}} = 1/\rho^3 \\ dV = \rho^2 \sin \phi \, d\rho \, d\phi \, d\theta \\ \text{Region: } b \leq \rho \leq a$$</div>
  </div>
 
  <div class="step" data-step="2">
  <div class="step-title">Set up and simplify</div>
- <div class="math">$$\int_0^{2\pi} \int_0^{\pi} \int_b^a (1/\rho^3) \cdot \rho^2 \sin \phi \, d\rho \, d\phi d\theta \\ = \int_0^{2\pi} \int_0^{\pi} \int_b^a \rho^{-1} \sin \phi \, d\rho \, d\phi d\theta$$</div>
+ <div class="math">$$\int_0^{2\pi} \int_0^{\pi} \int_b^a (1/\rho^3) \cdot \rho^2 \sin \phi \, d\rho \, d\phi \, d\theta \\ = \int_0^{2\pi} \int_0^{\pi} \int_b^a \rho^{-1} \sin \phi \, d\rho \, d\phi \, d\theta$$</div>
  </div>
 
  <div class="step" data-step="3">
  <div class="step-title">Evaluate</div>
- <div class="math">$$\int_b^a \rho^{-1} d\rho = \ln(a/b) \\ \int_0^{\pi} \sin \phi d\phi = 2 \\ \int_0^{2\pi} d\theta = 2\pi \\ \text{Total: } 4\pi \ln(a/b)$$</div>
+ <div class="math">$$\int_b^a \rho^{-1} \, d\rho = \ln(a/b) \\ \int_0^{\pi} \sin \phi \, d\phi = 2 \\ \int_0^{2\pi} \, d\theta = 2\pi \\ \text{Total: } 4\pi \ln(a/b)$$</div>
  </div>
  </div>
  </div>
@@ -733,12 +733,12 @@
  <div class="solution-content">
  <div class="step" data-step="1">
  <div class="step-title">Set up in spherical</div>
- <div class="math">$$d = \rho \text{(distance from origin)} \\ density = 1/(1 + \rho^3) \\ dV = \rho^2 \sin \phi \, d\rho \, d\phi d\theta \\ Mass = \int_0^{2\pi} \int_0^{\pi} \int_0^R \rho^2/(1 + \rho^3) \sin \phi \, d\rho \, d\phi d\theta$$</div>
+ <div class="math">$$d = \rho \text{(distance from origin)} \\ density = 1/(1 + \rho^3) \\ dV = \rho^2 \sin \phi \, d\rho \, d\phi \, d\theta \\ Mass = \int_0^{2\pi} \int_0^{\pi} \int_0^R \rho^2/(1 + \rho^3) \sin \phi \, d\rho \, d\phi \, d\theta$$</div>
  </div>
 
  <div class="step" data-step="2">
  <div class="step-title">Evaluate ρ integral</div>
- <div class="math">$$\int_0^R \rho^2/(1 + \rho^3) d\rho \\ \text{Let } u = 1 + \rho^3, du = 3\rho^2 d\rho \\ = (\frac{1}{3}) \ln(1 + R^3)$$</div>
+ <div class="math">$$\int_0^R \rho^2/(1 + \rho^3) \, d\rho \\ \text{Let } u = 1 + \rho^3, du = 3\rho^2 \, d\rho \\ = (\frac{1}{3}) \ln(1 + R^3)$$</div>
  </div>
 
  <div class="step" data-step="3">
@@ -767,12 +767,12 @@
  <div class="solution-content">
  <div class="step" data-step="1">
  <div class="step-title">Set up integral</div>
- <div class="math">$$Mass = \int_0^{2\pi} \int_0^{\pi} \int_1^2 0.4\rho^2 \cdot \rho^2 \sin \phi \, d\rho \, d\phi d\theta \\ = 0.4 \int_0^{2\pi} d\theta \cdot \int_0^{\pi} \sin \phi d\phi \cdot \int_1^2 \rho^4 d\rho$$</div>
+ <div class="math">$$Mass = \int_0^{2\pi} \int_0^{\pi} \int_1^2 0.4\rho^2 \cdot \rho^2 \sin \phi \, d\rho \, d\phi \, d\theta \\ = 0.4 \int_0^{2\pi} \, d\theta \cdot \int_0^{\pi} \sin \phi \, d\phi \cdot \int_1^2 \rho^4 \, d\rho$$</div>
  </div>
 
  <div class="step" data-step="2">
  <div class="step-title">Evaluate</div>
- <div class="math">$$= 0.4 \cdot 2\pi \cdot 2 \cdot [\rh\frac{o^5}{5}]_1^2 \\ = 0.4 \cdot 4\pi \cdot (32 - 1)/5 \\ = 0.4 \cdot 4\pi \cdot \frac{31}{5} = 9.92\pi$$</div>
+ <div class="math">$$= 0.4 \cdot 2\pi \cdot 2 \cdot \left[\frac{\rho^5}{5}\right]_1^2 \\ = 0.4 \cdot 4\pi \cdot (32 - 1)/5 \\ = 0.4 \cdot 4\pi \cdot \frac{31}{5} = 9.92\pi$$</div>
  </div>
 
  <div class="warning">Note: Units need to be consistent (convert m to cm if density is in g/cm^3)</div>
@@ -801,12 +801,12 @@
  <h5>Part (a)</h5>
  <div class="step" data-step="1">
  <div class="step-title">Set up average</div>
- <div class="math">$$T_avg = (1/V) \iiint_C 32(x^2 + y^2 + z^2) dV \\ V = 2^3 = 8$$</div>
+ <div class="math">$$T_{\text{avg}} = (1/V) \iiint_C 32(x^2 + y^2 + z^2) dV \\ V = 2^3 = 8$$</div>
  </div>
 
  <div class="step" data-step="2">
  <div class="step-title">Evaluate</div>
- <div class="math">$$\iiint_C (x^2 + y^2 + z^2) dV = 3 \iiint_C x^2 dV \text{(by symmetry)} \\ = 3 \cdot 8 \cdot \int_{-1}^1 x^2 dx / 2 = 3 \cdot 8 \cdot (\frac{2}{3})/2 = 8 \\ T_avg = (32 \cdot 8)/8 = 32$$</div>
+ <div class="math">$$\iiint_C (x^2 + y^2 + z^2) dV = 3 \iiint_C x^2 dV \text{(by symmetry)} \\ = 3 \cdot 8 \cdot \int_{-1}^1 x^2 dx / 2 = 3 \cdot 8 \cdot (\frac{2}{3})/2 = 8 \\ T_{\text{avg}} = (32 \cdot 8)/8 = 32$$</div>
  </div>
 
  <h5>Part (b)</h5>
@@ -880,7 +880,7 @@
 
  <div class="step" data-step="3">
  <div class="step-title">Evaluate</div>
- <div class="math">$$\int_r^{6-r^2} dz = 6 - r^2 - r \\ \int_0^2 (6 - r^2 - r) \cdot r dr = \int_0^2 (6r - r^3 - r^2) dr \\ = [3r^2 - \frac{r^4}{4} - \frac{r^3}{3}]_0^2 = 12 - 4 - \frac{8}{3} = \frac{16}{3} \\ V = 2\pi \cdot \frac{16}{3} = \frac{32\pi}{3}$$</div>
+ <div class="math">$$\int_r^{6-r^2} dz = 6 - r^2 - r \\ \int_0^2 (6 - r^2 - r) \cdot r \, dr = \int_0^2 (6r - r^3 - r^2) \, dr \\ = \left[3r^2 - \frac{r^4}{4} - \frac{r^3}{3}\right]_0^2 = 12 - 4 - \frac{8}{3} = \frac{16}{3} \\ V = 2\pi \cdot \frac{16}{3} = \frac{32\pi}{3}$$</div>
  </div>
  </div>
  </div>
@@ -909,7 +909,7 @@
 
  <div class="step" data-step="2">
  <div class="step-title">Alternative: Sphere volume minus cylinder + caps</div>
- <div class="math">$$V_sphere = (\frac{4}{3})\pi(8) = \frac{32\pi}{3} \\ V_remaining = V_sphere - V_cylinder_inside$$</div>
+ <div class="math">$$V_{\text{sphere}} = (\frac{4}{3})\pi(8) = \frac{32\pi}{3} \\ V_{\text{remaining}} = V_{\text{sphere}} - V_{\text{cylinder inside}}$$</div>
  </div>
 
  <p>This is a classic "napkin ring" problem. The remaining volume depends only on the height of the remaining ring.</p>
@@ -953,7 +953,7 @@
  <div class="solution-content">
  <div class="step" data-step="1">
  <div class="step-title">Find partial derivatives</div>
- <div class="math">$$x = 3ue^v, y = 7 + 3e^u \\ \partial x/\partial u = 3e^v, \partial x/\partial v = 3ue^v \\ \partial y/\partial u = 3e^u, \partial y/\partial v = 0$$</div>
+ <div class="math">$$x = 3ue^v, y = 7 + 3e^u \\ \frac{\partial x}{\partial u} = 3e^v, \frac{\partial x}{\partial v} = 3ue^v \\ \frac{\partial y}{\partial u} = 3e^u, \frac{\partial y}{\partial v} = 0$$</div>
  </div>
 
  <div class="step" data-step="2">
@@ -988,7 +988,7 @@
 
  <div class="step" data-step="2">
  <div class="step-title">Verify</div>
- <div class="math">$$G(1,0) = (-5, 4) \checkmark \\ G(0,1) = (8, 6) \checkmark \\ G(0,0) = (0, 0) \checkmark$$</div>
+ <div class="math">$$G(1,0) = (-5, 4)  \checkmark \\ G(0,1) = (8, 6)  \checkmark \\ G(0,0) = (0, 0)  \checkmark$$</div>
  </div>
  </div>
  </div>
@@ -1075,7 +1075,7 @@
  <div class="step" data-step="2">
  <div class="step-title">Find Jacobian</div>
  <p>Need to find \partial(x,y)/\partial(u,v) or its inverse \partial(u,v)/\partial(x,y)</p>
- <div class="math">$$\partial u/\partial x = 2x, \partial u/\partial y = -2y \\ \partial v/\partial x = y, \partial v/\partial y = x \\ \partial(u,v)/\partial(x,y) = 2x \cdot x - (-2y) \cdot y = 2x^2 + 2y^2 = 2(x^2 + y^2) \\ So \left|\frac{\partial(x,y)}{\partial(u,v)}\right| = 1/(2(x^2 + y^2))$$</div>
+ <div class="math">$$\frac{\partial u}{\partial x} = 2x, \frac{\partial u}{\partial y} = -2y \\ \frac{\partial v}{\partial x} = y, \frac{\partial v}{\partial y} = x \\ \partial(u,v)/\partial(x,y) = 2x \cdot x - (-2y) \cdot y = 2x^2 + 2y^2 = 2(x^2 + y^2) \\ \text{So }\left|\frac{\partial(x,y)}{\partial(u,v)}\right| = 1/(2(x^2 + y^2))$$</div>
  </div>
 
  <div class="step" data-step="3">
@@ -1223,7 +1223,7 @@
 
  <div class="step" data-step="3">
  <div class="step-title">Evaluate</div>
- <div class="math">$$\int_0^1 (12t^2 - 36t) \cdot 2\sqrt{10} dt = 2\sqrt{10} [4t^3 - 18t^2]_0^1 \\ = 2\sqrt{10} (4 - 18) = 2\sqrt{10} \cdot (-14) = -28\sqrt{10}$$</div>
+ <div class="math">$$\int_0^1 (12t^2 - 36t) \cdot 2\sqrt{10} \, dt = 2\sqrt{10} \left[4t^3 - 18t^2\right]_0^1 \\ = 2\sqrt{10} (4 - 18) = 2\sqrt{10} \cdot (-14) = -28\sqrt{10}$$</div>
  </div>
  </div>
  </div>
@@ -1282,12 +1282,12 @@
 
  <div class="step" data-step="2">
  <div class="step-title">Substitute</div>
- <div class="math">$$\int [9(t^3)(-t^{-2}) + 8(t^2)(3t^2) + (2 + t^{-1})(2t)] dt \\ = \int [-9t + 24t^4 + 4t + 2] dt$$</div>
+ <div class="math">$$\int \left[9(t^3)(-t^{-2}) + 8(t^2)(3t^2) + (2 + t^{-1})(2t)\right] \, dt \\ = \int \left[-9t + 24t^4 + 4t + 2\right] \, dt$$</div>
  </div>
 
  <div class="step" data-step="3">
- <div class="step-title">Evaluate (note: limit as t→0 needs care)</div>
- <p>This integral is improper at t = 0 due to t^{-1} term.</p>
+ <div class="step-title">Evaluate (note: limit as t \to 0 needs care)</div>
+ <p>This integral is improper at $t = 0$ due to the $t^{-1}$ term.</p>
  </div>
  </div>
  </div>
@@ -1372,7 +1372,7 @@
 
  <div class="step" data-step="3">
  <div class="step-title">Evaluate double integral</div>
- <div class="math">$$\int_0^4 \int_{x^2}^{4x} 2x \, dy \, dx = \int_0^4 2x(4x - x^2) dx \\ = \int_0^4 (8x^2 - 2x^3) dx = [8\frac{x^3}{3} - \frac{x^4}{2}]_0^4 \\ = \frac{512}{3} - 128 = \frac{128}{3}$$</div>
+ <div class="math">$$\int_0^4 \int_{x^2}^{4x} 2x \, dy \, dx = \int_0^4 2x(4x - x^2) \, dx \\ = \int_0^4 (8x^2 - 2x^3) \, dx = \left[\frac{8x^3}{3} - \frac{x^4}{2}\right]_0^4 \\ = \frac{512}{3} - 128 = \frac{128}{3}$$</div>
  </div>
  </div>
  </div>
@@ -1503,7 +1503,7 @@
 
  <div class="step" data-step="2">
  <div class="step-title">Surface element</div>
- <div class="math">$$dS = \sqrt{2} \cdot z dz d\theta (for cone z = \sqrt{x^2+y^2})$$</div>
+ <div class="math">$$dS = \sqrt{2} \cdot z dz \, d\theta (for cone z = \sqrt{x^2+y^2})$$</div>
  </div>
 
  <div class="step" data-step="3">
@@ -1532,7 +1532,7 @@
  <div class="solution-content">
  <div class="step" data-step="1">
  <div class="step-title">Compute curl</div>
- <div class="math">$$\nabla \times Φ = (0, 0, \partial x/\partial x - \partial(-y)/\partial y) = (0, 0, 2) = 2k$$</div>
+ <div class="math">$$\nabla \times Φ = (0, 0, \frac{\partial x}{\partial x} - \partial(-y)/\partial y) = (0, 0, 2) = 2k$$</div>
  </div>
 
  <div class="step" data-step="2">
@@ -1566,7 +1566,7 @@
 
  <div class="step" data-step="2">
  <div class="step-title">Convert to spherical and integrate</div>
- <div class="math">$$\int_0^{2\pi} \int_0^{\pi} \int_0^1 12\rho^2 \cdot \rho^2 \sin \phi \, d\rho \, d\phi d\theta \\ = 12 \cdot 2\pi \cdot 2 \cdot [\rh\frac{o^5}{5}]_0^1 = \frac{48\pi}{5}$$</div>
+ <div class="math">$$\int_0^{2\pi} \int_0^{\pi} \int_0^1 12\rho^2 \cdot \rho^2 \sin \phi \, d\rho \, d\phi \, d\theta \\ = 12 \cdot 2\pi \cdot 2 \cdot \left[\frac{\rho^5}{5}\right]_0^1 = \frac{48\pi}{5}$$</div>
  </div>
  </div>
  </div>
@@ -1607,12 +1607,12 @@
  <div class="solution-content">
  <div class="step" data-step="1">
  <div class="step-title">Test</div>
- <div class="math">$$\frac{\partial P}{\partial y} = 0, \frac{\partial Q}{\partial x} = 0 \checkmark \text{Equal!}$$</div>
+ <div class="math">$$\frac{\partial P}{\partial y} = 0, \frac{\partial Q}{\partial x} = 0  \checkmark \text{Equal!}$$</div>
  </div>
 
  <div class="step" data-step="2">
  <div class="step-title">Find f</div>
- <div class="math">$$\partial f/\partial x = 3x \to f = (\frac{3}{2})x^2 + g(y) \\ \partial f/\partial y = g'(y) = 7y \to g(y) = (\frac{7}{2})y^2 \\ f(x,y) = (\frac{3}{2})x^2 + (\frac{7}{2})y^2 + C$$</div>
+ <div class="math">$$\frac{\partial f}{\partial x} = 3x \to f = (\frac{3}{2})x^2 + g(y) \\ \frac{\partial f}{\partial y} = g'(y) = 7y \to g(y) = (\frac{7}{2})y^2 \\ f(x,y) = (\frac{3}{2})x^2 + (\frac{7}{2})y^2 + C$$</div>
  </div>
  </div>
  </div>
@@ -1661,19 +1661,19 @@
  <div class="step" data-step="1">
  <div class="step-title">Test for Conservative</div>
  <p>$P = 7x^2 + 7y^2$, $Q = 14xy$</p>
- <div class="math">$$\frac{\partial P}{\partial y} = 14y \\ \frac{\partial Q}{\partial x} = 14y \\ \frac{\partial P}{\partial y} = \frac{\partial Q}{\partial x} \checkmark Conservative!$$</div>
+ <div class="math">$$\frac{\partial P}{\partial y} = 14y \\ \frac{\partial Q}{\partial x} = 14y \\ \frac{\partial P}{\partial y} = \frac{\partial Q}{\partial x}  \checkmark Conservative!$$</div>
  </div>
 
  <div class="step" data-step="2">
  <div class="step-title">Find the Potential Function f</div>
- <p>Since \partial f/\partial x = P = 7x^2 + 7y^2:</p>
+ <p>Since \frac{\partial f}{\partial x} = P = 7x^2 + 7y^2:</p>
  <div class="math">$$f = \int (7x^2 + 7y^2)dx = (\frac{7}{3})x^3 + 7xy^2 + g(y)$$</div>
  </div>
 
  <div class="step" data-step="3">
  <div class="step-title">Determine g(y)</div>
- <p>Take \partial f/\partial y and set equal to Q:</p>
- <div class="math">$$\partial f/\partial y = 14xy + g'(y) = 14xy \\ g'(y) = 0 \to g(y) = C$$</div>
+ <p>Take \frac{\partial f}{\partial y} and set equal to Q:</p>
+ <div class="math">$$\frac{\partial f}{\partial y} = 14xy + g'(y) = 14xy \\ g'(y) = 0 \to g(y) = C$$</div>
  </div>
  </div>
  </div>
