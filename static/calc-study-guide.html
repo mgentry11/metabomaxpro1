@@ -1319,17 +1319,25 @@
  <div class="solution">
  <div class="solution-header">Solution</div>
  <div class="solution-content">
- <div class="step" data-step="1">
- <div class="step-title">Find derivatives</div>
- <div class="math">$$x = 2 + t^{-1} \to dx = -t^{-2} dt \\ y = t^3 \to dy = 3t^2 dt \\ z = t^2 \to dz = 2t dt$$</div>
- </div>
-
-<div class="step" data-step="2">
-<div class="step-title">Substitute into the integral</div>
-<div class="math">$$\int_0^1 \left[9y \cdot \frac{dx}{dt} + 8z \cdot \frac{dy}{dt} + x \cdot \frac{dz}{dt}\right] dt$$</div>
-<div class="math">$$= \int_0^1 \left[9(t^3)(-t^{-2}) + 8(t^2)(3t^2) + (2 + t^{-1})(2t)\right] dt$$</div>
+<div class="why-box">
+<p><strong>Key Concept:</strong> For a line integral $\int_C P\,dx + Q\,dy + R\,dz$ along a parameterized curve $\mathbf{r}(t)$, we substitute $x, y, z$ with their expressions in $t$, and replace $dx, dy, dz$ with $\frac{dx}{dt}dt, \frac{dy}{dt}dt, \frac{dz}{dt}dt$.</p>
 </div>
 
+<div class="step" data-step="1">
+<div class="step-title">Find derivatives of each component</div>
+<p>Given $\mathbf{r}(t) = (2 + t^{-1}, t^3, t^2)$, we need $\frac{dx}{dt}, \frac{dy}{dt}, \frac{dz}{dt}$:</p>
+<div class="math">$$x = 2 + t^{-1} \implies \frac{dx}{dt} = -t^{-2} = -\frac{1}{t^2}$$</div>
+<div class="math">$$y = t^3 \implies \frac{dy}{dt} = 3t^2$$</div>
+<div class="math">$$z = t^2 \implies \frac{dz}{dt} = 2t$$</div>
+</div>
+
+<div class="step" data-step="2">
+<div class="step-title">Write the line integral formula</div>
+<p>The line integral $\int_C 9y\,dx + 8z\,dy + x\,dz$ becomes:</p>
+<div class="math">$$\int_0^1 \left[9y(t) \cdot \frac{dx}{dt} + 8z(t) \cdot \frac{dy}{dt} + x(t) \cdot \frac{dz}{dt}\right] dt$$</div>
+<p>Substituting $x(t) = 2 + t^{-1}$, $y(t) = t^3$, $z(t) = t^2$:</p>
+<div class="math">$$= \int_0^1 \left[9(t^3)(-t^{-2}) + 8(t^2)(3t^2) + (2 + t^{-1})(2t)\right] dt$$</div>
+</div>
 <div class="step" data-step="3">
 <div class="step-title">Simplify each term</div>
 <div class="math">$$9(t^3)(-t^{-2}) = -9t$$</div>
@@ -1465,32 +1473,45 @@
  <div class="solution">
  <div class="solution-header">Solution</div>
  <div class="solution-content">
- <div class="step" data-step="1">
- <div class="step-title">Check if conservative</div>
- <p>This field has a singularity at origin. Need to use parameterization or careful application of Green's theorem.</p>
- </div>
+<div class="solution-header">Solution</div>
+<div class="solution-content">
+<div class="why-box">
+<p><strong>Key Concept:</strong> This vector field $\mathbf{F} = \left(\frac{-2y}{(x^2+y^2)^2}, \frac{2x}{(x^2+y^2)^2}\right)$ has a singularity at the origin, so Green's Theorem cannot be applied directly. We must parameterize the curve and compute the line integral explicitly.</p>
+</div>
 
- <div class="step" data-step="2">
- <div class="step-title">Parameterize circle</div>
- <div class="math">$$r(t) = (4\cos t, 4\sin t), 0 \leq t \leq 2\pi \\ dr = (-4\sin t, 4\cos t) dt \\ x^2 + y^2 = 16$$</div>
- </div>
+<div class="step" data-step="1">
+<div class="step-title">Recognize the singularity</div>
+<p>The field is undefined at $(0,0)$ because the denominator $(x^2+y^2)^2 = 0$ there. Since the origin is inside our circle of radius 4, we cannot use Green's Theorem (the region is not simply connected when we exclude the singularity).</p>
+</div>
 
- <div class="step" data-step="3">
- <div class="step-title">Compute F · dr</div>
- <div class="math">$$\mathbf{F} = \left(\frac{-8\sin t}{256}, \frac{8\cos t}{256}\right) = \left(\frac{-\sin t}{32}, \frac{\cos t}{32}\right) \\ \mathbf{F} \cdot d\mathbf{r} = \frac{-\sin t}{32}(-4\sin t) + \frac{\cos t}{32}(4\cos t) \\ = \frac{4\sin^2 t + 4\cos^2 t}{32} = \frac{4}{32} = \frac{1}{8}$$</div>
- </div>
+<div class="step" data-step="2">
+<div class="step-title">Parameterize the circle</div>
+<p>Circle of radius 4, counterclockwise:</p>
+<div class="math">$$\mathbf{r}(t) = (4\cos t, 4\sin t), \quad 0 \leq t \leq 2\pi$$</div>
+<p>Compute the differential:</p>
+<div class="math">$$d\mathbf{r} = \mathbf{r}'(t)\,dt = (-4\sin t, 4\cos t)\,dt$$</div>
+<p>On the circle: $x^2 + y^2 = 16$, so $(x^2+y^2)^2 = 256$</p>
+</div>
 
- <div class="step" data-step="4">
- <div class="step-title">Integrate</div>
- <div class="math">$$\int_0^{2\pi} (\frac{1}{8}) dt = \frac{\pi}{4}$$</div>
- </div>
- </div>
- </div>
- <div class="answer">
- <div class="answer-label">ANSWER</div>
- <div class="answer-value">$\pi/4$</div>
- </div>
- </div>
+<div class="step" data-step="3">
+<div class="step-title">Evaluate F on the circle</div>
+<p>Substitute $x = 4\cos t$, $y = 4\sin t$:</p>
+<div class="math">$$\mathbf{F} = \left(\frac{-2(4\sin t)}{256}, \frac{2(4\cos t)}{256}\right) = \left(\frac{-8\sin t}{256}, \frac{8\cos t}{256}\right) = \left(\frac{-\sin t}{32}, \frac{\cos t}{32}\right)$$</div>
+</div>
+
+<div class="step" data-step="4">
+<div class="step-title">Compute $\mathbf{F} \cdot d\mathbf{r}$</div>
+<p>Dot product of $\mathbf{F}$ with $d\mathbf{r}$:</p>
+<div class="math">$$\mathbf{F} \cdot d\mathbf{r} = \left(\frac{-\sin t}{32}\right)(-4\sin t) + \left(\frac{\cos t}{32}\right)(4\cos t)$$</div>
+<div class="math">$$= \frac{4\sin^2 t}{32} + \frac{4\cos^2 t}{32} = \frac{4(\sin^2 t + \cos^2 t)}{32} = \frac{4}{32} = \frac{1}{8}$$</div>
+<p><em>Notice: The integrand is constant! This happens because the field strength decreases with $r^{-2}$ while the path length increases with $r$.</em></p>
+</div>
+
+<div class="step" data-step="5">
+<div class="step-title">Integrate around the circle</div>
+<div class="math">$$\int_C \mathbf{F} \cdot d\mathbf{r} = \int_0^{2\pi} \frac{1}{8}\,dt = \frac{1}{8} \cdot 2\pi = \frac{\pi}{4}$$</div>
+</div>
+</div> </div>
 
  <!-- Problem 35: Similar circle integral -->
  <div class="problem">
@@ -1553,25 +1574,44 @@
  <div class="problem-statement">
  <p>S = hemisphere $x^2 + y^2 + z^2 = 1$ ($z \geq 0$) with base. $\mathbf{E} = 8x\mathbf{i} + 8y\mathbf{j} + 8z\mathbf{k}$. Find flux.</p>
  </div>
- <div class="solution">
- <div class="solution-header">Solution</div>
- <div class="solution-content">
- <div class="step" data-step="1">
- <div class="step-title">Use Divergence Theorem</div>
- <div class="math">$$\nabla \cdot E = 8 + 8 + 8 = 24$$</div>
- </div>
+<div class="solution">
+<div class="solution-header">Solution</div>
+<div class="solution-content">
+<div class="why-box">
+<p><strong>Key Concept:</strong> The Divergence Theorem converts a surface integral (flux) into a volume integral: $\iint_S \mathbf{F} \cdot d\mathbf{S} = \iiint_V (\nabla \cdot \mathbf{F})\,dV$. This works when S is a closed surface enclosing volume V.</p>
+</div>
 
- <div class="step" data-step="2">
- <div class="step-title">Apply theorem</div>
- <div class="math">$$\iint_S E \cdot dS = \iiint_V 24 dV = 24 \cdot (\frac{2\pi}{3}) = 16\pi$$</div>
- </div>
- </div>
- </div>
- <div class="answer">
- <div class="answer-label">ANSWER</div>
- <div class="answer-value">$16\pi$</div>
- </div>
- </div>
+<div class="step" data-step="1">
+<div class="step-title">Identify the closed surface</div>
+<p>The problem says "hemisphere with base" - this means the surface S consists of:</p>
+<p>• The curved hemisphere: $x^2 + y^2 + z^2 = 1$, $z \geq 0$</p>
+<p>• The flat circular base: $x^2 + y^2 \leq 1$, $z = 0$</p>
+<p>Together, these form a closed surface enclosing the upper half of the unit ball.</p>
+</div>
+
+<div class="step" data-step="2">
+<div class="step-title">Compute the divergence</div>
+<p>Given $\mathbf{E} = 8x\mathbf{i} + 8y\mathbf{j} + 8z\mathbf{k} = (8x, 8y, 8z)$:</p>
+<div class="math">$$\nabla \cdot \mathbf{E} = \frac{\partial}{\partial x}(8x) + \frac{\partial}{\partial y}(8y) + \frac{\partial}{\partial z}(8z) = 8 + 8 + 8 = 24$$</div>
+</div>
+
+<div class="step" data-step="3">
+<div class="step-title">Find the volume of the hemisphere</div>
+<p>The volume of a full sphere of radius 1 is $\frac{4}{3}\pi r^3 = \frac{4}{3}\pi$.</p>
+<p>The hemisphere (half the sphere) has volume:</p>
+<div class="math">$$V = \frac{1}{2} \cdot \frac{4}{3}\pi = \frac{2\pi}{3}$$</div>
+</div>
+
+<div class="step" data-step="4">
+<div class="step-title">Apply the Divergence Theorem</div>
+<div class="math">$$\iint_S \mathbf{E} \cdot d\mathbf{S} = \iiint_V (\nabla \cdot \mathbf{E})\,dV = \iiint_V 24\,dV = 24 \cdot V = 24 \cdot \frac{2\pi}{3} = 16\pi$$</div>
+</div>
+
+<div class="why-box">
+<p><strong>Why this works:</strong> Computing the flux directly would require parameterizing both the curved surface AND the flat base, then computing two separate surface integrals. The Divergence Theorem reduces this to a simple volume calculation since the divergence is constant.</p>
+</div>
+</div>
+</div> </div>
 
  <!-- Problem 37: Surface area of cone -->
  <div class="problem">
