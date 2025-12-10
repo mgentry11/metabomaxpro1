@@ -4,6 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Complete Calculus III Study Guide - All Problems Solved</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] },
+            options: { skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre'] }
+        };
+    </script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
@@ -130,7 +138,7 @@
                 <ul>
                     <li><strong>Double Integrals ∬</strong> - Sum over a 2D region (area, mass of a plate)</li>
                     <li><strong>Triple Integrals ∭</strong> - Sum over a 3D region (volume, mass of a solid)</li>
-                    <li><strong>Line Integrals ∫</strong> - Sum along a curve (work done by a force)</li>
+                    <li><strong>Line Integrals \int </strong> - Sum along a curve (work done by a force)</li>
                     <li><strong>Surface Integrals ∬</strong> - Sum over a surface (flux through a membrane)</li>
                 </ul>
             </div>
@@ -139,24 +147,24 @@
 
             <div class="formula-box">
                 <div class="formula-name">Polar Coordinates (2D)</div>
-                <div class="formula">x = r cos θ,  y = r sin θ,  r² = x² + y²
-dA = r dr dθ  ← Don't forget the r!</div>
+                <div class="formula">x = r cos \theta,  y = r sin \theta,  r^2 = x^2 + y^2
+dA = r dr d\theta  ← Don't forget the r!</div>
             </div>
 
             <div class="formula-box">
                 <div class="formula-name">Cylindrical Coordinates (3D)</div>
-                <div class="formula">x = r cos θ,  y = r sin θ,  z = z
-dV = r dz dr dθ</div>
+                <div class="formula">x = r cos \theta,  y = r sin \theta,  z = z
+dV = r dz dr d\theta</div>
             </div>
 
             <div class="formula-box">
                 <div class="formula-name">Spherical Coordinates (3D)</div>
-                <div class="formula">x = ρ sin φ cos θ,  y = ρ sin φ sin θ,  z = ρ cos φ
-ρ² = x² + y² + z²
-dV = ρ² sin φ dρ dφ dθ</div>
+                <div class="formula">x = \rho sin \phi cos \theta,  y = \rho sin \phi sin \theta,  z = \rho cos \phi
+\rho^2 = x^2 + y^2 + z^2
+dV = \rho^2 sin \phi d\rho d\phi d\theta</div>
             </div>
 
-            <div class="tip">Use polar/cylindrical when you see circles (x² + y²). Use spherical when you see spheres (x² + y² + z²).</div>
+            <div class="tip">Use polar/cylindrical when you see circles (x^2 + y^2). Use spherical when you see spheres (x^2 + y^2 + z^2).</div>
 
             <div class="back-top"><a href="#top">↑ Back to Contents</a></div>
         </section>
@@ -188,13 +196,13 @@ dV = ρ² sin φ dρ dφ dθ</div>
                         <div class="step" data-step="1">
                             <div class="step-title">Set up the integral</div>
                             <p>For the region bounded as shown with the given answer:</p>
-                            <div class="math">∬_D x dA = ∫∫ x dx dy</div>
+                            <div class="math">$$\iint_D x dA = \iint  x dx dy$$</div>
                         </div>
 
                         <div class="step" data-step="2">
                             <div class="step-title">Evaluate</div>
                             <p>Working backwards from the answer 182/3, this integral evaluates to:</p>
-                            <div class="math">∬_D x dA = 182/3</div>
+                            <div class="math">$$\iint_D x dA = 182/3$$</div>
                         </div>
                     </div>
                 </div>
@@ -211,7 +219,7 @@ dV = ρ² sin φ dρ dφ dθ</div>
                     <span class="problem-title">Iterated Integral of Cosine</span>
                 </div>
                 <div class="problem-statement">
-                    <p>Evaluate: ∫₋π⁰ ∫_{π/4}^{π/2} cos(2x + y) dy dx</p>
+                    <p>Evaluate: \int ₋\pi⁰ \int _{\pi/4}^{\pi/2} cos(2x + y) dy dx</p>
                     <p><strong>Answer: 0</strong></p>
                 </div>
                 <div class="solution">
@@ -219,23 +227,23 @@ dV = ρ² sin φ dρ dφ dθ</div>
                     <div class="solution-content">
                         <div class="step" data-step="1">
                             <div class="step-title">Inner integral (with respect to y)</div>
-                            <div class="math">∫_{π/4}^{π/2} cos(2x + y) dy = [sin(2x + y)]_{π/4}^{π/2}
-= sin(2x + π/2) - sin(2x + π/4)
-= cos(2x) - sin(2x + π/4)</div>
+                            <div class="math">$$\int _{\pi/4}^{\pi/2} cos(2x + y) dy = [sin(2x + y)]_{\pi/4}^{\pi/2}
+= sin(2x + \pi/2) - sin(2x + \pi/4)
+= cos(2x) - sin(2x + \pi/4)</div>
                         </div>
 
                         <div class="step" data-step="2">
                             <div class="step-title">Outer integral (with respect to x)</div>
-                            <div class="math">∫_{-π}^{0} [cos(2x) - sin(2x + π/4)] dx
-= [sin(2x)/2 + cos(2x + π/4)/2]_{-π}^{0}</div>
+                            <div class="math">$$\int _{-\pi}^{0} [cos(2x) - sin(2x + \pi/4)] dx
+= [sin(2x)/2 + cos(2x + \pi/4)/2]_{-\pi}^{0}</div>
                         </div>
 
                         <div class="step" data-step="3">
                             <div class="step-title">Evaluate at bounds</div>
-                            <div class="math">At x = 0: sin(0)/2 + cos(π/4)/2 = 0 + (√2/2)/2 = √2/4
-At x = -π: sin(-2π)/2 + cos(-2π + π/4)/2 = 0 + cos(π/4)/2 = √2/4
+                            <div class="math">$$At x = 0: sin(0)/2 + cos(\pi/4)/2 = 0 + (\sqrt{2}/2)/2 = \sqrt{2}/4
+At x = -\pi: sin(-2\pi)/2 + cos(-2\pi + \pi/4)/2 = 0 + cos(\pi/4)/2 = \sqrt{2}/4
 
-Result: √2/4 - √2/4 = 0</div>
+Result: \sqrt{2}/4 - \sqrt{2}/4 = 0</div>
                         </div>
 
                         <div class="why-box">
@@ -257,7 +265,7 @@ Result: √2/4 - √2/4 = 0</div>
                     <span class="problem-title">Change Order of Integration</span>
                 </div>
                 <div class="problem-statement">
-                    <p>Change the order of integration for: ∫₀¹³ ∫_x^{13} x·e^{y³/169} dy dx</p>
+                    <p>Change the order of integration for: \int _0^1^3 \int _x^{13} x \cdot e^{y^3/169} dy dx</p>
                 </div>
                 <div class="solution">
                     <div class="solution-header">Solution</div>
@@ -265,24 +273,24 @@ Result: √2/4 - √2/4 = 0</div>
                         <div class="step" data-step="1">
                             <div class="step-title">Identify the original region</div>
                             <p>Original: x goes from 0 to 13, y goes from x to 13</p>
-                            <p>This means: 0 ≤ x ≤ y and x ≤ y ≤ 13, with 0 ≤ x ≤ 13</p>
+                            <p>This means: 0 \leq x \leq y and x \leq y \leq 13, with 0 \leq x \leq 13</p>
                         </div>
 
                         <div class="step" data-step="2">
                             <div class="step-title">Rewrite for dy dx → dx dy</div>
                             <p>The region is: y from 0 to 13, x from 0 to y</p>
-                            <div class="math">∫₀¹³ ∫₀^y x·e^{y³/169} dx dy</div>
+                            <div class="math">$$\int _0^1^3 \int _0^y x \cdot e^{y^3/169} dx dy$$</div>
                         </div>
 
                         <div class="step" data-step="3">
                             <div class="step-title">Why this helps</div>
-                            <p>Now we can integrate x first (easy: x²/2), then y with the exponential.</p>
+                            <p>Now we can integrate x first (easy: x^2/2), then y with the exponential.</p>
                         </div>
                     </div>
                 </div>
                 <div class="answer">
                     <div class="answer-label">ANSWER</div>
-                    <div class="answer-value">∫₀¹³ ∫₀^y x·e^{y³/169} dx dy</div>
+                    <div class="answer-value">\int _0^1^3 \int _0^y x \cdot e^{y^3/169} dx dy</div>
                 </div>
             </div>
 
@@ -293,39 +301,39 @@ Result: √2/4 - √2/4 = 0</div>
                     <span class="problem-title">Question 16.138: Gaussian Over Lower Semicircle</span>
                 </div>
                 <div class="problem-statement">
-                    <p>Evaluate ∬_B e^{-x²-y²} dx dy, where B = {(x,y) | x² + y² ≤ 1 and y ≤ 0}</p>
+                    <p>Evaluate \iint_B e^{-x^2-y^2} dx dy, where B = {(x,y) | x^2 + y^2 \leq 1 and y \leq 0}</p>
                 </div>
                 <div class="solution">
                     <div class="solution-header">Solution</div>
                     <div class="solution-content">
                         <div class="step" data-step="1">
                             <div class="step-title">Convert to polar coordinates</div>
-                            <div class="math">x² + y² = r², so e^{-x²-y²} = e^{-r²}
-dA = r dr dθ
-Region: 0 ≤ r ≤ 1, π ≤ θ ≤ 2π (lower half where y ≤ 0)</div>
+                            <div class="math">$$x^2 + y^2 = r^2, so e^{-x^2-y^2} = e^{-r^2}
+dA = r dr d\theta
+Region: 0 \leq r \leq 1, \pi \leq \theta \leq 2\pi (lower half where y \leq 0)</div>
                         </div>
 
                         <div class="step" data-step="2">
                             <div class="step-title">Set up integral</div>
-                            <div class="math">∬_B e^{-r²} · r dr dθ = ∫_π^{2π} ∫_0^1 r·e^{-r²} dr dθ</div>
+                            <div class="math">$$\iint_B e^{-r^2}  \cdot  r dr d\theta = \int_{\pi}^{2\pi} \int_0^1 r \cdot e^{-r^2} dr d\theta$$</div>
                         </div>
 
                         <div class="step" data-step="3">
                             <div class="step-title">Inner integral</div>
-                            <div class="math">∫_0^1 r·e^{-r²} dr
-Let u = -r², du = -2r dr, so r dr = -du/2
+                            <div class="math">$$\int_0^1 r \cdot e^{-r^2} dr
+Let u = -r^2, du = -2r dr, so r dr = -du/2
 = -½[e^u]_{0}^{-1} = -½(e^{-1} - 1) = ½(1 - 1/e) = (e-1)/(2e)</div>
                         </div>
 
                         <div class="step" data-step="4">
                             <div class="step-title">Outer integral</div>
-                            <div class="math">∫_π^{2π} (e-1)/(2e) dθ = (e-1)/(2e) · π = π(e-1)/(2e)</div>
+                            <div class="math">$$\int_{\pi}^{2\pi} (e-1)/(2e) d\theta = (e-1)/(2e)  \cdot  \pi = \pi(e-1)/(2e)$$</div>
                         </div>
                     </div>
                 </div>
                 <div class="answer">
                     <div class="answer-label">ANSWER</div>
-                    <div class="answer-value">π(1 - e⁻¹)/2 = π(e-1)/(2e)</div>
+                    <div class="answer-value">\pi(1 - e⁻^1)/2 = \pi(e-1)/(2e)</div>
                 </div>
             </div>
 
@@ -336,32 +344,32 @@ Let u = -r², du = -2r dr, so r dr = -du/2
                     <span class="problem-title">Question 16.147b: Fourth Power Integral</span>
                 </div>
                 <div class="problem-statement">
-                    <p>Evaluate ∬_B (x⁴ + 2x²y² + y⁴) dx dy where B is the disk of radius 2 centered at origin in the first quadrant.</p>
+                    <p>Evaluate \iint_B (x^4 + 2x^2y^2 + y^4) dx dy where B is the disk of radius 2 centered at origin in the first quadrant.</p>
                 </div>
                 <div class="solution">
                     <div class="solution-header">Solution</div>
                     <div class="solution-content">
                         <div class="step" data-step="1">
                             <div class="step-title">Recognize the pattern</div>
-                            <div class="math">x⁴ + 2x²y² + y⁴ = (x² + y²)² = r⁴ in polar</div>
+                            <div class="math">$$x^4 + 2x^2y^2 + y^4 = (x^2 + y^2)^2 = r^4 in polar$$</div>
                         </div>
 
                         <div class="step" data-step="2">
                             <div class="step-title">Convert to polar</div>
-                            <div class="math">∬_B r⁴ · r dr dθ = ∫_0^{π/2} ∫_0^2 r⁵ dr dθ</div>
+                            <div class="math">$$\iint_B r^4  \cdot  r dr d\theta = \int_0^{\pi/2} \int_0^2 r^5 dr d\theta$$</div>
                         </div>
 
                         <div class="step" data-step="3">
                             <div class="step-title">Evaluate</div>
-                            <div class="math">∫_0^2 r⁵ dr = [r⁶/6]_0^2 = 64/6 = 32/3
+                            <div class="math">$$\int_0^2 r^5 dr = [r^6/6]_0^2 = 64/6 = 32/3
 
-∫_0^{π/2} (32/3) dθ = (32/3)(π/2) = 16π/3</div>
+\int_0^{\pi/2} (32/3) d\theta = (32/3)(\pi/2) = 16\pi/3</div>
                         </div>
                     </div>
                 </div>
                 <div class="answer">
                     <div class="answer-label">ANSWER</div>
-                    <div class="answer-value">16π/3</div>
+                    <div class="answer-value">16\pi/3</div>
                 </div>
             </div>
 
@@ -372,23 +380,23 @@ Let u = -r², du = -2r dr, so r dr = -du/2
                     <span class="problem-title">Question 16.147a: Improper Double Integral</span>
                 </div>
                 <div class="problem-statement">
-                    <p>Evaluate: ∫_0^∞ ∫_0^y x·e^{-y³} dx dy</p>
+                    <p>Evaluate: \int_0^{\infty} \int_0^y x \cdot e^{-y^3} dx dy</p>
                 </div>
                 <div class="solution">
                     <div class="solution-header">Solution</div>
                     <div class="solution-content">
                         <div class="step" data-step="1">
                             <div class="step-title">Inner integral (with respect to x)</div>
-                            <div class="math">∫_0^y x·e^{-y³} dx = e^{-y³} ∫_0^y x dx = e^{-y³} · [x²/2]_0^y = e^{-y³} · y²/2</div>
+                            <div class="math">$$\int_0^y x \cdot e^{-y^3} dx = e^{-y^3} \int_0^y x dx = e^{-y^3}  \cdot  [x^2/2]_0^y = e^{-y^3}  \cdot  y^2/2$$</div>
                         </div>
 
                         <div class="step" data-step="2">
                             <div class="step-title">Outer integral</div>
-                            <div class="math">∫_0^∞ (y²/2)·e^{-y³} dy
+                            <div class="math">$$\int_0^{\infty} (y^2/2) \cdot e^{-y^3} dy
 
-Let u = y³, du = 3y² dy, so y² dy = du/3
+Let u = y^3, du = 3y^2 dy, so y^2 dy = du/3
 
-= (1/2) · (1/3) ∫_0^∞ e^{-u} du = (1/6)[-e^{-u}]_0^∞ = (1/6)(0 - (-1)) = 1/6</div>
+= (1/2)  \cdot  (1/3) \int_0^{\infty} e^{-u} du = (1/6)[-e^{-u}]_0^\infty = (1/6)(0 - (-1)) = 1/6</div>
                         </div>
                     </div>
                 </div>
@@ -402,70 +410,70 @@ Let u = y³, du = 3y² dy, so y² dy = du/3
             <div class="problem">
                 <div class="problem-header">
                     <span class="problem-number">Problem 7</span>
-                    <span class="problem-title">Question 16.149: Integral Over All of R²</span>
+                    <span class="problem-title">Question 16.149: Integral Over All of R^2</span>
                 </div>
                 <div class="problem-statement">
-                    <p>Evaluate ∬_{R²} f(x,y) dx dy where f(x,y) = 1/(1 + x² + y²)^{3/2}</p>
+                    <p>Evaluate ∬_{R^2} f(x,y) dx dy where f(x,y) = 1/(1 + x^2 + y^2)^{3/2}</p>
                 </div>
                 <div class="solution">
                     <div class="solution-header">Solution</div>
                     <div class="solution-content">
                         <div class="step" data-step="1">
                             <div class="step-title">Convert to polar</div>
-                            <div class="math">1 + x² + y² = 1 + r²
-f = 1/(1 + r²)^{3/2}
-dA = r dr dθ
+                            <div class="math">$$1 + x^2 + y^2 = 1 + r^2
+f = 1/(1 + r^2)^{3/2}
+dA = r dr d\theta
 
-∫_0^{2π} ∫_0^∞ r/(1 + r²)^{3/2} dr dθ</div>
+\int_0^{2\pi} \int_0^{\infty} r/(1 + r^2)^{3/2} dr d\theta</div>
                         </div>
 
                         <div class="step" data-step="2">
                             <div class="step-title">Inner integral</div>
-                            <div class="math">∫_0^∞ r/(1 + r²)^{3/2} dr
+                            <div class="math">$$\int_0^{\infty} r/(1 + r^2)^{3/2} dr
 
-Let u = 1 + r², du = 2r dr
+Let u = 1 + r^2, du = 2r dr
 
-= (1/2) ∫_1^∞ u^{-3/2} du = (1/2)[-2u^{-1/2}]_1^∞ = (1/2)(0 - (-2)) = 1</div>
+= (1/2) \int _1^\infty u^{-3/2} du = (1/2)[-2u^{-1/2}]_1^\infty = (1/2)(0 - (-2)) = 1</div>
                         </div>
 
                         <div class="step" data-step="3">
                             <div class="step-title">Outer integral</div>
-                            <div class="math">∫_0^{2π} 1 dθ = 2π</div>
+                            <div class="math">$$\int_0^{2\pi} 1 d\theta = 2\pi$$</div>
                         </div>
                     </div>
                 </div>
                 <div class="answer">
                     <div class="answer-label">ANSWER</div>
-                    <div class="answer-value">2π</div>
+                    <div class="answer-value">2\pi</div>
                 </div>
             </div>
 
-            <!-- Problem 8: Integral of 1/√(3xy) -->
+            <!-- Problem 8: Integral of 1/\sqrt{(3xy) -->
             <div class="problem">
                 <div class="problem-header">
                     <span class="problem-number">Problem 8</span>
                     <span class="problem-title">Integral with Square Root</span>
                 </div>
                 <div class="problem-statement">
-                    <p>Evaluate ∬_D 1/√(3xy) dA where D = [0,8] × [0,8]</p>
+                    <p>Evaluate \iint_D 1/\sqrt{(3xy) dA where D = [0,8] \times [0,8]</p>
                 </div>
                 <div class="solution">
                     <div class="solution-header">Solution</div>
                     <div class="solution-content">
                         <div class="step" data-step="1">
                             <div class="step-title">Separate the integral</div>
-                            <div class="math">∬_D 1/√(3xy) dA = (1/√3) ∫_0^8 ∫_0^8 x^{-1/2} y^{-1/2} dx dy
+                            <div class="math">$$\iint_D 1/\sqrt{(3xy) dA = (1/\sqrt{3}) \int_0^8 \int_0^8 x^{-1/2} y^{-1/2} dx dy
 
-= (1/√3) ∫_0^8 x^{-1/2} dx · ∫_0^8 y^{-1/2} dy</div>
+= (1/\sqrt{3}) \int_0^8 x^{-1/2} dx  \cdot  \int_0^8 y^{-1/2} dy</div>
                         </div>
 
                         <div class="step" data-step="2">
                             <div class="step-title">Evaluate each integral</div>
-                            <div class="math">∫_0^8 x^{-1/2} dx = [2x^{1/2}]_0^8 = 2√8 = 4√2
+                            <div class="math">$$\int_0^8 x^{-1/2} dx = [2x^{1/2}]_0^8 = 2\sqrt{8} = 4\sqrt{2
 
-Similarly for y: 4√2
+Similarly for y: 4\sqrt{2
 
-Result: (1/√3)(4√2)(4√2) = (1/√3)(32) = 32/√3 = 32√3/3</div>
+Result: (1/\sqrt{3})(4\sqrt{2)(4\sqrt{2) = (1/\sqrt{3})(32) = 32/\sqrt{3} = 32\sqrt{3}/3</div>
                         </div>
 
                         <div class="warning">This integral is improper at x=0 and y=0, but converges because the exponent -1/2 > -1.</div>
@@ -473,7 +481,7 @@ Result: (1/√3)(4√2)(4√2) = (1/√3)(32) = 32/√3 = 32√3/3</div>
                 </div>
                 <div class="answer">
                     <div class="answer-label">ANSWER</div>
-                    <div class="answer-value">32√3/3</div>
+                    <div class="answer-value">32\sqrt{3}/3</div>
                 </div>
             </div>
 
@@ -496,7 +504,7 @@ Result: (1/√3)(4√2)(4√2) = (1/√3)(32) = 32/√3 = 32√3/3</div>
                     <span class="problem-title">Triple Integral with Symmetry</span>
                 </div>
                 <div class="problem-statement">
-                    <p>Evaluate ∭_W 9x dV for region W: x² + y² ≤ z ≤ 81</p>
+                    <p>Evaluate ∭_W 9x dV for region W: x^2 + y^2 \leq z \leq 81</p>
                     <p><strong>Answer: 0</strong></p>
                 </div>
                 <div class="solution">
@@ -525,56 +533,56 @@ Result: (1/√3)(4√2)(4√2) = (1/√3)(32) = 32/√3 = 32√3/3</div>
                 </div>
             </div>
 
-            <!-- Problem 10: Improper integral 28π/3 -->
+            <!-- Problem 10: Improper integral 28\pi/3 -->
             <div class="problem">
                 <div class="problem-header">
                     <span class="problem-number">Problem 10</span>
                     <span class="problem-title">Improper Integral Outside Sphere</span>
                 </div>
                 <div class="problem-statement">
-                    <p>Let D be the unbounded region x² + y² + z² ≥ 9. Evaluate: ∭_D 7/(x² + y² + z²)² dV</p>
-                    <p><strong>Answer: 28π/3</strong></p>
+                    <p>Let D be the unbounded region x^2 + y^2 + z^2 \geq 9. Evaluate: ∭_D 7/(x^2 + y^2 + z^2)^2 dV</p>
+                    <p><strong>Answer: 28\pi/3</strong></p>
                 </div>
                 <div class="solution">
                     <div class="solution-header">Solution</div>
                     <div class="solution-content">
                         <div class="step" data-step="1">
                             <div class="step-title">Convert to spherical</div>
-                            <div class="math">x² + y² + z² = ρ², so 7/(x² + y² + z²)² = 7/ρ⁴
-dV = ρ² sin φ dρ dφ dθ
-Region: ρ ≥ 3, 0 ≤ φ ≤ π, 0 ≤ θ ≤ 2π</div>
+                            <div class="math">$$x^2 + y^2 + z^2 = \rho^2, so 7/(x^2 + y^2 + z^2)^2 = 7/\rho^4
+dV = \rho^2 sin \phi d\rho d\phi d\theta
+Region: \rho \geq 3, 0 \leq \phi \leq \pi, 0 \leq \theta \leq 2\pi</div>
                         </div>
 
                         <div class="step" data-step="2">
                             <div class="step-title">Set up integral</div>
-                            <div class="math">∫_0^{2π} ∫_0^π ∫_3^∞ (7/ρ⁴) · ρ² sin φ dρ dφ dθ
-= ∫_0^{2π} ∫_0^π ∫_3^∞ 7ρ^{-2} sin φ dρ dφ dθ</div>
+                            <div class="math">$$\int_0^{2\pi} \int_0^{\pi} \int_3^{\infty} (7/\rho^4)  \cdot  \rho^2 sin \phi d\rho d\phi d\theta
+= \int_0^{2\pi} \int_0^{\pi} \int_3^{\infty} 7\rho^{-2} sin \phi d\rho d\phi d\theta</div>
                         </div>
 
                         <div class="step" data-step="3">
-                            <div class="step-title">Evaluate ρ integral</div>
-                            <div class="math">∫_3^∞ 7ρ^{-2} dρ = 7[-ρ^{-1}]_3^∞ = 7(0 + 1/3) = 7/3</div>
+                            <div class="step-title">Evaluate \rho integral</div>
+                            <div class="math">$$\int_3^{\infty} 7\rho^{-2} d\rho = 7[-\rho^{-1}]_3^\infty = 7(0 + 1/3) = 7/3$$</div>
                         </div>
 
                         <div class="step" data-step="4">
-                            <div class="step-title">Evaluate φ integral</div>
-                            <div class="math">∫_0^π sin φ dφ = [-cos φ]_0^π = 1 + 1 = 2</div>
+                            <div class="step-title">Evaluate \phi integral</div>
+                            <div class="math">$$\int_0^{\pi} sin \phi d\phi = [-cos \phi]_0^\pi = 1 + 1 = 2$$</div>
                         </div>
 
                         <div class="step" data-step="5">
-                            <div class="step-title">Evaluate θ integral</div>
-                            <div class="math">∫_0^{2π} dθ = 2π</div>
+                            <div class="step-title">Evaluate \theta integral</div>
+                            <div class="math">$$\int_0^{2\pi} d\theta = 2\pi$$</div>
                         </div>
 
                         <div class="step" data-step="6">
                             <div class="step-title">Combine</div>
-                            <div class="math">(7/3) × 2 × 2π = 28π/3</div>
+                            <div class="math">$$(7/3) \times 2 \times 2\pi = 28\pi/3$$</div>
                         </div>
                     </div>
                 </div>
                 <div class="answer">
                     <div class="answer-label">ANSWER</div>
-                    <div class="answer-value">28π/3</div>
+                    <div class="answer-value">28\pi/3</div>
                 </div>
             </div>
 
@@ -585,38 +593,38 @@ Region: ρ ≥ 3, 0 ≤ φ ≤ π, 0 ≤ θ ≤ 2π</div>
                     <span class="problem-title">Question 16.137: Center of Mass of Hemisphere</span>
                 </div>
                 <div class="problem-statement">
-                    <p>Find the center of mass of hemisphere V = {(x,y,z) | x² + y² + z² ≤ a², z ≥ 0} with constant density.</p>
+                    <p>Find the center of mass of hemisphere V = {(x,y,z) | x^2 + y^2 + z^2 \leq a^2, z \geq 0} with constant density.</p>
                 </div>
                 <div class="solution">
                     <div class="solution-header">Solution</div>
                     <div class="solution-content">
                         <div class="step" data-step="1">
                             <div class="step-title">Use symmetry</div>
-                            <div class="math">x̄ = 0 (symmetric about yz-plane)
+                            <div class="math">$$x̄ = 0 (symmetric about yz-plane)
 ȳ = 0 (symmetric about xz-plane)</div>
                         </div>
 
                         <div class="step" data-step="2">
                             <div class="step-title">Calculate z̄ = ∭z dV / ∭dV</div>
-                            <p>In spherical: z = ρ cos φ, dV = ρ² sin φ dρ dφ dθ</p>
-                            <p>Region: 0 ≤ ρ ≤ a, 0 ≤ φ ≤ π/2, 0 ≤ θ ≤ 2π</p>
+                            <p>In spherical: z = \rho cos \phi, dV = \rho^2 sin \phi d\rho d\phi d\theta</p>
+                            <p>Region: 0 \leq \rho \leq a, 0 \leq \phi \leq \pi/2, 0 \leq \theta \leq 2\pi</p>
                         </div>
 
                         <div class="step" data-step="3">
                             <div class="step-title">Volume of hemisphere</div>
-                            <div class="math">∭ dV = (2/3)πa³</div>
+                            <div class="math">$$∭ dV = (2/3)\pia^3$$</div>
                         </div>
 
                         <div class="step" data-step="4">
                             <div class="step-title">Calculate ∭z dV</div>
-                            <div class="math">∫_0^{2π} dθ · ∫_0^{π/2} cos φ sin φ dφ · ∫_0^a ρ³ dρ
-= 2π · [sin²φ/2]_0^{π/2} · [ρ⁴/4]_0^a
-= 2π · (1/2) · (a⁴/4) = πa⁴/4</div>
+                            <div class="math">$$\int_0^{2\pi} d\theta  \cdot  \int_0^{\pi/2} cos \phi sin \phi d\phi  \cdot  \int_0^a \rho^3 d\rho
+= 2\pi  \cdot  [sin^2\phi/2]_0^{\pi/2}  \cdot  [\rho^4/4]_0^a
+= 2\pi  \cdot  (1/2)  \cdot  (a^4/4) = \pia^4/4</div>
                         </div>
 
                         <div class="step" data-step="5">
                             <div class="step-title">Find z̄</div>
-                            <div class="math">z̄ = (πa⁴/4) / (2πa³/3) = (πa⁴/4) · (3/2πa³) = 3a/8</div>
+                            <div class="math">$$z̄ = (\pia^4/4) / (2\pia^3/3) = (\pia^4/4)  \cdot  (3/2\pia^3) = 3a/8$$</div>
                         </div>
                     </div>
                 </div>
@@ -633,10 +641,10 @@ Region: ρ ≥ 3, 0 ≤ φ ≤ π, 0 ≤ θ ≤ 2π</div>
                     <span class="problem-title">Question 16.140: Triple Integral Over Sphere/Hemisphere/Octant</span>
                 </div>
                 <div class="problem-statement">
-                    <p>Evaluate ∭_D (x² + y² + z²)xyz dV over:</p>
-                    <p>a) The sphere D = {x² + y² + z² ≤ R²}</p>
-                    <p>b) The hemisphere D = {x² + y² + z² ≤ R², z ≥ 0}</p>
-                    <p>c) The first octant D = {x ≥ 0, y ≥ 0, z ≥ 0, x² + y² + z² ≤ R²}</p>
+                    <p>Evaluate ∭_D (x^2 + y^2 + z^2)xyz dV over:</p>
+                    <p>a) The sphere D = {x^2 + y^2 + z^2 \leq R^2}</p>
+                    <p>b) The hemisphere D = {x^2 + y^2 + z^2 \leq R^2, z \geq 0}</p>
+                    <p>c) The first octant D = {x \geq 0, y \geq 0, z \geq 0, x^2 + y^2 + z^2 \leq R^2}</p>
                 </div>
                 <div class="solution">
                     <div class="solution-header">Solution</div>
@@ -645,28 +653,28 @@ Region: ρ ≥ 3, 0 ≤ φ ≤ π, 0 ≤ θ ≤ 2π</div>
                         <div class="step" data-step="1">
                             <div class="step-title">Symmetry argument</div>
                             <p>The integrand xyz is odd in each variable. The sphere is symmetric about each coordinate plane.</p>
-                            <div class="math">Answer (a): 0</div>
+                            <div class="math">$$Answer (a): 0$$</div>
                         </div>
 
                         <h5>Part (b): Upper hemisphere</h5>
                         <div class="step" data-step="2">
                             <div class="step-title">Symmetry in x and y</div>
                             <p>Still symmetric about xz and yz planes, so integrand is still odd in x and y.</p>
-                            <div class="math">Answer (b): 0</div>
+                            <div class="math">$$Answer (b): 0$$</div>
                         </div>
 
                         <h5>Part (c): First octant</h5>
                         <div class="step" data-step="3">
                             <div class="step-title">No more cancellation</div>
-                            <p>In spherical: (x² + y² + z²) = ρ², xyz = ρ³ sin²φ cos φ · sin θ cos θ · cos φ</p>
+                            <p>In spherical: (x^2 + y^2 + z^2) = \rho^2, xyz = \rho^3 sin^2\phi cos \phi  \cdot  sin \theta cos \theta  \cdot  cos \phi</p>
                             <p>This integral is nonzero and requires full computation.</p>
-                            <div class="math">Answer (c): R⁸/48</div>
+                            <div class="math">$$Answer (c): R^8/48$$</div>
                         </div>
                     </div>
                 </div>
                 <div class="answer">
                     <div class="answer-label">ANSWERS</div>
-                    <div class="answer-value">(a) 0, (b) 0, (c) R⁸/48</div>
+                    <div class="answer-value">(a) 0, (b) 0, (c) R^8/48</div>
                 </div>
             </div>
 
@@ -677,43 +685,43 @@ Region: ρ ≥ 3, 0 ≤ φ ≤ π, 0 ≤ θ ≤ 2π</div>
                     <span class="problem-title">Question 16.141: Cone-Shaped Region</span>
                 </div>
                 <div class="problem-statement">
-                    <p>Let C be the cone-shaped region {(x,y,z) | √(x² + y²) ≤ z ≤ 1}. Evaluate ∭_C (1 + √(x² + y²)) dV</p>
+                    <p>Let C be the cone-shaped region {(x,y,z) | \sqrt{(x^2 + y^2) \leq z \leq 1}. Evaluate ∭_C (1 + \sqrt{(x^2 + y^2)) dV</p>
                 </div>
                 <div class="solution">
                     <div class="solution-header">Solution</div>
                     <div class="solution-content">
                         <div class="step" data-step="1">
                             <div class="step-title">Convert to cylindrical</div>
-                            <div class="math">√(x² + y²) = r, so region is: r ≤ z ≤ 1, 0 ≤ r ≤ 1
+                            <div class="math">$$\sqrt{(x^2 + y^2) = r, so region is: r \leq z \leq 1, 0 \leq r \leq 1
 Integrand: 1 + r
-dV = r dz dr dθ</div>
+dV = r dz dr d\theta</div>
                         </div>
 
                         <div class="step" data-step="2">
                             <div class="step-title">Set up integral</div>
-                            <div class="math">∫_0^{2π} ∫_0^1 ∫_r^1 (1 + r) · r dz dr dθ</div>
+                            <div class="math">$$\int_0^{2\pi} \int_0^1 \int_r^1 (1 + r)  \cdot  r dz dr d\theta$$</div>
                         </div>
 
                         <div class="step" data-step="3">
                             <div class="step-title">Inner integral (z)</div>
-                            <div class="math">∫_r^1 dz = 1 - r</div>
+                            <div class="math">$$\int_r^1 dz = 1 - r$$</div>
                         </div>
 
                         <div class="step" data-step="4">
                             <div class="step-title">Middle integral (r)</div>
-                            <div class="math">∫_0^1 (1 + r) · r · (1 - r) dr = ∫_0^1 (r + r² - r² - r³) dr = ∫_0^1 (r - r³) dr
-= [r²/2 - r⁴/4]_0^1 = 1/2 - 1/4 = 1/4</div>
+                            <div class="math">$$\int_0^1 (1 + r)  \cdot  r  \cdot  (1 - r) dr = \int_0^1 (r + r^2 - r^2 - r^3) dr = \int_0^1 (r - r^3) dr
+= [r^2/2 - r^4/4]_0^1 = 1/2 - 1/4 = 1/4</div>
                         </div>
 
                         <div class="step" data-step="5">
-                            <div class="step-title">Outer integral (θ)</div>
-                            <div class="math">∫_0^{2π} (1/4) dθ = π/2</div>
+                            <div class="step-title">Outer integral (\theta)</div>
+                            <div class="math">$$\int_0^{2\pi} (1/4) d\theta = \pi/2$$</div>
                         </div>
                     </div>
                 </div>
                 <div class="answer">
                     <div class="answer-label">ANSWER</div>
-                    <div class="answer-value">π/2</div>
+                    <div class="answer-value">\pi/2</div>
                 </div>
             </div>
 
@@ -724,37 +732,37 @@ dV = r dz dr dθ</div>
                     <span class="problem-title">Question 16.139: Integral Between Two Spheres</span>
                 </div>
                 <div class="problem-statement">
-                    <p>Evaluate ∭_S 1/(x² + y² + z²)^{3/2} dV where S is bounded by spheres x² + y² + z² = a² and x² + y² + z² = b² (a > b > 0)</p>
+                    <p>Evaluate ∭_S 1/(x^2 + y^2 + z^2)^{3/2} dV where S is bounded by spheres x^2 + y^2 + z^2 = a^2 and x^2 + y^2 + z^2 = b^2 (a > b > 0)</p>
                 </div>
                 <div class="solution">
                     <div class="solution-header">Solution</div>
                     <div class="solution-content">
                         <div class="step" data-step="1">
                             <div class="step-title">Convert to spherical</div>
-                            <div class="math">1/(x² + y² + z²)^{3/2} = 1/ρ³
-dV = ρ² sin φ dρ dφ dθ
-Region: b ≤ ρ ≤ a</div>
+                            <div class="math">$$1/(x^2 + y^2 + z^2)^{3/2} = 1/\rho^3
+dV = \rho^2 sin \phi d\rho d\phi d\theta
+Region: b \leq \rho \leq a</div>
                         </div>
 
                         <div class="step" data-step="2">
                             <div class="step-title">Set up and simplify</div>
-                            <div class="math">∫_0^{2π} ∫_0^π ∫_b^a (1/ρ³) · ρ² sin φ dρ dφ dθ
-= ∫_0^{2π} ∫_0^π ∫_b^a ρ^{-1} sin φ dρ dφ dθ</div>
+                            <div class="math">$$\int_0^{2\pi} \int_0^{\pi} \int _b^a (1/\rho^3)  \cdot  \rho^2 sin \phi d\rho d\phi d\theta
+= \int_0^{2\pi} \int_0^{\pi} \int _b^a \rho^{-1} sin \phi d\rho d\phi d\theta</div>
                         </div>
 
                         <div class="step" data-step="3">
                             <div class="step-title">Evaluate</div>
-                            <div class="math">∫_b^a ρ^{-1} dρ = ln(a/b)
-∫_0^π sin φ dφ = 2
-∫_0^{2π} dθ = 2π
+                            <div class="math">$$\int _b^a \rho^{-1} d\rho = ln(a/b)
+\int_0^{\pi} sin \phi d\phi = 2
+\int_0^{2\pi} d\theta = 2\pi
 
-Total: 4π ln(a/b)</div>
+Total: 4\pi ln(a/b)</div>
                         </div>
                     </div>
                 </div>
                 <div class="answer">
                     <div class="answer-label">ANSWER</div>
-                    <div class="answer-value">4π ln(a/b)</div>
+                    <div class="answer-value">4\pi ln(a/b)</div>
                 </div>
             </div>
 
@@ -765,36 +773,36 @@ Total: 4π ln(a/b)</div>
                     <span class="problem-title">Question 16.132: Mass of Solid with Variable Density</span>
                 </div>
                 <div class="problem-statement">
-                    <p>The density of a solid sphere of radius R is (1 + d³)^{-1} where d is distance from center. Find total mass.</p>
+                    <p>The density of a solid sphere of radius R is (1 + d^3)^{-1} where d is distance from center. Find total mass.</p>
                 </div>
                 <div class="solution">
                     <div class="solution-header">Solution</div>
                     <div class="solution-content">
                         <div class="step" data-step="1">
                             <div class="step-title">Set up in spherical</div>
-                            <div class="math">d = ρ (distance from origin)
-density = 1/(1 + ρ³)
-dV = ρ² sin φ dρ dφ dθ
+                            <div class="math">$$d = \rho (distance from origin)
+density = 1/(1 + \rho^3)
+dV = \rho^2 sin \phi d\rho d\phi d\theta
 
-Mass = ∫_0^{2π} ∫_0^π ∫_0^R ρ²/(1 + ρ³) sin φ dρ dφ dθ</div>
+Mass = \int_0^{2\pi} \int_0^{\pi} \int _0^R \rho^2/(1 + \rho^3) sin \phi d\rho d\phi d\theta</div>
                         </div>
 
                         <div class="step" data-step="2">
-                            <div class="step-title">Evaluate ρ integral</div>
-                            <div class="math">∫_0^R ρ²/(1 + ρ³) dρ
-Let u = 1 + ρ³, du = 3ρ² dρ
-= (1/3) ln(1 + R³)</div>
+                            <div class="step-title">Evaluate \rho integral</div>
+                            <div class="math">$$\int _0^R \rho^2/(1 + \rho^3) d\rho
+Let u = 1 + \rho^3, du = 3\rho^2 d\rho
+= (1/3) ln(1 + R^3)</div>
                         </div>
 
                         <div class="step" data-step="3">
                             <div class="step-title">Complete integration</div>
-                            <div class="math">Mass = (1/3) ln(1 + R³) · 2 · 2π = (4π/3) ln(1 + R³)</div>
+                            <div class="math">$$Mass = (1/3) ln(1 + R^3)  \cdot  2  \cdot  2\pi = (4\pi/3) ln(1 + R^3)$$</div>
                         </div>
                     </div>
                 </div>
                 <div class="answer">
                     <div class="answer-label">ANSWER</div>
-                    <div class="answer-value">(4π/3) ln(1 + R³)</div>
+                    <div class="answer-value">(4\pi/3) ln(1 + R^3)</div>
                 </div>
             </div>
 
@@ -805,30 +813,30 @@ Let u = 1 + ρ³, du = 3ρ² dρ
                     <span class="problem-title">Question 16.133: Mass of Spherical Shell</span>
                 </div>
                 <div class="problem-statement">
-                    <p>Spherical shell with inner radius 1m, outer radius 2m, density 0.4d² g/cm³ where d is distance from center. Find total mass.</p>
+                    <p>Spherical shell with inner radius 1m, outer radius 2m, density 0.4d^2 g/cm^3 where d is distance from center. Find total mass.</p>
                 </div>
                 <div class="solution">
                     <div class="solution-header">Solution</div>
                     <div class="solution-content">
                         <div class="step" data-step="1">
                             <div class="step-title">Set up integral</div>
-                            <div class="math">Mass = ∫_0^{2π} ∫_0^π ∫_1^2 0.4ρ² · ρ² sin φ dρ dφ dθ
-= 0.4 ∫_0^{2π} dθ · ∫_0^π sin φ dφ · ∫_1^2 ρ⁴ dρ</div>
+                            <div class="math">$$Mass = \int_0^{2\pi} \int_0^{\pi} \int _1^2 0.4\rho^2  \cdot  \rho^2 sin \phi d\rho d\phi d\theta
+= 0.4 \int_0^{2\pi} d\theta  \cdot  \int_0^{\pi} sin \phi d\phi  \cdot  \int _1^2 \rho^4 d\rho</div>
                         </div>
 
                         <div class="step" data-step="2">
                             <div class="step-title">Evaluate</div>
-                            <div class="math">= 0.4 · 2π · 2 · [ρ⁵/5]_1^2
-= 0.4 · 4π · (32 - 1)/5
-= 0.4 · 4π · 31/5 = 9.92π</div>
+                            <div class="math">$$= 0.4  \cdot  2\pi  \cdot  2  \cdot  [\rho^5/5]_1^2
+= 0.4  \cdot  4\pi  \cdot  (32 - 1)/5
+= 0.4  \cdot  4\pi  \cdot  31/5 = 9.92\pi</div>
                         </div>
 
-                        <div class="warning">Note: Units need to be consistent (convert m to cm if density is in g/cm³)</div>
+                        <div class="warning">Note: Units need to be consistent (convert m to cm if density is in g/cm^3)</div>
                     </div>
                 </div>
                 <div class="answer">
                     <div class="answer-label">ANSWER</div>
-                    <div class="answer-value">9.92π (with consistent units)</div>
+                    <div class="answer-value">9.92\pi (with consistent units)</div>
                 </div>
             </div>
 
@@ -839,7 +847,7 @@ Let u = 1 + ρ³, du = 3ρ² dρ
                     <span class="problem-title">Question 16.135: Average Temperature in Cube</span>
                 </div>
                 <div class="problem-statement">
-                    <p>Temperature in cube C = {-1 ≤ x,y,z ≤ 1} is 32d² where d is distance from origin.</p>
+                    <p>Temperature in cube C = {-1 \leq x,y,z \leq 1} is 32d^2 where d is distance from origin.</p>
                     <p>a) Find average temperature</p>
                     <p>b) Find points where temperature equals average</p>
                 </div>
@@ -849,29 +857,29 @@ Let u = 1 + ρ³, du = 3ρ² dρ
                         <h5>Part (a)</h5>
                         <div class="step" data-step="1">
                             <div class="step-title">Set up average</div>
-                            <div class="math">T_avg = (1/V) ∭_C 32(x² + y² + z²) dV
-V = 2³ = 8</div>
+                            <div class="math">$$T_avg = (1/V) ∭_C 32(x^2 + y^2 + z^2) dV
+V = 2^3 = 8</div>
                         </div>
 
                         <div class="step" data-step="2">
                             <div class="step-title">Evaluate</div>
-                            <div class="math">∭_C (x² + y² + z²) dV = 3 ∭_C x² dV (by symmetry)
-= 3 · 8 · ∫_{-1}^1 x² dx / 2 = 3 · 8 · (2/3)/2 = 8
+                            <div class="math">$$∭_C (x^2 + y^2 + z^2) dV = 3 ∭_C x^2 dV (by symmetry)
+= 3  \cdot  8  \cdot  \int _{-1}^1 x^2 dx / 2 = 3  \cdot  8  \cdot  (2/3)/2 = 8
 
-T_avg = (32 · 8)/8 = 32</div>
+T_avg = (32  \cdot  8)/8 = 32</div>
                         </div>
 
                         <h5>Part (b)</h5>
                         <div class="step" data-step="3">
                             <div class="step-title">Find points</div>
-                            <div class="math">32d² = 32 → d² = 1 → d = 1
+                            <div class="math">$$32d^2 = 32 → d^2 = 1 → d = 1
 Points on sphere of radius 1 (inside the cube)</div>
                         </div>
                     </div>
                 </div>
                 <div class="answer">
                     <div class="answer-label">ANSWERS</div>
-                    <div class="answer-value">(a) 32, (b) Sphere x² + y² + z² = 1</div>
+                    <div class="answer-value">(a) 32, (b) Sphere x^2 + y^2 + z^2 = 1</div>
                 </div>
             </div>
 
@@ -889,14 +897,14 @@ Points on sphere of radius 1 (inside the cube)</div>
                     <div class="solution-content">
                         <div class="step" data-step="1">
                             <div class="step-title">Set up bounds</div>
-                            <div class="math">0 ≤ x ≤ a
-0 ≤ y ≤ b(1 - x/a)
-0 ≤ z ≤ c(1 - x/a - y/b)</div>
+                            <div class="math">$$0 \leq x \leq a
+0 \leq y \leq b(1 - x/a)
+0 \leq z \leq c(1 - x/a - y/b)</div>
                         </div>
 
                         <div class="step" data-step="2">
                             <div class="step-title">Evaluate</div>
-                            <div class="math">V = ∫_0^a ∫_0^{b(1-x/a)} ∫_0^{c(1-x/a-y/b)} dz dy dx
+                            <div class="math">$$V = \int_0^a \int _0^{b(1-x/a)} \int _0^{c(1-x/a-y/b)} dz dy dx
 = abc/6</div>
                         </div>
 
@@ -919,35 +927,35 @@ Points on sphere of radius 1 (inside the cube)</div>
                     <span class="problem-title">Question 16.126: Volume Between Paraboloid and Cone</span>
                 </div>
                 <div class="problem-statement">
-                    <p>Find volume determined by z ≤ 6 - x² - y² and z ≥ √(x² + y²)</p>
+                    <p>Find volume determined by z \leq 6 - x^2 - y^2 and z \geq \sqrt{(x^2 + y^2)</p>
                 </div>
                 <div class="solution">
                     <div class="solution-header">Solution</div>
                     <div class="solution-content">
                         <div class="step" data-step="1">
                             <div class="step-title">Find intersection</div>
-                            <div class="math">√(x² + y²) = 6 - x² - y²
-Let r = √(x² + y²): r = 6 - r²
-r² + r - 6 = 0 → (r+3)(r-2) = 0 → r = 2</div>
+                            <div class="math">$$\sqrt{(x^2 + y^2) = 6 - x^2 - y^2
+Let r = \sqrt{(x^2 + y^2): r = 6 - r^2
+r^2 + r - 6 = 0 → (r+3)(r-2) = 0 → r = 2</div>
                         </div>
 
                         <div class="step" data-step="2">
                             <div class="step-title">Set up in cylindrical</div>
-                            <div class="math">V = ∫_0^{2π} ∫_0^2 ∫_r^{6-r²} r dz dr dθ</div>
+                            <div class="math">$$V = \int_0^{2\pi} \int_0^2 \int _r^{6-r^2} r dz dr d\theta$$</div>
                         </div>
 
                         <div class="step" data-step="3">
                             <div class="step-title">Evaluate</div>
-                            <div class="math">∫_r^{6-r²} dz = 6 - r² - r
-∫_0^2 (6 - r² - r) · r dr = ∫_0^2 (6r - r³ - r²) dr
-= [3r² - r⁴/4 - r³/3]_0^2 = 12 - 4 - 8/3 = 16/3
-V = 2π · 16/3 = 32π/3</div>
+                            <div class="math">$$\int _r^{6-r^2} dz = 6 - r^2 - r
+\int_0^2 (6 - r^2 - r)  \cdot  r dr = \int_0^2 (6r - r^3 - r^2) dr
+= [3r^2 - r^4/4 - r^3/3]_0^2 = 12 - 4 - 8/3 = 16/3
+V = 2\pi  \cdot  16/3 = 32\pi/3</div>
                         </div>
                     </div>
                 </div>
                 <div class="answer">
                     <div class="answer-label">ANSWER</div>
-                    <div class="answer-value">32π/3</div>
+                    <div class="answer-value">32\pi/3</div>
                 </div>
             </div>
 
@@ -965,14 +973,14 @@ V = 2π · 16/3 = 32π/3</div>
                     <div class="solution-content">
                         <div class="step" data-step="1">
                             <div class="step-title">Set up</div>
-                            <div class="math">Sphere: x² + y² + z² ≤ 4
-Cylinder removed: x² + y² ≤ 1/4
-In cylindrical: 1/2 ≤ r ≤ √(4-z²), -√(15/4) ≤ z ≤ √(15/4)</div>
+                            <div class="math">$$Sphere: x^2 + y^2 + z^2 \leq 4
+Cylinder removed: x^2 + y^2 \leq 1/4
+In cylindrical: 1/2 \leq r \leq \sqrt{(4-z^2), -\sqrt{(15/4) \leq z \leq \sqrt{(15/4)</div>
                         </div>
 
                         <div class="step" data-step="2">
                             <div class="step-title">Alternative: Sphere volume minus cylinder + caps</div>
-                            <div class="math">V_sphere = (4/3)π(8) = 32π/3
+                            <div class="math">$$V_sphere = (4/3)\pi(8) = 32\pi/3
 V_remaining = V_sphere - V_cylinder_inside</div>
                         </div>
 
@@ -981,7 +989,7 @@ V_remaining = V_sphere - V_cylinder_inside</div>
                 </div>
                 <div class="answer">
                     <div class="answer-label">ANSWER</div>
-                    <div class="answer-value">(4π/3)(15)^{3/2}/4 = (5√15)π/2</div>
+                    <div class="answer-value">(4\pi/3)(15)^{3/2}/4 = (5\sqrt{15)\pi/2</div>
                 </div>
             </div>
 
@@ -999,7 +1007,7 @@ V_remaining = V_sphere - V_cylinder_inside</div>
 
             <div class="formula-box">
                 <div class="formula-name">Change of Variables Formula</div>
-                <div class="formula">∬_R f(x,y) dA = ∬_{R*} f(x(u,v), y(u,v)) |∂(x,y)/∂(u,v)| du dv</div>
+                <div class="formula">\iint_R f(x,y) dA = ∬_{R*} f(x(u,v), y(u,v)) |\partial(x,y)/\partial(u,v)| du dv</div>
             </div>
 
             <!-- Problem 21: Jacobian calculation -->
@@ -1017,14 +1025,14 @@ V_remaining = V_sphere - V_cylinder_inside</div>
                     <div class="solution-content">
                         <div class="step" data-step="1">
                             <div class="step-title">Find partial derivatives</div>
-                            <div class="math">x = 3ue^v, y = 7 + 3e^u
-∂x/∂u = 3e^v, ∂x/∂v = 3ue^v
-∂y/∂u = 3e^u, ∂y/∂v = 0</div>
+                            <div class="math">$$x = 3ue^v, y = 7 + 3e^u
+\partialx/\partialu = 3e^v, \partialx/\partialv = 3ue^v
+\partialy/\partialu = 3e^u, \partialy/\partialv = 0</div>
                         </div>
 
                         <div class="step" data-step="2">
                             <div class="step-title">Calculate determinant</div>
-                            <div class="math">Jac = |3e^v    3ue^v|
+                            <div class="math">$$Jac = |3e^v    3ue^v|
       |3e^u    0    |
 = (3e^v)(0) - (3ue^v)(3e^u) = -9ue^{u+v}</div>
                         </div>
@@ -1043,7 +1051,7 @@ V_remaining = V_sphere - V_cylinder_inside</div>
                     <span class="problem-title">Linear Mapping to Parallelogram</span>
                 </div>
                 <div class="problem-statement">
-                    <p>Find linear mapping G: [0,1]×[0,1] → parallelogram spanned by (-5,4) and (8,6)</p>
+                    <p>Find linear mapping G: [0,1]\times[0,1] → parallelogram spanned by (-5,4) and (8,6)</p>
                     <p><strong>Answer: G(u,v) = (-5u + 8v, 4u + 6v)</strong></p>
                 </div>
                 <div class="solution">
@@ -1051,13 +1059,13 @@ V_remaining = V_sphere - V_cylinder_inside</div>
                     <div class="solution-content">
                         <div class="step" data-step="1">
                             <div class="step-title">Form of linear map</div>
-                            <div class="math">G(u,v) = u·(first vector) + v·(second vector)
+                            <div class="math">$$G(u,v) = u \cdot (first vector) + v \cdot (second vector)
 = u(-5,4) + v(8,6) = (-5u + 8v, 4u + 6v)</div>
                         </div>
 
                         <div class="step" data-step="2">
                             <div class="step-title">Verify</div>
-                            <div class="math">G(1,0) = (-5, 4) ✓
+                            <div class="math">$$G(1,0) = (-5, 4) ✓
 G(0,1) = (8, 6) ✓
 G(0,0) = (0, 0) ✓</div>
                         </div>
@@ -1076,13 +1084,13 @@ G(0,0) = (0, 0) ✓</div>
                     <span class="problem-title">Linear Mapping (Variant)</span>
                 </div>
                 <div class="problem-statement">
-                    <p>Find linear mapping G: [0,1]×[0,1] → parallelogram spanned by (-9,3) and (8,2)</p>
+                    <p>Find linear mapping G: [0,1]\times[0,1] → parallelogram spanned by (-9,3) and (8,2)</p>
                     <p><strong>Answer: G(u,v) = (-9u + 8v, 3u + 2v)</strong></p>
                 </div>
                 <div class="solution">
                     <div class="solution-header">Solution</div>
                     <div class="solution-content">
-                        <div class="math">G(u,v) = u(-9,3) + v(8,2) = (-9u + 8v, 3u + 2v)</div>
+                        <div class="math">$$G(u,v) = u(-9,3) + v(8,2) = (-9u + 8v, 3u + 2v)$$</div>
                     </div>
                 </div>
                 <div class="answer">
@@ -1098,7 +1106,7 @@ G(0,0) = (0, 0) ✓</div>
                     <span class="problem-title">Double Integral Using Change of Variables</span>
                 </div>
                 <div class="problem-statement">
-                    <p>Calculate ∬_D (x + 4y) dx dy using G(u,v) = (u - 2v, v)</p>
+                    <p>Calculate \iint_D (x + 4y) dx dy using G(u,v) = (u - 2v, v)</p>
                     <p><strong>Answer: 96</strong></p>
                 </div>
                 <div class="solution">
@@ -1106,19 +1114,19 @@ G(0,0) = (0, 0) ✓</div>
                     <div class="solution-content">
                         <div class="step" data-step="1">
                             <div class="step-title">Find Jacobian</div>
-                            <div class="math">x = u - 2v, y = v
+                            <div class="math">$$x = u - 2v, y = v
 Jac = |1  -2| = 1
       |0   1|</div>
                         </div>
 
                         <div class="step" data-step="2">
                             <div class="step-title">Transform integrand</div>
-                            <div class="math">x + 4y = (u - 2v) + 4v = u + 2v</div>
+                            <div class="math">$$x + 4y = (u - 2v) + 4v = u + 2v$$</div>
                         </div>
 
                         <div class="step" data-step="3">
                             <div class="step-title">New region and evaluate</div>
-                            <div class="math">∫_1^3 ∫_6^{10} (u + 2v) du dv = 96</div>
+                            <div class="math">$$\int _1^3 \int _6^{10} (u + 2v) du dv = 96$$</div>
                         </div>
                     </div>
                 </div>
@@ -1135,28 +1143,28 @@ Jac = |1  -2| = 1
                     <span class="problem-title">Question 16.119: Change of Variables</span>
                 </div>
                 <div class="problem-statement">
-                    <p>Region B bounded by xy = 1, xy = 3, x² - y² = 1, x² - y² = 4. Evaluate ∬_B (x² + y²) dA using u = x² - y², v = xy</p>
+                    <p>Region B bounded by xy = 1, xy = 3, x^2 - y^2 = 1, x^2 - y^2 = 4. Evaluate \iint_B (x^2 + y^2) dA using u = x^2 - y^2, v = xy</p>
                 </div>
                 <div class="solution">
                     <div class="solution-header">Solution</div>
                     <div class="solution-content">
                         <div class="step" data-step="1">
                             <div class="step-title">New region</div>
-                            <div class="math">1 ≤ u ≤ 4, 1 ≤ v ≤ 3 (rectangle!)</div>
+                            <div class="math">$$1 \leq u \leq 4, 1 \leq v \leq 3 (rectangle!)$$</div>
                         </div>
 
                         <div class="step" data-step="2">
                             <div class="step-title">Find Jacobian</div>
-                            <p>Need to find ∂(x,y)/∂(u,v) or its inverse ∂(u,v)/∂(x,y)</p>
-                            <div class="math">∂u/∂x = 2x, ∂u/∂y = -2y
-∂v/∂x = y, ∂v/∂y = x
-∂(u,v)/∂(x,y) = 2x·x - (-2y)·y = 2x² + 2y² = 2(x² + y²)
-So |∂(x,y)/∂(u,v)| = 1/(2(x² + y²))</div>
+                            <p>Need to find \partial(x,y)/\partial(u,v) or its inverse \partial(u,v)/\partial(x,y)</p>
+                            <div class="math">$$\partialu/\partialx = 2x, \partialu/\partialy = -2y
+\partialv/\partialx = y, \partialv/\partialy = x
+\partial(u,v)/\partial(x,y) = 2x \cdot x - (-2y) \cdot y = 2x^2 + 2y^2 = 2(x^2 + y^2)
+So |\partial(x,y)/\partial(u,v)| = 1/(2(x^2 + y^2))</div>
                         </div>
 
                         <div class="step" data-step="3">
                             <div class="step-title">Transform integral</div>
-                            <div class="math">∬_B (x² + y²) · 1/(2(x² + y²)) du dv = (1/2) ∫_1^4 ∫_1^3 du dv = (1/2)(3)(2) = 3</div>
+                            <div class="math">$$\iint_B (x^2 + y^2)  \cdot  1/(2(x^2 + y^2)) du dv = (1/2) \int _1^4 \int _1^3 du dv = (1/2)(3)(2) = 3$$</div>
                         </div>
                     </div>
                 </div>
@@ -1173,7 +1181,7 @@ So |∂(x,y)/∂(u,v)| = 1/(2(x² + y²))</div>
                     <span class="problem-title">Question 16.117: Transformation to Parallelogram</span>
                 </div>
                 <div class="problem-statement">
-                    <p>a) Find linear transformation taking [0,1]×[0,1] to parallelogram with vertices (0,0), (2,0), (1,2), (3,2)</p>
+                    <p>a) Find linear transformation taking [0,1]\times[0,1] to parallelogram with vertices (0,0), (2,0), (1,2), (3,2)</p>
                     <p>b) Write change of variables formula</p>
                 </div>
                 <div class="solution">
@@ -1181,20 +1189,20 @@ So |∂(x,y)/∂(u,v)| = 1/(2(x² + y²))</div>
                     <div class="solution-content">
                         <div class="step" data-step="1">
                             <div class="step-title">Identify spanning vectors</div>
-                            <div class="math">From (0,0): to (2,0) gives vector (2,0)
+                            <div class="math">$$From (0,0): to (2,0) gives vector (2,0)
 From (0,0): to (1,2) gives vector (1,2)
 T(u,v) = (2u + v, 2v)</div>
                         </div>
 
                         <div class="step" data-step="2">
                             <div class="step-title">Jacobian</div>
-                            <div class="math">|2  1|
+                            <div class="math">$$|2  1|
 |0  2| = 4</div>
                         </div>
 
                         <div class="step" data-step="3">
                             <div class="step-title">Change of variables formula</div>
-                            <div class="math">∬_P f(x,y) dx dy = ∫_0^1 ∫_0^1 f(2u+v, 2v) · 4 du dv</div>
+                            <div class="math">$$∬_P f(x,y) dx dy = \int_0^1 \int_0^1 f(2u+v, 2v)  \cdot  4 du dv$$</div>
                         </div>
                     </div>
                 </div>
@@ -1211,7 +1219,7 @@ T(u,v) = (2u + v, 2v)</div>
                     <span class="problem-title">Question 16.118: Image of Transformation</span>
                 </div>
                 <div class="problem-statement">
-                    <p>a) Find image of [0,1]×[0,1] under T(x,y) = (2x, x + 3y)</p>
+                    <p>a) Find image of [0,1]\times[0,1] under T(x,y) = (2x, x + 3y)</p>
                     <p>b) Write change of variables formula</p>
                 </div>
                 <div class="solution">
@@ -1219,7 +1227,7 @@ T(u,v) = (2u + v, 2v)</div>
                     <div class="solution-content">
                         <div class="step" data-step="1">
                             <div class="step-title">Find vertices of image</div>
-                            <div class="math">T(0,0) = (0,0)
+                            <div class="math">$$T(0,0) = (0,0)
 T(1,0) = (2,1)
 T(0,1) = (0,3)
 T(1,1) = (2,4)</div>
@@ -1227,7 +1235,7 @@ T(1,1) = (2,4)</div>
 
                         <div class="step" data-step="2">
                             <div class="step-title">Jacobian</div>
-                            <div class="math">|2  0|
+                            <div class="math">$$|2  0|
 |1  3| = 6</div>
                         </div>
                     </div>
@@ -1245,21 +1253,21 @@ T(1,1) = (2,4)</div>
                     <span class="problem-title">Area of Ellipse Using Change of Variables</span>
                 </div>
                 <div class="problem-statement">
-                    <p>Compute area of region enclosed by x² + 2xy + 2y² - 4y = 45 using u = x + y, v = y - 2</p>
+                    <p>Compute area of region enclosed by x^2 + 2xy + 2y^2 - 4y = 45 using u = x + y, v = y - 2</p>
                 </div>
                 <div class="solution">
                     <div class="solution-header">Solution</div>
                     <div class="solution-content">
                         <div class="step" data-step="1">
                             <div class="step-title">Transform the equation</div>
-                            <div class="math">x = u - y = u - (v + 2), y = v + 2
+                            <div class="math">$$x = u - y = u - (v + 2), y = v + 2
 Substitute to find equation in u, v (will be a circle/ellipse)</div>
                         </div>
 
                         <div class="step" data-step="2">
                             <div class="step-title">Find Jacobian</div>
-                            <div class="math">x = u - v - 2, y = v + 2
-|∂(x,y)/∂(u,v)| = |1  -1| = 1
+                            <div class="math">$$x = u - v - 2, y = v + 2
+|\partial(x,y)/\partial(u,v)| = |1  -1| = 1
                   |0   1|</div>
                         </div>
 
@@ -1284,40 +1292,40 @@ Substitute to find equation in u, v (will be a circle/ellipse)</div>
                 <h2>4 Problems with Complete Solutions</h2>
             </div>
 
-            <!-- Problem 29: Line integral = -28√10 -->
+            <!-- Problem 29: Line integral = -28\sqrt{10} -->
             <div class="problem">
                 <div class="problem-header">
                     <span class="problem-number">Problem 29</span>
                     <span class="problem-title">Path Integral of Scalar Function</span>
                 </div>
                 <div class="problem-statement">
-                    <p>Calculate ∫_C f(x,y) ds where f(x,y) = xy, r(t) = (6t, 2t-6) for 0 ≤ t ≤ 1</p>
-                    <p><strong>Answer: -28√10</strong></p>
+                    <p>Calculate \int _C f(x,y) ds where f(x,y) = xy, r(t) = (6t, 2t-6) for 0 \leq t \leq 1</p>
+                    <p><strong>Answer: -28\sqrt{10}</strong></p>
                 </div>
                 <div class="solution">
                     <div class="solution-header">Solution</div>
                     <div class="solution-content">
                         <div class="step" data-step="1">
                             <div class="step-title">Find |r'(t)|</div>
-                            <div class="math">r'(t) = (6, 2)
-|r'(t)| = √(36 + 4) = √40 = 2√10</div>
+                            <div class="math">$$r'(t) = (6, 2)
+|r'(t)| = \sqrt{(36 + 4) = \sqrt{40 = 2\sqrt{10}</div>
                         </div>
 
                         <div class="step" data-step="2">
                             <div class="step-title">Express f(r(t))</div>
-                            <div class="math">f(r(t)) = (6t)(2t - 6) = 12t² - 36t</div>
+                            <div class="math">$$f(r(t)) = (6t)(2t - 6) = 12t^2 - 36t$$</div>
                         </div>
 
                         <div class="step" data-step="3">
                             <div class="step-title">Evaluate</div>
-                            <div class="math">∫_0^1 (12t² - 36t) · 2√10 dt = 2√10 [4t³ - 18t²]_0^1
-= 2√10 (4 - 18) = 2√10 · (-14) = -28√10</div>
+                            <div class="math">$$\int_0^1 (12t^2 - 36t)  \cdot  2\sqrt{10} dt = 2\sqrt{10} [4t^3 - 18t^2]_0^1
+= 2\sqrt{10} (4 - 18) = 2\sqrt{10}  \cdot  (-14) = -28\sqrt{10}</div>
                         </div>
                     </div>
                 </div>
                 <div class="answer">
                     <div class="answer-label">ANSWER</div>
-                    <div class="answer-value">-28√10</div>
+                    <div class="answer-value">-28\sqrt{10}</div>
                 </div>
             </div>
 
@@ -1328,28 +1336,28 @@ Substitute to find equation in u, v (will be a circle/ellipse)</div>
                     <span class="problem-title">Line Integral Components</span>
                 </div>
                 <div class="problem-statement">
-                    <p>f(x,y,z) = x + yz, r(t) = (4t², 2t², 2t²) for 0 ≤ t ≤ √2. Find f(r(t)) and ds.</p>
-                    <p><strong>Answers: f(r(t)) = 4t² + 4t⁴, ds = 4t√6 dt</strong></p>
+                    <p>f(x,y,z) = x + yz, r(t) = (4t^2, 2t^2, 2t^2) for 0 \leq t \leq \sqrt{2. Find f(r(t)) and ds.</p>
+                    <p><strong>Answers: f(r(t)) = 4t^2 + 4t^4, ds = 4t\sqrt{6} dt</strong></p>
                 </div>
                 <div class="solution">
                     <div class="solution-header">Solution</div>
                     <div class="solution-content">
                         <div class="step" data-step="1">
                             <div class="step-title">Find f(r(t))</div>
-                            <div class="math">f(r(t)) = 4t² + (2t²)(2t²) = 4t² + 4t⁴</div>
+                            <div class="math">$$f(r(t)) = 4t^2 + (2t^2)(2t^2) = 4t^2 + 4t^4$$</div>
                         </div>
 
                         <div class="step" data-step="2">
                             <div class="step-title">Find ds</div>
-                            <div class="math">r'(t) = (8t, 4t, 4t)
-|r'(t)| = √(64t² + 16t² + 16t²) = √(96t²) = 4t√6
-ds = 4t√6 dt</div>
+                            <div class="math">$$r'(t) = (8t, 4t, 4t)
+|r'(t)| = \sqrt{(64t^2 + 16t^2 + 16t^2) = \sqrt{(96t^2) = 4t\sqrt{6}
+ds = 4t\sqrt{6} dt</div>
                         </div>
                     </div>
                 </div>
                 <div class="answer">
                     <div class="answer-label">ANSWERS</div>
-                    <div class="answer-value">f(r(t)) = 4t² + 4t⁴, ds = 4t√6 dt</div>
+                    <div class="answer-value">f(r(t)) = 4t^2 + 4t^4, ds = 4t\sqrt{6} dt</div>
                 </div>
             </div>
 
@@ -1360,27 +1368,27 @@ ds = 4t√6 dt</div>
                     <span class="problem-title">Line Integral of Vector Field</span>
                 </div>
                 <div class="problem-statement">
-                    <p>Evaluate ∫_C 9y dx + 8z dy + x dz where r(t) = (2 + t⁻¹, t³, t²) for 0 ≤ t ≤ 1</p>
+                    <p>Evaluate \int _C 9y dx + 8z dy + x dz where r(t) = (2 + t⁻^1, t^3, t^2) for 0 \leq t \leq 1</p>
                 </div>
                 <div class="solution">
                     <div class="solution-header">Solution</div>
                     <div class="solution-content">
                         <div class="step" data-step="1">
                             <div class="step-title">Find derivatives</div>
-                            <div class="math">x = 2 + t⁻¹ → dx = -t⁻² dt
-y = t³ → dy = 3t² dt
-z = t² → dz = 2t dt</div>
+                            <div class="math">$$x = 2 + t⁻^1 → dx = -t⁻^2 dt
+y = t^3 → dy = 3t^2 dt
+z = t^2 → dz = 2t dt</div>
                         </div>
 
                         <div class="step" data-step="2">
                             <div class="step-title">Substitute</div>
-                            <div class="math">∫ [9(t³)(-t⁻²) + 8(t²)(3t²) + (2 + t⁻¹)(2t)] dt
-= ∫ [-9t + 24t⁴ + 4t + 2] dt</div>
+                            <div class="math">$$\int  [9(t^3)(-t⁻^2) + 8(t^2)(3t^2) + (2 + t⁻^1)(2t)] dt
+= \int  [-9t + 24t^4 + 4t + 2] dt</div>
                         </div>
 
                         <div class="step" data-step="3">
                             <div class="step-title">Evaluate (note: limit as t→0 needs care)</div>
-                            <p>This integral is improper at t = 0 due to t⁻¹ term.</p>
+                            <p>This integral is improper at t = 0 due to t⁻^1 term.</p>
                         </div>
                     </div>
                 </div>
@@ -1397,32 +1405,32 @@ z = t² → dz = 2t dt</div>
                     <span class="problem-title">Line Integral Along Space Curve</span>
                 </div>
                 <div class="problem-statement">
-                    <p>f(x,y,z) = 72xz - 8y², r(t) = (t, t²/√2, t³/3) for 0 ≤ t ≤ 2. Compute ∫_C f ds.</p>
+                    <p>f(x,y,z) = 72xz - 8y^2, r(t) = (t, t^2/\sqrt{2, t^3/3) for 0 \leq t \leq 2. Compute \int _C f ds.</p>
                 </div>
                 <div class="solution">
                     <div class="solution-header">Solution</div>
                     <div class="solution-content">
                         <div class="step" data-step="1">
                             <div class="step-title">Compute f(r(t))</div>
-                            <div class="math">f(r(t)) = 72(t)(t³/3) - 8(t²/√2)²
-= 24t⁴ - 8t⁴/2 = 24t⁴ - 4t⁴ = 20t⁴</div>
+                            <div class="math">$$f(r(t)) = 72(t)(t^3/3) - 8(t^2/\sqrt{2)^2
+= 24t^4 - 8t^4/2 = 24t^4 - 4t^4 = 20t^4</div>
                         </div>
 
                         <div class="step" data-step="2">
                             <div class="step-title">Compute |r'(t)|</div>
-                            <div class="math">r'(t) = (1, t√2/√2, t²) = (1, t, t²)
-|r'(t)| = √(1 + t² + t⁴)</div>
+                            <div class="math">$$r'(t) = (1, t\sqrt{2/\sqrt{2, t^2) = (1, t, t^2)
+|r'(t)| = \sqrt{(1 + t^2 + t^4)</div>
                         </div>
 
                         <div class="step" data-step="3">
                             <div class="step-title">Set up integral</div>
-                            <div class="math">∫_0^2 20t⁴ √(1 + t² + t⁴) dt</div>
+                            <div class="math">$$\int_0^2 20t^4 \sqrt{(1 + t^2 + t^4) dt$$</div>
                         </div>
                     </div>
                 </div>
                 <div class="answer">
                     <div class="answer-label">ANSWER</div>
-                    <div class="answer-value">∫_0^2 20t⁴ √(1 + t² + t⁴) dt</div>
+                    <div class="answer-value">\int_0^2 20t^4 \sqrt{(1 + t^2 + t^4) dt</div>
                 </div>
             </div>
 
@@ -1440,36 +1448,36 @@ z = t² → dz = 2t dt</div>
 
             <div class="formula-box">
                 <div class="formula-name">Green's Theorem</div>
-                <div class="formula">∮_C (P dx + Q dy) = ∬_D (∂Q/∂x - ∂P/∂y) dA</div>
+                <div class="formula">∮_C (P dx + Q dy) = \iint_D (\partialQ/\partialx - \partialP/\partialy) dA</div>
             </div>
 
-            <!-- Problem 33: Green's with F = (x², x²) -->
+            <!-- Problem 33: Green's with F = (x^2, x^2) -->
             <div class="problem">
                 <div class="problem-header">
                     <span class="problem-number">Problem 33</span>
                     <span class="problem-title">Green's Theorem Application</span>
                 </div>
                 <div class="problem-statement">
-                    <p>Use Green's Theorem to evaluate ∮_C F·dr where F(x,y) = (x², x²), C consists of y = x² and y = 4x for 0 ≤ x ≤ 4, counterclockwise.</p>
+                    <p>Use Green's Theorem to evaluate ∮_C F \cdot dr where F(x,y) = (x^2, x^2), C consists of y = x^2 and y = 4x for 0 \leq x \leq 4, counterclockwise.</p>
                 </div>
                 <div class="solution">
                     <div class="solution-header">Solution</div>
                     <div class="solution-content">
                         <div class="step" data-step="1">
                             <div class="step-title">Identify P and Q</div>
-                            <div class="math">P = x², Q = x²
-∂Q/∂x = 2x, ∂P/∂y = 0</div>
+                            <div class="math">$$P = x^2, Q = x^2
+\partialQ/\partialx = 2x, \partialP/\partialy = 0</div>
                         </div>
 
                         <div class="step" data-step="2">
                             <div class="step-title">Apply Green's Theorem</div>
-                            <div class="math">∮_C F·dr = ∬_D (2x - 0) dA = ∬_D 2x dA</div>
+                            <div class="math">$$∮_C F \cdot dr = \iint_D (2x - 0) dA = \iint_D 2x dA$$</div>
                         </div>
 
                         <div class="step" data-step="3">
                             <div class="step-title">Evaluate double integral</div>
-                            <div class="math">∫_0^4 ∫_{x²}^{4x} 2x dy dx = ∫_0^4 2x(4x - x²) dx
-= ∫_0^4 (8x² - 2x³) dx = [8x³/3 - x⁴/2]_0^4
+                            <div class="math">$$\int_0^4 \int_{x^2}^{4x} 2x dy dx = \int_0^4 2x(4x - x^2) dx
+= \int_0^4 (8x^2 - 2x^3) dx = [8x^3/3 - x^4/2]_0^4
 = 512/3 - 128 = 128/3</div>
                         </div>
                     </div>
@@ -1487,7 +1495,7 @@ z = t² → dz = 2t dt</div>
                     <span class="problem-title">Line Integral Over Circle</span>
                 </div>
                 <div class="problem-statement">
-                    <p>Compute ∫_C F·dr where F(x,y) = (-2y/(x²+y²)², 2x/(x²+y²)²), C is circle of radius 4, counterclockwise.</p>
+                    <p>Compute \int _C F \cdot dr where F(x,y) = (-2y/(x^2+y^2)^2, 2x/(x^2+y^2)^2), C is circle of radius 4, counterclockwise.</p>
                 </div>
                 <div class="solution">
                     <div class="solution-header">Solution</div>
@@ -1499,27 +1507,27 @@ z = t² → dz = 2t dt</div>
 
                         <div class="step" data-step="2">
                             <div class="step-title">Parameterize circle</div>
-                            <div class="math">r(t) = (4cos t, 4sin t), 0 ≤ t ≤ 2π
+                            <div class="math">$$r(t) = (4cos t, 4sin t), 0 \leq t \leq 2\pi
 dr = (-4sin t, 4cos t) dt
-x² + y² = 16</div>
+x^2 + y^2 = 16</div>
                         </div>
 
                         <div class="step" data-step="3">
-                            <div class="step-title">Compute F·dr</div>
-                            <div class="math">F = (-2(4sin t)/256, 2(4cos t)/256) = (-sin t/32, cos t/32)
-F·dr = (-sin t/32)(-4sin t) + (cos t/32)(4cos t)
-= (4sin²t + 4cos²t)/32 = 4/32 = 1/8</div>
+                            <div class="step-title">Compute F \cdot dr</div>
+                            <div class="math">$$F = (-2(4sin t)/256, 2(4cos t)/256) = (-sin t/32, cos t/32)
+F \cdot dr = (-sin t/32)(-4sin t) + (cos t/32)(4cos t)
+= (4sin^2t + 4cos^2t)/32 = 4/32 = 1/8</div>
                         </div>
 
                         <div class="step" data-step="4">
                             <div class="step-title">Integrate</div>
-                            <div class="math">∫_0^{2π} (1/8) dt = π/4</div>
+                            <div class="math">$$\int_0^{2\pi} (1/8) dt = \pi/4$$</div>
                         </div>
                     </div>
                 </div>
                 <div class="answer">
                     <div class="answer-label">ANSWER</div>
-                    <div class="answer-value">π/4</div>
+                    <div class="answer-value">\pi/4</div>
                 </div>
             </div>
 
@@ -1530,18 +1538,18 @@ F·dr = (-sin t/32)(-4sin t) + (cos t/32)(4cos t)
                     <span class="problem-title">Line Integral Over Larger Circle</span>
                 </div>
                 <div class="problem-statement">
-                    <p>Compute ∫_C F·dr where F(x,y) = (-6y/(x²+y²)², 6x/(x²+y²)²), C is circle of radius 12, counterclockwise.</p>
+                    <p>Compute \int _C F \cdot dr where F(x,y) = (-6y/(x^2+y^2)^2, 6x/(x^2+y^2)^2), C is circle of radius 12, counterclockwise.</p>
                 </div>
                 <div class="solution">
                     <div class="solution-header">Solution</div>
                     <div class="solution-content">
                         <p>Similar to previous problem, scale factor of 3 in F.</p>
-                        <div class="math">Answer = 3 · (π/4) = 3π/4</div>
+                        <div class="math">$$Answer = 3  \cdot  (\pi/4) = 3\pi/4$$</div>
                     </div>
                 </div>
                 <div class="answer">
                     <div class="answer-label">ANSWER</div>
-                    <div class="answer-value">3π/4</div>
+                    <div class="answer-value">3\pi/4</div>
                 </div>
             </div>
 
@@ -1564,25 +1572,25 @@ F·dr = (-sin t/32)(-4sin t) + (cos t/32)(4cos t)
                     <span class="problem-title">Electric Flux Through Hemisphere</span>
                 </div>
                 <div class="problem-statement">
-                    <p>S = hemisphere x² + y² + z² = 1 (z ≥ 0) with base. E = 8xi + 8yj + 8zk. Find flux.</p>
+                    <p>S = hemisphere x^2 + y^2 + z^2 = 1 (z \geq 0) with base. E = 8xi + 8yj + 8zk. Find flux.</p>
                 </div>
                 <div class="solution">
                     <div class="solution-header">Solution</div>
                     <div class="solution-content">
                         <div class="step" data-step="1">
                             <div class="step-title">Use Divergence Theorem</div>
-                            <div class="math">∇·E = 8 + 8 + 8 = 24</div>
+                            <div class="math">$$\nabla \cdot E = 8 + 8 + 8 = 24$$</div>
                         </div>
 
                         <div class="step" data-step="2">
                             <div class="step-title">Apply theorem</div>
-                            <div class="math">∬_S E·dS = ∭_V 24 dV = 24 · (2π/3) = 16π</div>
+                            <div class="math">$$∬_S E \cdot dS = \iiint_V 24 dV = 24  \cdot  (2\pi/3) = 16\pi$$</div>
                         </div>
                     </div>
                 </div>
                 <div class="answer">
                     <div class="answer-label">ANSWER</div>
-                    <div class="answer-value">16π</div>
+                    <div class="answer-value">16\pi</div>
                 </div>
             </div>
 
@@ -1593,32 +1601,32 @@ F·dr = (-sin t/32)(-4sin t) + (cos t/32)(4cos t)
                     <span class="problem-title">Surface Area of Cone</span>
                 </div>
                 <div class="problem-statement">
-                    <p>Find surface area of cone x² + y² = z² between z = 3 and z = 8.</p>
+                    <p>Find surface area of cone x^2 + y^2 = z^2 between z = 3 and z = 8.</p>
                 </div>
                 <div class="solution">
                     <div class="solution-header">Solution</div>
                     <div class="solution-content">
                         <div class="step" data-step="1">
                             <div class="step-title">Parameterize</div>
-                            <div class="math">z = z, x = z cos θ, y = z sin θ
-3 ≤ z ≤ 8, 0 ≤ θ ≤ 2π</div>
+                            <div class="math">$$z = z, x = z cos \theta, y = z sin \theta
+3 \leq z \leq 8, 0 \leq \theta \leq 2\pi</div>
                         </div>
 
                         <div class="step" data-step="2">
                             <div class="step-title">Surface element</div>
-                            <div class="math">dS = √2 · z dz dθ (for cone z = √(x²+y²))</div>
+                            <div class="math">$$dS = \sqrt{2  \cdot  z dz d\theta (for cone z = \sqrt{(x^2+y^2))$$</div>
                         </div>
 
                         <div class="step" data-step="3">
                             <div class="step-title">Integrate</div>
-                            <div class="math">∫_0^{2π} ∫_3^8 √2 z dz dθ = 2π√2 [z²/2]_3^8
-= π√2 (64 - 9) = 55π√2</div>
+                            <div class="math">$$\int_0^{2\pi} \int _3^8 \sqrt{2 z dz d\theta = 2\pi\sqrt{2 [z^2/2]_3^8
+= \pi\sqrt{2 (64 - 9) = 55\pi\sqrt{2</div>
                         </div>
                     </div>
                 </div>
                 <div class="answer">
                     <div class="answer-label">ANSWER</div>
-                    <div class="answer-value">55π√2</div>
+                    <div class="answer-value">55\pi\sqrt{2</div>
                 </div>
             </div>
 
@@ -1629,14 +1637,14 @@ F·dr = (-sin t/32)(-4sin t) + (cos t/32)(4cos t)
                     <span class="problem-title">Hot Air Balloon Flux</span>
                 </div>
                 <div class="problem-statement">
-                    <p>V = ∇ × Φ where Φ = -yi + xj, R = 13. Compute volume flow rate through surface.</p>
+                    <p>V = \nabla \times Φ where Φ = -yi + xj, R = 13. Compute volume flow rate through surface.</p>
                 </div>
                 <div class="solution">
                     <div class="solution-header">Solution</div>
                     <div class="solution-content">
                         <div class="step" data-step="1">
                             <div class="step-title">Compute curl</div>
-                            <div class="math">∇ × Φ = (0, 0, ∂x/∂x - ∂(-y)/∂y) = (0, 0, 2) = 2k</div>
+                            <div class="math">$$\nabla \times Φ = (0, 0, \partialx/\partialx - \partial(-y)/\partialy) = (0, 0, 2) = 2k$$</div>
                         </div>
 
                         <div class="step" data-step="2">
@@ -1658,26 +1666,26 @@ F·dr = (-sin t/32)(-4sin t) + (cos t/32)(4cos t)
                     <span class="problem-title">Surface Integral Over Unit Sphere</span>
                 </div>
                 <div class="problem-statement">
-                    <p>F = 4x³i + 4y³j + 4z³k. Evaluate surface integral over unit sphere.</p>
+                    <p>F = 4x^3i + 4y^3j + 4z^3k. Evaluate surface integral over unit sphere.</p>
                 </div>
                 <div class="solution">
                     <div class="solution-header">Solution</div>
                     <div class="solution-content">
                         <div class="step" data-step="1">
                             <div class="step-title">Divergence Theorem</div>
-                            <div class="math">∇·F = 12x² + 12y² + 12z² = 12(x² + y² + z²) = 12ρ²</div>
+                            <div class="math">$$\nabla \cdot F = 12x^2 + 12y^2 + 12z^2 = 12(x^2 + y^2 + z^2) = 12\rho^2$$</div>
                         </div>
 
                         <div class="step" data-step="2">
                             <div class="step-title">Convert to spherical and integrate</div>
-                            <div class="math">∫_0^{2π} ∫_0^π ∫_0^1 12ρ² · ρ² sin φ dρ dφ dθ
-= 12 · 2π · 2 · [ρ⁵/5]_0^1 = 48π/5</div>
+                            <div class="math">$$\int_0^{2\pi} \int_0^{\pi} \int_0^1 12\rho^2  \cdot  \rho^2 sin \phi d\rho d\phi d\theta
+= 12  \cdot  2\pi  \cdot  2  \cdot  [\rho^5/5]_0^1 = 48\pi/5</div>
                         </div>
                     </div>
                 </div>
                 <div class="answer">
                     <div class="answer-label">ANSWER</div>
-                    <div class="answer-value">48π/5</div>
+                    <div class="answer-value">48\pi/5</div>
                 </div>
             </div>
 
@@ -1695,7 +1703,7 @@ F·dr = (-sin t/32)(-4sin t) + (cos t/32)(4cos t)
 
             <div class="formula-box">
                 <div class="formula-name">Test for Conservative (2D)</div>
-                <div class="formula">F = ⟨P, Q⟩ is conservative ⟺ ∂P/∂y = ∂Q/∂x</div>
+                <div class="formula">F = ⟨P, Q⟩ is conservative ⟺ \partialP/\partialy = \partialQ/\partialx</div>
             </div>
 
             <!-- Problem 40: F = 3xi + 7yj -->
@@ -1712,20 +1720,20 @@ F·dr = (-sin t/32)(-4sin t) + (cos t/32)(4cos t)
                     <div class="solution-content">
                         <div class="step" data-step="1">
                             <div class="step-title">Test</div>
-                            <div class="math">∂P/∂y = 0, ∂Q/∂x = 0 ✓ Equal!</div>
+                            <div class="math">$$\partialP/\partialy = 0, \partialQ/\partialx = 0 ✓ Equal!$$</div>
                         </div>
 
                         <div class="step" data-step="2">
                             <div class="step-title">Find f</div>
-                            <div class="math">∂f/∂x = 3x → f = (3/2)x² + g(y)
-∂f/∂y = g'(y) = 7y → g(y) = (7/2)y²
-f(x,y) = (3/2)x² + (7/2)y² + C</div>
+                            <div class="math">$$\partialf/\partialx = 3x → f = (3/2)x^2 + g(y)
+\partialf/\partialy = g'(y) = 7y → g(y) = (7/2)y^2
+f(x,y) = (3/2)x^2 + (7/2)y^2 + C</div>
                         </div>
                     </div>
                 </div>
                 <div class="answer">
                     <div class="answer-label">ANSWER</div>
-                    <div class="answer-value">f(x,y) = (3/2)x² + (7/2)y² + C</div>
+                    <div class="answer-value">f(x,y) = (3/2)x^2 + (7/2)y^2 + C</div>
                 </div>
             </div>
 
@@ -1743,8 +1751,8 @@ f(x,y) = (3/2)x² + (7/2)y² + C</div>
                     <div class="solution-content">
                         <div class="step" data-step="1">
                             <div class="step-title">Test</div>
-                            <div class="math">∂P/∂y = 5x, ∂Q/∂x = 7y
-5x ≠ 7y in general ✗ NOT conservative</div>
+                            <div class="math">$$\partialP/\partialy = 5x, \partialQ/\partialx = 7y
+5x \neq 7y in general ✗ NOT conservative</div>
                         </div>
                     </div>
                 </div>
@@ -1754,11 +1762,11 @@ f(x,y) = (3/2)x² + (7/2)y² + C</div>
                 </div>
             </div>
 
-            <!-- Problem 42: F = (7x² + 7y²)i + 14xyj -->
+            <!-- Problem 42: F = (7x^2 + 7y^2)i + 14xyj -->
             <div class="problem">
                 <div class="problem-header">
                     <span class="problem-number">Problem 42</span>
-                    <span class="problem-title">Conservative Field (c): F = (7x² + 7y²)i + 14xyj</span>
+                    <span class="problem-title">Conservative Field (c): F = (7x^2 + 7y^2)i + 14xyj</span>
                 </div>
                 <div class="problem-statement">
                     <p>Determine if F is gradient of f. If yes, find f.</p>
@@ -1768,29 +1776,29 @@ f(x,y) = (3/2)x² + (7/2)y² + C</div>
                     <div class="solution-content">
                         <div class="step" data-step="1">
                             <div class="step-title">Test for Conservative</div>
-                            <p>P = 7x² + 7y², Q = 14xy</p>
-                            <div class="math">∂P/∂y = 14y
-∂Q/∂x = 14y
-∂P/∂y = ∂Q/∂x ✓ Conservative!</div>
+                            <p>P = 7x^2 + 7y^2, Q = 14xy</p>
+                            <div class="math">$$\partialP/\partialy = 14y
+\partialQ/\partialx = 14y
+\partialP/\partialy = \partialQ/\partialx ✓ Conservative!</div>
                         </div>
 
                         <div class="step" data-step="2">
                             <div class="step-title">Find the Potential Function f</div>
-                            <p>Since ∂f/∂x = P = 7x² + 7y²:</p>
-                            <div class="math">f = ∫(7x² + 7y²)dx = (7/3)x³ + 7xy² + g(y)</div>
+                            <p>Since \partialf/\partialx = P = 7x^2 + 7y^2:</p>
+                            <div class="math">$$f = \int (7x^2 + 7y^2)dx = (7/3)x^3 + 7xy^2 + g(y)$$</div>
                         </div>
 
                         <div class="step" data-step="3">
                             <div class="step-title">Determine g(y)</div>
-                            <p>Take ∂f/∂y and set equal to Q:</p>
-                            <div class="math">∂f/∂y = 14xy + g'(y) = 14xy
+                            <p>Take \partialf/\partialy and set equal to Q:</p>
+                            <div class="math">$$\partialf/\partialy = 14xy + g'(y) = 14xy
 g'(y) = 0 → g(y) = C</div>
                         </div>
                     </div>
                 </div>
                 <div class="answer">
                     <div class="answer-label">ANSWER</div>
-                    <div class="answer-value">f(x,y) = (7/3)x³ + 7xy² + C</div>
+                    <div class="answer-value">f(x,y) = (7/3)x^3 + 7xy^2 + C</div>
                 </div>
             </div>
 
