@@ -958,7 +958,7 @@
 
  <div class="step" data-step="2">
  <div class="step-title">Calculate determinant</div>
- <div class="math">$$Jac = |3e^v 3ue^v| \\ |3e^u 0 | \\ = (3e^v)(0) - (3ue^v)(3e^u) = -9ue^{u+v}$$</div>
+ <div class="math">$$\text{Jac} = \begin{vmatrix} 3e^v & 3ue^v \\ 3e^u & 0 \end{vmatrix} = (3e^v)(0) - (3ue^v)(3e^u) = -9ue^{u+v}$$</div>
  </div>
  </div>
  </div>
@@ -1035,7 +1035,7 @@
  <div class="solution-content">
  <div class="step" data-step="1">
  <div class="step-title">Find Jacobian</div>
- <div class="math">$$x = u - 2v, y = v \\ Jac = |1 -2| = 1 \\ |0 1|$$</div>
+ <div class="math">$$x = u - 2v, \quad y = v \\ \text{Jac} = \begin{vmatrix} 1 & -2 \\ 0 & 1 \end{vmatrix} = (1)(1) - (-2)(0) = 1$$</div>
  </div>
 
  <div class="step" data-step="2">
@@ -1105,12 +1105,12 @@
  <div class="solution-content">
  <div class="step" data-step="1">
  <div class="step-title">Identify spanning vectors</div>
- <div class="math">$$From (0,0): to (2,0) gives vector (2,0) \\ From (0,0): to (1,2) gives vector (1,2) \\ T(u,v) = (2u + v, 2v)$$</div>
+ <div class="math">$$\text{From } (0,0) \text{ to } (2,0) \text{ gives vector } (2,0) \\ \text{From } (0,0) \text{ to } (1,2) \text{ gives vector } (1,2) \\ T(u,v) = (2u + v, 2v)$$</div>
  </div>
 
  <div class="step" data-step="2">
  <div class="step-title">Jacobian</div>
- <div class="math">$$|2 1| \\ |0 2| = 4$$</div>
+ <div class="math">$$\begin{vmatrix} 2 & 1 \\ 0 & 2 \end{vmatrix} = (2)(2) - (1)(0) = 4$$</div>
  </div>
 
  <div class="step" data-step="3">
@@ -1121,7 +1121,7 @@
  </div>
  <div class="answer">
  <div class="answer-label">ANSWER</div>
- <div class="answer-value">T(u,v) = (2u + v, 2v), Jacobian = 4</div>
+ <div class="answer-value">$T(u,v) = (2u + v, 2v)$, Jacobian $= 4$</div>
  </div>
  </div>
 
@@ -1145,7 +1145,7 @@
 
  <div class="step" data-step="2">
  <div class="step-title">Jacobian</div>
- <div class="math">$$|2 0| \\ |1 3| = 6$$</div>
+ <div class="math">$$\begin{vmatrix} 2 & 0 \\ 1 & 3 \end{vmatrix} = (2)(3) - (0)(1) = 6$$</div>
  </div>
  </div>
  </div>
@@ -1174,7 +1174,7 @@
 
  <div class="step" data-step="2">
  <div class="step-title">Find Jacobian</div>
- <div class="math">$$x = u - v - 2, y = v + 2 \\ \left|\frac{\partial(x,y)}{\partial(u,v)}\right| = |1 -1| = 1 \\ |0 1|$$</div>
+ <div class="math">$$x = u - v - 2, \quad y = v + 2 \\ \left|\frac{\partial(x,y)}{\partial(u,v)}\right| = \begin{vmatrix} 1 & -1 \\ 0 & 1 \end{vmatrix} = 1$$</div>
  </div>
 
  <p>The transformed region will be easier to integrate over.</p>
@@ -1661,19 +1661,19 @@
  <div class="step" data-step="1">
  <div class="step-title">Test for Conservative</div>
  <p>$P = 7x^2 + 7y^2$, $Q = 14xy$</p>
- <div class="math">$$\frac{\partial P}{\partial y} = 14y \\ \frac{\partial Q}{\partial x} = 14y \\ \frac{\partial P}{\partial y} = \frac{\partial Q}{\partial x}  \checkmark Conservative!$$</div>
+ <div class="math">$$\frac{\partial P}{\partial y} = 14y \\ \frac{\partial Q}{\partial x} = 14y \\ \frac{\partial P}{\partial y} = \frac{\partial Q}{\partial x} \quad \checkmark \text{ Conservative!}$$</div>
  </div>
 
  <div class="step" data-step="2">
  <div class="step-title">Find the Potential Function f</div>
- <p>Since \frac{\partial f}{\partial x} = P = 7x^2 + 7y^2:</p>
- <div class="math">$$f = \int (7x^2 + 7y^2)dx = (\frac{7}{3})x^3 + 7xy^2 + g(y)$$</div>
+ <p>Since $\frac{\partial f}{\partial x} = P = 7x^2 + 7y^2$:</p>
+ <div class="math">$$f = \int (7x^2 + 7y^2) \, dx = \frac{7}{3}x^3 + 7xy^2 + g(y)$$</div>
  </div>
 
  <div class="step" data-step="3">
  <div class="step-title">Determine g(y)</div>
- <p>Take \frac{\partial f}{\partial y} and set equal to Q:</p>
- <div class="math">$$\frac{\partial f}{\partial y} = 14xy + g'(y) = 14xy \\ g'(y) = 0 \to g(y) = C$$</div>
+ <p>Take $\frac{\partial f}{\partial y}$ and set equal to $Q$:</p>
+ <div class="math">$$\frac{\partial f}{\partial y} = 14xy + g'(y) = 14xy \\ g'(y) = 0 \implies g(y) = C$$</div>
  </div>
  </div>
  </div>
