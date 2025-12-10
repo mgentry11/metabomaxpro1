@@ -147,21 +147,17 @@
 
             <div class="formula-box">
                 <div class="formula-name">Polar Coordinates (2D)</div>
-                <div class="formula">x = r \cos \theta,  y = r \sin \theta,  r^2 = x^2 + y^2
-dA = r \, dr \, d\theta  ← Don't forget the r!</div>
+                <div class="formula">$$x = r \cos \theta,  y = r \sin \theta,  r^2 = x^2 + y^2 \\ dA = r \, dr \, d\theta  \text{←  Don't forget the r!}$$</div>
             </div>
 
             <div class="formula-box">
                 <div class="formula-name">Cylindrical Coordinates (3D)</div>
-                <div class="formula">x = r \cos \theta,  y = r \sin \theta,  z = z
-dV = r dz \, dr \, d\theta</div>
+                <div class="formula">$$x = r \cos \theta,  y = r \sin \theta,  z = z \\ dV = r dz \, dr \, d\theta$$</div>
             </div>
 
             <div class="formula-box">
                 <div class="formula-name">Spherical Coordinates (3D)</div>
-                <div class="formula">x = \rho \sin \phi \cos \theta,  y = \rho \sin \phi \sin \theta,  z = \rho \cos \phi
-\rho^2 = x^2 + y^2 + z^2
-dV = \rho^2 \sin \phi \, d\rho \, d\phi d\theta</div>
+                <div class="formula">$$x = \rho \sin \phi \cos \theta,  y = \rho \sin \phi \sin \theta,  z = \rho \cos \phi \\ \rho^2 = x^2 + y^2 + z^2 \\ dV = \rho^2 \sin \phi \, d\rho \, d\phi d\theta$$</div>
             </div>
 
             <div class="tip">Use polar/cylindrical when you see circles (x^2 + y^2). Use spherical when you see spheres (x^2 + y^2 + z^2).</div>
@@ -186,7 +182,7 @@ dV = \rho^2 \sin \phi \, d\rho \, d\phi d\theta</div>
                 </div>
                 <div class="problem-statement">
                     <p>Calculate the double integral of f(x,y) = x over the region D in the figure, where a = 5 and b = 6.</p>
-                    <p><strong>\text{Answer: } 182/3</strong></p>
+                    <p><strong>Answer:  182/3</strong></p>
                 </div>
                 <div class="solution">
                     <div class="solution-header">Solution</div>
@@ -220,7 +216,7 @@ dV = \rho^2 \sin \phi \, d\rho \, d\phi d\theta</div>
                 </div>
                 <div class="problem-statement">
                     <p>Evaluate: $\int_{-\pi}^{0} \int_{\pi/4}^{\pi/2} \cos(2x + y) \, dy \, dx$</p>
-                    <p><strong>\text{Answer: } 0</strong></p>
+                    <p><strong>Answer:  0</strong></p>
                 </div>
                 <div class="solution">
                     <div class="solution-header">Solution</div>
@@ -261,7 +257,7 @@ dV = \rho^2 \sin \phi \, d\rho \, d\phi d\theta</div>
                     <span class="problem-title">Change Order of Integration</span>
                 </div>
                 <div class="problem-statement">
-                    <p>Change the order of integration for: \int_0^1^3 \int_x^{13} x \cdot e^{y^3/169} \, dy \, dx</p>
+                    <p>$Change the order of integration for: \int_0^1^3 \int_x^{13} x \cdot e^{y^3/169} \, dy \, dx$</p>
                 </div>
                 <div class="solution">
                     <div class="solution-header">Solution</div>
@@ -269,13 +265,13 @@ dV = \rho^2 \sin \phi \, d\rho \, d\phi d\theta</div>
                         <div class="step" data-step="1">
                             <div class="step-title">Identify the original region</div>
                             <p>Original: x goes from 0 to 13, y goes from x to 13</p>
-                            <p>This means: 0 \leq x \leq y and x \leq y \leq 13, with 0 \leq x \leq 13</p>
+                            <p>This means: $0 \leq x \leq y$ and $x \leq y \leq 13$, with $0 \leq x \leq 13$</p>
                         </div>
 
                         <div class="step" data-step="2">
-                            <div class="step-title">Rewrite for \, dy \, dx \to \, dx \, dy</div>
+                            <div class="step-title">Rewrite for $dy \, dx \to dx \, dy$</div>
                             <p>The region is: y from 0 to 13, x from 0 to y</p>
-                            <div class="math">$$\int_0^{13} \int_0^y x \cdot e^{y^\frac{3}{169}} \, dx \, dy$$</div>
+                            <div class="math">$$\int_0^{13} \int_0^y x \cdot e^{\frac{y^3}{169}} \, dx \, dy$$</div>
                         </div>
 
                         <div class="step" data-step="3">
@@ -297,7 +293,7 @@ dV = \rho^2 \sin \phi \, d\rho \, d\phi d\theta</div>
                     <span class="problem-title">Question 16.138: Gaussian Over Lower Semicircle</span>
                 </div>
                 <div class="problem-statement">
-                    <p>Evaluate \iint_B e^{-x^2-y^2} \, dx \, dy, where B = {(x,y) | x^2 + y^2 \leq 1 and y \leq 0}</p>
+                    <p>$Evaluate \iint_B e^{-x^2-y^2} \, dx \, dy, where B = {(x,y) | x^2 + y^2 \leq 1 and y \leq 0}$</p>
                 </div>
                 <div class="solution">
                     <div class="solution-header">Solution</div>
@@ -305,7 +301,7 @@ dV = \rho^2 \sin \phi \, d\rho \, d\phi d\theta</div>
                         <div class="step" data-step="1">
                             <div class="step-title">Convert to polar coordinates</div>
                             <div class="math">$$x^2 + y^2 = r^2, \quad e^{-x^2-y^2} = e^{-r^2}, \quad dA = r \, dr \, d\theta$$</div>
-                            <p>\text{Region: } $0 \leq r \leq 1$, $\pi \leq \theta \leq 2\pi$ (lower half where $y \leq 0$)</p>
+                            <p>Region: $ $0 \leq r \leq 1$, $\pi \leq \theta \leq 2\pi$ (lower half where $y \leq 0$)</p>
                         </div>
 
                         <div class="step" data-step="2">
@@ -337,14 +333,14 @@ dV = \rho^2 \sin \phi \, d\rho \, d\phi d\theta</div>
                     <span class="problem-title">Question 16.147b: Fourth Power Integral</span>
                 </div>
                 <div class="problem-statement">
-                    <p>Evaluate \iint_B (x^4 + 2x^2y^2 + y^4) \, dx \, dy where B is the disk of radius 2 centered at origin in the first quadrant.</p>
+                    <p>$Evaluate \iint_B (x^4 + 2x^2y^2 + y^4) \, dx \, dy where B is the disk of radius 2 centered at origin in the first quadrant.$</p>
                 </div>
                 <div class="solution">
                     <div class="solution-header">Solution</div>
                     <div class="solution-content">
                         <div class="step" data-step="1">
                             <div class="step-title">Recognize the pattern</div>
-                            <div class="math">$$x^4 + 2x^2y^2 + y^4 = (x^2 + y^2)^2 = r^4 in polar$$</div>
+                            <div class="math">$$x^4 + 2x^2y^2 + y^4 = (x^2 + y^2)^2 = r^4 \text{ in polar}$$</div>
                         </div>
 
                         <div class="step" data-step="2">
@@ -354,7 +350,7 @@ dV = \rho^2 \sin \phi \, d\rho \, d\phi d\theta</div>
 
                         <div class="step" data-step="3">
                             <div class="step-title">Evaluate</div>
-                            <div class="math">$$\int_0^2 r^5 dr = [r^\frac{6}{6}]_0^2 = \frac{64}{6} = \frac{32}{3} \\ \int_0^{\frac{\pi}{2}} (\frac{32}{3}) d\theta = (\frac{32}{3})(\frac{\pi}{2}) = 16\frac{\pi}{3}$$</div>
+                            <div class="math">$$\int_0^2 r^5 dr = [\frac{r^6}{6}]_0^2 = \frac{64}{6} = \frac{32}{3} \\ \int_0^{\frac{\pi}{2}} (\frac{32}{3}) d\theta = (\frac{32}{3})(\frac{\pi}{2}) = \frac{16\pi}{3}$$</div>
                         </div>
                     </div>
                 </div>
@@ -371,19 +367,19 @@ dV = \rho^2 \sin \phi \, d\rho \, d\phi d\theta</div>
                     <span class="problem-title">Question 16.147a: Improper Double Integral</span>
                 </div>
                 <div class="problem-statement">
-                    <p>Evaluate: \int_0^{\infty} \int_0^y x \cdot e^{-y^3} \, dx \, dy</p>
+                    <p>$Evaluate: \int_0^{\infty} \int_0^y x \cdot e^{-y^3} \, dx \, dy$</p>
                 </div>
                 <div class="solution">
                     <div class="solution-header">Solution</div>
                     <div class="solution-content">
                         <div class="step" data-step="1">
                             <div class="step-title">Inner integral (with respect to x)</div>
-                            <div class="math">$$\int_0^y x \cdot e^{-y^3} dx = e^{-y^3} \int_0^y x dx = e^{-y^3} \cdot [x^\frac{2}{2}]_0^y = e^{-y^3} \cdot y^\frac{2}{2}$$</div>
+                            <div class="math">$$\int_0^y x \cdot e^{-y^3} dx = e^{-y^3} \int_0^y x dx = e^{-y^3} \cdot [\frac{x^2}{2}]_0^y = e^{-y^3} \cdot \frac{y^2}{2}$$</div>
                         </div>
 
                         <div class="step" data-step="2">
                             <div class="step-title">Outer integral</div>
-                            <div class="math">$$\int_0^{\infty} (y^\frac{2}{2}) \cdot e^{-y^3} dy \\ Let u = y^3, du = 3y^2 dy, \text{ so } y^2 dy = d\frac{u}{3} \\ = (\frac{1}{2}) \cdot (\frac{1}{3}) \int_0^{\infty} e^{-u} du = (\frac{1}{6})[-e^{-u}]_0^\infty = (\frac{1}{6})(0 - (-1)) = \frac{1}{6}$$</div>
+                            <div class="math">$$\int_0^{\infty} (\frac{y^2}{2}) \cdot e^{-y^3} dy \\ \text{Let } u = y^3, du = 3y^2 dy, \text{ so } y^2 dy = \frac{du}{3} \\ = (\frac{1}{2}) \cdot (\frac{1}{3}) \int_0^{\infty} e^{-u} du = (\frac{1}{6})[-e^{-u}]_0^\infty = (\frac{1}{6})(0 - (-1)) = \frac{1}{6}$$</div>
                         </div>
                     </div>
                 </div>
@@ -400,7 +396,7 @@ dV = \rho^2 \sin \phi \, d\rho \, d\phi d\theta</div>
                     <span class="problem-title">Question 16.149: Integral Over All of R^2</span>
                 </div>
                 <div class="problem-statement">
-                    <p>Evaluate \iint _{R^2} f(x,y) \, dx \, dy where f(x,y) = 1/(1 + x^2 + y^2)^{3/2}</p>
+                    <p>$Evaluate \iint _{R^2} f(x,y) \, dx \, dy where f(x,y) = 1/(1 + x^2 + y^2)^{3/2}$</p>
                 </div>
                 <div class="solution">
                     <div class="solution-header">Solution</div>
@@ -412,7 +408,7 @@ dV = \rho^2 \sin \phi \, d\rho \, d\phi d\theta</div>
 
                         <div class="step" data-step="2">
                             <div class="step-title">Inner integral</div>
-                            <div class="math">$$\int_0^{\infty} r/(1 + r^2)^{\frac{3}{2}} dr \\ Let u = 1 + r^2, du = 2r dr \\ = (\frac{1}{2}) \int_1^\infty u^{-\frac{3}{2}} du = (\frac{1}{2})[-2u^{-\frac{1}{2}}]_1^\infty = (\frac{1}{2})(0 - (-2)) = 1$$</div>
+                            <div class="math">$$\int_0^{\infty} r/(1 + r^2)^{\frac{3}{2}} dr \\ \text{Let } u = 1 + r^2, du = 2r dr \\ = (\frac{1}{2}) \int_1^\infty u^{-\frac{3}{2}} du = (\frac{1}{2})[-2u^{-\frac{1}{2}}]_1^\infty = (\frac{1}{2})(0 - (-2)) = 1$$</div>
                         </div>
 
                         <div class="step" data-step="3">
@@ -434,19 +430,19 @@ dV = \rho^2 \sin \phi \, d\rho \, d\phi d\theta</div>
                     <span class="problem-title">Integral with Square Root</span>
                 </div>
                 <div class="problem-statement">
-                    <p>Evaluate \iint_D 1/\sqrt{3xy} dA where D = [0,8] \times [0,8]</p>
+                    <p>$Evaluate \iint_D 1/\sqrt{3xy} dA where D = [0,8] \times [0,8]$</p>
                 </div>
                 <div class="solution">
                     <div class="solution-header">Solution</div>
                     <div class="solution-content">
                         <div class="step" data-step="1">
                             <div class="step-title">Separate the integral</div>
-                            <div class="math">$$\iint_D 1/\sqrt{3xy} dA = (1/\sqrt{3}) \int_0^8 \int_0^8 x^{-\frac{1}{2}} y^{-\frac{1}{2}} \, dx \, dy \\ = (1/\sqrt{3}) \int_0^8 x^{-\frac{1}{2}} dx \cdot \int_0^8 y^{-\frac{1}{2}} dy$$</div>
+                            <div class="math">$$\iint_D 1/\sqrt{3xy} dA = (\frac{1}{\sqrt{3}}) \int_0^8 \int_0^8 x^{-\frac{1}{2}} y^{-\frac{1}{2}} \, dx \, dy \\ = (\frac{1}{\sqrt{3}}) \int_0^8 x^{-\frac{1}{2}} dx \cdot \int_0^8 y^{-\frac{1}{2}} dy$$</div>
                         </div>
 
                         <div class="step" data-step="2">
                             <div class="step-title">Evaluate each integral</div>
-                            <div class="math">$$\int_0^8 x^{-\frac{1}{2}} dx = [2x^{\frac{1}{2}}]_0^8 = 2\sqrt{8} = 4\sqrt{2} \\ Similarly for y: 4\sqrt{2} \\ \text{Result: } (1/\sqrt{3})(4\sqrt{2})(4\sqrt{2}) = (1/\sqrt{3})(32) = 32/\sqrt{3} = 32\sqrt{3}/3$$</div>
+                            <div class="math">$$\int_0^8 x^{-\frac{1}{2}} dx = [2x^{\frac{1}{2}}]_0^8 = 2\sqrt{8} = 4\sqrt{2} \\ \text{Similarly for } y: 4\sqrt{2} \\ \text{Result: } (\frac{1}{\sqrt{3}})(4\sqrt{2})(4\sqrt{2}) = (\frac{1}{\sqrt{3}})(32) = 3\frac{2}{\sqrt{3}} = 32\sqrt{3}/3$$</div>
                         </div>
 
                         <div class="warning">This integral is improper at x=0 and y=0, but converges because the exponent -1/2 > -1.</div>
@@ -477,8 +473,8 @@ dV = \rho^2 \sin \phi \, d\rho \, d\phi d\theta</div>
                     <span class="problem-title">Triple Integral with Symmetry</span>
                 </div>
                 <div class="problem-statement">
-                    <p>Evaluate \iiint _W 9x dV for region W: x^2 + y^2 \leq z \leq 81</p>
-                    <p><strong>\text{Answer: } 0</strong></p>
+                    <p>$Evaluate \iiint _W 9x dV for region W: x^2 + y^2 \leq z \leq 81$</p>
+                    <p><strong>Answer:  0</strong></p>
                 </div>
                 <div class="solution">
                     <div class="solution-header">Solution</div>
@@ -513,8 +509,8 @@ dV = \rho^2 \sin \phi \, d\rho \, d\phi d\theta</div>
                     <span class="problem-title">Improper Integral Outside Sphere</span>
                 </div>
                 <div class="problem-statement">
-                    <p>Let D be the unbounded region x^2 + y^2 + z^2 \geq 9. Evaluate: \iiint _D 7/(x^2 + y^2 + z^2)^2 dV</p>
-                    <p><strong>\text{Answer: } 28\pi/3</strong></p>
+                    <p>$Let D be the unbounded region x^2 + y^2 + z^2 \geq 9. Evaluate: \iiint _D 7/(x^2 + y^2 + z^2)^2 dV$</p>
+                    <p><strong>Answer:  28\pi/3</strong></p>
                 </div>
                 <div class="solution">
                     <div class="solution-header">Solution</div>
@@ -530,23 +526,23 @@ dV = \rho^2 \sin \phi \, d\rho \, d\phi d\theta</div>
                         </div>
 
                         <div class="step" data-step="3">
-                            <div class="step-title">Evaluate \rho integral</div>
+                            <div class="step-title">$Evaluate \rho integral$</div>
                             <div class="math">$$\int_3^{\infty} 7\rho^{-2} d\rho = 7[-\rho^{-1}]_3^\infty = 7(0 + \frac{1}{3}) = \frac{7}{3}$$</div>
                         </div>
 
                         <div class="step" data-step="4">
-                            <div class="step-title">Evaluate \phi integral</div>
+                            <div class="step-title">$Evaluate \phi integral$</div>
                             <div class="math">$$\int_0^{\pi} \sin \phi d\phi = [-\cos \phi]_0^\pi = 1 + 1 = 2$$</div>
                         </div>
 
                         <div class="step" data-step="5">
-                            <div class="step-title">Evaluate \theta integral</div>
+                            <div class="step-title">$Evaluate \theta integral$</div>
                             <div class="math">$$\int_0^{2\pi} d\theta = 2\pi$$</div>
                         </div>
 
                         <div class="step" data-step="6">
                             <div class="step-title">Combine</div>
-                            <div class="math">$$(\frac{7}{3}) \times 2 \times 2\pi = 28\frac{\pi}{3}$$</div>
+                            <div class="math">$$(\frac{7}{3}) \times 2 \times 2\pi = \frac{28\pi}{3}$$</div>
                         </div>
                     </div>
                 </div>
@@ -563,20 +559,20 @@ dV = \rho^2 \sin \phi \, d\rho \, d\phi d\theta</div>
                     <span class="problem-title">Question 16.137: Center of Mass of Hemisphere</span>
                 </div>
                 <div class="problem-statement">
-                    <p>Find the center of mass of hemisphere V = {(x,y,z) | x^2 + y^2 + z^2 \leq a^2, z \geq 0} with constant density.</p>
+                    <p>$Find the center of mass of hemisphere V = {(x,y,z) | x^2 + y^2 + z^2 \leq a^2, z \geq 0} with constant density.$</p>
                 </div>
                 <div class="solution">
                     <div class="solution-header">Solution</div>
                     <div class="solution-content">
                         <div class="step" data-step="1">
                             <div class="step-title">Use symmetry</div>
-                            <div class="math">$$\bar{x} = 0 \text{(symmetric about yz-plane)} \\ ȳ = 0 \text{(symmetric about xz-plane)}$$</div>
+                            <div class="math">$$\bar{x} = 0 \text{(symmetric about yz-plane)} \\ \bar{y} = 0 \text{(symmetric about xz-plane)}$$</div>
                         </div>
 
                         <div class="step" data-step="2">
-                            <div class="step-title">Calculate \bar{z} = \iiint z dV / \iiint dV</div>
-                            <p>In spherical: z = \rho \cos \phi, dV = \rho^2 \sin \phi \, d\rho \, d\phi d\theta</p>
-                            <p>\text{Region: } 0 \leq \rho \leq a, 0 \leq \phi \leq \pi/2, 0 \leq \theta \leq 2\pi</p>
+                            <div class="step-title">$Calculate \bar{z} = \iiint z dV / \iiint dV$</div>
+                            <p>$In spherical: z = \rho \cos \phi, dV = \rho^2 \sin \phi \, d\rho \, d\phi d\theta$</p>
+                            <p>$\text{Region: } 0 \leq \rho \leq a, 0 \leq \phi \leq \pi/2, 0 \leq \theta \leq 2\pi$</p>
                         </div>
 
                         <div class="step" data-step="3">
@@ -585,13 +581,13 @@ dV = \rho^2 \sin \phi \, d\rho \, d\phi d\theta</div>
                         </div>
 
                         <div class="step" data-step="4">
-                            <div class="step-title">Calculate \iiint z dV</div>
-                            <div class="math">$$\int_0^{2\pi} d\theta \cdot \int_0^{\frac{\pi}{2}} \cos \phi \sin \phi d\phi \cdot \int_0^a \rho^3 d\rho \\ = 2\pi \cdot [\frac{sin^2\phi}{2}]_0^{\frac{\pi}{2}} \cdot [\rho^\frac{4}{4}]_0^a \\ = 2\pi \cdot (\frac{1}{2}) \cdot (a^\frac{4}{4}) = \pi a^\frac{4}{4}$$</div>
+                            <div class="step-title">$Calculate \iiint z dV$</div>
+                            <div class="math">$$\int_0^{2\pi} d\theta \cdot \int_0^{\frac{\pi}{2}} \cos \phi \sin \phi d\phi \cdot \int_0^a \rho^3 d\rho \\ = 2\pi \cdot [\frac{\sin^2\phi}{2}]_0^{\frac{\pi}{2}} \cdot [\rh\frac{o^4}{4}]_0^a \\ = 2\pi \cdot (\frac{1}{2}) \cdot (\frac{a^4}{4}) = \pi \frac{a^4}{4}$$</div>
                         </div>
 
                         <div class="step" data-step="5">
                             <div class="step-title">Find \bar{z}</div>
-                            <div class="math">$$\bar{z} = (\pi a^\frac{4}{4}) / (2\pi a^\frac{3}{3}) = (\pi a^\frac{4}{4}) \cdot (\frac{3}{2}\pi a^3) = 3\frac{a}{8}$$</div>
+                            <div class="math">$$\bar{z} = (\pi \frac{a^4}{4}) / (2\pi \frac{a^3}{3}) = (\pi \frac{a^4}{4}) \cdot (\frac{3}{2}\pi a^3) = \frac{3a}{8}$$</div>
                         </div>
                     </div>
                 </div>
@@ -608,10 +604,10 @@ dV = \rho^2 \sin \phi \, d\rho \, d\phi d\theta</div>
                     <span class="problem-title">Question 16.140: Triple Integral Over Sphere/Hemisphere/Octant</span>
                 </div>
                 <div class="problem-statement">
-                    <p>Evaluate \iiint _D (x^2 + y^2 + z^2)xyz dV over:</p>
-                    <p>a) The sphere D = {x^2 + y^2 + z^2 \leq R^2}</p>
-                    <p>b) The hemisphere D = {x^2 + y^2 + z^2 \leq R^2, z \geq 0}</p>
-                    <p>c) The first octant D = {x \geq 0, y \geq 0, z \geq 0, x^2 + y^2 + z^2 \leq R^2}</p>
+                    <p>$Evaluate \iiint _D (x^2 + y^2 + z^2)xyz dV over:$</p>
+                    <p>$a) The sphere D = {x^2 + y^2 + z^2 \leq R^2}$</p>
+                    <p>$b) The hemisphere D = {x^2 + y^2 + z^2 \leq R^2, z \geq 0}$</p>
+                    <p>$c) The first octant D = {x \geq 0, y \geq 0, z \geq 0, x^2 + y^2 + z^2 \leq R^2}$</p>
                 </div>
                 <div class="solution">
                     <div class="solution-header">Solution</div>
@@ -620,22 +616,22 @@ dV = \rho^2 \sin \phi \, d\rho \, d\phi d\theta</div>
                         <div class="step" data-step="1">
                             <div class="step-title">Symmetry argument</div>
                             <p>The integrand xyz is odd in each variable. The sphere is symmetric about each coordinate plane.</p>
-                            <div class="math">$$Answer (a): 0$$</div>
+                            <div class="math">$$\text{Answer (a): } 0$$</div>
                         </div>
 
                         <h5>Part (b): Upper hemisphere</h5>
                         <div class="step" data-step="2">
                             <div class="step-title">Symmetry in x and y</div>
-                            <p>Still symmetric about xz and yz planes, \text{ so } integrand is still odd in x and y.</p>
-                            <div class="math">$$Answer (b): 0$$</div>
+                            <p>$Still symmetric about xz and yz planes, \text{ so } integrand is still odd in x and y.$</p>
+                            <div class="math">$$\text{Answer (b): } 0$$</div>
                         </div>
 
                         <h5>Part (c): First octant</h5>
                         <div class="step" data-step="3">
                             <div class="step-title">No more cancellation</div>
-                            <p>In spherical: (x^2 + y^2 + z^2) = \rho^2, xyz = \rho^3 sin^2\phi \cos \phi \cdot \sin \theta \cos \theta \cdot \cos \phi</p>
+                            <p>$In spherical: (x^2 + y^2 + z^2) = \rho^2, xyz = \rho^3 \sin^2\phi \cos \phi \cdot \sin \theta \cos \theta \cdot \cos \phi$</p>
                             <p>This integral is nonzero and requires full computation.</p>
-                            <div class="math">$$Answer (c): R^\frac{8}{48}$$</div>
+                            <div class="math">$$\text{Answer (c): } \frac{R^8}{48}$$</div>
                         </div>
                     </div>
                 </div>
@@ -652,14 +648,14 @@ dV = \rho^2 \sin \phi \, d\rho \, d\phi d\theta</div>
                     <span class="problem-title">Question 16.141: Cone-Shaped Region</span>
                 </div>
                 <div class="problem-statement">
-                    <p>Let C be the cone-shaped region {(x,y,z) | \sqrt{x^2 + y^2} \leq z \leq 1}. Evaluate \iiint _C (1 + \sqrt{x^2 + y^2}) dV</p>
+                    <p>$Let C be the cone-shaped region {(x,y,z) | \sqrt{x^2 + y^2} \leq z \leq 1}. Evaluate \iiint _C (1 + \sqrt{x^2 + y^2}) dV$</p>
                 </div>
                 <div class="solution">
                     <div class="solution-header">Solution</div>
                     <div class="solution-content">
                         <div class="step" data-step="1">
                             <div class="step-title">Convert to cylindrical</div>
-                            <div class="math">$$\sqrt{x^2 + y^2} = r, \text{ so } region is: r \leq z \leq 1, 0 \leq r \leq 1 \\ Integrand: 1 + r \\ dV = r dz \, dr \, d\theta$$</div>
+                            <div class="math">$$\sqrt{x^2 + y^2} = r, \text{ so } \text{region is: } r \leq z \leq 1, 0 \leq r \leq 1 \\ \text{Integrand: } 1 + r \\ dV = r dz \, dr \, d\theta$$</div>
                         </div>
 
                         <div class="step" data-step="2">
@@ -674,11 +670,11 @@ dV = \rho^2 \sin \phi \, d\rho \, d\phi d\theta</div>
 
                         <div class="step" data-step="4">
                             <div class="step-title">Middle integral (r)</div>
-                            <div class="math">$$\int_0^1 (1 + r) \cdot r \cdot (1 - r) dr = \int_0^1 (r + r^2 - r^2 - r^3) dr = \int_0^1 (r - r^3) dr \\ = [r^\frac{2}{2} - r^\frac{4}{4}]_0^1 = \frac{1}{2} - \frac{1}{4} = \frac{1}{4}$$</div>
+                            <div class="math">$$\int_0^1 (1 + r) \cdot r \cdot (1 - r) dr = \int_0^1 (r + r^2 - r^2 - r^3) dr = \int_0^1 (r - r^3) dr \\ = [\frac{r^2}{2} - \frac{r^4}{4}]_0^1 = \frac{1}{2} - \frac{1}{4} = \frac{1}{4}$$</div>
                         </div>
 
                         <div class="step" data-step="5">
-                            <div class="step-title">Outer integral (\theta)</div>
+                            <div class="step-title">$Outer integral (\theta)$</div>
                             <div class="math">$$\int_0^{2\pi} (\frac{1}{4}) d\theta = \frac{\pi}{2}$$</div>
                         </div>
                     </div>
@@ -696,7 +692,7 @@ dV = \rho^2 \sin \phi \, d\rho \, d\phi d\theta</div>
                     <span class="problem-title">Question 16.139: Integral Between Two Spheres</span>
                 </div>
                 <div class="problem-statement">
-                    <p>Evaluate \iiint _S 1/(x^2 + y^2 + z^2)^{3/2} dV where S is bounded by spheres x^2 + y^2 + z^2 = a^2 and x^2 + y^2 + z^2 = b^2 (a > b > 0)</p>
+                    <p>$Evaluate \iiint _S 1/(x^2 + y^2 + z^2)^{3/2} dV where S is bounded by spheres x^2 + y^2 + z^2 = a^2 and x^2 + y^2 + z^2 = b^2 (a > b > 0)$</p>
                 </div>
                 <div class="solution">
                     <div class="solution-header">Solution</div>
@@ -713,7 +709,7 @@ dV = \rho^2 \sin \phi \, d\rho \, d\phi d\theta</div>
 
                         <div class="step" data-step="3">
                             <div class="step-title">Evaluate</div>
-                            <div class="math">$$\int_b^a \rho^{-1} d\rho = \ln(a/b) \\ \int_0^{\pi} \sin \phi d\phi = 2 \\ \int_0^{2\pi} d\theta = 2\pi \\ Total: 4\pi \ln(a/b)$$</div>
+                            <div class="math">$$\int_b^a \rho^{-1} d\rho = \ln(a/b) \\ \int_0^{\pi} \sin \phi d\phi = 2 \\ \int_0^{2\pi} d\theta = 2\pi \\ \text{Total: } 4\pi \ln(a/b)$$</div>
                         </div>
                     </div>
                 </div>
@@ -741,13 +737,13 @@ dV = \rho^2 \sin \phi \, d\rho \, d\phi d\theta</div>
                         </div>
 
                         <div class="step" data-step="2">
-                            <div class="step-title">Evaluate \rho integral</div>
-                            <div class="math">$$\int_0^R \rho^2/(1 + \rho^3) d\rho \\ Let u = 1 + \rho^3, du = 3\rho^2 d\rho \\ = (\frac{1}{3}) \ln(1 + R^3)$$</div>
+                            <div class="step-title">$Evaluate \rho integral$</div>
+                            <div class="math">$$\int_0^R \rho^2/(1 + \rho^3) d\rho \\ \text{Let } u = 1 + \rho^3, du = 3\rho^2 d\rho \\ = (\frac{1}{3}) \ln(1 + R^3)$$</div>
                         </div>
 
                         <div class="step" data-step="3">
                             <div class="step-title">Complete integration</div>
-                            <div class="math">$$Mass = (\frac{1}{3}) \ln(1 + R^3) \cdot 2 \cdot 2\pi = (4\frac{\pi}{3}) \ln(1 + R^3)$$</div>
+                            <div class="math">$$Mass = (\frac{1}{3}) \ln(1 + R^3) \cdot 2 \cdot 2\pi = (\frac{4\pi}{3}) \ln(1 + R^3)$$</div>
                         </div>
                     </div>
                 </div>
@@ -776,7 +772,7 @@ dV = \rho^2 \sin \phi \, d\rho \, d\phi d\theta</div>
 
                         <div class="step" data-step="2">
                             <div class="step-title">Evaluate</div>
-                            <div class="math">$$= 0.4 \cdot 2\pi \cdot 2 \cdot [\rho^\frac{5}{5}]_1^2 \\ = 0.4 \cdot 4\pi \cdot (32 - 1)/5 \\ = 0.4 \cdot 4\pi \cdot \frac{31}{5} = 9.92\pi$$</div>
+                            <div class="math">$$= 0.4 \cdot 2\pi \cdot 2 \cdot [\rh\frac{o^5}{5}]_1^2 \\ = 0.4 \cdot 4\pi \cdot (32 - 1)/5 \\ = 0.4 \cdot 4\pi \cdot \frac{31}{5} = 9.92\pi$$</div>
                         </div>
 
                         <div class="warning">Note: Units need to be consistent (convert m to cm if density is in g/cm^3)</div>
@@ -795,7 +791,7 @@ dV = \rho^2 \sin \phi \, d\rho \, d\phi d\theta</div>
                     <span class="problem-title">Question 16.135: Average Temperature in Cube</span>
                 </div>
                 <div class="problem-statement">
-                    <p>Temperature in cube C = {-1 \leq x,y,z \leq 1} is 32d^2 where d is distance from origin.</p>
+                    <p>$Temperature in cube C = {-1 \leq x,y,z \leq 1} is 32d^2 where d is distance from origin.$</p>
                     <p>a) Find average temperature</p>
                     <p>b) Find points where temperature equals average</p>
                 </div>
@@ -810,7 +806,7 @@ dV = \rho^2 \sin \phi \, d\rho \, d\phi d\theta</div>
 
                         <div class="step" data-step="2">
                             <div class="step-title">Evaluate</div>
-                            <div class="math">$$\iiint _C (x^2 + y^2 + z^2) dV = 3 \iiint _C x^2 dV (by symmetry) \\ = 3 \cdot 8 \cdot \int_{-1}^1 x^2 dx / 2 = 3 \cdot 8 \cdot (\frac{2}{3})/2 = 8 \\ T_avg = (32 \cdot 8)/8 = 32$$</div>
+                            <div class="math">$$\iiint _C (x^2 + y^2 + z^2) dV = 3 \iiint _C x^2 dV \text{(by symmetry)} \\ = 3 \cdot 8 \cdot \int_{-1}^1 x^2 dx / 2 = 3 \cdot 8 \cdot (\frac{2}{3})/2 = 8 \\ T_avg = (32 \cdot 8)/8 = 32$$</div>
                         </div>
 
                         <h5>Part (b)</h5>
@@ -867,14 +863,14 @@ dV = \rho^2 \sin \phi \, d\rho \, d\phi d\theta</div>
                     <span class="problem-title">Question 16.126: Volume Between Paraboloid and Cone</span>
                 </div>
                 <div class="problem-statement">
-                    <p>Find volume determined by z \leq 6 - x^2 - y^2 and z \geq \sqrt{x^2 + y^2}</p>
+                    <p>$Find volume determined by z \leq 6 - x^2 - y^2 and z \geq \sqrt{x^2 + y^2}$</p>
                 </div>
                 <div class="solution">
                     <div class="solution-header">Solution</div>
                     <div class="solution-content">
                         <div class="step" data-step="1">
                             <div class="step-title">Find intersection</div>
-                            <div class="math">$$\sqrt{x^2 + y^2} = 6 - x^2 - y^2 \\ Let r = \sqrt{x^2 + y^2}: r = 6 - r^2 \\ r^2 + r - 6 = 0 \to (r+3)(r-2) = 0 \to r = 2$$</div>
+                            <div class="math">$$\sqrt{x^2 + y^2} = 6 - x^2 - y^2 \\ \text{Let } r = \sqrt{x^2 + y^2}: r = 6 - r^2 \\ r^2 + r - 6 = 0 \to (r+3)(r-2) = 0 \to r = 2$$</div>
                         </div>
 
                         <div class="step" data-step="2">
@@ -884,7 +880,7 @@ dV = \rho^2 \sin \phi \, d\rho \, d\phi d\theta</div>
 
                         <div class="step" data-step="3">
                             <div class="step-title">Evaluate</div>
-                            <div class="math">$$\int_r^{6-r^2} dz = 6 - r^2 - r \\ \int_0^2 (6 - r^2 - r) \cdot r dr = \int_0^2 (6r - r^3 - r^2) dr \\ = [3r^2 - r^\frac{4}{4} - r^\frac{3}{3}]_0^2 = 12 - 4 - \frac{8}{3} = \frac{16}{3} \\ V = 2\pi \cdot \frac{16}{3} = 32\frac{\pi}{3}$$</div>
+                            <div class="math">$$\int_r^{6-r^2} dz = 6 - r^2 - r \\ \int_0^2 (6 - r^2 - r) \cdot r dr = \int_0^2 (6r - r^3 - r^2) dr \\ = [3r^2 - \frac{r^4}{4} - \frac{r^3}{3}]_0^2 = 12 - 4 - \frac{8}{3} = \frac{16}{3} \\ V = 2\pi \cdot \frac{16}{3} = \frac{32\pi}{3}$$</div>
                         </div>
                     </div>
                 </div>
@@ -913,7 +909,7 @@ dV = \rho^2 \sin \phi \, d\rho \, d\phi d\theta</div>
 
                         <div class="step" data-step="2">
                             <div class="step-title">Alternative: Sphere volume minus cylinder + caps</div>
-                            <div class="math">$$V_sphere = (\frac{4}{3})\pi(8) = 32\frac{\pi}{3} \\ V_remaining = V_sphere - V_cylinder_inside$$</div>
+                            <div class="math">$$V_sphere = (\frac{4}{3})\pi(8) = \frac{32\pi}{3} \\ V_remaining = V_sphere - V_cylinder_inside$$</div>
                         </div>
 
                         <p>This is a classic "napkin ring" problem. The remaining volume depends only on the height of the remaining ring.</p>
@@ -939,7 +935,7 @@ dV = \rho^2 \sin \phi \, d\rho \, d\phi d\theta</div>
 
             <div class="formula-box">
                 <div class="formula-name">Change of Variables Formula</div>
-                <div class="formula">\iint_R f(x,y) dA = \iint _{R*} f(x(u,v), y(u,v)) |\partial(x,y)/\partial(u,v)| du dv</div>
+                <div class="formula">$$\iint_R f(x,y) dA = \iint _{R*} f(x(u,v), y(u,v)) \left|\frac{\partial(x,y)}{\partial(u,v)}\right| du dv$$</div>
             </div>
 
             <!-- Problem 21: Jacobian calculation -->
@@ -950,7 +946,7 @@ dV = \rho^2 \sin \phi \, d\rho \, d\phi d\theta</div>
                 </div>
                 <div class="problem-statement">
                     <p>Compute the Jacobian of G(u,v) = (3ue^v, 7 + 3e^u)</p>
-                    <p><strong>\text{Answer: } -9ue^{u+v}</strong></p>
+                    <p><strong>Answer:  -9ue^{u+v}</strong></p>
                 </div>
                 <div class="solution">
                     <div class="solution-header">Solution</div>
@@ -980,7 +976,7 @@ dV = \rho^2 \sin \phi \, d\rho \, d\phi d\theta</div>
                 </div>
                 <div class="problem-statement">
                     <p>Find linear mapping G: [0,1]\times[0,1] \to parallelogram spanned by (-5,4) and (8,6)</p>
-                    <p><strong>\text{Answer: } G(u,v) = (-5u + 8v, 4u + 6v)</strong></p>
+                    <p><strong>Answer:  G(u,v) = (-5u + 8v, 4u + 6v)</strong></p>
                 </div>
                 <div class="solution">
                     <div class="solution-header">Solution</div>
@@ -1010,7 +1006,7 @@ dV = \rho^2 \sin \phi \, d\rho \, d\phi d\theta</div>
                 </div>
                 <div class="problem-statement">
                     <p>Find linear mapping G: [0,1]\times[0,1] \to parallelogram spanned by (-9,3) and (8,2)</p>
-                    <p><strong>\text{Answer: } G(u,v) = (-9u + 8v, 3u + 2v)</strong></p>
+                    <p><strong>Answer:  G(u,v) = (-9u + 8v, 3u + 2v)</strong></p>
                 </div>
                 <div class="solution">
                     <div class="solution-header">Solution</div>
@@ -1031,8 +1027,8 @@ dV = \rho^2 \sin \phi \, d\rho \, d\phi d\theta</div>
                     <span class="problem-title">Double Integral Using Change of Variables</span>
                 </div>
                 <div class="problem-statement">
-                    <p>Calculate \iint_D (x + 4y) \, dx \, dy using G(u,v) = (u - 2v, v)</p>
-                    <p><strong>\text{Answer: } 96</strong></p>
+                    <p>$Calculate \iint_D (x + 4y) \, dx \, dy using G(u,v) = (u - 2v, v)$</p>
+                    <p><strong>Answer:  96</strong></p>
                 </div>
                 <div class="solution">
                     <div class="solution-header">Solution</div>
@@ -1066,7 +1062,7 @@ dV = \rho^2 \sin \phi \, d\rho \, d\phi d\theta</div>
                     <span class="problem-title">Question 16.119: Change of Variables</span>
                 </div>
                 <div class="problem-statement">
-                    <p>Region B bounded by xy = 1, xy = 3, x^2 - y^2 = 1, x^2 - y^2 = 4. Evaluate \iint_B (x^2 + y^2) dA using u = x^2 - y^2, v = xy</p>
+                    <p>$Region B bounded by xy = 1, xy = 3, x^2 - y^2 = 1, x^2 - y^2 = 4. Evaluate \iint_B (x^2 + y^2) dA using u = x^2 - y^2, v = xy$</p>
                 </div>
                 <div class="solution">
                     <div class="solution-header">Solution</div>
@@ -1079,7 +1075,7 @@ dV = \rho^2 \sin \phi \, d\rho \, d\phi d\theta</div>
                         <div class="step" data-step="2">
                             <div class="step-title">Find Jacobian</div>
                             <p>Need to find \partial(x,y)/\partial(u,v) or its inverse \partial(u,v)/\partial(x,y)</p>
-                            <div class="math">$$\partial u/\partial x = 2x, \partial u/\partial y = -2y \\ \partialv/\partial x = y, \partialv/\partial y = x \\ \partial(u,v)/\partial(x,y) = 2x \cdot x - (-2y) \cdot y = 2x^2 + 2y^2 = 2(x^2 + y^2) \\ So |\partial(x,y)/\partial(u,v)| = 1/(2(x^2 + y^2))$$</div>
+                            <div class="math">$$\partial u/\partial x = 2x, \partial u/\partial y = -2y \\ \partialv/\partial x = y, \partialv/\partial y = x \\ \partial(u,v)/\partial(x,y) = 2x \cdot x - (-2y) \cdot y = 2x^2 + 2y^2 = 2(x^2 + y^2) \\ So \left|\frac{\partial(x,y)}{\partial(u,v)}\right| = 1/(2(x^2 + y^2))$$</div>
                         </div>
 
                         <div class="step" data-step="3">
@@ -1178,7 +1174,7 @@ dV = \rho^2 \sin \phi \, d\rho \, d\phi d\theta</div>
 
                         <div class="step" data-step="2">
                             <div class="step-title">Find Jacobian</div>
-                            <div class="math">$$x = u - v - 2, y = v + 2 \\ |\partial(x,y)/\partial(u,v)| = |1  -1| = 1 \\ |0   1|$$</div>
+                            <div class="math">$$x = u - v - 2, y = v + 2 \\ \left|\frac{\partial(x,y)}{\partial(u,v)}\right| = |1  -1| = 1 \\ |0   1|$$</div>
                         </div>
 
                         <p>The transformed region will be easier to integrate over.</p>
@@ -1209,8 +1205,8 @@ dV = \rho^2 \sin \phi \, d\rho \, d\phi d\theta</div>
                     <span class="problem-title">Path Integral of Scalar Function</span>
                 </div>
                 <div class="problem-statement">
-                    <p>Calculate \int_C f(x,y) ds where f(x,y) = xy, r(t) = (6t, 2t-6) for 0 \leq t \leq 1</p>
-                    <p><strong>\text{Answer: } -28\sqrt{10}</strong></p>
+                    <p>$Calculate \int_C f(x,y) ds where f(x,y) = xy, r(t) = (6t, 2t-6) for 0 \leq t \leq 1$</p>
+                    <p><strong>Answer:  -28\sqrt{10}</strong></p>
                 </div>
                 <div class="solution">
                     <div class="solution-header">Solution</div>
@@ -1244,7 +1240,7 @@ dV = \rho^2 \sin \phi \, d\rho \, d\phi d\theta</div>
                     <span class="problem-title">Line Integral Components</span>
                 </div>
                 <div class="problem-statement">
-                    <p>f(x,y,z) = x + yz, r(t) = (4t^2, 2t^2, 2t^2) for 0 \leq t \leq \sqrt{2. Find f(r(t)) and ds.</p>
+                    <p>$f(x,y,z) = x + yz, r(t) = (4t^2, 2t^2, 2t^2) for 0 \leq t \leq \sqrt{2. Find f(r(t)) and ds.$</p>
                     <p><strong>Answers: f(r(t)) = 4t^2 + 4t^4, ds = 4t\sqrt{6} dt</strong></p>
                 </div>
                 <div class="solution">
@@ -1274,7 +1270,7 @@ dV = \rho^2 \sin \phi \, d\rho \, d\phi d\theta</div>
                     <span class="problem-title">Line Integral of Vector Field</span>
                 </div>
                 <div class="problem-statement">
-                    <p>Evaluate \int_C 9y dx + 8z dy + x dz where r(t) = (2 + t^{-1}, t^3, t^2) for 0 \leq t \leq 1</p>
+                    <p>$Evaluate \int_C 9y dx + 8z dy + x dz where r(t) = (2 + t^{-1}, t^3, t^2) for 0 \leq t \leq 1$</p>
                 </div>
                 <div class="solution">
                     <div class="solution-header">Solution</div>
@@ -1308,14 +1304,14 @@ dV = \rho^2 \sin \phi \, d\rho \, d\phi d\theta</div>
                     <span class="problem-title">Line Integral Along Space Curve</span>
                 </div>
                 <div class="problem-statement">
-                    <p>f(x,y,z) = 72xz - 8y^2, r(t) = (t, t^2/\sqrt{2}, t^3/3) for 0 \leq t \leq 2. Compute \int_C f ds.</p>
+                    <p>$f(x,y,z) = 72xz - 8y^2, r(t) = (t, t^\frac{2}{\sqrt{2}}, t^3/3) for 0 \leq t \leq 2. Compute \int_C f ds.$</p>
                 </div>
                 <div class="solution">
                     <div class="solution-header">Solution</div>
                     <div class="solution-content">
                         <div class="step" data-step="1">
                             <div class="step-title">Compute f(r(t))</div>
-                            <div class="math">$$f(r(t)) = 72(t)(t^\frac{3}{3}) - 8(t^2/\sqrt{2})^2 \\ = 24t^4 - 8t^\frac{4}{2} = 24t^4 - 4t^4 = 20t^4$$</div>
+                            <div class="math">$$f(r(t)) = 72(t)(\frac{t^3}{3}) - 8(t^\frac{2}{\sqrt{2}})^2 \\ = 24t^4 - 8\frac{t^4}{2} = 24t^4 - 4t^4 = 20t^4$$</div>
                         </div>
 
                         <div class="step" data-step="2">
@@ -1349,7 +1345,7 @@ dV = \rho^2 \sin \phi \, d\rho \, d\phi d\theta</div>
 
             <div class="formula-box">
                 <div class="formula-name">Green's Theorem</div>
-                <div class="formula">∮_C (P dx + Q dy) = \iint_D (\partial Q/\partial x - \partial P/\partial y) dA</div>
+                <div class="formula">$$\oint_C (P dx + Q dy) = \iint_D (\frac{\partial Q}{\partial x} - \frac{\partial P}{\partial y}) dA$$</div>
             </div>
 
             <!-- Problem 33: Green's with F = (x^2, x^2) -->
@@ -1359,24 +1355,24 @@ dV = \rho^2 \sin \phi \, d\rho \, d\phi d\theta</div>
                     <span class="problem-title">Green's Theorem Application</span>
                 </div>
                 <div class="problem-statement">
-                    <p>Use Green's Theorem to evaluate ∮_C F \cdot dr where F(x,y) = (x^2, x^2), C consists of y = x^2 and y = 4x for 0 \leq x \leq 4, counterclockwise.</p>
+                    <p>$Use Green's Theorem to evaluate \oint_C F \cdot dr where F(x,y) = (x^2, x^2), C consists of y = x^2 and y = 4x for 0 \leq x \leq 4, counterclockwise.$</p>
                 </div>
                 <div class="solution">
                     <div class="solution-header">Solution</div>
                     <div class="solution-content">
                         <div class="step" data-step="1">
                             <div class="step-title">Identify P and Q</div>
-                            <div class="math">$$P = x^2, Q = x^2 \\ \partial Q/\partial x = 2x, \partial P/\partial y = 0$$</div>
+                            <div class="math">$$P = x^2, Q = x^2 \\ \frac{\partial Q}{\partial x} = 2x, \frac{\partial P}{\partial y} = 0$$</div>
                         </div>
 
                         <div class="step" data-step="2">
                             <div class="step-title">Apply Green's Theorem</div>
-                            <div class="math">$$∮_C F \cdot dr = \iint_D (2x - 0) dA = \iint_D 2x dA$$</div>
+                            <div class="math">$$\oint_C F \cdot dr = \iint_D (2x - 0) dA = \iint_D 2x dA$$</div>
                         </div>
 
                         <div class="step" data-step="3">
                             <div class="step-title">Evaluate double integral</div>
-                            <div class="math">$$\int_0^4 \int_{x^2}^{4x} 2x \, dy \, dx = \int_0^4 2x(4x - x^2) dx \\ = \int_0^4 (8x^2 - 2x^3) dx = [8x^\frac{3}{3} - x^\frac{4}{2}]_0^4 \\ = \frac{512}{3} - 128 = \frac{128}{3}$$</div>
+                            <div class="math">$$\int_0^4 \int_{x^2}^{4x} 2x \, dy \, dx = \int_0^4 2x(4x - x^2) dx \\ = \int_0^4 (8x^2 - 2x^3) dx = [8\frac{x^3}{3} - \frac{x^4}{2}]_0^4 \\ = \frac{512}{3} - 128 = \frac{128}{3}$$</div>
                         </div>
                     </div>
                 </div>
@@ -1393,7 +1389,7 @@ dV = \rho^2 \sin \phi \, d\rho \, d\phi d\theta</div>
                     <span class="problem-title">Line Integral Over Circle</span>
                 </div>
                 <div class="problem-statement">
-                    <p>Compute \int_C F \cdot dr where F(x,y) = (-2y/(x^2+y^2)^2, 2x/(x^2+y^2)^2), C is circle of radius 4, counterclockwise.</p>
+                    <p>$Compute \int_C F \cdot dr where F(x,y) = (-2y/(x^2+y^2)^2, 2x/(x^2+y^2)^2), C is circle of radius 4, counterclockwise.$</p>
                 </div>
                 <div class="solution">
                     <div class="solution-header">Solution</div>
@@ -1409,7 +1405,7 @@ dV = \rho^2 \sin \phi \, d\rho \, d\phi d\theta</div>
                         </div>
 
                         <div class="step" data-step="3">
-                            <div class="step-title">Compute F \cdot dr</div>
+                            <div class="step-title">$Compute F \cdot dr$</div>
                             <div class="math">$$F = (-2(4\sin t)/256, 2(4\cos t)/256) = (-\sin \frac{t}{32}, \cos \frac{t}{32}) \\ F \cdot dr = (-\sin \frac{t}{32})(-4\sin t) + (\cos \frac{t}{32})(4\cos t) \\ = (4sin^2t + 4cos^2t)/32 = \frac{4}{32} = \frac{1}{8}$$</div>
                         </div>
 
@@ -1432,13 +1428,13 @@ dV = \rho^2 \sin \phi \, d\rho \, d\phi d\theta</div>
                     <span class="problem-title">Line Integral Over Larger Circle</span>
                 </div>
                 <div class="problem-statement">
-                    <p>Compute \int_C F \cdot dr where F(x,y) = (-6y/(x^2+y^2)^2, 6x/(x^2+y^2)^2), C is circle of radius 12, counterclockwise.</p>
+                    <p>$Compute \int_C F \cdot dr where F(x,y) = (-6y/(x^2+y^2)^2, 6x/(x^2+y^2)^2), C is circle of radius 12, counterclockwise.$</p>
                 </div>
                 <div class="solution">
                     <div class="solution-header">Solution</div>
                     <div class="solution-content">
                         <p>Similar to previous problem, scale factor of 3 in F.</p>
-                        <div class="math">$$Answer = 3 \cdot (\frac{\pi}{4}) = 3\frac{\pi}{4}$$</div>
+                        <div class="math">$$Answer = 3 \cdot (\frac{\pi}{4}) = \frac{3\pi}{4}$$</div>
                     </div>
                 </div>
                 <div class="answer">
@@ -1466,7 +1462,7 @@ dV = \rho^2 \sin \phi \, d\rho \, d\phi d\theta</div>
                     <span class="problem-title">Electric Flux Through Hemisphere</span>
                 </div>
                 <div class="problem-statement">
-                    <p>S = hemisphere x^2 + y^2 + z^2 = 1 (z \geq 0) with base. E = 8xi + 8yj + 8zk. Find flux.</p>
+                    <p>$S = hemisphere x^2 + y^2 + z^2 = 1 (z \geq 0) with base. E = 8xi + 8yj + 8zk. Find flux.$</p>
                 </div>
                 <div class="solution">
                     <div class="solution-header">Solution</div>
@@ -1478,7 +1474,7 @@ dV = \rho^2 \sin \phi \, d\rho \, d\phi d\theta</div>
 
                         <div class="step" data-step="2">
                             <div class="step-title">Apply theorem</div>
-                            <div class="math">$$\iint _S E \cdot dS = \iiint_V 24 dV = 24 \cdot (2\frac{\pi}{3}) = 16\pi$$</div>
+                            <div class="math">$$\iint _S E \cdot dS = \iiint_V 24 dV = 24 \cdot (\frac{2\pi}{3}) = 16\pi$$</div>
                         </div>
                     </div>
                 </div>
@@ -1512,7 +1508,7 @@ dV = \rho^2 \sin \phi \, d\rho \, d\phi d\theta</div>
 
                         <div class="step" data-step="3">
                             <div class="step-title">Integrate</div>
-                            <div class="math">$$\int_0^{2\pi} \int_3^8 \sqrt{2} z dz d\theta = 2\pi\sqrt{2} [z^\frac{2}{2}]_3^8 \\ = \pi\sqrt{2} (64 - 9) = 55\pi\sqrt{2$$</div>
+                            <div class="math">$$\int_0^{2\pi} \int_3^8 \sqrt{2} z dz d\theta = 2\pi\sqrt{2} [\frac{z^2}{2}]_3^8 \\ = \pi\sqrt{2} (64 - 9) = 55\pi\sqrt{2$$</div>
                         </div>
                     </div>
                 </div>
@@ -1570,7 +1566,7 @@ dV = \rho^2 \sin \phi \, d\rho \, d\phi d\theta</div>
 
                         <div class="step" data-step="2">
                             <div class="step-title">Convert to spherical and integrate</div>
-                            <div class="math">$$\int_0^{2\pi} \int_0^{\pi} \int_0^1 12\rho^2 \cdot \rho^2 \sin \phi \, d\rho \, d\phi d\theta \\ = 12 \cdot 2\pi \cdot 2 \cdot [\rho^\frac{5}{5}]_0^1 = 48\frac{\pi}{5}$$</div>
+                            <div class="math">$$\int_0^{2\pi} \int_0^{\pi} \int_0^1 12\rho^2 \cdot \rho^2 \sin \phi \, d\rho \, d\phi d\theta \\ = 12 \cdot 2\pi \cdot 2 \cdot [\rh\frac{o^5}{5}]_0^1 = \frac{48\pi}{5}$$</div>
                         </div>
                     </div>
                 </div>
@@ -1594,7 +1590,7 @@ dV = \rho^2 \sin \phi \, d\rho \, d\phi d\theta</div>
 
             <div class="formula-box">
                 <div class="formula-name">Test for Conservative (2D)</div>
-                <div class="formula">F = ⟨P, Q⟩ is conservative ⟺ \partial P/\partial y = \partial Q/\partial x</div>
+                <div class="formula">$$F = \langle P, Q\rangle  is conservative \Leftrightarrow \frac{\partial P}{\partial y} = \frac{\partial Q}{\partial x}$$</div>
             </div>
 
             <!-- Problem 40: F = 3xi + 7yj -->
@@ -1611,7 +1607,7 @@ dV = \rho^2 \sin \phi \, d\rho \, d\phi d\theta</div>
                     <div class="solution-content">
                         <div class="step" data-step="1">
                             <div class="step-title">Test</div>
-                            <div class="math">$$\partial P/\partial y = 0, \partial Q/\partial x = 0 \checkmark \text{Equal!}$$</div>
+                            <div class="math">$$\frac{\partial P}{\partial y} = 0, \frac{\partial Q}{\partial x} = 0 \checkmark \text{Equal!}$$</div>
                         </div>
 
                         <div class="step" data-step="2">
@@ -1622,7 +1618,7 @@ dV = \rho^2 \sin \phi \, d\rho \, d\phi d\theta</div>
                 </div>
                 <div class="answer">
                     <div class="answer-label">ANSWER</div>
-                    <div class="answer-value">f(x,y) = (3/2)x^2 + (7/2)y^2 + C</div>
+                    <div class="answer-value">f(x,y) = \frac{3}{2}x^2 + \frac{7}{2}y^2 + C</div>
                 </div>
             </div>
 
@@ -1640,7 +1636,7 @@ dV = \rho^2 \sin \phi \, d\rho \, d\phi d\theta</div>
                     <div class="solution-content">
                         <div class="step" data-step="1">
                             <div class="step-title">Test</div>
-                            <div class="math">$$\partial P/\partial y = 5x, \partial Q/\partial x = 7y \\ 5x \neq 7y in general \times \text{NOT conservative}$$</div>
+                            <div class="math">$$\frac{\partial P}{\partial y} = 5x, \frac{\partial Q}{\partial x} = 7y \\ 5x \neq 7y in general \times \text{NOT conservative}$$</div>
                         </div>
                     </div>
                 </div>
@@ -1665,7 +1661,7 @@ dV = \rho^2 \sin \phi \, d\rho \, d\phi d\theta</div>
                         <div class="step" data-step="1">
                             <div class="step-title">Test for Conservative</div>
                             <p>P = 7x^2 + 7y^2, Q = 14xy</p>
-                            <div class="math">$$\partial P/\partial y = 14y \\ \partial Q/\partial x = 14y \\ \partial P/\partial y = \partial Q/\partial x \checkmark Conservative!$$</div>
+                            <div class="math">$$\frac{\partial P}{\partial y} = 14y \\ \frac{\partial Q}{\partial x} = 14y \\ \frac{\partial P}{\partial y} = \frac{\partial Q}{\partial x} \checkmark Conservative!$$</div>
                         </div>
 
                         <div class="step" data-step="2">
@@ -1683,7 +1679,7 @@ dV = \rho^2 \sin \phi \, d\rho \, d\phi d\theta</div>
                 </div>
                 <div class="answer">
                     <div class="answer-label">ANSWER</div>
-                    <div class="answer-value">f(x,y) = (7/3)x^3 + 7xy^2 + C</div>
+                    <div class="answer-value">f(x,y) = \frac{7}{3}x^3 + 7xy^2 + C</div>
                 </div>
             </div>
 
