@@ -1224,28 +1224,41 @@
  </div>
  <div class="problem-statement">
  <p>Find linear mapping $G: [0,1] \times [0,1] \to$ parallelogram spanned by $(-5,4)$ and $(8,6)$</p>
- <p><strong>Answers:</strong> $G(u,v) = (-5u + 8v, 4u + 6v)$</p>
- </div>
- <div class="solution">
- <div class="solution-header">Solution</div>
- <div class="solution-content">
- <div class="step" data-step="1">
- <div class="step-title">Form of linear map</div>
- <div class="math">$$G(u,v) = u \cdot (first vector) + v \cdot (second vector) \\ = u(-5,4) + v(8,6) = (-5u + 8v, 4u + 6v)$$</div>
- </div>
+<div class="solution">
+<div class="solution-header">Solution</div>
+<div class="solution-content">
+<div class="why-box">
+<p><strong>Key Concept:</strong> A linear map from the unit square to a parallelogram takes $(u,v) \mapsto u\mathbf{a} + v\mathbf{b}$, where $\mathbf{a}$ and $\mathbf{b}$ are the vectors that span the parallelogram.</p>
+</div>
 
- <div class="step" data-step="2">
- <div class="step-title">Verify</div>
- <div class="math">$$G(1,0) = (-5, 4)  \checkmark \\ G(0,1) = (8, 6)  \checkmark \\ G(0,0) = (0, 0)  \checkmark$$</div>
- </div>
- </div>
- </div>
- <div class="answer">
- <div class="answer-label">ANSWER</div>
- <div class="answer-value">$G(u,v) = (-5u + 8v, 4u + 6v)$</div>
- </div>
- </div>
+<div class="step" data-step="1">
+<div class="step-title">Understand the mapping structure</div>
+<p>We want to map the unit square $[0,1] \times [0,1]$ to a parallelogram.</p>
+<p>The parallelogram is spanned by vectors $\mathbf{a} = (-5, 4)$ and $\mathbf{b} = (8, 6)$.</p>
+<p>This means the parallelogram has vertices at: $(0,0)$, $(-5,4)$, $(8,6)$, and $(-5+8, 4+6) = (3, 10)$.</p>
+</div>
 
+<div class="step" data-step="2">
+<div class="step-title">Write the linear map</div>
+<p>A linear map taking $(0,0) \to (0,0)$, $(1,0) \to \mathbf{a}$, $(0,1) \to \mathbf{b}$ is:</p>
+<div class="math">$$G(u,v) = u\mathbf{a} + v\mathbf{b} = u(-5, 4) + v(8, 6)$$</div>
+<div class="math">$$= (-5u + 8v, 4u + 6v)$$</div>
+</div>
+
+<div class="step" data-step="3">
+<div class="step-title">Verify the corner mappings</div>
+<div class="math">$$G(0,0) = (0, 0) \quad \checkmark$$</div>
+<div class="math">$$G(1,0) = (-5, 4) = \mathbf{a} \quad \checkmark$$</div>
+<div class="math">$$G(0,1) = (8, 6) = \mathbf{b} \quad \checkmark$$</div>
+<div class="math">$$G(1,1) = (-5+8, 4+6) = (3, 10) \quad \checkmark$$</div>
+</div>
+</div>
+</div>
+<div class="answer">
+<div class="answer-label">ANSWER</div>
+<div class="answer-value">$G(u,v) = (-5u + 8v, 4u + 6v)$</div>
+</div>
+</div>
  <!-- Problem 23: Another linear mapping -->
  <div class="problem">
  <div class="problem-header">
@@ -1456,32 +1469,52 @@
  <p>Calculate $\int_C f(x,y) \, ds$ where $f(x,y) = xy$, $\mathbf{r}(t) = (6t, 2t-6)$ for $0 \leq t \leq 1$</p>
  <p><strong>Answer:</strong> $-28\sqrt{10}$</p>
  </div>
- <div class="solution">
- <div class="solution-header">Solution</div>
- <div class="solution-content">
- <div class="step" data-step="1">
- <div class="step-title">Find |r'(t)|</div>
- <div class="math">$$r'(t) = (6, 2) \\ |r'(t)| = \sqrt{36 + 4} = \sqrt{40} = 2\sqrt{10}$$</div>
- </div>
+<div class="solution">
+<div class="solution-header">Solution</div>
+<div class="solution-content">
+<div class="why-box">
+<p><strong>Key Concept:</strong> A scalar line integral $\int_C f\,ds$ measures the "total" of $f$ along the curve, weighted by arc length. Formula: $\int_a^b f(\mathbf{r}(t)) |\mathbf{r}'(t)|\,dt$.</p>
+</div>
 
- <div class="step" data-step="2">
- <div class="step-title">Express f(r(t))</div>
- <div class="math">$$f(r(t)) = (6t)(2t - 6) = 12t^2 - 36t$$</div>
- </div>
+<div class="step" data-step="1">
+<div class="step-title">Compute the derivative r'(t)</div>
+<p>Given $\mathbf{r}(t) = (6t, 2t-6)$:</p>
+<div class="math">$$\mathbf{r}'(t) = (6, 2)$$</div>
+<p>Note: This is a constant vector — the curve is a straight line segment.</p>
+</div>
 
- <div class="step" data-step="3">
- <div class="step-title">Evaluate</div>
- <div class="math">$$\int_0^1 (12t^2 - 36t) \cdot 2\sqrt{10} \, dt = 2\sqrt{10} \left[4t^3 - 18t^2\right]_0^1 \\ = 2\sqrt{10} (4 - 18) = 2\sqrt{10} \cdot (-14) = -28\sqrt{10}$$</div>
- </div>
- </div>
- </div>
- <div class="answer">
- <div class="answer-label">ANSWER</div>
- <div class="answer-value">$-28\sqrt{10}$</div>
- </div>
- </div>
+<div class="step" data-step="2">
+<div class="step-title">Compute |r'(t)| (the speed)</div>
+<div class="math">$$|\mathbf{r}'(t)| = \sqrt{6^2 + 2^2} = \sqrt{36 + 4} = \sqrt{40} = 2\sqrt{10}$$</div>
+</div>
 
- <!-- Problem 30: f(r(t)) and ds -->
+<div class="step" data-step="3">
+<div class="step-title">Express f(r(t))</div>
+<p>Substitute the parameterization into $f(x,y) = xy$:</p>
+<div class="math">$$f(\mathbf{r}(t)) = f(6t, 2t-6) = (6t)(2t - 6) = 12t^2 - 36t$$</div>
+</div>
+
+<div class="step" data-step="4">
+<div class="step-title">Set up the integral</div>
+<div class="math">$$\int_C f\,ds = \int_0^1 f(\mathbf{r}(t)) |\mathbf{r}'(t)|\,dt = \int_0^1 (12t^2 - 36t) \cdot 2\sqrt{10}\,dt$$</div>
+</div>
+
+<div class="step" data-step="5">
+<div class="step-title">Evaluate the integral</div>
+<div class="math">$$= 2\sqrt{10} \int_0^1 (12t^2 - 36t)\,dt = 2\sqrt{10} \left[4t^3 - 18t^2\right]_0^1$$</div>
+<div class="math">$$= 2\sqrt{10} [(4 - 18) - 0] = 2\sqrt{10} \cdot (-14) = -28\sqrt{10}$$</div>
+</div>
+
+<div class="why-box">
+<p><strong>Geometric meaning:</strong> The negative result indicates that $f = xy$ is predominantly negative along this path (the curve crosses regions where $x > 0, y < 0$).</p>
+</div>
+</div>
+</div>
+<div class="answer">
+<div class="answer-label">ANSWER</div>
+<div class="answer-value">$-28\sqrt{10}$</div>
+</div>
+</div> <!-- Problem 30: f(r(t)) and ds -->
  <div class="problem">
  <div class="problem-header">
  <span class="problem-number">Problem 30</span>
@@ -1489,31 +1522,47 @@
  </div>
  <div class="problem-statement">
  <p>$f(x,y,z) = x + yz$, $\mathbf{r}(t) = (4t^2, 2t^2, 2t^2)$ for $0 \leq t \leq \sqrt{2}$. Find $f(\mathbf{r}(t))$ and $ds$.</p>
- <p><strong>Answers:</strong> $f(\mathbf{r}(t)) = 4t^2 + 4t^4$, $ds = 4t\sqrt{6} \, dt$</p>
- </div>
- <div class="solution">
- <div class="solution-header">Solution</div>
- <div class="solution-content">
- <div class="step" data-step="1">
- <div class="step-title">Find f(r(t))</div>
- <div class="math">$$f(r(t)) = 4t^2 + (2t^2)(2t^2) = 4t^2 + 4t^4$$</div>
- </div>
+<div class="solution">
+<div class="solution-header">Solution</div>
+<div class="solution-content">
+<div class="why-box">
+<p><strong>Key Concept:</strong> For scalar line integrals, we need to express both the function $f$ and the arc length element $ds = |\mathbf{r}'(t)|\,dt$ in terms of the parameter $t$.</p>
+</div>
 
- <div class="step" data-step="2">
- <div class="step-title">Find ds</div>
- <div class="math">$$r'(t) = (8t, 4t, 4t) \\ |r'(t)| = \sqrt{64t^2 + 16t^2 + 16t^2} = \sqrt{96t^2} = 4t\sqrt{6} \\ ds = 4t\sqrt{6} \, dt$$</div>
- </div>
- </div>
- </div>
- <div class="answer">
- <div class="answer-label">ANSWERS</div>
- <div class="answer-value">$f(r(t)) = 4t^2 + 4t^4, ds = 4t\sqrt{6} dt$</div>
- </div>
- </div>
+<div class="step" data-step="1">
+<div class="step-title">Identify the components</div>
+<p>Given: $f(x,y,z) = x + yz$ and $\mathbf{r}(t) = (4t^2, 2t^2, 2t^2)$</p>
+<p>So: $x(t) = 4t^2$, $y(t) = 2t^2$, $z(t) = 2t^2$</p>
+</div>
 
- <!-- Problem 31: Line integral 9y dx + 8z dy + x dz -->
- <div class="problem">
- <div class="problem-header">
+<div class="step" data-step="2">
+<div class="step-title">Compute f(r(t))</div>
+<p>Substitute the parameterization into $f$:</p>
+<div class="math">$$f(\mathbf{r}(t)) = x + yz = 4t^2 + (2t^2)(2t^2) = 4t^2 + 4t^4$$</div>
+</div>
+
+<div class="step" data-step="3">
+<div class="step-title">Compute r'(t)</div>
+<div class="math">$$\mathbf{r}'(t) = \left(\frac{d}{dt}(4t^2), \frac{d}{dt}(2t^2), \frac{d}{dt}(2t^2)\right) = (8t, 4t, 4t)$$</div>
+</div>
+
+<div class="step" data-step="4">
+<div class="step-title">Compute |r'(t)|</div>
+<div class="math">$$|\mathbf{r}'(t)| = \sqrt{(8t)^2 + (4t)^2 + (4t)^2} = \sqrt{64t^2 + 16t^2 + 16t^2} = \sqrt{96t^2}$$</div>
+<div class="math">$$= \sqrt{96} \cdot |t| = 4\sqrt{6} \cdot t \quad \text{(since } t \geq 0 \text{)}$$</div>
+</div>
+
+<div class="step" data-step="5">
+<div class="step-title">Write ds</div>
+<div class="math">$$ds = |\mathbf{r}'(t)|\,dt = 4t\sqrt{6}\,dt$$</div>
+</div>
+</div>
+</div>
+<div class="answer">
+<div class="answer-label">ANSWERS</div>
+<div class="answer-value">$f(\mathbf{r}(t)) = 4t^2 + 4t^4$, $ds = 4t\sqrt{6}\,dt$</div>
+</div>
+</div> <div class="problem-header">
  <span class="problem-number">Problem 31</span>
  <span class="problem-title">Line Integral of Vector Field</span>
  </div>
