@@ -1358,23 +1358,32 @@
  <div class="math">$$f(r(t)) = 72(t)(\frac{t^3}{3}) - 8(\frac{t^2}{\sqrt{2}})^2 \\ = 24t^4 - 8\frac{t^4}{2} = 24t^4 - 4t^4 = 20t^4$$</div>
  </div>
 
- <div class="step" data-step="2">
- <div class="step-title">Compute |r'(t)|</div>
- <div class="math">$$r'(t) = (1, t\sqrt{2}/\sqrt{2}, t^2) = (1, t, t^2) \quad |r'(t)| = \sqrt{1 + t^2 + t^4}$$</div>
- </div>
+<div class="step" data-step="2">
+<div class="step-title">Compute r'(t)</div>
+<p>$x(t) = t \Rightarrow x'(t) = 1$</p>
+<p>$y(t) = \frac{t^2}{\sqrt{2}} \Rightarrow y'(t) = \frac{2t}{\sqrt{2}} = t\sqrt{2}$</p>
+<p>$z(t) = \frac{t^3}{3} \Rightarrow z'(t) = t^2$</p>
+<div class="math">$$r'(t) = (1, t\sqrt{2}, t^2)$$</div>
+</div>
 
- <div class="step" data-step="3">
- <div class="step-title">Set up integral</div>
- <div class="math">$$\int_0^2 20t^4 \sqrt{1 + t^2 + t^4} dt$$</div>
- </div>
- </div>
- </div>
- <div class="answer">
- <div class="answer-label">ANSWER</div>
- <div class="answer-value">$\int_0^2 20t^4 \sqrt{1 + t^2 + t^4} dt$</div>
- </div>
- </div>
+<div class="step" data-step="3">
+<div class="step-title">Compute |r'(t)|</div>
+<div class="math">$$|r'(t)| = \sqrt{1 + 2t^2 + t^4} = \sqrt{(1 + t^2)^2} = 1 + t^2$$</div>
+</div>
 
+<div class="step" data-step="4">
+<div class="step-title">Set up and evaluate integral</div>
+<div class="math">$$\int_0^2 20t^4 (1 + t^2) \, dt = 20 \int_0^2 (t^4 + t^6) \, dt$$</div>
+<div class="math">$$= 20 \left[\frac{t^5}{5} + \frac{t^7}{7}\right]_0^2 = 20 \left(\frac{32}{5} + \frac{128}{7}\right)$$</div>
+<div class="math">$$= 20 \cdot \frac{224 + 640}{35} = 20 \cdot \frac{864}{35} = \frac{17280}{35} = \frac{3456}{7}$$</div>
+</div>
+</div>
+</div>
+<div class="answer">
+<div class="answer-label">ANSWER</div>
+<div class="answer-value">$\frac{3456}{7}$</div>
+</div>
+</div>
  <div class="back-top"><a href="#top">↑ Back to Contents</a></div>
  </section>
 
@@ -1474,19 +1483,37 @@
  <div class="problem-statement">
  <p>Compute $\int_C \mathbf{F} \cdot d\mathbf{r}$ where $\mathbf{F}(x,y) = \left(\frac{-6y}{(x^2+y^2)^2}, \frac{6x}{(x^2+y^2)^2}\right)$, C is circle of radius 12, counterclockwise.</p>
  </div>
- <div class="solution">
- <div class="solution-header">Solution</div>
- <div class="solution-content">
- <p>Similar to previous problem, scale factor of 3 in F.</p>
- <div class="math">$$Answer = 3 \cdot (\frac{\pi}{4}) = \frac{3\pi}{4}$$</div>
- </div>
- </div>
- <div class="answer">
- <div class="answer-label">ANSWER</div>
- <div class="answer-value">$3\pi/4$</div>
- </div>
- </div>
+<div class="solution">
+<div class="solution-header">Solution</div>
+<div class="solution-content">
+<div class="step" data-step="1">
+<div class="step-title">Parameterize the circle</div>
+<div class="math">$$\mathbf{r}(\theta) = (12\cos\theta, 12\sin\theta), \quad 0 \leq \theta \leq 2\pi$$</div>
+<div class="math">$$d\mathbf{r} = (-12\sin\theta, 12\cos\theta) \, d\theta$$</div>
+</div>
 
+<div class="step" data-step="2">
+<div class="step-title">Evaluate F on the circle</div>
+<p>On circle: $x^2 + y^2 = 144$, so $(x^2+y^2)^2 = 20736$</p>
+<div class="math">$$\mathbf{F} = \left(\frac{-72\sin\theta}{20736}, \frac{72\cos\theta}{20736}\right) = \left(\frac{-\sin\theta}{288}, \frac{\cos\theta}{288}\right)$$</div>
+</div>
+
+<div class="step" data-step="3">
+<div class="step-title">Compute F · dr</div>
+<div class="math">$$\mathbf{F} \cdot d\mathbf{r} = \frac{12\sin^2\theta + 12\cos^2\theta}{288} = \frac{12}{288} = \frac{1}{24}$$</div>
+</div>
+
+<div class="step" data-step="4">
+<div class="step-title">Integrate</div>
+<div class="math">$$\int_0^{2\pi} \frac{1}{24} \, d\theta = \frac{2\pi}{24} = \frac{\pi}{12}$$</div>
+</div>
+</div>
+</div>
+<div class="answer">
+<div class="answer-label">ANSWER</div>
+<div class="answer-value">$\frac{\pi}{12}$</div>
+</div>
+</div>
  <div class="back-top"><a href="#top">↑ Back to Contents</a></div>
  </section>
 
