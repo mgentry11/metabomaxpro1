@@ -136,10 +136,10 @@
  <div class="concept-box">
  <h4>What We're Computing</h4>
  <ul>
- <li><strong>Double Integrals \iint </strong> - Sum over a 2D region (area, mass of a plate)</li>
- <li><strong>Triple Integrals \iiint </strong> - Sum over a 3D region (volume, mass of a solid)</li>
- <li><strong>Line Integrals \int</strong> - Sum along a curve (work done by a force)</li>
- <li><strong>Surface Integrals \iint </strong> - Sum over a surface (flux through a membrane)</li>
+ <li><strong>Double Integrals $\iint$</strong> - Sum over a 2D region (area, mass of a plate)</li>
+ <li><strong>Triple Integrals $\iiint$</strong> - Sum over a 3D region (volume, mass of a solid)</li>
+ <li><strong>Line Integrals $\int$</strong> - Sum along a curve (work done by a force)</li>
+ <li><strong>Surface Integrals $\iint$</strong> - Sum over a surface (flux through a membrane)</li>
  </ul>
  </div>
 
@@ -350,7 +350,7 @@
 
  <div class="step" data-step="3">
  <div class="step-title">Evaluate</div>
- <div class="math">$$\int_0^2 r^5 dr = [\frac{r^6}{6}]_0^2 = \frac{64}{6} = \frac{32}{3} \\ \int_0^{\frac{\pi}{2}} (\frac{32}{3}) d\theta = (\frac{32}{3})(\frac{\pi}{2}) = \frac{16\pi}{3}$$</div>
+ <div class="math">$$\int_0^2 r^5 \, dr = \left[\frac{r^6}{6}\right]_0^2 = \frac{64}{6} = \frac{32}{3} \\ \int_0^{\frac{\pi}{2}} \frac{32}{3} \, d\theta = \frac{32}{3} \cdot \frac{\pi}{2} = \frac{16\pi}{3}$$</div>
  </div>
  </div>
  </div>
@@ -374,7 +374,7 @@
  <div class="solution-content">
  <div class="step" data-step="1">
  <div class="step-title">Inner integral (with respect to x)</div>
- <div class="math">$$\int_0^y x \cdot e^{-y^3} dx = e^{-y^3} \int_0^y x dx = e^{-y^3} \cdot [\frac{x^2}{2}]_0^y = e^{-y^3} \cdot \frac{y^2}{2}$$</div>
+ <div class="math">$$\int_0^y x \cdot e^{-y^3} \, dx = e^{-y^3} \int_0^y x \, dx = e^{-y^3} \cdot \left[\frac{x^2}{2}\right]_0^y = e^{-y^3} \cdot \frac{y^2}{2}$$</div>
  </div>
 
  <div class="step" data-step="2">
@@ -582,11 +582,11 @@
 
  <div class="step" data-step="4">
  <div class="step-title">Calculate $\iiint z dV$</div>
- <div class="math">$$\int_0^{2\pi} d\theta \cdot \int_0^{\frac{\pi}{2}} \cos \phi \sin \phi d\phi \cdot \int_0^a \rho^3 d\rho \\ = 2\pi \cdot [\frac{\sin^2\phi}{2}]_0^{\frac{\pi}{2}} \cdot [\rh\frac{o^4}{4}]_0^a \\ = 2\pi \cdot (\frac{1}{2}) \cdot (\frac{a^4}{4}) = \pi \frac{a^4}{4}$$</div>
+ <div class="math">$$\int_0^{2\pi} d\theta \cdot \int_0^{\frac{\pi}{2}} \cos \phi \sin \phi \, d\phi \cdot \int_0^a \rho^3 \, d\rho \\ = 2\pi \cdot \left[\frac{\sin^2\phi}{2}\right]_0^{\frac{\pi}{2}} \cdot \left[\frac{\rho^4}{4}\right]_0^a \\ = 2\pi \cdot \frac{1}{2} \cdot \frac{a^4}{4} = \frac{\pi a^4}{4}$$</div>
  </div>
 
  <div class="step" data-step="5">
- <div class="step-title">Find \bar{z}</div>
+ <div class="step-title">Find $\bar{z}$</div>
  <div class="math">$$\bar{z} = (\pi \frac{a^4}{4}) / (2\pi \frac{a^3}{3}) = (\pi \frac{a^4}{4}) \cdot (\frac{3}{2}\pi a^3) = \frac{3a}{8}$$</div>
  </div>
  </div>
@@ -670,7 +670,7 @@
 
  <div class="step" data-step="4">
  <div class="step-title">Middle integral (r)</div>
- <div class="math">$$\int_0^1 (1 + r) \cdot r \cdot (1 - r) dr = \int_0^1 (r + r^2 - r^2 - r^3) dr = \int_0^1 (r - r^3) dr \\ = [\frac{r^2}{2} - \frac{r^4}{4}]_0^1 = \frac{1}{2} - \frac{1}{4} = \frac{1}{4}$$</div>
+ <div class="math">$$\int_0^1 (1 + r) \cdot r \cdot (1 - r) \, dr = \int_0^1 (r + r^2 - r^2 - r^3) \, dr = \int_0^1 (r - r^3) \, dr \\ = \left[\frac{r^2}{2} - \frac{r^4}{4}\right]_0^1 = \frac{1}{2} - \frac{1}{4} = \frac{1}{4}$$</div>
  </div>
 
  <div class="step" data-step="5">
@@ -904,7 +904,7 @@
  <div class="solution-content">
  <div class="step" data-step="1">
  <div class="step-title">Set up</div>
- <div class="math">$$\text{Sphere: } x^2 + y^2 + z^2 \leq 4 \\ Cylinder removed: x^2 + y^2 \leq \frac{1}{4} \\ In cylindrical: \frac{1}{2} \leq r \leq \sqrt{4-z^2), -\sqrt{\frac{15}{4}) \leq z \leq \sqrt{\frac{15}{4})$$</div>
+ <div class="math">$$\text{Sphere: } x^2 + y^2 + z^2 \leq 4 \\ \text{Cylinder removed: } x^2 + y^2 \leq \frac{1}{4} \\ \text{In cylindrical: } \frac{1}{2} \leq r \leq \sqrt{4-z^2}, -\sqrt{\frac{15}{4}} \leq z \leq \sqrt{\frac{15}{4}}$$</div>
  </div>
 
  <div class="step" data-step="2">
@@ -1213,7 +1213,7 @@
  <div class="solution-content">
  <div class="step" data-step="1">
  <div class="step-title">Find |r'(t)|</div>
- <div class="math">$$r'(t) = (6, 2) \\ |r'(t)| = \sqrt{36 + 4) = \sqrt{40} = 2\sqrt{10}$$</div>
+ <div class="math">$$r'(t) = (6, 2) \\ |r'(t)| = \sqrt{36 + 4} = \sqrt{40} = 2\sqrt{10}$$</div>
  </div>
 
  <div class="step" data-step="2">
@@ -1253,7 +1253,7 @@
 
  <div class="step" data-step="2">
  <div class="step-title">Find ds</div>
- <div class="math">$$r'(t) = (8t, 4t, 4t) \\ |r'(t)| = \sqrt{64t^2 + 16t^2 + 16t^2) = \sqrt{96t^2) = 4t\sqrt{6} \\ ds = 4t\sqrt{6} dt$$</div>
+ <div class="math">$$r'(t) = (8t, 4t, 4t) \\ |r'(t)| = \sqrt{64t^2 + 16t^2 + 16t^2} = \sqrt{96t^2} = 4t\sqrt{6} \\ ds = 4t\sqrt{6} \, dt$$</div>
  </div>
  </div>
  </div>
@@ -1508,13 +1508,13 @@
 
  <div class="step" data-step="3">
  <div class="step-title">Integrate</div>
- <div class="math">$$\int_0^{2\pi} \int_3^8 \sqrt{2} z dz d\theta = 2\pi\sqrt{2} [\frac{z^2}{2}]_3^8 \\ = \pi\sqrt{2} (64 - 9) = 55\pi\sqrt{2$$</div>
+ <div class="math">$$\int_0^{2\pi} \int_3^8 \sqrt{2} \, z \, dz \, d\theta = 2\pi\sqrt{2} \left[\frac{z^2}{2}\right]_3^8 \\ = \pi\sqrt{2} (64 - 9) = 55\pi\sqrt{2}$$</div>
  </div>
  </div>
  </div>
  <div class="answer">
  <div class="answer-label">ANSWER</div>
- <div class="answer-value">$55\pi\sqrt{2$</div>
+ <div class="answer-value">$55\pi\sqrt{2}$</div>
  </div>
  </div>
 
