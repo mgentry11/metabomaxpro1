@@ -1732,31 +1732,63 @@
  <p>Determine if F is gradient of f. If yes, find f.</p>
  </div>
  <div class="solution">
- <div class="solution-header">Solution</div>
- <div class="solution-content">
- <div class="step" data-step="1">
- <div class="step-title">Test</div>
- <div class="math">$$\frac{\partial P}{\partial y} = 0, \frac{\partial Q}{\partial x} = 0  \checkmark \text{Equal!}$$</div>
- </div>
+<div class="solution">
+<div class="solution-header">Solution</div>
+<div class="solution-content">
+<div class="why-box">
+<p><strong>Key Concept:</strong> A 2D vector field $\mathbf{F} = P\mathbf{i} + Q\mathbf{j}$ is <em>conservative</em> (i.e., the gradient of some potential function $f$) if and only if $\frac{\partial P}{\partial y} = \frac{\partial Q}{\partial x}$. This is equivalent to saying $\nabla \times \mathbf{F} = 0$ (curl-free).</p>
+</div>
 
- <div class="step" data-step="2">
- <div class="step-title">Find f</div>
- <div class="math">$$\frac{\partial f}{\partial x} = 3x \to f = (\frac{3}{2})x^2 + g(y) \\ \frac{\partial f}{\partial y} = g'(y) = 7y \to g(y) = (\frac{7}{2})y^2 \\ f(x,y) = (\frac{3}{2})x^2 + (\frac{7}{2})y^2 + C$$</div>
- </div>
- </div>
- </div>
- <div class="answer">
- <div class="answer-label">ANSWER</div>
- <div class="answer-value">$f(x,y) = \frac{3}{2}x^2 + \frac{7}{2}y^2 + C$</div>
- </div>
- </div>
+<div class="step" data-step="1">
+<div class="step-title">Identify P and Q</div>
+<p>From $\mathbf{F} = 3x\mathbf{i} + 7y\mathbf{j}$:</p>
+<div class="math">$$P = 3x, \quad Q = 7y$$</div>
+</div>
 
- <!-- Problem 41: F = 5xyi + 7xyj -->
- <div class="problem">
- <div class="problem-header">
- <span class="problem-number">Problem 41</span>
- <span class="problem-title">Conservative Field (b): F = 5xyi + 7xyj</span>
- </div>
+<div class="step" data-step="2">
+<div class="step-title">Test for conservative field</div>
+<p>Check if $\frac{\partial P}{\partial y} = \frac{\partial Q}{\partial x}$:</p>
+<div class="math">$$\frac{\partial P}{\partial y} = \frac{\partial}{\partial y}(3x) = 0$$</div>
+<div class="math">$$\frac{\partial Q}{\partial x} = \frac{\partial}{\partial x}(7y) = 0$$</div>
+<p>Since $0 = 0$ ✓, the field IS conservative.</p>
+</div>
+
+<div class="step" data-step="3">
+<div class="step-title">Find f by integrating P with respect to x</div>
+<p>Since $\frac{\partial f}{\partial x} = P = 3x$, integrate with respect to $x$:</p>
+<div class="math">$$f(x,y) = \int 3x\,dx = \frac{3}{2}x^2 + g(y)$$</div>
+<p>Note: The "constant" of integration can depend on $y$ since we're only integrating in $x$.</p>
+</div>
+
+<div class="step" data-step="4">
+<div class="step-title">Find g(y) using Q</div>
+<p>Take $\frac{\partial f}{\partial y}$ and set equal to $Q$:</p>
+<div class="math">$$\frac{\partial f}{\partial y} = \frac{\partial}{\partial y}\left(\frac{3}{2}x^2 + g(y)\right) = g'(y)$$</div>
+<p>But we need $\frac{\partial f}{\partial y} = Q = 7y$, so:</p>
+<div class="math">$$g'(y) = 7y \implies g(y) = \int 7y\,dy = \frac{7}{2}y^2 + C$$</div>
+</div>
+
+<div class="step" data-step="5">
+<div class="step-title">Write the potential function</div>
+<div class="math">$$f(x,y) = \frac{3}{2}x^2 + \frac{7}{2}y^2 + C$$</div>
+</div>
+
+<div class="why-box">
+<p><strong>Verification:</strong> Check that $\nabla f = \mathbf{F}$: $\frac{\partial f}{\partial x} = 3x$ ✓ and $\frac{\partial f}{\partial y} = 7y$ ✓</p>
+</div>
+</div>
+<div class="answer">
+<div class="answer-label">ANSWER</div>
+<div class="answer-value">$f(x,y) = \frac{3}{2}x^2 + \frac{7}{2}y^2 + C$</div>
+</div>
+</div>
+
+<!-- Problem 41: F = 5xyi + 7xyj -->
+<div class="problem">
+<div class="problem-header">
+<span class="problem-number">Problem 41</span>
+<span class="problem-title">Conservative Field (b): F = 5xyi + 7xyj</span>
+</div>
  <div class="problem-statement">
  <p>Determine if F is gradient of f. If yes, find f.</p>
  </div>
