@@ -1688,34 +1688,49 @@
  </div>
  <div class="problem-statement">
  <p>Use Green's Theorem to evaluate $\oint_C \mathbf{F} \cdot d\mathbf{r}$ where $\mathbf{F}(x,y) = (x^2, x^2)$, C consists of $y = x^2$ and $y = 4x$ for $0 \leq x \leq 4$, counterclockwise.</p>
- </div>
- <div class="solution">
- <div class="solution-header">Solution</div>
- <div class="solution-content">
- <div class="step" data-step="1">
- <div class="step-title">Identify P and Q</div>
- <div class="math">$$P = x^2, Q = x^2 \\ \frac{\partial Q}{\partial x} = 2x, \frac{\partial P}{\partial y} = 0$$</div>
- </div>
+<div class="solution">
+<div class="solution-header">Solution</div>
+<div class="solution-content">
+<div class="why-box">
+<p><strong>Green's Theorem:</strong> $\oint_C P\,dx + Q\,dy = \iint_D \left(\frac{\partial Q}{\partial x} - \frac{\partial P}{\partial y}\right)dA$. This converts a line integral around a closed curve into a double integral over the enclosed region.</p>
+</div>
 
- <div class="step" data-step="2">
- <div class="step-title">Apply Green's Theorem</div>
- <div class="math">$$\oint_C F \cdot dr = \iint_D (2x - 0) dA = \iint_D 2x dA$$</div>
- </div>
+<div class="step" data-step="1">
+<div class="step-title">Identify P and Q</div>
+<p>From $\mathbf{F}(x,y) = (x^2, x^2)$:</p>
+<div class="math">$$P = x^2, \quad Q = x^2$$</div>
+</div>
 
- <div class="step" data-step="3">
- <div class="step-title">Evaluate double integral</div>
- <div class="math">$$\int_0^4 \int_{x^2}^{4x} 2x \, dy \, dx = \int_0^4 2x(4x - x^2) \, dx \\ = \int_0^4 (8x^2 - 2x^3) \, dx = \left[\frac{8x^3}{3} - \frac{x^4}{2}\right]_0^4 \\ = \frac{512}{3} - 128 = \frac{128}{3}$$</div>
- </div>
- </div>
- </div>
- <div class="answer">
- <div class="answer-label">ANSWER</div>
- <div class="answer-value">$\frac{128}{3}$</div>
- </div>
- </div>
+<div class="step" data-step="2">
+<div class="step-title">Compute the partial derivatives</div>
+<div class="math">$$\frac{\partial Q}{\partial x} = \frac{\partial}{\partial x}(x^2) = 2x$$</div>
+<div class="math">$$\frac{\partial P}{\partial y} = \frac{\partial}{\partial y}(x^2) = 0$$</div>
+</div>
 
- <!-- Problem 34: Circle line integral -->
- <div class="problem">
+<div class="step" data-step="3">
+<div class="step-title">Apply Green's Theorem</div>
+<div class="math">$$\oint_C \mathbf{F} \cdot d\mathbf{r} = \iint_D (2x - 0)\,dA = \iint_D 2x\,dA$$</div>
+</div>
+
+<div class="step" data-step="4">
+<div class="step-title">Identify the region D</div>
+<p>The region D is bounded by $y = x^2$ (below) and $y = 4x$ (above), for $0 \leq x \leq 4$.</p>
+<p>These curves intersect where $x^2 = 4x$, i.e., $x(x-4) = 0$, giving $x = 0$ and $x = 4$.</p>
+</div>
+
+<div class="step" data-step="5">
+<div class="step-title">Set up and evaluate the double integral</div>
+<div class="math">$$\int_0^4 \int_{x^2}^{4x} 2x\,dy\,dx = \int_0^4 2x \cdot [y]_{x^2}^{4x}\,dx = \int_0^4 2x(4x - x^2)\,dx$$</div>
+<div class="math">$$= \int_0^4 (8x^2 - 2x^3)\,dx = \left[\frac{8x^3}{3} - \frac{x^4}{2}\right]_0^4$$</div>
+<div class="math">$$= \frac{8 \cdot 64}{3} - \frac{256}{2} = \frac{512}{3} - 128 = \frac{512 - 384}{3} = \frac{128}{3}$$</div>
+</div>
+</div>
+</div>
+<div class="answer">
+<div class="answer-label">ANSWER</div>
+<div class="answer-value">$\frac{128}{3}$</div>
+</div>
+</div> <div class="problem">
  <div class="problem-header">
  <span class="problem-number">Problem 34</span>
  <span class="problem-title">Line Integral Over Circle</span>
@@ -2002,26 +2017,51 @@
  </div>
  <div class="problem-statement">
  <p>$\mathbf{F} = 4x^3\mathbf{i} + 4y^3\mathbf{j} + 4z^3\mathbf{k}$. Evaluate surface integral over unit sphere.</p>
- </div>
- <div class="solution">
- <div class="solution-header">Solution</div>
- <div class="solution-content">
- <div class="step" data-step="1">
- <div class="step-title">Divergence Theorem</div>
- <div class="math">$$\nabla \cdot F = 12x^2 + 12y^2 + 12z^2 = 12(x^2 + y^2 + z^2) = 12\rho^2$$</div>
- </div>
+<div class="solution">
+<div class="solution-header">Solution</div>
+<div class="solution-content">
+<div class="why-box">
+<p><strong>Key Concept:</strong> The Divergence Theorem states $\iint_S \mathbf{F} \cdot d\mathbf{S} = \iiint_V (\nabla \cdot \mathbf{F})\,dV$. This converts a surface integral over a closed surface into a volume integral.</p>
+</div>
 
- <div class="step" data-step="2">
- <div class="step-title">Convert to spherical and integrate</div>
- <div class="math">$$\int_0^{2\pi} \int_0^{\pi} \int_0^1 12\rho^2 \cdot \rho^2 \sin \phi \, d\rho \, d\phi \, d\theta \\ = 12 \cdot 2\pi \cdot 2 \cdot \left[\frac{\rho^5}{5}\right]_0^1 = \frac{48\pi}{5}$$</div>
- </div>
- </div>
- </div>
- <div class="answer">
- <div class="answer-label">ANSWER</div>
- <div class="answer-value">$48\pi/5$</div>
- </div>
- </div>
+<div class="step" data-step="1">
+<div class="step-title">Compute the divergence</div>
+<p>Given $\mathbf{F} = 4x^3\mathbf{i} + 4y^3\mathbf{j} + 4z^3\mathbf{k}$:</p>
+<div class="math">$$\nabla \cdot \mathbf{F} = \frac{\partial}{\partial x}(4x^3) + \frac{\partial}{\partial y}(4y^3) + \frac{\partial}{\partial z}(4z^3)$$</div>
+<div class="math">$$= 12x^2 + 12y^2 + 12z^2 = 12(x^2 + y^2 + z^2)$$</div>
+</div>
+
+<div class="step" data-step="2">
+<div class="step-title">Convert to spherical coordinates</div>
+<p>In spherical: $x^2 + y^2 + z^2 = \rho^2$</p>
+<p>So $\nabla \cdot \mathbf{F} = 12\rho^2$</p>
+<p>$dV = \rho^2 \sin\phi\,d\rho\,d\phi\,d\theta$</p>
+<p>Unit sphere: $0 \leq \rho \leq 1$, $0 \leq \phi \leq \pi$, $0 \leq \theta \leq 2\pi$</p>
+</div>
+
+<div class="step" data-step="3">
+<div class="step-title">Set up the triple integral</div>
+<div class="math">$$\iiint_V 12\rho^2 \cdot \rho^2 \sin\phi\,d\rho\,d\phi\,d\theta = 12 \int_0^{2\pi} \int_0^{\pi} \int_0^1 \rho^4 \sin\phi\,d\rho\,d\phi\,d\theta$$</div>
+</div>
+
+<div class="step" data-step="4">
+<div class="step-title">Evaluate each integral separately</div>
+<div class="math">$$\int_0^1 \rho^4\,d\rho = \left[\frac{\rho^5}{5}\right]_0^1 = \frac{1}{5}$$</div>
+<div class="math">$$\int_0^{\pi} \sin\phi\,d\phi = [-\cos\phi]_0^{\pi} = 1 + 1 = 2$$</div>
+<div class="math">$$\int_0^{2\pi} d\theta = 2\pi$$</div>
+</div>
+
+<div class="step" data-step="5">
+<div class="step-title">Combine results</div>
+<div class="math">$$12 \cdot \frac{1}{5} \cdot 2 \cdot 2\pi = \frac{48\pi}{5}$$</div>
+</div>
+</div>
+</div>
+<div class="answer">
+<div class="answer-label">ANSWER</div>
+<div class="answer-value">$\frac{48\pi}{5}$</div>
+</div>
+</div> </div>
 
  <div class="back-top"><a href="#top">↑ Back to Contents</a></div>
  </section>
@@ -2132,22 +2172,42 @@
  <div class="problem-statement">
  <p>Determine if F is gradient of f. If yes, find f.</p>
  </div>
- <div class="solution">
- <div class="solution-header">Solution</div>
- <div class="solution-content">
- <div class="step" data-step="1">
- <div class="step-title">Test</div>
- <div class="math">$$\frac{\partial P}{\partial y} = 5x, \quad \frac{\partial Q}{\partial x} = 7y \\ 5x \neq 7y \text{ in general} \quad \times \text{ NOT conservative}$$</div>
- </div>
- </div>
- </div>
- <div class="answer">
- <div class="answer-label">ANSWER</div>
- <div class="answer-value">DNE (Not conservative)</div>
- </div>
- </div>
+<div class="solution">
+<div class="solution-header">Solution</div>
+<div class="solution-content">
+<div class="why-box">
+<p><strong>Recall:</strong> A field $\mathbf{F} = P\mathbf{i} + Q\mathbf{j}$ is conservative iff $\frac{\partial P}{\partial y} = \frac{\partial Q}{\partial x}$.</p>
+</div>
 
- <!-- Problem 42: F = (7x^2 + 7y^2)i + 14xyj -->
+<div class="step" data-step="1">
+<div class="step-title">Identify P and Q</div>
+<p>From $\mathbf{F} = 5xy\mathbf{i} + 7xy\mathbf{j}$:</p>
+<div class="math">$$P = 5xy, \quad Q = 7xy$$</div>
+</div>
+
+<div class="step" data-step="2">
+<div class="step-title">Compute the partial derivatives</div>
+<div class="math">$$\frac{\partial P}{\partial y} = \frac{\partial}{\partial y}(5xy) = 5x$$</div>
+<div class="math">$$\frac{\partial Q}{\partial x} = \frac{\partial}{\partial x}(7xy) = 7y$$</div>
+</div>
+
+<div class="step" data-step="3">
+<div class="step-title">Compare</div>
+<p>For the field to be conservative, we need $5x = 7y$ for all $(x,y)$.</p>
+<p>But $5x \neq 7y$ in general (only on the line $y = \frac{5x}{7}$).</p>
+<p>Therefore, $\mathbf{F}$ is <strong>NOT conservative</strong>.</p>
+</div>
+
+<div class="why-box">
+<p><strong>Consequence:</strong> Since $\mathbf{F}$ is not conservative, there is no potential function $f$ such that $\nabla f = \mathbf{F}$. Line integrals of $\mathbf{F}$ will depend on the path taken, not just the endpoints.</p>
+</div>
+</div>
+</div>
+<div class="answer">
+<div class="answer-label">ANSWER</div>
+<div class="answer-value">Not conservative (no potential function exists)</div>
+</div>
+</div> <!-- Problem 42: F = (7x^2 + 7y^2)i + 14xyj -->
  <div class="problem">
  <div class="problem-header">
  <span class="problem-number">Problem 42</span>
