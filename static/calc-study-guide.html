@@ -1324,23 +1324,41 @@
  <div class="math">$$x = 2 + t^{-1} \to dx = -t^{-2} dt \\ y = t^3 \to dy = 3t^2 dt \\ z = t^2 \to dz = 2t dt$$</div>
  </div>
 
- <div class="step" data-step="2">
- <div class="step-title">Substitute</div>
- <div class="math">$$\int \left[9(t^3)(-t^{-2}) + 8(t^2)(3t^2) + (2 + t^{-1})(2t)\right] \, dt \\ = \int \left[-9t + 24t^4 + 4t + 2\right] \, dt$$</div>
- </div>
+<div class="step" data-step="2">
+<div class="step-title">Substitute into the integral</div>
+<div class="math">$$\int_0^1 \left[9y \cdot \frac{dx}{dt} + 8z \cdot \frac{dy}{dt} + x \cdot \frac{dz}{dt}\right] dt$$</div>
+<div class="math">$$= \int_0^1 \left[9(t^3)(-t^{-2}) + 8(t^2)(3t^2) + (2 + t^{-1})(2t)\right] dt$$</div>
+</div>
 
- <div class="step" data-step="3">
- <div class="step-title">Evaluate (note: limit as t \to 0 needs care)</div>
- <p>This integral is improper at $t = 0$ due to the $t^{-1}$ term.</p>
- </div>
- </div>
- </div>
- <div class="answer">
- <div class="answer-label">ANSWER</div>
- <div class="answer-value">(evaluate carefully near t=0)</div>
- </div>
- </div>
+<div class="step" data-step="3">
+<div class="step-title">Simplify each term</div>
+<div class="math">$$9(t^3)(-t^{-2}) = -9t$$</div>
+<div class="math">$$8(t^2)(3t^2) = 24t^4$$</div>
+<div class="math">$$(2 + t^{-1})(2t) = 4t + 2$$</div>
+<div class="math">$$\text{Total: } -9t + 24t^4 + 4t + 2 = 24t^4 - 5t + 2$$</div>
+</div>
 
+<div class="step" data-step="4">
+<div class="step-title">Integrate</div>
+<div class="math">$$\int_0^1 (24t^4 - 5t + 2) \, dt = \left[\frac{24t^5}{5} - \frac{5t^2}{2} + 2t\right]_0^1$$</div>
+</div>
+
+<div class="step" data-step="5">
+<div class="step-title">Evaluate at bounds</div>
+<div class="math">$$= \frac{24}{5} - \frac{5}{2} + 2$$</div>
+<div class="math">$$= \frac{48}{10} - \frac{25}{10} + \frac{20}{10} = \frac{43}{10}$$</div>
+</div>
+
+<div class="why-box">
+<p><strong>Note:</strong> The parameterization $x = 2 + t^{-1}$ is undefined at $t = 0$. The integral from $\epsilon$ to $1$ converges as $\epsilon \to 0^+$.</p>
+</div>
+</div>
+</div>
+<div class="answer">
+<div class="answer-label">ANSWER</div>
+<div class="answer-value">$\frac{43}{10}$</div>
+</div>
+</div>
  <!-- Problem 32: Line integral along curve -->
  <div class="problem">
  <div class="problem-header">
