@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS transcripts (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     candidate_name VARCHAR(255) NOT NULL DEFAULT 'Unknown Candidate',
     transcript TEXT NOT NULL,
+    resume TEXT,  -- Optional resume text for more thorough analysis
     source VARCHAR(50) DEFAULT 'upload',  -- 'upload', 'paste', 'import'
     filename VARCHAR(255),
     ip_address VARCHAR(45),

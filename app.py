@@ -3413,6 +3413,7 @@ def transcripts_api():
             data = request.get_json()
             transcript_text = data.get('transcript', '').strip()
             candidate_name = data.get('candidate_name', '').strip()
+            resume_text = data.get('resume', '').strip()  # Optional resume
             source = data.get('source', 'paste')  # 'paste', 'upload'
             filename = data.get('filename', '')
 
@@ -3423,6 +3424,7 @@ def transcripts_api():
             transcript_data = {
                 'candidate_name': candidate_name or 'Unknown Candidate',
                 'transcript': transcript_text[:50000],  # 50k char limit
+                'resume': resume_text[:30000] if resume_text else None,  # 30k char limit for resume
                 'source': source,
                 'filename': filename[:255] if filename else None,
                 'ip_address': request.remote_addr,
@@ -3464,7 +3466,7 @@ def transcripts_api():
                     "Content-Type": "application/json"
                 },
                 params={
-                    "select": "id,created_at,candidate_name,source,filename",
+                    "select": "id,created_at,candidate_name,source,filename,resume",
                     "order": "created_at.desc",
                     "limit": "100"
                 }
@@ -3517,6 +3519,8 @@ def transcript_detail(transcript_id):
             update_data = {}
             if 'candidate_name' in data:
                 update_data['candidate_name'] = data['candidate_name'][:255]
+            if 'resume' in data:
+                update_data['resume'] = data['resume'][:30000] if data['resume'] else None
 
             if not update_data:
                 response = jsonify({'error': 'No valid fields to update'})
@@ -3633,61 +3637,71 @@ def analyze_transcripts():
                 transcript_record = transcript_response.json()[0]
                 transcript_text = transcript_record.get('transcript', '')
                 candidate_name = transcript_record.get('candidate_name', 'Unknown')
+                resume_text = transcript_record.get('resume', '')  # Optional resume
 
                 if not transcript_text:
                     results.append({'transcript_id': transcript_id, 'success': False, 'error': 'No transcript text'})
                     continue
 
-                # Build comprehensive prompt
+                # Build comprehensive prompt with optional resume
+                resume_section = ""
+                resume_instructions = ""
+                if resume_text:
+                    resume_section = f"""
+CANDIDATE RESUME:
+{resume_text}
+"""
+                    resume_instructions = """
+RESUME ANALYSIS (if resume provided):
+   - Compare resume claims against interview responses - do they align?
+   - Note any skills/experience on resume NOT discussed in interview
+   - Identify any discrepancies between resume and interview statements
+   - Assess how well the resume matches job requirements
+"""
+
                 prompt = f"""You are a senior HR analyst and executive recruiter with 20+ years of experience. Conduct an exhaustive analysis of this interview transcript against the job description. Your analysis must be thorough, evidence-based, and include extensive direct quotes from the candidate.
 
 JOB DESCRIPTION:
 {job_description}
-
+{resume_section}
 INTERVIEW TRANSCRIPT:
 {transcript_text}
 
-ANALYSIS REQUIREMENTS:
+CRITICAL INSTRUCTIONS:
 
-1. CANDIDATE IDENTIFICATION: Identify who is the interviewer vs candidate. Focus ONLY on candidate responses.
+1. QUESTION & ANSWER EXTRACTION: Extract each interviewer question and the candidate's answer. Present these as Q&A pairs showing exactly what was asked and how it was answered. This is essential for understanding interview quality.
 
-2. STRENGTHS ANALYSIS (provide 5-8 strengths):
+2. CANDIDATE IDENTIFICATION: Identify who is the interviewer vs candidate. The interviewer asks questions; the candidate answers them. Focus analysis on candidate responses but DO capture the questions asked.
+
+3. STRENGTHS ANALYSIS (provide 5-8 strengths):
    - Each strength must include a DIRECT QUOTE from the candidate as evidence
    - Explain how this strength relates to the job requirements
    - Rate the strength's relevance (high/medium/low)
 
-3. SKILLS & EXPERIENCE MATCH (provide 5-8 matching skills):
+4. SKILLS & EXPERIENCE MATCH (provide 5-8 matching skills):
    - Map specific candidate experiences to job requirements
    - Include quotes showing depth of experience
    - Note years of experience or proficiency level where mentioned
-
-4. CONCERNS & GAPS (provide 3-5 concerns):
+{resume_instructions}
+5. CONCERNS & GAPS (provide 3-5 concerns):
    - Identify missing skills or experience gaps
    - Note any red flags or inconsistencies
    - Include quotes that raised concerns (if applicable)
 
-5. COMMUNICATION ANALYSIS:
+6. COMMUNICATION ANALYSIS:
    - Assess clarity, confidence, and articulation
    - Note use of specific examples vs vague statements
    - Evaluate storytelling ability (STAR method usage)
 
-6. CULTURAL FIT INDICATORS:
+7. CULTURAL FIT INDICATORS:
    - Values alignment based on their responses
    - Work style preferences mentioned
    - Team collaboration indicators
-
-7. NOTABLE QUOTES (provide 8-12 significant quotes):
-   - Include the candidate's most impressive statements
-   - Include statements that reveal character/values
-   - Include technical depth demonstrations
-   - Include any concerning statements
-   - Each quote needs context explaining its significance
 
 8. COMPREHENSIVE SUMMARY:
    - Overall assessment (4-5 paragraphs)
    - Hiring recommendation with confidence level
    - Suggested follow-up questions for next interview
-   - Salary/level appropriateness if discernible
 
 Provide your analysis in this exact JSON format:
 {{
@@ -3696,14 +3710,18 @@ Provide your analysis in this exact JSON format:
         "skills_match": <0-100>,
         "experience_match": <0-100>,
         "communication": <0-100>,
-        "cultural_fit": <0-100>
+        "cultural_fit": <0-100>{', "resume_match": <0-100>' if resume_text else ''}
     }},
+    "interview_qa": [
+        {{"question": "The interviewer's question", "answer": "The candidate's response (can be summarized if very long)", "quality": "excellent/good/fair/poor", "notes": "Brief assessment of the answer quality"}}
+    ],
     "strengths": [
         {{"strength": "Description of strength", "evidence": "Direct quote from candidate", "relevance": "high/medium/low", "job_requirement": "Which requirement this addresses"}}
     ],
     "matching_skills": [
         {{"skill": "Skill name", "experience_level": "years or proficiency", "evidence": "Quote demonstrating this skill", "job_match": "How it matches the JD"}}
     ],
+    {"resume_analysis" if resume_text else '"resume_analysis"'}: {'{{"resume_job_match": "How well resume matches job requirements", "resume_interview_alignment": "How well resume claims align with interview responses", "resume_gaps": ["Skills on resume not discussed in interview"], "resume_strengths": ["Strong resume points relevant to job"]}}' if resume_text else 'null'},
     "concerns": [
         {{"concern": "Description of concern", "severity": "high/medium/low", "evidence": "Quote or observation", "mitigation": "How this could be addressed"}}
     ],
