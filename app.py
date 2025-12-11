@@ -2523,6 +2523,238 @@ def save_interview_report(transcript, job_description, candidate_name, job_title
         print(f"[INTERVIEW] Error saving report: {e}")
         return None
 
+@app.route('/api/interview-drafts', methods=['POST', 'OPTIONS'])
+def save_interview_draft():
+    """
+    Save a draft interview transcript without running analysis.
+    Used for bulk uploading transcripts before adding job descriptions.
+    """
+    if request.method == 'OPTIONS':
+        response = jsonify({'status': 'ok'})
+        return add_cors_headers(response)
+
+    try:
+        data = request.get_json()
+        transcript = data.get('transcript', '')
+        candidate_name = data.get('candidate_name', '')
+
+        if not transcript:
+            response = jsonify({'error': 'Transcript is required'})
+            return add_cors_headers(response), 400
+
+        supabase_url = os.getenv('SUPABASE_URL')
+        supabase_key = os.getenv('SUPABASE_KEY', '').strip()
+
+        if not supabase_url or not supabase_key:
+            response = jsonify({'error': 'Database not configured'})
+            return add_cors_headers(response), 500
+
+        # Save as draft (no job description, no analysis)
+        draft_data = {
+            'candidate_name': candidate_name or 'Unknown Candidate',
+            'job_title': '',
+            'transcript': transcript[:10000],
+            'job_description': '',
+            'fit_score': None,
+            'strengths': None,
+            'matching_skills': None,
+            'concerns': None,
+            'notable_quotes': None,
+            'summary': None,
+            'full_response': None,
+            'ip_address': request.remote_addr,
+            'user_agent': request.headers.get('User-Agent', '')[:500]
+        }
+
+        db_response = requests.post(
+            f"{supabase_url}/rest/v1/interview_reports",
+            headers={
+                "apikey": supabase_key,
+                "Authorization": f"Bearer {supabase_key}",
+                "Content-Type": "application/json",
+                "Prefer": "return=representation"
+            },
+            json=draft_data
+        )
+
+        if db_response.status_code in [200, 201]:
+            saved = db_response.json()
+            draft_id = saved[0]['id'] if saved else None
+            print(f"[INTERVIEW] Draft saved with ID: {draft_id}")
+            response = jsonify({'success': True, 'draft_id': draft_id, 'candidate_name': candidate_name})
+            return add_cors_headers(response)
+        else:
+            print(f"[INTERVIEW] Failed to save draft: {db_response.status_code} - {db_response.text}")
+            response = jsonify({'error': 'Failed to save draft'})
+            return add_cors_headers(response), 500
+
+    except Exception as e:
+        print(f"Error saving interview draft: {e}")
+        response = jsonify({'error': str(e)})
+        return add_cors_headers(response), 500
+
+
+@app.route('/api/interview-reports/<report_id>/analyze', methods=['POST', 'OPTIONS'])
+def analyze_existing_draft(report_id):
+    """
+    Run analysis on an existing draft by adding job description.
+    """
+    if request.method == 'OPTIONS':
+        response = jsonify({'status': 'ok'})
+        return add_cors_headers(response)
+
+    try:
+        data = request.get_json()
+        job_description = data.get('job_description', '')
+        job_title = data.get('job_title', '')
+
+        if not job_description:
+            response = jsonify({'error': 'Job description is required'})
+            return add_cors_headers(response), 400
+
+        supabase_url = os.getenv('SUPABASE_URL')
+        supabase_key = os.getenv('SUPABASE_KEY', '').strip()
+
+        # Fetch the draft
+        db_response = requests.get(
+            f"{supabase_url}/rest/v1/interview_reports",
+            headers={
+                "apikey": supabase_key,
+                "Authorization": f"Bearer {supabase_key}",
+                "Content-Type": "application/json"
+            },
+            params={"id": f"eq.{report_id}", "select": "*"}
+        )
+
+        if db_response.status_code != 200 or not db_response.json():
+            response = jsonify({'error': 'Draft not found'})
+            return add_cors_headers(response), 404
+
+        draft = db_response.json()[0]
+        transcript = draft.get('transcript', '')
+        candidate_name = draft.get('candidate_name', '')
+
+        if not transcript:
+            response = jsonify({'error': 'Draft has no transcript'})
+            return add_cors_headers(response), 400
+
+        # Get OpenAI API key
+        openai_key = os.getenv('OPENAI_API_KEY')
+        if not openai_key:
+            response = jsonify({'error': 'AI service not configured'})
+            return add_cors_headers(response), 500
+
+        # Build the analysis prompt
+        prompt = f"""You are an expert HR analyst and interview coach. Analyze this interview transcript against the job description and provide a detailed candidate fit report.
+
+JOB DESCRIPTION:
+{job_description}
+
+INTERVIEW TRANSCRIPT:
+{transcript}
+
+INSTRUCTIONS:
+1. First, identify who is the interviewer vs the candidate (the candidate is the one answering questions, sharing their experience, etc.)
+2. Focus ONLY on what the candidate said - ignore interviewer questions
+3. Compare the candidate's responses against the job requirements
+4. Be objective and evidence-based - cite specific things the candidate said
+
+Provide your analysis in this exact JSON format:
+{{
+    "fit_score": <number 0-100>,
+    "strengths": [
+        "Strength 1 with specific evidence from transcript",
+        "Strength 2 with specific evidence",
+        "Strength 3 with specific evidence"
+    ],
+    "matching_skills": [
+        "Skill/experience that matches job requirement 1",
+        "Skill/experience that matches job requirement 2",
+        "Skill/experience that matches job requirement 3"
+    ],
+    "concerns": [
+        "Potential gap or area to explore further 1",
+        "Potential gap or area to explore further 2"
+    ],
+    "notable_quotes": [
+        {{"quote": "Exact quote from candidate", "context": "Why this quote is significant"}},
+        {{"quote": "Another notable quote", "context": "Why significant"}}
+    ],
+    "summary": "2-3 paragraph summary of why this candidate would or would not be a good fit, with specific evidence from the interview."
+}}
+
+Return ONLY valid JSON, no additional text."""
+
+        # Call OpenAI API
+        import openai
+        client = openai.OpenAI(api_key=openai_key)
+
+        ai_response = client.chat.completions.create(
+            model="gpt-4o",
+            messages=[
+                {"role": "system", "content": "You are an expert HR analyst. Always respond with valid JSON only."},
+                {"role": "user", "content": prompt}
+            ],
+            temperature=0.7,
+            max_tokens=2000
+        )
+
+        result_text = ai_response.choices[0].message.content.strip()
+
+        if result_text.startswith('```'):
+            result_text = result_text.split('```')[1]
+            if result_text.startswith('json'):
+                result_text = result_text[4:]
+        result_text = result_text.strip()
+
+        result = json.loads(result_text)
+
+        # Update the draft with analysis results
+        update_data = {
+            'job_description': job_description[:5000],
+            'job_title': job_title or '',
+            'fit_score': result.get('fit_score'),
+            'strengths': json.dumps(result.get('strengths', [])),
+            'matching_skills': json.dumps(result.get('matching_skills', [])),
+            'concerns': json.dumps(result.get('concerns', [])),
+            'notable_quotes': json.dumps(result.get('notable_quotes', [])),
+            'summary': result.get('summary', ''),
+            'full_response': json.dumps(result)
+        }
+
+        db_update = requests.patch(
+            f"{supabase_url}/rest/v1/interview_reports",
+            headers={
+                "apikey": supabase_key,
+                "Authorization": f"Bearer {supabase_key}",
+                "Content-Type": "application/json"
+            },
+            params={"id": f"eq.{report_id}"},
+            json=update_data
+        )
+
+        if db_update.status_code not in [200, 204]:
+            print(f"[INTERVIEW] Failed to update draft: {db_update.status_code}")
+
+        result['report_id'] = report_id
+        result['candidate_name'] = candidate_name
+        result['job_title'] = job_title
+
+        response = jsonify(result)
+        return add_cors_headers(response)
+
+    except json.JSONDecodeError as e:
+        print(f"JSON parse error in draft analysis: {e}")
+        response = jsonify({'error': 'Failed to parse AI response'})
+        return add_cors_headers(response), 500
+    except Exception as e:
+        print(f"Error analyzing draft: {e}")
+        import traceback
+        traceback.print_exc()
+        response = jsonify({'error': str(e)})
+        return add_cors_headers(response), 500
+
+
 @app.route('/api/analyze-interview', methods=['POST', 'OPTIONS'])
 def analyze_interview():
     """
@@ -2542,7 +2774,8 @@ def analyze_interview():
         job_title = data.get('job_title', '')
 
         if not transcript or not job_description:
-            return jsonify({'error': 'Both transcript and job_description are required'}), 400
+            response = jsonify({'error': 'Both transcript and job_description are required'})
+            return add_cors_headers(response), 400
 
         # Get OpenAI API key
         openai_key = os.getenv('OPENAI_API_KEY')
