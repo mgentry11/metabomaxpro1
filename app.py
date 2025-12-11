@@ -2466,6 +2466,63 @@ def generate_ai_recommendation():
 # INTERVIEW ANALYZER API (Public - for bigoil.net)
 # ============================================================================
 
+def add_cors_headers(response):
+    """Add CORS headers to response"""
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
+    response.headers.add('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS')
+    return response
+
+def save_interview_report(transcript, job_description, candidate_name, job_title, result, request_obj):
+    """Save interview report to Supabase database"""
+    try:
+        supabase_url = os.getenv('SUPABASE_URL')
+        supabase_key = os.getenv('SUPABASE_KEY', '').strip()
+
+        if not supabase_url or not supabase_key:
+            print("[INTERVIEW] Supabase not configured, skipping save")
+            return None
+
+        report_data = {
+            'candidate_name': candidate_name or 'Unknown Candidate',
+            'job_title': job_title or 'Unknown Position',
+            'transcript': transcript[:10000],  # Limit size
+            'job_description': job_description[:5000],
+            'fit_score': result.get('fit_score'),
+            'strengths': json.dumps(result.get('strengths', [])),
+            'matching_skills': json.dumps(result.get('matching_skills', [])),
+            'concerns': json.dumps(result.get('concerns', [])),
+            'notable_quotes': json.dumps(result.get('notable_quotes', [])),
+            'summary': result.get('summary', ''),
+            'full_response': json.dumps(result),
+            'ip_address': request_obj.remote_addr,
+            'user_agent': request_obj.headers.get('User-Agent', '')[:500]
+        }
+
+        response = requests.post(
+            f"{supabase_url}/rest/v1/interview_reports",
+            headers={
+                "apikey": supabase_key,
+                "Authorization": f"Bearer {supabase_key}",
+                "Content-Type": "application/json",
+                "Prefer": "return=representation"
+            },
+            json=report_data
+        )
+
+        if response.status_code in [200, 201]:
+            saved = response.json()
+            report_id = saved[0]['id'] if saved else None
+            print(f"[INTERVIEW] Report saved with ID: {report_id}")
+            return report_id
+        else:
+            print(f"[INTERVIEW] Failed to save report: {response.status_code} - {response.text}")
+            return None
+
+    except Exception as e:
+        print(f"[INTERVIEW] Error saving report: {e}")
+        return None
+
 @app.route('/api/analyze-interview', methods=['POST', 'OPTIONS'])
 def analyze_interview():
     """
@@ -2475,15 +2532,14 @@ def analyze_interview():
     # Handle CORS preflight
     if request.method == 'OPTIONS':
         response = jsonify({'status': 'ok'})
-        response.headers.add('Access-Control-Allow-Origin', '*')
-        response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
-        response.headers.add('Access-Control-Allow-Methods', 'POST, OPTIONS')
-        return response
+        return add_cors_headers(response)
 
     try:
         data = request.get_json()
         transcript = data.get('transcript', '')
         job_description = data.get('job_description', '')
+        candidate_name = data.get('candidate_name', '')
+        job_title = data.get('job_title', '')
 
         if not transcript or not job_description:
             return jsonify({'error': 'Both transcript and job_description are required'}), 400
@@ -2560,24 +2616,149 @@ Return ONLY valid JSON, no additional text."""
 
         result = json.loads(result_text)
 
+        # Save report to database
+        report_id = save_interview_report(
+            transcript, job_description, candidate_name, job_title, result, request
+        )
+
+        # Add report_id to result
+        result['report_id'] = report_id
+
         # Add CORS header to response
         response = jsonify(result)
-        response.headers.add('Access-Control-Allow-Origin', '*')
-        return response
+        return add_cors_headers(response)
 
     except json.JSONDecodeError as e:
         print(f"JSON parse error in interview analysis: {e}")
         print(f"Raw response: {result_text[:500] if 'result_text' in dir() else 'N/A'}")
         response = jsonify({'error': 'Failed to parse AI response'})
-        response.headers.add('Access-Control-Allow-Origin', '*')
-        return response, 500
+        return add_cors_headers(response), 500
     except Exception as e:
         print(f"Error in interview analysis: {e}")
         import traceback
         traceback.print_exc()
         response = jsonify({'error': str(e)})
-        response.headers.add('Access-Control-Allow-Origin', '*')
-        return response, 500
+        return add_cors_headers(response), 500
+
+
+@app.route('/api/interview-reports', methods=['GET', 'OPTIONS'])
+def list_interview_reports():
+    """List all saved interview reports"""
+    if request.method == 'OPTIONS':
+        response = jsonify({'status': 'ok'})
+        return add_cors_headers(response)
+
+    try:
+        supabase_url = os.getenv('SUPABASE_URL')
+        supabase_key = os.getenv('SUPABASE_KEY', '').strip()
+
+        if not supabase_url or not supabase_key:
+            response = jsonify({'error': 'Database not configured'})
+            return add_cors_headers(response), 500
+
+        # Get reports, most recent first
+        db_response = requests.get(
+            f"{supabase_url}/rest/v1/interview_reports",
+            headers={
+                "apikey": supabase_key,
+                "Authorization": f"Bearer {supabase_key}",
+                "Content-Type": "application/json"
+            },
+            params={
+                "select": "id,created_at,candidate_name,job_title,fit_score",
+                "order": "created_at.desc",
+                "limit": "50"
+            }
+        )
+
+        if db_response.status_code == 200:
+            reports = db_response.json()
+            response = jsonify({'reports': reports})
+            return add_cors_headers(response)
+        else:
+            response = jsonify({'error': 'Failed to fetch reports'})
+            return add_cors_headers(response), 500
+
+    except Exception as e:
+        print(f"Error listing interview reports: {e}")
+        response = jsonify({'error': str(e)})
+        return add_cors_headers(response), 500
+
+
+@app.route('/api/interview-reports/<report_id>', methods=['GET', 'DELETE', 'OPTIONS'])
+def get_or_delete_interview_report(report_id):
+    """Get or delete a specific interview report"""
+    if request.method == 'OPTIONS':
+        response = jsonify({'status': 'ok'})
+        return add_cors_headers(response)
+
+    try:
+        supabase_url = os.getenv('SUPABASE_URL')
+        supabase_key = os.getenv('SUPABASE_KEY', '').strip()
+
+        if not supabase_url or not supabase_key:
+            response = jsonify({'error': 'Database not configured'})
+            return add_cors_headers(response), 500
+
+        if request.method == 'DELETE':
+            # Delete report
+            db_response = requests.delete(
+                f"{supabase_url}/rest/v1/interview_reports",
+                headers={
+                    "apikey": supabase_key,
+                    "Authorization": f"Bearer {supabase_key}",
+                    "Content-Type": "application/json"
+                },
+                params={"id": f"eq.{report_id}"}
+            )
+
+            if db_response.status_code in [200, 204]:
+                response = jsonify({'success': True})
+                return add_cors_headers(response)
+            else:
+                response = jsonify({'error': 'Failed to delete report'})
+                return add_cors_headers(response), 500
+
+        else:
+            # GET - fetch full report
+            db_response = requests.get(
+                f"{supabase_url}/rest/v1/interview_reports",
+                headers={
+                    "apikey": supabase_key,
+                    "Authorization": f"Bearer {supabase_key}",
+                    "Content-Type": "application/json"
+                },
+                params={
+                    "id": f"eq.{report_id}",
+                    "select": "*"
+                }
+            )
+
+            if db_response.status_code == 200:
+                reports = db_response.json()
+                if reports:
+                    report = reports[0]
+                    # Parse JSON fields
+                    for field in ['strengths', 'matching_skills', 'concerns', 'notable_quotes', 'full_response']:
+                        if report.get(field) and isinstance(report[field], str):
+                            try:
+                                report[field] = json.loads(report[field])
+                            except:
+                                pass
+                    response = jsonify(report)
+                    return add_cors_headers(response)
+                else:
+                    response = jsonify({'error': 'Report not found'})
+                    return add_cors_headers(response), 404
+            else:
+                response = jsonify({'error': 'Failed to fetch report'})
+                return add_cors_headers(response), 500
+
+    except Exception as e:
+        print(f"Error with interview report {report_id}: {e}")
+        response = jsonify({'error': str(e)})
+        return add_cors_headers(response), 500
+
 
 def get_user_metabolic_data(email):
     """Extract metabolic data from user's latest report"""
