@@ -2462,6 +2462,123 @@ def generate_ai_recommendation():
         traceback.print_exc()
         return jsonify({'error': str(e)}), 500
 
+# ============================================================================
+# INTERVIEW ANALYZER API (Public - for bigoil.net)
+# ============================================================================
+
+@app.route('/api/analyze-interview', methods=['POST', 'OPTIONS'])
+def analyze_interview():
+    """
+    Analyze an interview transcript against a job description.
+    Public API endpoint for bigoil.net interview analyzer tool.
+    """
+    # Handle CORS preflight
+    if request.method == 'OPTIONS':
+        response = jsonify({'status': 'ok'})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
+        response.headers.add('Access-Control-Allow-Methods', 'POST, OPTIONS')
+        return response
+
+    try:
+        data = request.get_json()
+        transcript = data.get('transcript', '')
+        job_description = data.get('job_description', '')
+
+        if not transcript or not job_description:
+            return jsonify({'error': 'Both transcript and job_description are required'}), 400
+
+        # Get OpenAI API key
+        openai_key = os.getenv('OPENAI_API_KEY')
+        if not openai_key:
+            return jsonify({'error': 'AI service not configured'}), 500
+
+        # Build the analysis prompt
+        prompt = f"""You are an expert HR analyst and interview coach. Analyze this interview transcript against the job description and provide a detailed candidate fit report.
+
+JOB DESCRIPTION:
+{job_description}
+
+INTERVIEW TRANSCRIPT:
+{transcript}
+
+INSTRUCTIONS:
+1. First, identify who is the interviewer vs the candidate (the candidate is the one answering questions, sharing their experience, etc.)
+2. Focus ONLY on what the candidate said - ignore interviewer questions
+3. Compare the candidate's responses against the job requirements
+4. Be objective and evidence-based - cite specific things the candidate said
+
+Provide your analysis in this exact JSON format:
+{{
+    "fit_score": <number 0-100>,
+    "strengths": [
+        "Strength 1 with specific evidence from transcript",
+        "Strength 2 with specific evidence",
+        "Strength 3 with specific evidence"
+    ],
+    "matching_skills": [
+        "Skill/experience that matches job requirement 1",
+        "Skill/experience that matches job requirement 2",
+        "Skill/experience that matches job requirement 3"
+    ],
+    "concerns": [
+        "Potential gap or area to explore further 1",
+        "Potential gap or area to explore further 2"
+    ],
+    "notable_quotes": [
+        {{"quote": "Exact quote from candidate", "context": "Why this quote is significant"}},
+        {{"quote": "Another notable quote", "context": "Why significant"}}
+    ],
+    "summary": "2-3 paragraph summary of why this candidate would or would not be a good fit, with specific evidence from the interview."
+}}
+
+Return ONLY valid JSON, no additional text."""
+
+        # Call OpenAI API
+        import openai
+        client = openai.OpenAI(api_key=openai_key)
+
+        response = client.chat.completions.create(
+            model="gpt-4o",
+            messages=[
+                {"role": "system", "content": "You are an expert HR analyst. Always respond with valid JSON only."},
+                {"role": "user", "content": prompt}
+            ],
+            temperature=0.7,
+            max_tokens=2000
+        )
+
+        # Parse the response
+        result_text = response.choices[0].message.content.strip()
+
+        # Clean up potential markdown code blocks
+        if result_text.startswith('```'):
+            result_text = result_text.split('```')[1]
+            if result_text.startswith('json'):
+                result_text = result_text[4:]
+        result_text = result_text.strip()
+
+        result = json.loads(result_text)
+
+        # Add CORS header to response
+        response = jsonify(result)
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response
+
+    except json.JSONDecodeError as e:
+        print(f"JSON parse error in interview analysis: {e}")
+        print(f"Raw response: {result_text[:500] if 'result_text' in dir() else 'N/A'}")
+        response = jsonify({'error': 'Failed to parse AI response'})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 500
+    except Exception as e:
+        print(f"Error in interview analysis: {e}")
+        import traceback
+        traceback.print_exc()
+        response = jsonify({'error': str(e)})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 500
+
 def get_user_metabolic_data(email):
     """Extract metabolic data from user's latest report"""
     try:
