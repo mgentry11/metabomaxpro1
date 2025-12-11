@@ -2685,9 +2685,9 @@ def list_interview_reports():
         return add_cors_headers(response), 500
 
 
-@app.route('/api/interview-reports/<report_id>', methods=['GET', 'DELETE', 'OPTIONS'])
+@app.route('/api/interview-reports/<report_id>', methods=['GET', 'DELETE', 'PATCH', 'OPTIONS'])
 def get_or_delete_interview_report(report_id):
-    """Get or delete a specific interview report"""
+    """Get, update, or delete a specific interview report"""
     if request.method == 'OPTIONS':
         response = jsonify({'status': 'ok'})
         return add_cors_headers(response)
@@ -2717,6 +2717,41 @@ def get_or_delete_interview_report(report_id):
                 return add_cors_headers(response)
             else:
                 response = jsonify({'error': 'Failed to delete report'})
+                return add_cors_headers(response), 500
+
+        elif request.method == 'PATCH':
+            # Update report (candidate_name, job_title)
+            data = request.get_json()
+            update_data = {}
+
+            # Only allow updating specific fields
+            if 'candidate_name' in data:
+                update_data['candidate_name'] = data['candidate_name']
+            if 'job_title' in data:
+                update_data['job_title'] = data['job_title']
+
+            if not update_data:
+                response = jsonify({'error': 'No valid fields to update'})
+                return add_cors_headers(response), 400
+
+            db_response = requests.patch(
+                f"{supabase_url}/rest/v1/interview_reports",
+                headers={
+                    "apikey": supabase_key,
+                    "Authorization": f"Bearer {supabase_key}",
+                    "Content-Type": "application/json",
+                    "Prefer": "return=representation"
+                },
+                params={"id": f"eq.{report_id}"},
+                json=update_data
+            )
+
+            if db_response.status_code in [200, 204]:
+                response = jsonify({'success': True, 'updated': update_data})
+                return add_cors_headers(response)
+            else:
+                print(f"[INTERVIEW] Update failed: {db_response.status_code} - {db_response.text}")
+                response = jsonify({'error': 'Failed to update report'})
                 return add_cors_headers(response), 500
 
         else:
