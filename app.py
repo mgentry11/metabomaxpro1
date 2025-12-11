@@ -2574,7 +2574,8 @@ def job_descriptions():
                 response = jsonify({'success': True, 'job': saved[0] if saved else None})
                 return add_cors_headers(response)
             else:
-                response = jsonify({'error': 'Failed to save job description'})
+                print(f"[JOB] Failed to save: {db_response.status_code} - {db_response.text}")
+                response = jsonify({'error': f'Failed to save job description: {db_response.status_code}'})
                 return add_cors_headers(response), 500
 
         except Exception as e:
@@ -2601,7 +2602,8 @@ def job_descriptions():
                 response = jsonify({'jobs': db_response.json()})
                 return add_cors_headers(response)
             else:
-                response = jsonify({'error': 'Failed to fetch job descriptions'})
+                print(f"[JOB] Failed to fetch: {db_response.status_code} - {db_response.text}")
+                response = jsonify({'error': f'Failed to fetch job descriptions: {db_response.status_code}'})
                 return add_cors_headers(response), 500
 
         except Exception as e:
