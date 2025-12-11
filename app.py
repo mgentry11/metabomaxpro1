@@ -3390,6 +3390,424 @@ def get_or_delete_interview_report(report_id):
         return add_cors_headers(response), 500
 
 
+# ============================================================================
+# TRANSCRIPTS API (Persistent transcripts for re-analysis)
+# ============================================================================
+
+@app.route('/api/transcripts', methods=['GET', 'POST', 'OPTIONS'])
+def transcripts_api():
+    """List or create transcripts"""
+    if request.method == 'OPTIONS':
+        response = jsonify({'status': 'ok'})
+        return add_cors_headers(response)
+
+    supabase_url = os.getenv('SUPABASE_URL')
+    supabase_key = os.getenv('SUPABASE_KEY', '').strip()
+
+    if not supabase_url or not supabase_key:
+        response = jsonify({'error': 'Database not configured'})
+        return add_cors_headers(response), 500
+
+    if request.method == 'POST':
+        try:
+            data = request.get_json()
+            transcript_text = data.get('transcript', '').strip()
+            candidate_name = data.get('candidate_name', '').strip()
+            source = data.get('source', 'paste')  # 'paste', 'upload'
+            filename = data.get('filename', '')
+
+            if not transcript_text:
+                response = jsonify({'error': 'Transcript text is required'})
+                return add_cors_headers(response), 400
+
+            transcript_data = {
+                'candidate_name': candidate_name or 'Unknown Candidate',
+                'transcript': transcript_text[:50000],  # 50k char limit
+                'source': source,
+                'filename': filename[:255] if filename else None,
+                'ip_address': request.remote_addr,
+                'user_agent': request.headers.get('User-Agent', '')[:500]
+            }
+
+            db_response = requests.post(
+                f"{supabase_url}/rest/v1/transcripts",
+                headers={
+                    "apikey": supabase_key,
+                    "Authorization": f"Bearer {supabase_key}",
+                    "Content-Type": "application/json",
+                    "Prefer": "return=representation"
+                },
+                json=transcript_data
+            )
+
+            if db_response.status_code in [200, 201]:
+                saved = db_response.json()
+                response = jsonify({'success': True, 'transcript': saved[0] if saved else None})
+                return add_cors_headers(response)
+            else:
+                print(f"[TRANSCRIPT] Failed to save: {db_response.status_code} - {db_response.text}")
+                response = jsonify({'error': f'Failed to save transcript'})
+                return add_cors_headers(response), 500
+
+        except Exception as e:
+            print(f"Error saving transcript: {e}")
+            response = jsonify({'error': str(e)})
+            return add_cors_headers(response), 500
+
+    else:  # GET
+        try:
+            db_response = requests.get(
+                f"{supabase_url}/rest/v1/transcripts",
+                headers={
+                    "apikey": supabase_key,
+                    "Authorization": f"Bearer {supabase_key}",
+                    "Content-Type": "application/json"
+                },
+                params={
+                    "select": "id,created_at,candidate_name,source,filename",
+                    "order": "created_at.desc",
+                    "limit": "100"
+                }
+            )
+
+            if db_response.status_code == 200:
+                response = jsonify({'transcripts': db_response.json()})
+                return add_cors_headers(response)
+            else:
+                print(f"[TRANSCRIPT] Failed to fetch: {db_response.status_code} - {db_response.text}")
+                response = jsonify({'error': 'Failed to fetch transcripts'})
+                return add_cors_headers(response), 500
+
+        except Exception as e:
+            print(f"Error listing transcripts: {e}")
+            response = jsonify({'error': str(e)})
+            return add_cors_headers(response), 500
+
+
+@app.route('/api/transcripts/<transcript_id>', methods=['GET', 'DELETE', 'PATCH', 'OPTIONS'])
+def transcript_detail(transcript_id):
+    """Get, update, or delete a transcript"""
+    if request.method == 'OPTIONS':
+        response = jsonify({'status': 'ok'})
+        return add_cors_headers(response)
+
+    supabase_url = os.getenv('SUPABASE_URL')
+    supabase_key = os.getenv('SUPABASE_KEY', '').strip()
+
+    if request.method == 'DELETE':
+        db_response = requests.delete(
+            f"{supabase_url}/rest/v1/transcripts",
+            headers={
+                "apikey": supabase_key,
+                "Authorization": f"Bearer {supabase_key}",
+                "Content-Type": "application/json"
+            },
+            params={"id": f"eq.{transcript_id}"}
+        )
+        if db_response.status_code in [200, 204]:
+            response = jsonify({'success': True})
+            return add_cors_headers(response)
+        else:
+            response = jsonify({'error': 'Failed to delete'})
+            return add_cors_headers(response), 500
+
+    elif request.method == 'PATCH':
+        try:
+            data = request.get_json()
+            update_data = {}
+            if 'candidate_name' in data:
+                update_data['candidate_name'] = data['candidate_name'][:255]
+
+            if not update_data:
+                response = jsonify({'error': 'No valid fields to update'})
+                return add_cors_headers(response), 400
+
+            db_response = requests.patch(
+                f"{supabase_url}/rest/v1/transcripts",
+                headers={
+                    "apikey": supabase_key,
+                    "Authorization": f"Bearer {supabase_key}",
+                    "Content-Type": "application/json",
+                    "Prefer": "return=representation"
+                },
+                params={"id": f"eq.{transcript_id}"},
+                json=update_data
+            )
+
+            if db_response.status_code in [200, 204]:
+                response = jsonify({'success': True, 'updated': update_data})
+                return add_cors_headers(response)
+            else:
+                response = jsonify({'error': 'Failed to update'})
+                return add_cors_headers(response), 500
+
+        except Exception as e:
+            response = jsonify({'error': str(e)})
+            return add_cors_headers(response), 500
+
+    else:  # GET
+        db_response = requests.get(
+            f"{supabase_url}/rest/v1/transcripts",
+            headers={
+                "apikey": supabase_key,
+                "Authorization": f"Bearer {supabase_key}",
+                "Content-Type": "application/json"
+            },
+            params={"id": f"eq.{transcript_id}", "select": "*"}
+        )
+        if db_response.status_code == 200 and db_response.json():
+            response = jsonify(db_response.json()[0])
+            return add_cors_headers(response)
+        else:
+            response = jsonify({'error': 'Not found'})
+            return add_cors_headers(response), 404
+
+
+@app.route('/api/analyze-transcripts', methods=['POST', 'OPTIONS'])
+def analyze_transcripts():
+    """
+    Analyze multiple transcripts against a single job description.
+    Creates NEW report records - transcripts remain unchanged for re-use.
+    """
+    if request.method == 'OPTIONS':
+        response = jsonify({'status': 'ok'})
+        return add_cors_headers(response)
+
+    try:
+        data = request.get_json()
+        transcript_ids = data.get('transcript_ids', [])
+        job_id = data.get('job_id')
+
+        if not transcript_ids or not job_id:
+            response = jsonify({'error': 'transcript_ids and job_id are required'})
+            return add_cors_headers(response), 400
+
+        supabase_url = os.getenv('SUPABASE_URL')
+        supabase_key = os.getenv('SUPABASE_KEY', '').strip()
+        openai_key = os.getenv('OPENAI_API_KEY')
+
+        if not openai_key:
+            response = jsonify({'error': 'AI service not configured'})
+            return add_cors_headers(response), 500
+
+        # Fetch job description
+        job_response = requests.get(
+            f"{supabase_url}/rest/v1/job_descriptions",
+            headers={
+                "apikey": supabase_key,
+                "Authorization": f"Bearer {supabase_key}",
+                "Content-Type": "application/json"
+            },
+            params={"id": f"eq.{job_id}", "select": "*"}
+        )
+
+        if job_response.status_code != 200 or not job_response.json():
+            response = jsonify({'error': 'Job description not found'})
+            return add_cors_headers(response), 404
+
+        job = job_response.json()[0]
+        job_description = job['description']
+        job_title = job['title']
+
+        results = []
+        import openai
+        client = openai.OpenAI(api_key=openai_key)
+
+        for transcript_id in transcript_ids:
+            try:
+                # Fetch transcript
+                transcript_response = requests.get(
+                    f"{supabase_url}/rest/v1/transcripts",
+                    headers={
+                        "apikey": supabase_key,
+                        "Authorization": f"Bearer {supabase_key}",
+                        "Content-Type": "application/json"
+                    },
+                    params={"id": f"eq.{transcript_id}", "select": "*"}
+                )
+
+                if transcript_response.status_code != 200 or not transcript_response.json():
+                    results.append({'transcript_id': transcript_id, 'success': False, 'error': 'Transcript not found'})
+                    continue
+
+                transcript_record = transcript_response.json()[0]
+                transcript_text = transcript_record.get('transcript', '')
+                candidate_name = transcript_record.get('candidate_name', 'Unknown')
+
+                if not transcript_text:
+                    results.append({'transcript_id': transcript_id, 'success': False, 'error': 'No transcript text'})
+                    continue
+
+                # Build comprehensive prompt
+                prompt = f"""You are a senior HR analyst and executive recruiter with 20+ years of experience. Conduct an exhaustive analysis of this interview transcript against the job description. Your analysis must be thorough, evidence-based, and include extensive direct quotes from the candidate.
+
+JOB DESCRIPTION:
+{job_description}
+
+INTERVIEW TRANSCRIPT:
+{transcript_text}
+
+ANALYSIS REQUIREMENTS:
+
+1. CANDIDATE IDENTIFICATION: Identify who is the interviewer vs candidate. Focus ONLY on candidate responses.
+
+2. STRENGTHS ANALYSIS (provide 5-8 strengths):
+   - Each strength must include a DIRECT QUOTE from the candidate as evidence
+   - Explain how this strength relates to the job requirements
+   - Rate the strength's relevance (high/medium/low)
+
+3. SKILLS & EXPERIENCE MATCH (provide 5-8 matching skills):
+   - Map specific candidate experiences to job requirements
+   - Include quotes showing depth of experience
+   - Note years of experience or proficiency level where mentioned
+
+4. CONCERNS & GAPS (provide 3-5 concerns):
+   - Identify missing skills or experience gaps
+   - Note any red flags or inconsistencies
+   - Include quotes that raised concerns (if applicable)
+
+5. COMMUNICATION ANALYSIS:
+   - Assess clarity, confidence, and articulation
+   - Note use of specific examples vs vague statements
+   - Evaluate storytelling ability (STAR method usage)
+
+6. CULTURAL FIT INDICATORS:
+   - Values alignment based on their responses
+   - Work style preferences mentioned
+   - Team collaboration indicators
+
+7. NOTABLE QUOTES (provide 8-12 significant quotes):
+   - Include the candidate's most impressive statements
+   - Include statements that reveal character/values
+   - Include technical depth demonstrations
+   - Include any concerning statements
+   - Each quote needs context explaining its significance
+
+8. COMPREHENSIVE SUMMARY:
+   - Overall assessment (4-5 paragraphs)
+   - Hiring recommendation with confidence level
+   - Suggested follow-up questions for next interview
+   - Salary/level appropriateness if discernible
+
+Provide your analysis in this exact JSON format:
+{{
+    "fit_score": <number 0-100>,
+    "fit_score_breakdown": {{
+        "skills_match": <0-100>,
+        "experience_match": <0-100>,
+        "communication": <0-100>,
+        "cultural_fit": <0-100>
+    }},
+    "strengths": [
+        {{"strength": "Description of strength", "evidence": "Direct quote from candidate", "relevance": "high/medium/low", "job_requirement": "Which requirement this addresses"}}
+    ],
+    "matching_skills": [
+        {{"skill": "Skill name", "experience_level": "years or proficiency", "evidence": "Quote demonstrating this skill", "job_match": "How it matches the JD"}}
+    ],
+    "concerns": [
+        {{"concern": "Description of concern", "severity": "high/medium/low", "evidence": "Quote or observation", "mitigation": "How this could be addressed"}}
+    ],
+    "communication_assessment": {{
+        "clarity": "Assessment of how clearly they communicate",
+        "confidence": "Assessment of confidence level",
+        "examples_quality": "Do they use specific examples or stay vague?",
+        "overall": "Overall communication rating"
+    }},
+    "cultural_indicators": {{
+        "work_style": "What their preferred work style seems to be",
+        "values": "Values they demonstrated",
+        "team_fit": "How they might fit with a team"
+    }},
+    "notable_quotes": [
+        {{"quote": "Exact quote from candidate", "context": "Why this quote is significant", "sentiment": "positive/negative/neutral"}}
+    ],
+    "summary": "Comprehensive 4-5 paragraph assessment including hiring recommendation, confidence level, and suggested follow-up questions",
+    "hiring_recommendation": "strong_yes/yes/maybe/no/strong_no",
+    "follow_up_questions": ["Question 1 to ask in next interview", "Question 2", "Question 3"]
+}}
+
+Return ONLY valid JSON, no additional text."""
+
+                ai_response = client.chat.completions.create(
+                    model="gpt-4o",
+                    messages=[
+                        {"role": "system", "content": "You are an expert HR analyst and executive recruiter. Provide exhaustive, evidence-based analysis with extensive direct quotes. Always respond with valid JSON only."},
+                        {"role": "user", "content": prompt}
+                    ],
+                    temperature=0.7,
+                    max_tokens=4000
+                )
+
+                result_text = ai_response.choices[0].message.content.strip()
+                if result_text.startswith('```'):
+                    result_text = result_text.split('```')[1]
+                    if result_text.startswith('json'):
+                        result_text = result_text[4:]
+                result_text = result_text.strip()
+
+                analysis = json.loads(result_text)
+
+                # Create NEW report record (don't modify transcript)
+                report_data = {
+                    'transcript_id': transcript_id,
+                    'candidate_name': candidate_name,
+                    'job_title': job_title,
+                    'transcript': transcript_text[:10000],
+                    'job_description': job_description[:5000],
+                    'fit_score': analysis.get('fit_score'),
+                    'strengths': json.dumps(analysis.get('strengths', [])),
+                    'matching_skills': json.dumps(analysis.get('matching_skills', [])),
+                    'concerns': json.dumps(analysis.get('concerns', [])),
+                    'notable_quotes': json.dumps(analysis.get('notable_quotes', [])),
+                    'summary': analysis.get('summary', ''),
+                    'full_response': json.dumps(analysis),
+                    'ip_address': request.remote_addr,
+                    'user_agent': request.headers.get('User-Agent', '')[:500]
+                }
+
+                db_insert = requests.post(
+                    f"{supabase_url}/rest/v1/interview_reports",
+                    headers={
+                        "apikey": supabase_key,
+                        "Authorization": f"Bearer {supabase_key}",
+                        "Content-Type": "application/json",
+                        "Prefer": "return=representation"
+                    },
+                    json=report_data
+                )
+
+                if db_insert.status_code in [200, 201]:
+                    saved = db_insert.json()
+                    report_id = saved[0]['id'] if saved else None
+                    results.append({
+                        'transcript_id': transcript_id,
+                        'success': True,
+                        'report_id': report_id,
+                        'candidate_name': candidate_name,
+                        'fit_score': analysis.get('fit_score')
+                    })
+                else:
+                    results.append({
+                        'transcript_id': transcript_id,
+                        'success': False,
+                        'error': 'Failed to save report'
+                    })
+
+            except Exception as e:
+                print(f"Error analyzing transcript {transcript_id}: {e}")
+                results.append({'transcript_id': transcript_id, 'success': False, 'error': str(e)})
+
+        response = jsonify({'results': results})
+        return add_cors_headers(response)
+
+    except Exception as e:
+        print(f"Error in analyze transcripts: {e}")
+        import traceback
+        traceback.print_exc()
+        response = jsonify({'error': str(e)})
+        return add_cors_headers(response), 500
+
+
 def get_user_metabolic_data(email):
     """Extract metabolic data from user's latest report"""
     try:
