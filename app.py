@@ -2730,8 +2730,8 @@ def batch_analyze():
                     results.append({'draft_id': draft_id, 'success': False, 'error': 'No transcript'})
                     continue
 
-                # Build prompt
-                prompt = f"""You are an expert HR analyst and interview coach. Analyze this interview transcript against the job description and provide a detailed candidate fit report.
+                # Build comprehensive prompt
+                prompt = f"""You are a senior HR analyst and executive recruiter with 20+ years of experience. Conduct an exhaustive analysis of this interview transcript against the job description. Your analysis must be thorough, evidence-based, and include extensive direct quotes from the candidate.
 
 JOB DESCRIPTION:
 {job_description}
@@ -2739,20 +2739,83 @@ JOB DESCRIPTION:
 INTERVIEW TRANSCRIPT:
 {transcript}
 
-INSTRUCTIONS:
-1. First, identify who is the interviewer vs the candidate (the candidate is the one answering questions, sharing their experience, etc.)
-2. Focus ONLY on what the candidate said - ignore interviewer questions
-3. Compare the candidate's responses against the job requirements
-4. Be objective and evidence-based - cite specific things the candidate said
+ANALYSIS REQUIREMENTS:
+
+1. CANDIDATE IDENTIFICATION: Identify who is the interviewer vs candidate. Focus ONLY on candidate responses.
+
+2. STRENGTHS ANALYSIS (provide 5-8 strengths):
+   - Each strength must include a DIRECT QUOTE from the candidate as evidence
+   - Explain how this strength relates to the job requirements
+   - Rate the strength's relevance (high/medium/low)
+
+3. SKILLS & EXPERIENCE MATCH (provide 5-8 matching skills):
+   - Map specific candidate experiences to job requirements
+   - Include quotes showing depth of experience
+   - Note years of experience or proficiency level where mentioned
+
+4. CONCERNS & GAPS (provide 3-5 concerns):
+   - Identify missing skills or experience gaps
+   - Note any red flags or inconsistencies
+   - Include quotes that raised concerns (if applicable)
+
+5. COMMUNICATION ANALYSIS:
+   - Assess clarity, confidence, and articulation
+   - Note use of specific examples vs vague statements
+   - Evaluate storytelling ability (STAR method usage)
+
+6. CULTURAL FIT INDICATORS:
+   - Values alignment based on their responses
+   - Work style preferences mentioned
+   - Team collaboration indicators
+
+7. NOTABLE QUOTES (provide 8-12 significant quotes):
+   - Include the candidate's most impressive statements
+   - Include statements that reveal character/values
+   - Include technical depth demonstrations
+   - Include any concerning statements
+   - Each quote needs context explaining its significance
+
+8. COMPREHENSIVE SUMMARY:
+   - Overall assessment (4-5 paragraphs)
+   - Hiring recommendation with confidence level
+   - Suggested follow-up questions for next interview
+   - Salary/level appropriateness if discernible
 
 Provide your analysis in this exact JSON format:
 {{
     "fit_score": <number 0-100>,
-    "strengths": ["Strength 1", "Strength 2", "Strength 3"],
-    "matching_skills": ["Skill 1", "Skill 2", "Skill 3"],
-    "concerns": ["Concern 1", "Concern 2"],
-    "notable_quotes": [{{"quote": "Quote text", "context": "Why significant"}}],
-    "summary": "2-3 paragraph summary."
+    "fit_score_breakdown": {{
+        "skills_match": <0-100>,
+        "experience_match": <0-100>,
+        "communication": <0-100>,
+        "cultural_fit": <0-100>
+    }},
+    "strengths": [
+        {{"strength": "Description of strength", "evidence": "Direct quote from candidate", "relevance": "high/medium/low", "job_requirement": "Which requirement this addresses"}}
+    ],
+    "matching_skills": [
+        {{"skill": "Skill name", "experience_level": "years or proficiency", "evidence": "Quote demonstrating this skill", "job_match": "How it matches the JD"}}
+    ],
+    "concerns": [
+        {{"concern": "Description of concern", "severity": "high/medium/low", "evidence": "Quote or observation", "mitigation": "How this could be addressed"}}
+    ],
+    "communication_assessment": {{
+        "clarity": "Assessment of how clearly they communicate",
+        "confidence": "Assessment of confidence level",
+        "examples_quality": "Do they use specific examples or stay vague?",
+        "overall": "Overall communication rating"
+    }},
+    "cultural_indicators": {{
+        "work_style": "What their preferred work style seems to be",
+        "values": "Values they demonstrated",
+        "team_fit": "How they might fit with a team"
+    }},
+    "notable_quotes": [
+        {{"quote": "Exact quote from candidate", "context": "Why this quote is significant", "sentiment": "positive/negative/neutral"}}
+    ],
+    "summary": "Comprehensive 4-5 paragraph assessment including hiring recommendation, confidence level, and suggested follow-up questions",
+    "hiring_recommendation": "strong_yes/yes/maybe/no/strong_no",
+    "follow_up_questions": ["Question 1 to ask in next interview", "Question 2", "Question 3"]
 }}
 
 Return ONLY valid JSON, no additional text."""
@@ -2760,11 +2823,11 @@ Return ONLY valid JSON, no additional text."""
                 ai_response = client.chat.completions.create(
                     model="gpt-4o",
                     messages=[
-                        {"role": "system", "content": "You are an expert HR analyst. Always respond with valid JSON only."},
+                        {"role": "system", "content": "You are an expert HR analyst and executive recruiter. Provide exhaustive, evidence-based analysis with extensive direct quotes. Always respond with valid JSON only."},
                         {"role": "user", "content": prompt}
                     ],
                     temperature=0.7,
-                    max_tokens=2000
+                    max_tokens=4000
                 )
 
                 result_text = ai_response.choices[0].message.content.strip()
