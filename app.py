@@ -31,13 +31,63 @@ app.config['UPLOAD_FOLDER'] = 'uploads'
 app.config['REPORTS_FOLDER'] = 'reports'
 app.config['MAX_CONTENT_LENGTH'] = 200 * 1024 * 1024  # 200MB max file size
 
-# Session configuration for better reliability
-app.config['SESSION_COOKIE_SECURE'] = os.getenv('FLASK_ENV') == 'production'
-app.config['SESSION_COOKIE_HTTPONLY'] = True
-app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
-app.config['PERMANENT_SESSION_LIFETIME'] = 86400  # 24 hours
+# HIPAA-Compliant Session Configuration
+app.config['SESSION_COOKIE_SECURE'] = True  # Always use HTTPS
+app.config['SESSION_COOKIE_HTTPONLY'] = True  # Prevent XSS access to cookies
+app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'  # CSRF protection
+app.config['PERMANENT_SESSION_LIFETIME'] = 900  # 15 minutes - HIPAA requirement
+app.config['SESSION_REFRESH_EACH_REQUEST'] = True  # Reset timeout on activity
+
+# HIPAA Security Headers
+@app.after_request
+def add_security_headers(response):
+    """Add HIPAA-required security headers to all responses"""
+    response.headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains'
+    response.headers['X-Content-Type-Options'] = 'nosniff'
+    response.headers['X-Frame-Options'] = 'DENY'
+    response.headers['X-XSS-Protection'] = '1; mode=block'
+    response.headers['Content-Security-Policy'] = "default-src 'self' https:; script-src 'self' 'unsafe-inline' https://js.stripe.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; frame-src https://js.stripe.com;"
+    response.headers['Referrer-Policy'] = 'strict-origin-when-cross-origin'
+    response.headers['Permissions-Policy'] = 'geolocation=(), microphone=(), camera=()'
+    return response
 
 ALLOWED_EXTENSIONS = {'pdf'}
+
+# HIPAA Audit Logging
+def log_phi_access(user_id, action, resource_type, resource_id=None, details=None):
+    """Log PHI access events for HIPAA compliance audit trail"""
+    try:
+        log_entry = {
+            'timestamp': datetime.utcnow().isoformat(),
+            'user_id': user_id,
+            'action': action,  # VIEW, CREATE, UPDATE, DELETE, DOWNLOAD, EXPORT
+            'resource_type': resource_type,  # report, test, profile
+            'resource_id': resource_id,
+            'ip_address': request.remote_addr if request else None,
+            'user_agent': request.user_agent.string if request else None,
+            'details': details
+        }
+        # Log to console (in production, send to secure logging service)
+        print(f"[HIPAA AUDIT] {json.dumps(log_entry)}")
+
+        # Store in Supabase audit_logs table if available
+        if SUPABASE_URL and SUPABASE_KEY:
+            try:
+                requests.post(
+                    f"{SUPABASE_REST_URL}/audit_logs",
+                    headers={
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': f'Bearer {SUPABASE_KEY}',
+                        'Content-Type': 'application/json',
+                        'Prefer': 'return=minimal'
+                    },
+                    json=log_entry,
+                    timeout=5
+                )
+            except:
+                pass  # Don't fail if audit logging fails
+    except Exception as e:
+        print(f"[HIPAA AUDIT ERROR] {e}")
 
 # Supabase configuration
 SUPABASE_URL = os.getenv('SUPABASE_URL')
