@@ -4,480 +4,432 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pricing - MetaboMax Pro</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif']
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            900: '#0c4a6e'
+                        },
+                        accent: {
+                            400: '#2dd4bf',
+                            500: '#14b8a6'
+                        }
+                    },
+                    boxShadow: {
+                        'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.1)',
+                        'glow': '0 0 40px rgba(14, 165, 233, 0.15)'
+                    }
+                }
+            }
+        }
+    </script>
+
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 2rem;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .header {
-            text-align: center;
-            color: white;
-            margin-bottom: 4rem;
-        }
-
-        .header h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-
-        .header p {
-            font-size: 1.3rem;
-            opacity: 0.95;
-        }
-
-        .pricing-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 2rem;
-            margin-bottom: 3rem;
-        }
-
-        .pricing-card {
-            background: rgba(255, 255, 255, 0.95);
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 3rem 2rem;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            transition: all 0.3s;
-            position: relative;
+            -webkit-backdrop-filter: blur(10px);
         }
-
-        .pricing-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
+        .gradient-icon {
+            background: linear-gradient(135deg, #0284c7 0%, #14b8a6 100%);
         }
-
-        .pricing-card.popular {
-            border: 3px solid #fbbf24;
-            transform: scale(1.05);
+        .gradient-bg {
+            background: linear-gradient(135deg, #0284c7 0%, #14b8a6 100%);
         }
-
-        .popular-badge {
-            position: absolute;
-            top: -15px;
-            right: 20px;
-            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
-            color: white;
-            padding: 0.5rem 1.5rem;
-            border-radius: 20px;
-            font-weight: 700;
-            font-size: 0.9rem;
+        .card-hover {
+            transition: all 0.3s ease;
         }
-
-        .plan-name {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #1e293b;
-            margin-bottom: 1rem;
-        }
-
-        .plan-price {
-            font-size: 3rem;
-            font-weight: 800;
-            color: #667eea;
-            margin-bottom: 0.5rem;
-        }
-
-        .plan-price small {
-            font-size: 1.2rem;
-            color: #64748b;
-            font-weight: 400;
-        }
-
-        .plan-description {
-            color: #64748b;
-            margin-bottom: 2rem;
-            font-size: 1rem;
-        }
-
-        .features-list {
-            list-style: none;
-            margin-bottom: 2rem;
-        }
-
-        .features-list li {
-            padding: 0.75rem 0;
-            color: #1e293b;
-            font-size: 0.95rem;
-            border-bottom: 1px solid #e2e8f0;
-        }
-
-        .features-list li:last-child {
-            border-bottom: none;
-        }
-
-        .features-list li:before {
-            content: "✓ ";
-            color: #10b981;
-            font-weight: bold;
-            margin-right: 0.5rem;
-        }
-
-        .btn {
-            width: 100%;
-            padding: 1rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            text-decoration: none;
-            display: block;
-            text-align: center;
-            transition: all 0.3s;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
-        }
-
-        .btn-secondary {
-            background: white;
-            color: #667eea;
-            border: 2px solid #667eea;
-        }
-
-        .btn-secondary:hover {
-            background: #f8fafc;
-        }
-
-        .comparison-section {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 3rem 2rem;
-            margin-top: 4rem;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-        }
-
-        .comparison-section h2 {
-            text-align: center;
-            margin-bottom: 2rem;
-            color: #1e293b;
-        }
-
-        .comparison-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .comparison-table th {
-            padding: 1rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            font-weight: 600;
-        }
-
-        .comparison-table td {
-            padding: 1rem;
-            text-align: center;
-            border-bottom: 1px solid #e2e8f0;
-        }
-
-        .comparison-table tr:nth-child(even) {
-            background: #f8fafc;
-        }
-
-        .check {
-            color: #10b981;
-            font-weight: bold;
-            font-size: 1.2rem;
-        }
-
-        .cross {
-            color: #ef4444;
-            font-weight: bold;
-            font-size: 1.2rem;
-        }
-
-        .back-link {
-            text-align: center;
-            margin-top: 2rem;
-        }
-
-        .back-link a {
-            color: white;
-            text-decoration: none;
-            font-size: 1.1rem;
-        }
-
-        .back-link a:hover {
-            text-decoration: underline;
-        }
-
-        @media (max-width: 768px) {
-            .header h1 {
-                font-size: 2rem;
-            }
-
-            .pricing-card.popular {
-                transform: scale(1);
-            }
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px -8px rgba(0, 0, 0, 0.15);
         }
     </style>
 </head>
-<body>
-    <div class="container">
-        <div class="header">
-            <img src="{{ url_for('static', filename='images/logo.jpg') }}" alt="MetaboMaxPro Logo" style="max-width: 400px; width: 100%; margin-bottom: 2rem; filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.5));">
-            <h1>Simple, Transparent Pricing</h1>
-            <p>Choose the plan that works best for you</p>
+<body class="font-sans bg-slate-50 text-slate-800 antialiased">
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 glass-nav shadow-soft">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <a href="{{ url_for('landing') }}" class="flex items-center space-x-2">
+                    <div class="w-8 h-8 rounded-lg gradient-icon flex items-center justify-center">
+                        <span class="text-white font-bold text-lg">M</span>
+                    </div>
+                    <span class="text-xl font-bold text-slate-900">MetaboMax Pro</span>
+                </a>
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="{{ url_for('landing') }}" class="text-slate-600 hover:text-brand-600 font-medium">Home</a>
+                    <a href="{{ url_for('login') }}" class="text-slate-600 hover:text-brand-600 font-medium">Login</a>
+                    <a href="{{ url_for('register') }}" class="bg-brand-500 hover:bg-brand-600 text-white px-5 py-2 rounded-full font-semibold transition-colors">
+                        Get Started
+                    </a>
+                </div>
+            </div>
         </div>
+    </nav>
 
-        <!-- AI Clarity Section -->
-        <div style="max-width: 1000px; margin: 0 auto 3rem auto; background: white; border-radius: 16px; padding: 2.5rem; box-shadow: 0 10px 40px rgba(0,0,0,0.2);">
-            <h2 style="text-align: center; color: #1e293b; margin-bottom: 2rem; font-size: 2rem;">📊 What's Included in Your Report</h2>
+    <!-- Header -->
+    <section class="pt-28 pb-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-4xl sm:text-5xl font-extrabold text-slate-900 mb-4">Simple, Transparent Pricing</h1>
+            <p class="text-xl text-slate-600 max-w-2xl mx-auto">Choose the plan that works best for you. Start free, upgrade anytime.</p>
+        </div>
+    </section>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
-                <div style="background: #f0fdf4; padding: 2rem; border-radius: 12px; border-left: 5px solid #10b981;">
-                    <h3 style="color: #065f46; margin: 0 0 1rem 0; font-size: 1.4rem;">
-                        ✅ Core Metabolic Data (No AI)
-                    </h3>
-                    <p style="color: #064e3b; margin-bottom: 1rem; font-weight: 600;">Industry-standard calculations - Always accurate</p>
-                    <ul style="margin: 0; padding-left: 1.5rem; color: #064e3b; line-height: 2;">
-                        <li>VO2 Max analysis</li>
-                        <li>Resting Metabolic Rate (RMR)</li>
-                        <li>Heart rate training zones</li>
-                        <li>Fat oxidation rates</li>
-                        <li>Lactate threshold</li>
-                        <li>Substrate utilization charts</li>
-                    </ul>
-                    <p style="margin-top: 1rem; color: #065f46; font-size: 0.95rem; font-style: italic;">
-                        <strong>Same medically-approved algorithms testing facilities use.</strong>
+    <!-- AI Clarity Section -->
+    <section class="pb-12">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-white rounded-2xl shadow-soft p-8">
+                <h2 class="text-2xl font-bold text-slate-900 text-center mb-8">
+                    <i class="fas fa-chart-bar text-brand-500 mr-2"></i>
+                    What's Included in Your Report
+                </h2>
+
+                <div class="grid md:grid-cols-2 gap-6 mb-6">
+                    <!-- Core Data -->
+                    <div class="bg-green-50 rounded-xl p-6 border-l-4 border-green-500">
+                        <h3 class="text-lg font-bold text-green-800 mb-2">
+                            <i class="fas fa-check-circle mr-2"></i>Core Metabolic Data (No AI)
+                        </h3>
+                        <p class="text-green-700 text-sm font-medium mb-4">Industry-standard calculations - Always accurate</p>
+                        <ul class="space-y-2 text-green-700 text-sm">
+                            <li class="flex items-center"><i class="fas fa-check mr-2 text-green-500"></i>VO2 Max analysis</li>
+                            <li class="flex items-center"><i class="fas fa-check mr-2 text-green-500"></i>Resting Metabolic Rate (RMR)</li>
+                            <li class="flex items-center"><i class="fas fa-check mr-2 text-green-500"></i>Heart rate training zones</li>
+                            <li class="flex items-center"><i class="fas fa-check mr-2 text-green-500"></i>Fat oxidation rates</li>
+                            <li class="flex items-center"><i class="fas fa-check mr-2 text-green-500"></i>Lactate threshold</li>
+                        </ul>
+                        <p class="text-green-800 text-xs mt-4 font-medium italic">Same medically-approved algorithms testing facilities use.</p>
+                    </div>
+
+                    <!-- AI Enhancements -->
+                    <div class="bg-blue-50 rounded-xl p-6 border-l-4 border-blue-500">
+                        <h3 class="text-lg font-bold text-blue-800 mb-2">
+                            <i class="fas fa-robot mr-2"></i>AI Enhancements (Optional)
+                        </h3>
+                        <p class="text-blue-700 text-sm font-medium mb-4">Personalized recommendations - Verify with professionals</p>
+                        <ul class="space-y-2 text-blue-700 text-sm">
+                            <li class="flex items-center"><i class="fas fa-sparkles mr-2 text-blue-500"></i>Supplement suggestions</li>
+                            <li class="flex items-center"><i class="fas fa-sparkles mr-2 text-blue-500"></i>Peptide therapy education</li>
+                            <li class="flex items-center"><i class="fas fa-sparkles mr-2 text-blue-500"></i>Training protocol recommendations</li>
+                            <li class="flex items-center"><i class="fas fa-sparkles mr-2 text-blue-500"></i>Nutrition timing strategies</li>
+                            <li class="flex items-center"><i class="fas fa-sparkles mr-2 text-blue-500"></i>Recovery optimization</li>
+                        </ul>
+                        <p class="text-blue-800 text-xs mt-4 font-medium italic">Discuss all AI recommendations with your healthcare provider.</p>
+                    </div>
+                </div>
+
+                <div class="bg-amber-50 border-l-4 border-amber-400 p-4 rounded-r-lg">
+                    <p class="text-amber-800 text-sm">
+                        <i class="fas fa-lightbulb mr-2 text-amber-500"></i>
+                        <strong>All plans include rock-solid core metabolic data.</strong> AI recommendations are optional enhancements that should be reviewed with healthcare professionals.
                     </p>
                 </div>
+            </div>
+        </div>
+    </section>
 
-                <div style="background: #eff6ff; padding: 2rem; border-radius: 12px; border-left: 5px solid #3b82f6;">
-                    <h3 style="color: #1e40af; margin: 0 0 1rem 0; font-size: 1.4rem;">
-                        🤖 AI Enhancements (Optional)
-                    </h3>
-                    <p style="color: #1e3a8a; margin-bottom: 1rem; font-weight: 600;">Personalized recommendations - Verify with professionals</p>
-                    <ul style="margin: 0; padding-left: 1.5rem; color: #1e3a8a; line-height: 2;">
-                        <li>Supplement suggestions</li>
-                        <li>Peptide therapy education</li>
-                        <li>Training protocol recommendations</li>
-                        <li>Nutrition timing strategies</li>
-                        <li>Recovery optimization</li>
-                        <li>Custom action plans</li>
+    <!-- Pricing Cards -->
+    <section class="pb-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+
+                <!-- Free Tier -->
+                <div class="bg-white rounded-2xl p-6 border-2 border-green-500 card-hover relative">
+                    <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-green-500 text-white px-4 py-1 rounded-full text-xs font-bold">
+                        TRY IT FREE
+                    </div>
+                    <div class="text-center pt-4 pb-6">
+                        <h3 class="text-xl font-bold text-slate-900 mb-2">Free Tier</h3>
+                        <div class="text-4xl font-extrabold text-slate-900">$0</div>
+                        <p class="text-slate-500 text-sm">forever</p>
+                    </div>
+                    <p class="text-slate-600 text-sm text-center mb-6">Try 2 professional reports - $350-500 value</p>
+                    <ul class="space-y-3 mb-6">
+                        <li class="flex items-center text-sm text-slate-700">
+                            <i class="fas fa-check text-green-500 mr-2"></i><strong>2 FREE basic reports</strong>
+                        </li>
+                        <li class="flex items-center text-sm text-slate-700">
+                            <i class="fas fa-check text-green-500 mr-2"></i>Upload unlimited PDFs
+                        </li>
+                        <li class="flex items-center text-sm text-slate-700">
+                            <i class="fas fa-check text-green-500 mr-2"></i>Cloud storage
+                        </li>
+                        <li class="flex items-center text-sm text-slate-700">
+                            <i class="fas fa-check text-green-500 mr-2"></i>VO2 Max analysis
+                        </li>
+                        <li class="flex items-center text-sm text-slate-700">
+                            <i class="fas fa-check text-green-500 mr-2"></i>Training zones
+                        </li>
+                        <li class="flex items-center text-sm text-slate-400">
+                            <i class="fas fa-times text-slate-300 mr-2"></i>No AI recommendations
+                        </li>
                     </ul>
-                    <p style="margin-top: 1rem; color: #1e40af; font-size: 0.95rem; font-style: italic;">
-                        <strong>Discuss all AI recommendations with your healthcare provider.</strong>
+                    <a href="{{ url_for('register') }}" class="block w-full text-center bg-green-500 hover:bg-green-600 text-white py-3 rounded-xl font-semibold transition-colors">
+                        Start Free
+                    </a>
+                </div>
+
+                <!-- Unlimited Basic - Popular -->
+                <div class="bg-white rounded-2xl p-6 border-2 border-brand-500 shadow-glow card-hover relative">
+                    <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-brand-500 text-white px-4 py-1 rounded-full text-xs font-bold">
+                        MOST POPULAR
+                    </div>
+                    <div class="text-center pt-4 pb-6">
+                        <h3 class="text-xl font-bold text-slate-900 mb-2">Unlimited Basic</h3>
+                        <div class="text-4xl font-extrabold text-slate-900">$69</div>
+                        <p class="text-slate-500 text-sm">one-time</p>
+                    </div>
+                    <p class="text-slate-600 text-sm text-center mb-6">Unlimited reports, no AI - 73% savings</p>
+                    <ul class="space-y-3 mb-6">
+                        <li class="flex items-center text-sm text-slate-700">
+                            <i class="fas fa-check text-green-500 mr-2"></i><strong>Unlimited basic reports</strong>
+                        </li>
+                        <li class="flex items-center text-sm text-slate-700">
+                            <i class="fas fa-check text-green-500 mr-2"></i>Everything in Free tier
+                        </li>
+                        <li class="flex items-center text-sm text-slate-700">
+                            <i class="fas fa-check text-green-500 mr-2"></i>Generate reports forever
+                        </li>
+                        <li class="flex items-center text-sm text-slate-700">
+                            <i class="fas fa-check text-green-500 mr-2"></i>Perfect for quarterly testing
+                        </li>
+                        <li class="flex items-center text-sm text-slate-700">
+                            <i class="fas fa-check text-green-500 mr-2"></i>PDF export
+                        </li>
+                        <li class="flex items-center text-sm text-slate-400">
+                            <i class="fas fa-times text-slate-300 mr-2"></i>No AI recommendations
+                        </li>
+                    </ul>
+                    <button onclick="handlePurchase('unlimited_basic')" class="block w-full text-center bg-brand-500 hover:bg-brand-600 text-white py-3 rounded-xl font-semibold transition-colors">
+                        Buy Now - $69
+                    </button>
+                    <p class="text-center text-xs text-slate-500 mt-3">vs $175-250 per report at facilities</p>
+                </div>
+
+                <!-- AI Enhanced -->
+                <div class="bg-white rounded-2xl p-6 border-2 border-purple-500 card-hover relative">
+                    <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-purple-500 text-white px-4 py-1 rounded-full text-xs font-bold">
+                        BEST FOR OPTIMIZATION
+                    </div>
+                    <div class="text-center pt-4 pb-6">
+                        <h3 class="text-xl font-bold text-slate-900 mb-2">AI-Enhanced</h3>
+                        <div class="text-4xl font-extrabold text-slate-900">$99</div>
+                        <p class="text-slate-500 text-sm">one-time</p>
+                    </div>
+                    <p class="text-slate-600 text-sm text-center mb-6">Unlimited basic + 10 AI enhancements</p>
+                    <ul class="space-y-3 mb-6">
+                        <li class="flex items-center text-sm text-slate-700">
+                            <i class="fas fa-check text-purple-500 mr-2"></i><strong>Unlimited basic reports</strong>
+                        </li>
+                        <li class="flex items-center text-sm text-slate-700">
+                            <i class="fas fa-check text-purple-500 mr-2"></i><strong>10 AI recommendation credits</strong>
+                        </li>
+                        <li class="flex items-center text-sm text-slate-700">
+                            <i class="fas fa-check text-purple-500 mr-2"></i>Supplement suggestions
+                        </li>
+                        <li class="flex items-center text-sm text-slate-700">
+                            <i class="fas fa-check text-purple-500 mr-2"></i>Peptide protocols
+                        </li>
+                        <li class="flex items-center text-sm text-slate-700">
+                            <i class="fas fa-check text-purple-500 mr-2"></i>Training plans
+                        </li>
+                        <li class="flex items-center text-sm text-slate-700">
+                            <i class="fas fa-check text-purple-500 mr-2"></i>Nutrition strategies
+                        </li>
+                    </ul>
+                    <button onclick="handlePurchase('ai_package')" class="block w-full text-center bg-purple-500 hover:bg-purple-600 text-white py-3 rounded-xl font-semibold transition-colors">
+                        Buy Now - $99
+                    </button>
+                </div>
+
+                <!-- Monthly Subscription -->
+                <div class="bg-slate-900 rounded-2xl p-6 card-hover relative">
+                    <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-accent-500 text-white px-4 py-1 rounded-full text-xs font-bold">
+                        UNLIMITED EVERYTHING
+                    </div>
+                    <div class="text-center pt-4 pb-6">
+                        <h3 class="text-xl font-bold text-white mb-2">Monthly Pro</h3>
+                        <div class="text-4xl font-extrabold text-white">$39</div>
+                        <p class="text-slate-400 text-sm">/month</p>
+                    </div>
+                    <p class="text-slate-400 text-sm text-center mb-6">Best value for monthly testing</p>
+                    <ul class="space-y-3 mb-6">
+                        <li class="flex items-center text-sm text-slate-300">
+                            <i class="fas fa-check text-accent-400 mr-2"></i><strong>Unlimited basic reports</strong>
+                        </li>
+                        <li class="flex items-center text-sm text-slate-300">
+                            <i class="fas fa-check text-accent-400 mr-2"></i><strong>Unlimited AI recommendations</strong>
+                        </li>
+                        <li class="flex items-center text-sm text-slate-300">
+                            <i class="fas fa-check text-accent-400 mr-2"></i>Progress tracking
+                        </li>
+                        <li class="flex items-center text-sm text-slate-300">
+                            <i class="fas fa-check text-accent-400 mr-2"></i>Trend analysis
+                        </li>
+                        <li class="flex items-center text-sm text-slate-300">
+                            <i class="fas fa-check text-accent-400 mr-2"></i>Priority support
+                        </li>
+                        <li class="flex items-center text-sm text-slate-300">
+                            <i class="fas fa-check text-accent-400 mr-2"></i>Cancel anytime
+                        </li>
+                    </ul>
+                    <button onclick="handlePurchase('subscription')" class="block w-full text-center bg-accent-500 hover:bg-accent-400 text-white py-3 rounded-xl font-semibold transition-colors">
+                        Subscribe - $39/mo
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Progress Tracking Explainer -->
+    <section class="pb-20">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-white rounded-2xl shadow-soft p-8">
+                <h2 class="text-2xl font-bold text-slate-900 text-center mb-2">
+                    <i class="fas fa-chart-line text-brand-500 mr-2"></i>
+                    Why Choose the Monthly Plan?
+                </h2>
+                <p class="text-slate-600 text-center mb-8">Get more than just reports — track your metabolic improvements over time</p>
+
+                <div class="bg-brand-50 rounded-xl p-6 mb-6">
+                    <h3 class="text-lg font-bold text-brand-700 mb-4">Automatic Progress Analysis Reports</h3>
+                    <p class="text-slate-600 mb-4">With cloud storage, our system can generate comprehensive progress reports that show:</p>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <ul class="space-y-2 text-sm text-slate-700">
+                            <li class="flex items-start"><i class="fas fa-arrow-trend-up text-brand-500 mr-2 mt-1"></i><strong>VO2 Max Changes:</strong> Track cardiovascular fitness week-by-week</li>
+                            <li class="flex items-start"><i class="fas fa-fire text-brand-500 mr-2 mt-1"></i><strong>Fat Oxidation Trends:</strong> See metabolic efficiency improvements</li>
+                            <li class="flex items-start"><i class="fas fa-bolt text-brand-500 mr-2 mt-1"></i><strong>RMR Changes:</strong> Monitor baseline calorie burn</li>
+                        </ul>
+                        <ul class="space-y-2 text-sm text-slate-700">
+                            <li class="flex items-start"><i class="fas fa-heart-pulse text-brand-500 mr-2 mt-1"></i><strong>Heart Rate Trends:</strong> Observe recovery improvements</li>
+                            <li class="flex items-start"><i class="fas fa-hourglass-half text-brand-500 mr-2 mt-1"></i><strong>Biological Age:</strong> Watch your bio age decrease</li>
+                            <li class="flex items-start"><i class="fas fa-code-compare text-brand-500 mr-2 mt-1"></i><strong>Custom Comparisons:</strong> Compare any two tests</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="bg-green-50 border-l-4 border-green-500 p-4 rounded-r-lg">
+                    <p class="text-green-800 text-sm">
+                        <i class="fas fa-lightbulb mr-2 text-green-500"></i>
+                        <strong>Example:</strong> After 12 weeks of training, see exactly how your VO2 Max increased from 42 to 48 ml/kg/min, how your fat burning zone expanded, and how your biological age dropped by 3 years.
                     </p>
                 </div>
             </div>
+        </div>
+    </section>
 
-            <div style="background: #fef9c3; border-left: 4px solid #eab308; padding: 1.5rem; border-radius: 8px;">
-                <p style="margin: 0; color: #713f12; line-height: 1.7;">
-                    💡 <strong>All plans include rock-solid core metabolic data.</strong> The AI recommendations are optional enhancements to help you maximize your results—but they should always be reviewed with healthcare professionals experienced in VO2 max testing and metabolic optimization.
-                </p>
+    <!-- Comparison Table -->
+    <section class="pb-20">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-white rounded-2xl shadow-soft overflow-hidden">
+                <div class="p-8 pb-4">
+                    <h2 class="text-2xl font-bold text-slate-900 text-center">How We Compare to Testing Centers</h2>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead>
+                            <tr class="gradient-bg text-white">
+                                <th class="py-4 px-6 text-left font-semibold">Feature</th>
+                                <th class="py-4 px-6 text-center font-semibold">Testing Centers</th>
+                                <th class="py-4 px-6 text-center font-semibold">One-Time ($69)</th>
+                                <th class="py-4 px-6 text-center font-semibold">Monthly ($39)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100">
+                            <tr class="hover:bg-slate-50">
+                                <td class="py-4 px-6 font-medium text-slate-700">Price</td>
+                                <td class="py-4 px-6 text-center text-slate-500">$175-250</td>
+                                <td class="py-4 px-6 text-center text-brand-600 font-bold">$69</td>
+                                <td class="py-4 px-6 text-center text-brand-600 font-bold">$39/mo</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50 bg-slate-50">
+                                <td class="py-4 px-6 font-medium text-slate-700">Number of Reports</td>
+                                <td class="py-4 px-6 text-center text-slate-500">1 per payment</td>
+                                <td class="py-4 px-6 text-center text-slate-700">Unlimited</td>
+                                <td class="py-4 px-6 text-center font-bold text-brand-600">Unlimited</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50">
+                                <td class="py-4 px-6 font-medium text-slate-700">Delivery Time</td>
+                                <td class="py-4 px-6 text-center text-slate-500">1-2 weeks</td>
+                                <td class="py-4 px-6 text-center"><span class="bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs font-medium">Minutes</span></td>
+                                <td class="py-4 px-6 text-center"><span class="bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs font-medium">Minutes</span></td>
+                            </tr>
+                            <tr class="hover:bg-slate-50 bg-slate-50">
+                                <td class="py-4 px-6 font-medium text-slate-700">Cloud Storage</td>
+                                <td class="py-4 px-6 text-center"><i class="fas fa-times text-red-400"></i></td>
+                                <td class="py-4 px-6 text-center"><i class="fas fa-check text-green-500"></i></td>
+                                <td class="py-4 px-6 text-center"><i class="fas fa-check text-green-500"></i></td>
+                            </tr>
+                            <tr class="hover:bg-slate-50">
+                                <td class="py-4 px-6 font-medium text-slate-700">Progress Tracking</td>
+                                <td class="py-4 px-6 text-center"><i class="fas fa-times text-red-400"></i></td>
+                                <td class="py-4 px-6 text-center"><i class="fas fa-check text-green-500"></i></td>
+                                <td class="py-4 px-6 text-center"><i class="fas fa-check text-green-500"></i></td>
+                            </tr>
+                            <tr class="hover:bg-slate-50 bg-slate-50">
+                                <td class="py-4 px-6 font-medium text-slate-700">AI Recommendations</td>
+                                <td class="py-4 px-6 text-center"><i class="fas fa-times text-red-400"></i></td>
+                                <td class="py-4 px-6 text-center"><i class="fas fa-times text-red-400"></i></td>
+                                <td class="py-4 px-6 text-center"><span class="bg-purple-100 text-purple-700 px-2 py-1 rounded-full text-xs font-medium">Unlimited</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
+    </section>
 
-        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-bottom: 3rem;">
-            <!-- FREE Tier -->
-            <div class="pricing-card" style="background: rgba(255, 255, 255, 0.95); border: 2px solid #10b981;">
-                <div style="background: #10b981; color: white; padding: 0.5rem; text-align: center; font-weight: 600; font-size: 0.9rem; margin: -1rem -1rem 1rem -1rem;">
-                    TRY IT FREE
-                </div>
-                <div class="plan-name">Free Tier</div>
-                <div class="plan-price">
-                    $0
-                    <small>forever</small>
-                </div>
-                <div class="plan-description">Try 2 professional reports - $350-500 value</div>
-                <ul class="features-list">
-                    <li><strong>2 FREE basic reports</strong></li>
-                    <li>Upload unlimited PDFs</li>
-                    <li>Cloud storage</li>
-                    <li>VO2 Max analysis</li>
-                    <li>RMR calculations</li>
-                    <li>Training zones</li>
-                    <li>PDF export</li>
-                    <li>❌ No AI</li>
-                </ul>
-                <a href="{{ url_for('register') }}" class="btn" style="background: #10b981;">Start Free</a>
-            </div>
+    <!-- Back Link -->
+    <section class="pb-12">
+        <div class="text-center">
+            <a href="{{ url_for('landing') }}" class="text-slate-600 hover:text-brand-600 font-medium">
+                <i class="fas fa-arrow-left mr-2"></i>Back to Home
+            </a>
+        </div>
+    </section>
 
-            <!-- $69 Unlimited Basic -->
-            <div class="pricing-card popular">
-                <div class="popular-badge">MOST POPULAR</div>
-                <div class="plan-name">Unlimited Basic</div>
-                <div class="plan-price">
-                    $69
-                    <small>one-time</small>
+    <!-- Footer -->
+    <footer class="bg-slate-900 py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="flex items-center space-x-2 mb-4 md:mb-0">
+                    <div class="w-6 h-6 rounded gradient-icon flex items-center justify-center">
+                        <span class="text-white font-bold text-sm">M</span>
+                    </div>
+                    <span class="text-white font-semibold">MetaboMax Pro</span>
                 </div>
-                <div class="plan-description">Unlimited reports, no AI - 73% savings</div>
-                <ul class="features-list">
-                    <li><strong>Unlimited basic reports</strong></li>
-                    <li>Everything in Free tier</li>
-                    <li>Generate reports forever</li>
-                    <li>Perfect for quarterly testing</li>
-                    <li>Cloud storage</li>
-                    <li>PDF export</li>
-                    <li>❌ No AI</li>
-                </ul>
-                <button class="btn" onclick="handlePurchase('unlimited_basic')">Buy Now - $69</button>
-                <p style="text-align: center; margin-top: 1rem; font-size: 0.9rem; color: #64748b;">vs $175-250 per report at facilities</p>
-            </div>
-
-            <!-- $99 AI-Enhanced -->
-            <div class="pricing-card" style="border: 2px solid #8b5cf6;">
-                <div style="background: #8b5cf6; color: white; padding: 0.5rem; text-align: center; font-weight: 600; font-size: 0.9rem; margin: -1rem -1rem 1rem -1rem;">
-                    BEST FOR OPTIMIZATION
-                </div>
-                <div class="plan-name">AI-Enhanced</div>
-                <div class="plan-price">
-                    $99
-                    <small>one-time</small>
-                </div>
-                <div class="plan-description">Unlimited basic + 10 AI enhancements with customization</div>
-                <ul class="features-list">
-                    <li><strong>Unlimited basic reports</strong></li>
-                    <li><strong>10 AI recommendation credits</strong></li>
-                    <li><strong>AI customization controls</strong></li>
-                    <li>Supplement suggestions</li>
-                    <li>Peptide protocols</li>
-                    <li>Training plans</li>
-                    <li>Nutrition strategies</li>
-                    <li>Recovery optimization</li>
-                </ul>
-                <button class="btn" onclick="handlePurchase('ai_package')" style="background: #8b5cf6;">Buy Now - $99</button>
-            </div>
-
-            <!-- $39/month Subscription -->
-            <div class="pricing-card" style="border: 2px solid #3b82f6;">
-                <div style="background: #3b82f6; color: white; padding: 0.5rem; text-align: center; font-weight: 600; font-size: 0.9rem; margin: -1rem -1rem 1rem -1rem;">
-                    UNLIMITED EVERYTHING
-                </div>
-                <div class="plan-name">Monthly Subscription</div>
-                <div class="plan-price">
-                    $39
-                    <small>/month</small>
-                </div>
-                <div class="plan-description">Best value for monthly testing</div>
-                <ul class="features-list">
-                    <li><strong>Unlimited basic reports</strong></li>
-                    <li><strong>Unlimited AI recommendations</strong></li>
-                    <li><strong>AI customization controls</strong></li>
-                    <li>Progress tracking</li>
-                    <li>Trend analysis</li>
-                    <li>Compare any tests</li>
-                    <li>Priority support</li>
-                    <li>Cancel anytime</li>
-                </ul>
-                <button class="btn" onclick="handlePurchase('subscription')">Subscribe - $39/month</button>
+                <p class="text-slate-500 text-sm">&copy; 2025 MetaboMax Pro. All rights reserved.</p>
             </div>
         </div>
-
-        <!-- Progress Tracking Explainer -->
-        <div class="comparison-section" style="margin-top: 3rem;">
-            <h2>📈 Why Choose the Monthly Plan?</h2>
-            <p style="font-size: 1.1rem; text-align: center; margin-bottom: 2rem; color: #475569;">
-                Get more than just reports — track your metabolic improvements over time
-            </p>
-
-            <div style="background: #eff6ff; padding: 2rem; border-radius: 12px; margin: 2rem 0;">
-                <h3 style="color: #667eea; margin-bottom: 1rem;">Automatic Progress Analysis Reports</h3>
-                <p style="margin-bottom: 1rem;">With cloud storage, our system can generate comprehensive progress reports that show:</p>
-                <ul style="margin-left: 2rem; margin-top: 1rem;">
-                    <li><strong>VO2 Max Changes:</strong> Track your cardiovascular fitness improvements week-by-week or month-by-month</li>
-                    <li><strong>Fat Oxidation Trends:</strong> See how your metabolic efficiency is improving with training</li>
-                    <li><strong>Resting Metabolic Rate:</strong> Monitor changes in your baseline calorie burn</li>
-                    <li><strong>Heart Rate Trends:</strong> Observe resting HR improvements and recovery rate changes</li>
-                    <li><strong>Biological Age:</strong> Watch your biological age decrease as your fitness improves</li>
-                    <li><strong>Custom Comparisons:</strong> Compare any two tests (3 months apart, 6 months, 1 year, etc.)</li>
-                </ul>
-
-                <div style="background: white; padding: 1.5rem; margin-top: 1.5rem; border-radius: 8px; border-left: 4px solid #10b981;">
-                    <p style="margin: 0;"><strong>💡 Example:</strong> After 12 weeks of training, see exactly how your VO2 Max increased from 42 to 48 ml/kg/min, how your fat burning zone expanded, and how your biological age dropped by 3 years. These insights are invaluable for athletes, coaches, and fitness enthusiasts serious about tracking results.</p>
-                </div>
-            </div>
-
-            <p style="text-align: center; font-size: 1rem; color: #64748b; margin-top: 1rem;">
-                <em>Progress tracking requires at least 2 stored tests. The one-time $69 plan gives you one report with no storage or comparison features.</em>
-            </p>
-        </div>
-
-        <!-- Comparison Section -->
-        <div class="comparison-section">
-            <h2>How We Compare to Testing Centers</h2>
-            <table class="comparison-table">
-                <thead>
-                    <tr>
-                        <th>Feature</th>
-                        <th>Testing Centers</th>
-                        <th>MetaboMax Pro (One-Time)</th>
-                        <th>MetaboMax Pro (Monthly)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><strong>Price</strong></td>
-                        <td>$175-250</td>
-                        <td><strong>$69</strong></td>
-                        <td><strong>$39/mo</strong></td>
-                    </tr>
-                    <tr>
-                        <td><strong>Number of Reports</strong></td>
-                        <td>1 per payment</td>
-                        <td>1</td>
-                        <td><strong>Unlimited</strong></td>
-                    </tr>
-                    <tr>
-                        <td><strong>Delivery Time</strong></td>
-                        <td>1-2 weeks</td>
-                        <td><strong>Minutes</strong></td>
-                        <td><strong>Minutes</strong></td>
-                    </tr>
-                    <tr>
-                        <td><strong>Cloud Storage</strong></td>
-                        <td><span class="cross">✗</span></td>
-                        <td><span class="cross">✗</span></td>
-                        <td><span class="check">✓</span></td>
-                    </tr>
-                    <tr>
-                        <td><strong>Progress Tracking</strong></td>
-                        <td><span class="cross">✗</span></td>
-                        <td><span class="cross">✗</span></td>
-                        <td><span class="check">✓</span></td>
-                    </tr>
-                    <tr>
-                        <td><strong>Works with Any System</strong></td>
-                        <td><span class="cross">✗</span></td>
-                        <td><span class="check">✓</span></td>
-                        <td><span class="check">✓</span></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <div class="back-link">
-            <a href="{{ url_for('landing') }}">← Back to Home</a>
-        </div>
-    </div>
+    </footer>
 
     <script>
         async function handlePurchase(planType) {
-            // Check if user is logged in by checking if we're on the pricing page (not redirected)
             {% if session.get('user') %}
-                // User is logged in, proceed with Stripe checkout
                 try {
                     const response = await fetch('/create-checkout-session', {
                         method: 'POST',
@@ -492,10 +444,8 @@
                     const data = await response.json();
 
                     if (data.checkout_url) {
-                        // Redirect to Stripe checkout
                         window.location.href = data.checkout_url;
                     } else if (data.error) {
-                        // Show specific error message from server
                         console.error('Checkout error:', data.error);
                         alert('Error: ' + data.error);
                     } else {
@@ -506,7 +456,6 @@
                     alert('An error occurred. Please try again. Details: ' + error.message);
                 }
             {% else %}
-                // User is not logged in, redirect to registration
                 window.location.href = '{{ url_for("register") }}';
             {% endif %}
         }

@@ -1,0 +1,50 @@
+# Git
+.git
+.gitignore
+
+# Python
+__pycache__
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+ENV/
+env/
+.venv/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Environment files (secrets should come from AWS Secrets Manager)
+.env
+.env.*
+!.env.example
+
+# Local development files
+*.log
+*.sqlite
+*.db
+
+# Uploads and reports (will use S3)
+uploads/
+reports/
+*.pdf
+
+# Documentation
+*.md
+!README.md
+
+# Backup folders
+backup_*/
+
+# macOS
+.DS_Store

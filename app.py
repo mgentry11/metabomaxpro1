@@ -3935,6 +3935,636 @@ def save_recommendation_to_db(email, subject, recommendations):
     except Exception as e:
         print(f"Error saving recommendation: {e}")
 
+# =============================================================================
+# INTERVIEW ANALYZER API ENDPOINTS
+# =============================================================================
+
+@app.route('/api/job-descriptions', methods=['GET'])
+@login_required
+def get_job_descriptions():
+    """Get all job descriptions for the current user"""
+    user_id = session['user']['id']
+    try:
+        response = http_session.get(
+            f"{SUPABASE_REST_URL}/job_descriptions?user_id=eq.{user_id}&order=created_at.desc",
+            headers=get_supabase_headers()
+        )
+        if response.ok:
+            jobs = response.json()
+            # Get transcript and report counts for each job
+            for job in jobs:
+                # Count transcripts
+                t_resp = http_session.get(
+                    f"{SUPABASE_REST_URL}/interview_transcripts?job_id=eq.{job['id']}&select=id",
+                    headers=get_supabase_headers()
+                )
+                job['transcript_count'] = len(t_resp.json()) if t_resp.ok else 0
+                # Count reports
+                r_resp = http_session.get(
+                    f"{SUPABASE_REST_URL}/interview_reports?job_id=eq.{job['id']}&select=id",
+                    headers=get_supabase_headers()
+                )
+                job['report_count'] = len(r_resp.json()) if r_resp.ok else 0
+            return jsonify({'jobs': jobs})
+        return jsonify({'error': 'Failed to fetch jobs'}), 500
+    except Exception as e:
+        print(f"[GET JOBS] Error: {e}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/job-descriptions', methods=['POST'])
+@login_required
+def create_job_description():
+    """Create a new job description"""
+    user_id = session['user']['id']
+    data = request.get_json()
+
+    if not data.get('title') or not data.get('description'):
+        return jsonify({'error': 'Title and description are required'}), 400
+
+    try:
+        response = http_session.post(
+            f"{SUPABASE_REST_URL}/job_descriptions",
+            headers=get_supabase_headers(),
+            json={
+                'user_id': user_id,
+                'title': data['title'],
+                'company': data.get('company', ''),
+                'description': data['description']
+            }
+        )
+        if response.ok:
+            return jsonify({'success': True, 'job': response.json()[0]})
+        return jsonify({'error': 'Failed to create job'}), 500
+    except Exception as e:
+        print(f"[CREATE JOB] Error: {e}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/job-descriptions/<job_id>', methods=['GET'])
+@login_required
+def get_job_description(job_id):
+    """Get a specific job description"""
+    user_id = session['user']['id']
+    try:
+        response = http_session.get(
+            f"{SUPABASE_REST_URL}/job_descriptions?id=eq.{job_id}&user_id=eq.{user_id}",
+            headers=get_supabase_headers()
+        )
+        if response.ok and response.json():
+            return jsonify({'job': response.json()[0]})
+        return jsonify({'error': 'Job not found'}), 404
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/job-descriptions/<job_id>', methods=['DELETE'])
+@login_required
+def delete_job_description(job_id):
+    """Delete a job description (cascades to transcripts and reports)"""
+    user_id = session['user']['id']
+    try:
+        # Verify ownership first
+        check = http_session.get(
+            f"{SUPABASE_REST_URL}/job_descriptions?id=eq.{job_id}&user_id=eq.{user_id}&select=id",
+            headers=get_supabase_headers()
+        )
+        if not check.ok or not check.json():
+            return jsonify({'error': 'Job not found or access denied'}), 404
+
+        response = http_session.delete(
+            f"{SUPABASE_REST_URL}/job_descriptions?id=eq.{job_id}&user_id=eq.{user_id}",
+            headers=get_supabase_headers()
+        )
+        if response.ok or response.status_code == 204:
+            return jsonify({'success': True})
+        return jsonify({'error': 'Failed to delete job'}), 500
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/job-descriptions/<job_id>/transcripts', methods=['GET'])
+@login_required
+def get_job_transcripts(job_id):
+    """Get all transcripts for a specific job"""
+    user_id = session['user']['id']
+    try:
+        response = http_session.get(
+            f"{SUPABASE_REST_URL}/interview_transcripts?job_id=eq.{job_id}&user_id=eq.{user_id}&order=created_at.desc",
+            headers=get_supabase_headers()
+        )
+        if response.ok:
+            return jsonify({'transcripts': response.json()})
+        return jsonify({'error': 'Failed to fetch transcripts'}), 500
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/job-descriptions/<job_id>/reports', methods=['GET'])
+@login_required
+def get_job_reports(job_id):
+    """Get all reports for a specific job"""
+    user_id = session['user']['id']
+    try:
+        response = http_session.get(
+            f"{SUPABASE_REST_URL}/interview_reports?job_id=eq.{job_id}&user_id=eq.{user_id}&order=created_at.desc",
+            headers=get_supabase_headers()
+        )
+        if response.ok:
+            return jsonify({'reports': response.json()})
+        return jsonify({'error': 'Failed to fetch reports'}), 500
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/transcripts', methods=['POST'])
+@login_required
+def create_transcript():
+    """Create a new transcript (must be linked to a job)"""
+    user_id = session['user']['id']
+    data = request.get_json()
+
+    if not data.get('job_id'):
+        return jsonify({'error': 'job_id is required'}), 400
+    if not data.get('candidate_name') or not data.get('transcript'):
+        return jsonify({'error': 'candidate_name and transcript are required'}), 400
+
+    try:
+        response = http_session.post(
+            f"{SUPABASE_REST_URL}/interview_transcripts",
+            headers=get_supabase_headers(),
+            json={
+                'user_id': user_id,
+                'job_id': data['job_id'],
+                'candidate_name': data['candidate_name'],
+                'transcript': data['transcript'],
+                'resume': data.get('resume'),
+                'source': data.get('source', 'paste'),
+                'filename': data.get('filename')
+            }
+        )
+        if response.ok:
+            return jsonify({'success': True, 'transcript': response.json()[0]})
+        return jsonify({'error': 'Failed to create transcript'}), 500
+    except Exception as e:
+        print(f"[CREATE TRANSCRIPT] Error: {e}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/transcripts/<transcript_id>', methods=['DELETE'])
+@login_required
+def delete_transcript(transcript_id):
+    """Delete a transcript"""
+    user_id = session['user']['id']
+    try:
+        response = http_session.delete(
+            f"{SUPABASE_REST_URL}/interview_transcripts?id=eq.{transcript_id}&user_id=eq.{user_id}",
+            headers=get_supabase_headers()
+        )
+        if response.ok or response.status_code == 204:
+            return jsonify({'success': True})
+        return jsonify({'error': 'Failed to delete transcript'}), 500
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/interview-reports/<report_id>', methods=['GET'])
+@login_required
+def get_interview_report(report_id):
+    """Get a specific interview report"""
+    user_id = session['user']['id']
+    try:
+        response = http_session.get(
+            f"{SUPABASE_REST_URL}/interview_reports?id=eq.{report_id}&user_id=eq.{user_id}",
+            headers=get_supabase_headers()
+        )
+        if response.ok and response.json():
+            return jsonify(response.json()[0])
+        return jsonify({'error': 'Report not found'}), 404
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/interview-reports/<report_id>', methods=['PATCH'])
+@login_required
+def update_interview_report(report_id):
+    """Update an interview report (candidate_name, job_title)"""
+    user_id = session['user']['id']
+    data = request.get_json()
+
+    allowed_fields = ['candidate_name', 'job_title']
+    update_data = {k: v for k, v in data.items() if k in allowed_fields}
+
+    if not update_data:
+        return jsonify({'error': 'No valid fields to update'}), 400
+
+    try:
+        response = http_session.patch(
+            f"{SUPABASE_REST_URL}/interview_reports?id=eq.{report_id}&user_id=eq.{user_id}",
+            headers=get_supabase_headers(),
+            json=update_data
+        )
+        if response.ok:
+            return jsonify({'success': True})
+        return jsonify({'error': 'Failed to update report'}), 500
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/interview-reports/<report_id>', methods=['DELETE'])
+@login_required
+def delete_interview_report(report_id):
+    """Delete an interview report"""
+    user_id = session['user']['id']
+    try:
+        response = http_session.delete(
+            f"{SUPABASE_REST_URL}/interview_reports?id=eq.{report_id}&user_id=eq.{user_id}",
+            headers=get_supabase_headers()
+        )
+        if response.ok or response.status_code == 204:
+            return jsonify({'success': True})
+        return jsonify({'error': 'Failed to delete report'}), 500
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/analyze-transcripts', methods=['POST'])
+@login_required
+def analyze_transcripts():
+    """Analyze transcripts against a job description using AI"""
+    user_id = session['user']['id']
+    data = request.get_json()
+
+    job_id = data.get('job_id')
+    transcript_ids = data.get('transcript_ids', [])
+
+    if not job_id or not transcript_ids:
+        return jsonify({'error': 'job_id and transcript_ids are required'}), 400
+
+    try:
+        # Get job description
+        job_resp = http_session.get(
+            f"{SUPABASE_REST_URL}/job_descriptions?id=eq.{job_id}&user_id=eq.{user_id}",
+            headers=get_supabase_headers()
+        )
+        if not job_resp.ok or not job_resp.json():
+            return jsonify({'error': 'Job not found'}), 404
+        job = job_resp.json()[0]
+
+        results = []
+        for transcript_id in transcript_ids:
+            try:
+                # Get transcript
+                t_resp = http_session.get(
+                    f"{SUPABASE_REST_URL}/interview_transcripts?id=eq.{transcript_id}&user_id=eq.{user_id}",
+                    headers=get_supabase_headers()
+                )
+                if not t_resp.ok or not t_resp.json():
+                    results.append({'transcript_id': transcript_id, 'success': False, 'error': 'Transcript not found'})
+                    continue
+                transcript = t_resp.json()[0]
+
+                # Analyze with AI
+                analysis = analyze_interview_with_ai(job, transcript)
+
+                # Save report
+                report_data = {
+                    'user_id': user_id,
+                    'job_id': job_id,
+                    'transcript_id': transcript_id,
+                    'candidate_name': transcript['candidate_name'],
+                    'job_title': job['title'],
+                    'fit_score': analysis.get('fit_score', 0),
+                    'full_response': json.dumps(analysis)
+                }
+
+                save_resp = http_session.post(
+                    f"{SUPABASE_REST_URL}/interview_reports",
+                    headers=get_supabase_headers(),
+                    json=report_data
+                )
+
+                if save_resp.ok:
+                    results.append({'transcript_id': transcript_id, 'success': True, 'report_id': save_resp.json()[0]['id']})
+                else:
+                    results.append({'transcript_id': transcript_id, 'success': False, 'error': 'Failed to save report'})
+
+            except Exception as e:
+                print(f"[ANALYZE] Error for transcript {transcript_id}: {e}")
+                results.append({'transcript_id': transcript_id, 'success': False, 'error': str(e)})
+
+        return jsonify({'results': results})
+
+    except Exception as e:
+        print(f"[ANALYZE] Error: {e}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({'error': str(e)}), 500
+
+def analyze_interview_with_ai(job, transcript):
+    """Use AI to analyze an interview transcript against a job description"""
+    import openai
+
+    openai_key = os.getenv('OPENAI_API_KEY')
+    if not openai_key:
+        # Return a basic analysis if no AI key
+        return {
+            'fit_score': 50,
+            'hiring_recommendation': 'maybe',
+            'strengths': ['Unable to analyze - AI not configured'],
+            'matching_skills': [],
+            'concerns': ['AI analysis unavailable'],
+            'summary': 'AI analysis is not available. Please configure OpenAI API key.'
+        }
+
+    client = openai.OpenAI(api_key=openai_key)
+
+    prompt = f"""Analyze this interview transcript for the following job position and provide a detailed assessment.
+
+JOB TITLE: {job['title']}
+COMPANY: {job.get('company', 'Not specified')}
+JOB DESCRIPTION:
+{job['description']}
+
+CANDIDATE: {transcript['candidate_name']}
+INTERVIEW TRANSCRIPT:
+{transcript['transcript']}
+
+{f"CANDIDATE RESUME: {transcript['resume']}" if transcript.get('resume') else ""}
+
+Please analyze and return a JSON object with EXACTLY this structure (no markdown, no code blocks, just raw JSON):
+{{
+    "fit_score": <integer 0-100>,
+    "hiring_recommendation": "<string: 'strong_yes', 'yes', 'maybe', 'no', or 'strong_no'>",
+    "fit_score_breakdown": {{
+        "technical_skills": <integer 0-100>,
+        "experience_match": <integer 0-100>,
+        "cultural_fit": <integer 0-100>,
+        "communication": <integer 0-100>
+    }},
+    "interview_qa": [
+        {{
+            "question": "<string: interviewer question>",
+            "answer": "<string: summary of candidate's answer>",
+            "quality": "<string: 'excellent', 'good', 'fair', or 'poor'>",
+            "notes": "<string: brief analysis>"
+        }}
+    ],
+    "resume_analysis": {{
+        "resume_job_match": "<string: how well resume matches job requirements>",
+        "resume_interview_alignment": "<string: how interview answers align with resume claims>",
+        "resume_strengths": ["<string: key resume strengths>"],
+        "resume_gaps": ["<string: resume items not discussed in interview>"]
+    }},
+    "strengths": [
+        {{
+            "strength": "<string: key strength>",
+            "evidence": "<string: quote or reference from transcript>",
+            "relevance": "<string: 'high', 'medium', or 'low'>",
+            "job_requirement": "<string: which job requirement this addresses>"
+        }}
+    ],
+    "matching_skills": [
+        {{
+            "skill": "<string: skill name>",
+            "experience_level": "<string: e.g., '5 years', 'expert'>",
+            "evidence": "<string: quote or reference>",
+            "job_match": "<string: how this matches job requirements>"
+        }}
+    ],
+    "concerns": [
+        {{
+            "concern": "<string: area of concern>",
+            "evidence": "<string: quote or observation>",
+            "severity": "<string: 'high', 'medium', or 'low'>",
+            "mitigation": "<string: how this might be addressed>"
+        }}
+    ],
+    "communication_assessment": {{
+        "clarity": "<string: assessment of communication clarity>",
+        "confidence": "<string: assessment of confidence level>",
+        "examples_quality": "<string: quality of examples provided>",
+        "overall": "<string: overall communication assessment>"
+    }},
+    "cultural_indicators": {{
+        "work_style": "<string: observed work style preferences>",
+        "values": "<string: values demonstrated>",
+        "team_fit": "<string: assessment of team fit>"
+    }},
+    "notable_quotes": [
+        {{
+            "quote": "<string: notable quote from candidate>",
+            "context": "<string: context/topic>",
+            "sentiment": "<string: 'positive', 'negative', or 'neutral'>"
+        }}
+    ],
+    "follow_up_questions": ["<string: suggested follow-up question>"],
+    "summary": "<string: 2-3 paragraph executive summary>"
+}}
+
+Return ONLY the JSON object, no additional text or formatting."""
+
+    try:
+        response = client.chat.completions.create(
+            model="gpt-4o",
+            messages=[
+                {"role": "system", "content": "You are an expert HR analyst and interview assessor. Analyze interviews objectively and provide detailed, actionable insights. Always return valid JSON only."},
+                {"role": "user", "content": prompt}
+            ],
+            temperature=0.3,
+            max_tokens=4000
+        )
+
+        result_text = response.choices[0].message.content.strip()
+
+        # Clean up any markdown code blocks
+        if result_text.startswith('```'):
+            result_text = result_text.split('```')[1]
+            if result_text.startswith('json'):
+                result_text = result_text[4:]
+        if result_text.endswith('```'):
+            result_text = result_text[:-3]
+
+        return json.loads(result_text.strip())
+
+    except json.JSONDecodeError as e:
+        print(f"[AI ANALYSIS] JSON parse error: {e}")
+        print(f"[AI ANALYSIS] Raw response: {result_text[:500]}")
+        return {
+            'fit_score': 50,
+            'hiring_recommendation': 'maybe',
+            'strengths': ['Analysis completed but response parsing failed'],
+            'matching_skills': [],
+            'concerns': ['Unable to parse full analysis'],
+            'summary': 'AI analysis was performed but the response could not be fully parsed.'
+        }
+    except Exception as e:
+        print(f"[AI ANALYSIS] Error: {e}")
+        return {
+            'fit_score': 50,
+            'hiring_recommendation': 'maybe',
+            'strengths': ['Analysis error occurred'],
+            'matching_skills': [],
+            'concerns': [str(e)],
+            'summary': f'An error occurred during analysis: {str(e)}'
+        }
+
+# =============================================
+# Email Extractor API
+# =============================================
+
+@app.route('/api/extract-email', methods=['POST'])
+def extract_email():
+    """Extract email from LinkedIn profile URL using email finder services"""
+    try:
+        data = request.get_json()
+        linkedin_url = data.get('linkedin_url', '')
+
+        if not linkedin_url:
+            return jsonify({'error': 'LinkedIn URL required'}), 400
+
+        # Extract username from LinkedIn URL
+        import re
+        match = re.search(r'linkedin\.com/in/([^/?]+)', linkedin_url)
+        if not match:
+            return jsonify({'error': 'Invalid LinkedIn URL format'}), 400
+
+        linkedin_username = match.group(1).lower()
+
+        # Try ContactOut API if available
+        contactout_key = os.getenv('CONTACTOUT_API_KEY')
+        if contactout_key:
+            try:
+                import requests as req
+                resp = req.get(
+                    f'https://api.contactout.com/v2/person',
+                    params={'linkedin_url': linkedin_url},
+                    headers={'Authorization': f'Bearer {contactout_key}'},
+                    timeout=10
+                )
+                if resp.status_code == 200:
+                    person_data = resp.json()
+                    return jsonify({
+                        'email': person_data.get('email', ''),
+                        'work_email': person_data.get('work_email', ''),
+                        'phone': person_data.get('phone', ''),
+                        'source': 'contactout'
+                    })
+            except Exception as e:
+                print(f"[EMAIL EXTRACTOR] ContactOut error: {e}")
+
+        # Try Hunter.io API if available
+        hunter_key = os.getenv('HUNTER_API_KEY')
+        if hunter_key:
+            try:
+                import requests as req
+                resp = req.get(
+                    f'https://api.hunter.io/v2/linkedin-email-finder',
+                    params={'linkedin_url': linkedin_url, 'api_key': hunter_key},
+                    timeout=10
+                )
+                if resp.status_code == 200:
+                    hunter_data = resp.json().get('data', {})
+                    return jsonify({
+                        'email': hunter_data.get('email', ''),
+                        'work_email': '',
+                        'phone': '',
+                        'source': 'hunter'
+                    })
+            except Exception as e:
+                print(f"[EMAIL EXTRACTOR] Hunter.io error: {e}")
+
+        # No API keys configured - return demo response
+        return jsonify({
+            'email': '',
+            'work_email': '',
+            'phone': '',
+            'error': 'No email finder API configured. Set CONTACTOUT_API_KEY or HUNTER_API_KEY.',
+            'source': 'none'
+        }), 200
+
+    except Exception as e:
+        print(f"[EMAIL EXTRACTOR] Error: {e}")
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/parse-linkedin-pdf', methods=['POST'])
+def parse_linkedin_pdf():
+    """Parse a LinkedIn PDF profile and extract structured data"""
+    try:
+        if 'file' not in request.files:
+            return jsonify({'error': 'No file provided'}), 400
+
+        file = request.files['file']
+        if not file.filename.endswith('.pdf'):
+            return jsonify({'error': 'File must be a PDF'}), 400
+
+        # Parse PDF with pdfplumber
+        import pdfplumber
+        import io
+
+        pdf_bytes = io.BytesIO(file.read())
+        text = ''
+        with pdfplumber.open(pdf_bytes) as pdf:
+            for page in pdf.pages:
+                text += page.extract_text() or ''
+
+        # Extract basic information using patterns
+        lines = text.split('\n')
+        result = {
+            'name': lines[0].strip() if lines else file.filename.replace('.pdf', ''),
+            'headline': '',
+            'location': '',
+            'about': '',
+            'currentTitle': '',
+            'currentCompany': '',
+            'skills': [],
+            'experience': [],
+            'education': []
+        }
+
+        # Try to identify sections
+        current_section = None
+        about_lines = []
+
+        for i, line in enumerate(lines):
+            line = line.strip()
+            if not line:
+                continue
+
+            # Identify sections
+            if 'Experience' in line and len(line) < 15:
+                current_section = 'experience'
+                continue
+            elif 'Education' in line and len(line) < 15:
+                current_section = 'education'
+                continue
+            elif 'Skills' in line and len(line) < 15:
+                current_section = 'skills'
+                continue
+            elif 'About' in line and len(line) < 10:
+                current_section = 'about'
+                continue
+
+            # First real line after name is usually headline
+            if i == 1 and not result['headline']:
+                result['headline'] = line
+            elif i == 2 and not result['location']:
+                result['location'] = line
+
+            # Collect about section
+            if current_section == 'about':
+                about_lines.append(line)
+            elif current_section == 'skills':
+                # Skills are often comma or bullet separated
+                if ',' in line:
+                    result['skills'].extend([s.strip() for s in line.split(',')])
+                elif '•' in line:
+                    result['skills'].extend([s.strip() for s in line.split('•')])
+                else:
+                    result['skills'].append(line)
+
+        result['about'] = ' '.join(about_lines[:5])  # First 5 lines of about
+        result['skills'] = result['skills'][:20]  # Max 20 skills
+
+        return jsonify(result)
+
+    except Exception as e:
+        print(f"[LINKEDIN PDF] Error: {e}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({'error': str(e)}), 500
+
+
 # Global error handlers for AJAX requests
 @app.errorhandler(404)
 def not_found_error(error):

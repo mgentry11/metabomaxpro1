@@ -3,213 +3,181 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Metabolic Report Generator</title>
+    <title>Login - MetaboMax Pro</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif']
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            900: '#0c4a6e'
+                        },
+                        accent: {
+                            400: '#2dd4bf',
+                            500: '#14b8a6'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        .gradient-bg {
+            background: linear-gradient(135deg, #0284c7 0%, #14b8a6 100%);
         }
-
-        body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem;
-        }
-
-        .login-container {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 3rem;
-            max-width: 450px;
-            width: 100%;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-        }
-
-        .logo {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .logo h1 {
-            font-size: 2rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 0.5rem;
-        }
-
-        .logo p {
-            color: #64748b;
-            font-size: 0.9rem;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: #1e293b;
-            font-weight: 500;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            border: 2px solid #e2e8f0;
-            border-radius: 10px;
-            font-size: 1rem;
-            transition: all 0.3s;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-
-        .btn {
-            width: 100%;
-            padding: 1rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
-        }
-
-        .btn:active {
-            transform: translateY(0);
-        }
-
-        .divider {
-            text-align: center;
-            margin: 2rem 0;
-            color: #64748b;
-            position: relative;
-        }
-
-        .divider::before,
-        .divider::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            width: 40%;
-            height: 1px;
-            background: #e2e8f0;
-        }
-
-        .divider::before {
-            left: 0;
-        }
-
-        .divider::after {
-            right: 0;
-        }
-
-        .register-link {
-            text-align: center;
-            margin-top: 1.5rem;
-            color: #64748b;
-        }
-
-        .register-link a {
-            color: #667eea;
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        .register-link a:hover {
-            text-decoration: underline;
-        }
-
-        .alert {
-            padding: 1rem;
-            border-radius: 10px;
-            margin-bottom: 1.5rem;
-        }
-
-        .alert-success {
-            background: #d1fae5;
-            color: #065f46;
-            border-left: 4px solid #10b981;
-        }
-
-        .alert-danger {
-            background: #fee2e2;
-            color: #991b1b;
-            border-left: 4px solid #ef4444;
-        }
-
-        .alert-warning {
-            background: #fef3c7;
-            color: #92400e;
-            border-left: 4px solid #f59e0b;
-        }
-
-        .alert-info {
-            background: #dbeafe;
-            color: #1e40af;
-            border-left: 4px solid #3b82f6;
+        .gradient-icon {
+            background: linear-gradient(135deg, #0284c7 0%, #14b8a6 100%);
         }
     </style>
 </head>
-<body>
-    <div class="login-container">
-        <div class="logo">
-            <img src="{{ url_for('static', filename='images/logo.jpg') }}" alt="MetaboMaxPro Logo" style="max-width: 300px; width: 100%; margin-bottom: 1rem;">
-            <p>Professional metabolic test analysis</p>
+<body class="font-sans bg-slate-50 min-h-screen flex items-center justify-center p-4">
+    <!-- Background decoration -->
+    <div class="fixed inset-0 -z-10 overflow-hidden">
+        <div class="absolute -top-40 -right-40 w-80 h-80 bg-brand-100 rounded-full blur-3xl opacity-50"></div>
+        <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-accent-400 rounded-full blur-3xl opacity-30"></div>
+    </div>
+
+    <div class="w-full max-w-md">
+        <!-- Logo -->
+        <div class="text-center mb-8">
+            <a href="{{ url_for('landing') }}" class="inline-flex items-center space-x-2">
+                <div class="w-10 h-10 rounded-xl gradient-icon flex items-center justify-center">
+                    <span class="text-white font-bold text-xl">M</span>
+                </div>
+                <span class="text-2xl font-bold text-slate-900">MetaboMax Pro</span>
+            </a>
+            <p class="text-slate-500 mt-2">Professional metabolic test analysis</p>
         </div>
 
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ category }}">
-                        {{ message }}
+        <!-- Login Card -->
+        <div class="bg-white rounded-2xl shadow-xl p-8">
+            <h1 class="text-2xl font-bold text-slate-900 text-center mb-6">Welcome back</h1>
+
+            <!-- Flash Messages -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        {% if category == 'success' %}
+                        <div class="mb-6 bg-green-50 border-l-4 border-green-500 p-4 rounded-r-lg">
+                            <div class="flex items-center">
+                                <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                                <p class="text-green-700">{{ message }}</p>
+                            </div>
+                        </div>
+                        {% elif category == 'danger' or category == 'error' %}
+                        <div class="mb-6 bg-red-50 border-l-4 border-red-500 p-4 rounded-r-lg">
+                            <div class="flex items-center">
+                                <i class="fas fa-exclamation-circle text-red-500 mr-3"></i>
+                                <p class="text-red-700">{{ message }}</p>
+                            </div>
+                        </div>
+                        {% elif category == 'warning' %}
+                        <div class="mb-6 bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-lg">
+                            <div class="flex items-center">
+                                <i class="fas fa-exclamation-triangle text-amber-500 mr-3"></i>
+                                <p class="text-amber-700">{{ message }}</p>
+                            </div>
+                        </div>
+                        {% else %}
+                        <div class="mb-6 bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg">
+                            <div class="flex items-center">
+                                <i class="fas fa-info-circle text-blue-500 mr-3"></i>
+                                <p class="text-blue-700">{{ message }}</p>
+                            </div>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <form method="POST" action="{{ url_for('login') }}" class="space-y-6">
+                <div>
+                    <label for="email" class="block text-sm font-medium text-slate-700 mb-2">Email Address</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-envelope text-slate-400"></i>
+                        </div>
+                        <input type="email" id="email" name="email" required autofocus
+                            class="w-full pl-10 pr-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all"
+                            placeholder="you@example.com">
                     </div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
+                </div>
 
-        <form method="POST" action="{{ url_for('login') }}">
-            <div class="form-group">
-                <label for="email">Email Address</label>
-                <input type="email" id="email" name="email" required autofocus>
+                <div>
+                    <label for="password" class="block text-sm font-medium text-slate-700 mb-2">Password</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-lock text-slate-400"></i>
+                        </div>
+                        <input type="password" id="password" name="password" required
+                            class="w-full pl-10 pr-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all"
+                            placeholder="Enter your password">
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between">
+                    <label class="flex items-center">
+                        <input type="checkbox" class="w-4 h-4 text-brand-500 border-slate-300 rounded focus:ring-brand-500">
+                        <span class="ml-2 text-sm text-slate-600">Remember me</span>
+                    </label>
+                    <a href="{{ url_for('forgot_password') }}" class="text-sm text-brand-600 hover:text-brand-700 font-medium">
+                        Forgot password?
+                    </a>
+                </div>
+
+                <button type="submit"
+                    class="w-full gradient-bg text-white py-3 px-4 rounded-xl font-semibold hover:opacity-90 transition-all focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2">
+                    Sign In
+                </button>
+            </form>
+
+            <div class="mt-6">
+                <div class="relative">
+                    <div class="absolute inset-0 flex items-center">
+                        <div class="w-full border-t border-slate-200"></div>
+                    </div>
+                    <div class="relative flex justify-center text-sm">
+                        <span class="px-4 bg-white text-slate-500">or</span>
+                    </div>
+                </div>
+
+                <p class="mt-6 text-center text-slate-600">
+                    Don't have an account?
+                    <a href="{{ url_for('register') }}" class="text-brand-600 hover:text-brand-700 font-semibold">
+                        Sign up free
+                    </a>
+                </p>
             </div>
-
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" required>
-            </div>
-
-            <div style="text-align: right; margin-bottom: 1rem;">
-                <a href="{{ url_for('forgot_password') }}" style="color: #667eea; text-decoration: none; font-size: 0.9rem;">Forgot Password?</a>
-            </div>
-
-            <button type="submit" class="btn">Log In</button>
-        </form>
-
-        <div class="divider">or</div>
-
-        <div class="register-link">
-            Don't have an account? <a href="{{ url_for('register') }}">Sign up</a>
         </div>
+
+        <!-- Back to home -->
+        <p class="text-center mt-6">
+            <a href="{{ url_for('landing') }}" class="text-slate-500 hover:text-slate-700 text-sm">
+                <i class="fas fa-arrow-left mr-2"></i>Back to home
+            </a>
+        </p>
     </div>
 </body>
 </html>
