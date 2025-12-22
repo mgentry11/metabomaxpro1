@@ -147,42 +147,31 @@ class UniversalRecommendationAI:
         }
 
     def _ensure_client(self):
-        """Initialize OpenAI API client only when first needed"""
+        """Initialize AWS Bedrock client for HIPAA-compliant AI"""
         if self._initialized:
             return
 
         self._initialized = True
 
-        # Use OpenAI API only
-        openai_key = os.getenv('OPENAI_API_KEY')
-        if openai_key:
-            print(f"[AI DEBUG] OpenAI API Key found (length: {len(openai_key)})")
-            try:
-                from openai import OpenAI
-                self.client = OpenAI(
-                    api_key=openai_key,
-                    timeout=60.0,
-                    max_retries=3
-                )
-                self.api_provider = 'openai'
-                print("[AI DEBUG] Using OpenAI API - Client initialized successfully")
-            except ImportError:
-                print("[AI DEBUG] openai package not installed")
-                self.client = None
-                self.api_provider = None
-            except Exception as e:
-                print(f"[AI DEBUG] Failed to initialize OpenAI: {e}")
-                import traceback
-                traceback.print_exc()
-                self.client = None
-                self.api_provider = None
-        else:
-            print("[AI DEBUG] No OpenAI API Key found")
+        # Use AWS Bedrock (HIPAA-compliant) - Primary
+        try:
+            import boto3
+            self.client = boto3.client(
+                'bedrock-runtime',
+                region_name=os.getenv('AWS_REGION', 'us-east-1')
+            )
+            self.api_provider = 'bedrock'
+            self.model_id = "anthropic.claude-3-sonnet-20240229-v1:0"
+            print("[AI DEBUG] Using AWS Bedrock (HIPAA-compliant) - Client initialized successfully")
+        except Exception as e:
+            print(f"[AI DEBUG] Failed to initialize Bedrock: {e}")
+            import traceback
+            traceback.print_exc()
             self.client = None
             self.api_provider = None
 
         if not self.client:
-            print("Warning: No AI API key found or failed to initialize")
+            print("Warning: AWS Bedrock not available - AI recommendations disabled")
             self.api_provider = None
 
     def get_recommendations(self, subject, metabolic_data, user_goals=None, custom_context=None):
@@ -229,29 +218,44 @@ In the meantime, your basic metabolic report with all your core performance metr
             }
 
         try:
+            import json
             print(f"[AI DEBUG] API provider: {self.api_provider}")
             print(f"[AI DEBUG] Client object: {self.client}")
 
-            # Use OpenAI API
-            print("[AI DEBUG] Making OpenAI API call...")
-            response = self.client.chat.completions.create(
-                model="gpt-4",
-                messages=[
-                    {"role": "system", "content": self._get_system_prompt(template)},
+            # Use AWS Bedrock (HIPAA-compliant Claude)
+            print("[AI DEBUG] Making AWS Bedrock API call...")
+
+            system_prompt = self._get_system_prompt(template)
+
+            request_body = {
+                "anthropic_version": "bedrock-2023-05-31",
+                "max_tokens": 4096,
+                "temperature": 0.7,
+                "system": system_prompt,
+                "messages": [
                     {"role": "user", "content": prompt}
-                ],
-                temperature=0.7,
-                max_tokens=2500
+                ]
+            }
+
+            response = self.client.invoke_model(
+                modelId=self.model_id,
+                contentType="application/json",
+                accept="application/json",
+                body=json.dumps(request_body)
             )
-            print("[AI DEBUG] OpenAI API call succeeded!")
-            recommendation_text = response.choices[0].message.content
+
+            response_body = json.loads(response['body'].read())
+            recommendation_text = response_body['content'][0]['text']
+
+            print("[AI DEBUG] AWS Bedrock API call succeeded!")
 
             return {
                 'subject': subject,
                 'recommendations': recommendation_text,
                 'timestamp': datetime.now().isoformat(),
                 'metabolic_summary': self._summarize_metabolic_data(metabolic_data),
-                'ai_provider': self.api_provider
+                'ai_provider': 'bedrock-claude-3',
+                'hipaa_compliant': True
             }
 
         except Exception as e:
@@ -267,15 +271,12 @@ In the meantime, your basic metabolic report with all your core performance metr
 **Error Details:** {error_msg}
 
 This error occurred while trying to generate AI recommendations. Common causes:
-- OpenAI API quota exceeded or billing issue
-- Invalid API key
+- AWS credentials not configured
+- Bedrock model access not enabled
 - Rate limiting
 - Network connectivity issue
 
-Please check your OpenAI account at https://platform.openai.com/account/usage to verify:
-1. Your API key is valid
-2. You have available credits
-3. Your usage limits haven't been exceeded""",
+Please check your AWS Bedrock configuration and ensure Claude model access is enabled.""",
                 'timestamp': datetime.now().isoformat(),
                 'metabolic_summary': self._summarize_metabolic_data(metabolic_data),
                 'error': True,
