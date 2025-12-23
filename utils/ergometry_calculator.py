@@ -828,64 +828,90 @@ def calculate_all_scores(pdf_path: str) -> Dict:
 
     # 6. HRV SCORE
     # Based on resting HR and age-adjusted norms
-    # PREFER demographic estimates for consistency with PNOE scoring
-    if estimated_values:
-        mean_hr = estimated_values['resting_hr']
-        # HRV scoring based on resting HR (lower = higher HRV score)
-        # Calibrated: Mark has 62 bpm and got 88% HRV
-        if mean_hr <= 55:
-            hrv_score = 95
-        elif mean_hr <= 58:
-            hrv_score = 92
-        elif mean_hr <= 62:
-            hrv_score = 88  # Mark's value
-        elif mean_hr <= 66:
-            hrv_score = 82
-        elif mean_hr <= 70:
-            hrv_score = 75
-        elif mean_hr <= 75:
-            hrv_score = 65
-        elif mean_hr <= 80:
-            hrv_score = 55
-        else:
-            hrv_score = 45
+    # Use chart-extracted HR if available, otherwise use demographic estimates
+    mean_hr = None
 
-        result['core_scores']['hrv'] = hrv_score
-        result['raw_metrics']['mean_hr'] = round(mean_hr)
-        result['calculation_details']['hrv'] = f"Resting HR: {mean_hr:.0f} bpm → HRV: {hrv_score}%"
+    # First, try to get HR from chart axis ranges (more accurate than demographics)
+    if chart_ranges.get('hr_min') and chart_ranges.get('hr_max'):
+        # For resting tests, use the lower end of the HR range
+        # (axis shows full range, but resting HR is typically near the minimum)
+        hr_min = chart_ranges['hr_min']
+        hr_max = chart_ranges['hr_max']
+        # Estimate resting HR as 10% above the minimum (accounts for chart padding)
+        mean_hr = hr_min + (hr_max - hr_min) * 0.1
+        result['calculation_details']['hr_source'] = f"From chart range: {hr_min}-{hr_max} bpm"
+    elif has_hr and data['time_series']['hr']:
+        mean_hr = stats.get('hr_mean', stats.get('hr_trimmed_mean'))
+        result['calculation_details']['hr_source'] = "From extracted data"
+    elif estimated_values:
+        mean_hr = estimated_values['resting_hr']
+        result['calculation_details']['hr_source'] = "From demographics"
     else:
-        result['core_scores']['hrv'] = 75
-        result['calculation_details']['hrv'] = "Estimated from demographics"
+        mean_hr = 70  # Default
+
+    # HRV scoring based on resting HR (lower = higher HRV score)
+    # Calibrated: Mark has 62 bpm and got 88% HRV
+    if mean_hr <= 55:
+        hrv_score = 95
+    elif mean_hr <= 58:
+        hrv_score = 92
+    elif mean_hr <= 62:
+        hrv_score = 88  # Mark's value
+    elif mean_hr <= 66:
+        hrv_score = 82
+    elif mean_hr <= 70:
+        hrv_score = 75
+    elif mean_hr <= 75:
+        hrv_score = 65
+    elif mean_hr <= 80:
+        hrv_score = 55
+    elif mean_hr <= 85:
+        hrv_score = 48
+    elif mean_hr <= 90:
+        hrv_score = 42
+    elif mean_hr <= 95:
+        hrv_score = 36
+    elif mean_hr <= 100:
+        hrv_score = 30
+    else:
+        hrv_score = 25
+
+    result['core_scores']['hrv'] = hrv_score
+    result['raw_metrics']['mean_hr'] = round(mean_hr)
+    result['calculation_details']['hrv'] = f"Resting HR: {mean_hr:.0f} bpm → HRV: {hrv_score}%"
 
     # 7. SYMPATHETIC/PARASYMPATHETIC BALANCE SCORE
     # Based on autonomic balance indicators (resting HR, HRV)
-    # PREFER demographic estimates for consistency with PNOE scoring
-    if estimated_values:
-        mean_hr = estimated_values['resting_hr']
-        # Higher parasympathetic = lower resting HR
-        # Calibrated: Mark has 62 bpm and got 76% symp/parasym
-        if mean_hr <= 55:
-            symp_score = 85
-        elif mean_hr <= 58:
-            symp_score = 80
-        elif mean_hr <= 62:
-            symp_score = 76  # Mark's value
-        elif mean_hr <= 66:
-            symp_score = 72
-        elif mean_hr <= 70:
-            symp_score = 66
-        elif mean_hr <= 75:
-            symp_score = 58
-        elif mean_hr <= 80:
-            symp_score = 50
-        else:
-            symp_score = 42
-
-        result['core_scores']['symp_parasym'] = symp_score
-        result['calculation_details']['symp_parasym'] = f"Resting HR: {mean_hr:.0f} bpm → Parasympathetic: {symp_score}%"
+    # Use the same mean_hr we calculated above
+    # Higher parasympathetic = lower resting HR
+    # Calibrated: Mark has 62 bpm and got 76% symp/parasym
+    if mean_hr <= 55:
+        symp_score = 85
+    elif mean_hr <= 58:
+        symp_score = 80
+    elif mean_hr <= 62:
+        symp_score = 76  # Mark's value
+    elif mean_hr <= 66:
+        symp_score = 72
+    elif mean_hr <= 70:
+        symp_score = 66
+    elif mean_hr <= 75:
+        symp_score = 58
+    elif mean_hr <= 80:
+        symp_score = 50
+    elif mean_hr <= 85:
+        symp_score = 44
+    elif mean_hr <= 90:
+        symp_score = 38
+    elif mean_hr <= 95:
+        symp_score = 32
+    elif mean_hr <= 100:
+        symp_score = 26
     else:
-        result['core_scores']['symp_parasym'] = 70
-        result['calculation_details']['symp_parasym'] = "Estimated from demographics"
+        symp_score = 20
+
+    result['core_scores']['symp_parasym'] = symp_score
+    result['calculation_details']['symp_parasym'] = f"Resting HR: {mean_hr:.0f} bpm → Parasympathetic: {symp_score}%"
 
     return result
 
