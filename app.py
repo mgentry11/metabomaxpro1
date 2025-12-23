@@ -21,6 +21,7 @@ from utils.beautiful_report import generate_beautiful_report
 from utils.calculate_scores import calculate_biological_age as calculate_bio_age_proper
 from ai_recommendations import UniversalRecommendationAI
 from blog_posts import get_all_posts, get_post_by_slug, get_recent_posts
+import db  # Database module for RDS PostgreSQL
 
 # Load environment variables (override=True ensures .env file takes precedence over shell variables)
 load_dotenv(override=True)
@@ -57,35 +58,14 @@ ALLOWED_EXTENSIONS = {'pdf'}
 def log_phi_access(user_id, action, resource_type, resource_id=None, details=None):
     """Log PHI access events for HIPAA compliance audit trail"""
     try:
-        log_entry = {
-            'timestamp': datetime.utcnow().isoformat(),
-            'user_id': user_id,
-            'action': action,  # VIEW, CREATE, UPDATE, DELETE, DOWNLOAD, EXPORT
-            'resource_type': resource_type,  # report, test, profile
-            'resource_id': resource_id,
-            'ip_address': request.remote_addr if request else None,
-            'user_agent': request.user_agent.string if request else None,
-            'details': details
-        }
-        # Log to console (in production, send to secure logging service)
-        print(f"[HIPAA AUDIT] {json.dumps(log_entry)}")
+        ip_address = request.remote_addr if request else None
+        user_agent = request.user_agent.string if request else None
 
-        # Store in Supabase audit_logs table if available
-        if SUPABASE_URL and SUPABASE_KEY:
-            try:
-                requests.post(
-                    f"{SUPABASE_REST_URL}/audit_logs",
-                    headers={
-                        'apikey': SUPABASE_KEY,
-                        'Authorization': f'Bearer {SUPABASE_KEY}',
-                        'Content-Type': 'application/json',
-                        'Prefer': 'return=minimal'
-                    },
-                    json=log_entry,
-                    timeout=5
-                )
-            except:
-                pass  # Don't fail if audit logging fails
+        # Log to console
+        print(f"[HIPAA AUDIT] user={user_id} action={action} resource={resource_type}/{resource_id}")
+
+        # Store in RDS audit_logs table
+        db.log_audit(user_id, action, resource_type, resource_id, ip_address, user_agent, details)
     except Exception as e:
         print(f"[HIPAA AUDIT ERROR] {e}")
 
@@ -156,11 +136,14 @@ os.makedirs(app.config['REPORTS_FOLDER'], exist_ok=True)
 
 # Startup logging
 print("=" * 60)
-print("🚀 PNOE WEBAPP STARTING UP")
+print("🚀 METABOMAX PRO STARTING UP")
 print(f"📂 Upload folder: {app.config['UPLOAD_FOLDER']}")
 print(f"📂 Reports folder: {app.config['REPORTS_FOLDER']}")
-print(f"🔑 Supabase configured: {'Yes' if SUPABASE_URL and SUPABASE_KEY else 'No'}")
+# Test RDS database connection
+db_connected = db.test_connection()
+print(f"🗄️ RDS Database: {'Connected ✅' if db_connected else 'Not connected ❌'}")
 print(f"💳 Stripe configured: {'Yes' if stripe.api_key else 'No'}")
+print(f"🔐 HIPAA Mode: Enabled")
 print("=" * 60)
 
 def allowed_file(filename):
@@ -193,12 +176,9 @@ def login_required(f):
 def get_user_subscription(user_id):
     """Get user's subscription details"""
     try:
-        response = http_session.get(
-            f"{SUPABASE_REST_URL}/subscriptions?user_id=eq.{user_id}",
-            headers=get_supabase_headers()
-        )
-        if response.ok and response.json():
-            return response.json()[0]
+        subscription = db.get_subscription(user_id)
+        if subscription:
+            return dict(subscription)
         return None
     except Exception as e:
         print(f"Error getting subscription: {e}")
@@ -261,14 +241,10 @@ def use_ai_credit(user_id):
     if plan_name == 'subscription':
         return True
 
-    ai_credits = subscription.get('ai_credits', 0)
+    ai_credits = subscription.get('ai_credits', 0) or subscription.get('ai_credits_remaining', 0)
     if ai_credits > 0:
         try:
-            http_session.patch(
-                f"{SUPABASE_REST_URL}/subscriptions?user_id=eq.{user_id}",
-                headers=get_supabase_headers(),
-                json={'ai_credits': ai_credits - 1}
-            )
+            db.decrement_ai_credits(user_id)
             return True
         except Exception as e:
             print(f"Error using AI credit: {e}")
@@ -567,62 +543,23 @@ def register():
             print(f"[REGISTER] Generated user_id: {user_id}")
 
             # Check if user already exists
-            try:
-                response = http_session.get(
-                    f"{SUPABASE_REST_URL}/profiles?email=eq.{email}&select=id",
-                    headers=get_supabase_headers(),
-                    timeout=10
-                )
-                print(f"[REGISTER] Check existing user status: {response.status_code}")
+            if db.check_email_exists(email):
+                flash('An account with this email already exists.', 'danger')
+                return render_template('register.html')
 
-                if response.ok and response.json():
-                    flash('An account with this email already exists.', 'danger')
-                    return render_template('register.html')
-            except Exception as check_error:
-                print(f"[REGISTER] Warning: Could not check existing user: {check_error}")
-                # Continue with registration anyway
+            # Create profile in database
+            print(f"[REGISTER] Creating profile for: {email}")
+            profile = db.create_profile(email, password_hash, full_name, company_name)
 
-            # Insert user into profiles table
-            profile_data = {
-                'id': user_id,
-                'email': email,
-                'full_name': full_name,
-                'password_hash': password_hash,
-                'company_name': company_name
-            }
-            print(f"[REGISTER] Creating profile with data: {list(profile_data.keys())}")
+            if not profile:
+                raise Exception("Failed to create profile")
 
-            # Use a fresh session for the POST request
-            profile_response = requests.post(
-                f"{SUPABASE_REST_URL}/profiles",
-                headers=get_supabase_headers(),
-                json=profile_data,
-                timeout=15
-            )
-
-            print(f"[REGISTER] Profile creation status: {profile_response.status_code}")
-            print(f"[REGISTER] Profile response: {profile_response.text[:500] if profile_response.text else 'empty'}")
-
-            if not profile_response.ok:
-                raise Exception(f"Failed to create profile: {profile_response.text}")
+            user_id = str(profile['id'])
+            print(f"[REGISTER] Profile created with ID: {user_id}")
 
             # Create subscription record with new free tier (2 reports)
-            sub_response = requests.post(
-                f"{SUPABASE_REST_URL}/subscriptions",
-                headers=get_supabase_headers(),
-                json={
-                    'user_id': user_id,
-                    'plan_name': 'free',
-                    'status': 'active',
-                    'reports_limit': 2,
-                    'reports_used': 0,
-                    'ai_credits': 0
-                },
-                timeout=15
-            )
-
-            if not sub_response.ok:
-                print(f"Warning: Failed to create subscription: {sub_response.text}")
+            db.create_subscription(user_id, plan_type='free', basic_reports_remaining=2, ai_credits_remaining=0)
+            print(f"[REGISTER] Subscription created for user: {user_id}")
 
             flash('Registration successful! You can now log in.', 'success')
             return redirect(url_for('login'))
@@ -648,35 +585,29 @@ def login():
 
         try:
             # Query user from database
-            response = http_session.get(
-                f"{SUPABASE_REST_URL}/profiles?email=eq.{email}&select=id,email,full_name,password_hash",
-                headers=get_supabase_headers()
-            )
+            user = db.get_profile_by_email(email)
 
-            if response.ok and response.json():
-                users = response.json()
-                if users and len(users) > 0:
-                    user = users[0]
-
-                    # Verify password
-                    if check_password_hash(user['password_hash'], password):
-                        # Store user info in session
-                        session['user'] = {
-                            'id': user['id'],
-                            'email': user['email'],
-                            'full_name': user.get('full_name', '')
-                        }
-                        flash('Login successful!', 'success')
-                        return redirect(url_for('dashboard'))
-                    else:
-                        flash('Invalid email or password.', 'danger')
+            if user:
+                # Verify password
+                if check_password_hash(user['password_hash'], password):
+                    # Store user info in session
+                    session['user'] = {
+                        'id': str(user['id']),
+                        'email': user['email'],
+                        'full_name': user.get('full_name', '')
+                    }
+                    # Log successful login
+                    log_phi_access(user['id'], 'LOGIN', 'session')
+                    flash('Login successful!', 'success')
+                    return redirect(url_for('dashboard'))
                 else:
                     flash('Invalid email or password.', 'danger')
             else:
                 flash('Invalid email or password.', 'danger')
 
         except Exception as e:
-            flash(f'Login error: {str(e)}', 'danger')
+            print(f"[LOGIN] Error: {e}")
+            flash(f'Login error. Please try again.', 'danger')
 
     return render_template('login.html')
 

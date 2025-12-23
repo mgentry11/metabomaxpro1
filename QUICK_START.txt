@@ -1,0 +1,174 @@
+================================================================================
+                    bigoil.net WEBSITE FIX - QUICK START
+================================================================================
+
+PROBLEM:
+  1. HTTPS SSL Error - No valid certificate for bigoil.net
+  2. HTTP 403 Forbidden - CloudFront can't access S3 bucket
+
+SOLUTION:
+  Complete fix toolkit with automated scripts created
+
+================================================================================
+                         HOW TO RUN THE FIX
+================================================================================
+
+OPTION 1: Automated Fix (Recommended)
+--------------------------------------
+Just run this ONE command:
+
+    cd /Users/markgentry/metabomaxpro1 && chmod +x *.sh && ./fix_bigoil_auto.sh
+
+That's it! The script will:
+  ✓ Diagnose current issues
+  ✓ Create/verify SSL certificate
+  ✓ Fix S3 permissions
+  ✓ Update CloudFront
+  ✓ Wait for deployment
+  ✓ Verify website works
+
+Time: 20-65 minutes (depending on DNS validation)
+
+
+OPTION 2: Step-by-Step (Manual Control)
+----------------------------------------
+Run each script in order:
+
+    cd /Users/markgentry/metabomaxpro1
+    chmod +x *.sh
+
+    ./1_diagnose_bigoil.sh      # See current issues
+    ./2_create_certificate.sh   # Create SSL certificate
+    ./3_fix_s3_access.sh        # Fix bucket permissions
+    ./4_update_cloudfront.sh    # Update CloudFront
+    ./5_verify_website.sh       # Verify it works
+
+================================================================================
+                           FILES CREATED
+================================================================================
+
+Main Scripts:
+  ✓ RUN_FIX.sh                 - Easiest way to start
+  ✓ fix_bigoil_auto.sh         - Fully automated fix
+  ✓ 1_diagnose_bigoil.sh       - Diagnose current state
+  ✓ 2_create_certificate.sh    - SSL certificate setup
+  ✓ 3_fix_s3_access.sh         - Fix S3 permissions
+  ✓ 4_update_cloudfront.sh     - Update CloudFront
+  ✓ 5_verify_website.sh        - Verify website
+
+Documentation:
+  ✓ QUICK_START.txt            - This file
+  ✓ BIGOIL_FIX_SUMMARY.md      - Executive summary
+  ✓ README_BIGOIL_FIX.md       - Complete guide
+  ✓ bigoil_fix_steps.md        - Manual commands
+
+================================================================================
+                      WHAT WILL BE FIXED
+================================================================================
+
+1. ACM Certificate
+   - Creates SSL cert for bigoil.net and www.bigoil.net
+   - In us-east-1 region (required for CloudFront)
+   - Uses DNS validation
+
+2. S3 Bucket
+   - Updates bucket policy for CloudFront access
+   - Creates Origin Access Control (OAC)
+   - No changes to your files
+
+3. CloudFront Distribution
+   - Attaches SSL certificate
+   - Adds domain aliases
+   - Sets default root object (index.html)
+   - Enables HTTPS redirect
+
+================================================================================
+                         IMPORTANT NOTES
+================================================================================
+
+DNS Validation (If Creating New Certificate):
+  1. Script will pause and show DNS records to add
+  2. Add CNAME records to your DNS provider
+  3. Wait 5-30 minutes for validation
+  4. Run script again to continue
+
+Deployment Time:
+  - CloudFront deployments take 15-30 minutes
+  - Script will wait automatically
+
+Safety:
+  - Non-destructive changes only
+  - Original configs backed up to /tmp/
+  - S3 files unchanged
+
+================================================================================
+                      EXPECTED TIMELINE
+================================================================================
+
+If certificate already exists:
+  Total time: ~20-35 minutes
+
+If new certificate needed:
+  Certificate creation: 2 min
+  DNS validation: 5-30 min (manual)
+  Rest of process: 20 min
+  Total time: ~30-65 minutes
+
+================================================================================
+                      AFTER THE FIX
+================================================================================
+
+Your website will be accessible at:
+  🌐 https://bigoil.net
+  🌐 https://www.bigoil.net
+
+Both will:
+  ✓ Load with valid SSL certificate
+  ✓ Show no browser warnings
+  ✓ Redirect from HTTP to HTTPS
+  ✓ Serve your content correctly
+
+================================================================================
+                        TROUBLESHOOTING
+================================================================================
+
+Problem: Certificate validation pending
+Solution: Add DNS CNAME records shown by script, wait 5-30 min
+
+Problem: Still getting 403 error
+Solution: Wait for CloudFront deployment, check S3 has index.html
+
+Problem: SSL warning in browser
+Solution: Wait for CloudFront "Deployed" status, clear browser cache
+
+Full troubleshooting guide: README_BIGOIL_FIX.md
+
+================================================================================
+                         NEED HELP?
+================================================================================
+
+View detailed documentation:
+  cat README_BIGOIL_FIX.md
+
+View manual commands:
+  cat bigoil_fix_steps.md
+
+View executive summary:
+  cat BIGOIL_FIX_SUMMARY.md
+
+Check current status:
+  ./1_diagnose_bigoil.sh
+
+================================================================================
+                      READY TO FIX?
+================================================================================
+
+Run this command:
+
+    cd /Users/markgentry/metabomaxpro1 && chmod +x *.sh && ./fix_bigoil_auto.sh
+
+Or for the simplest start:
+
+    ./RUN_FIX.sh
+
+================================================================================
