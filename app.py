@@ -328,14 +328,15 @@ def extract_pnoe_data(pdf_path):
                             data['patient_info']['height_cm'] = int(height_match.group(1))
 
                     # Extract core scores (look for percentages)
+                    # More specific patterns to avoid mis-matches
                     score_patterns = [
-                        (r'Sympathetic.*?(\d+)%', 'symp_parasym'),
-                        (r'Ventilation.*?(\d+)%', 'ventilation_eff'),
-                        (r'Breathing.*?(\d+)%', 'breathing_coord'),
-                        (r'Lung.*?(\d+)%', 'lung_util'),
-                        (r'HRV.*?(\d+)%', 'hrv'),
-                        (r'Metabolic.*?Rate.*?(\d+)%', 'metabolic_rate'),
-                        (r'Fat.*?Burning.*?(\d+)%', 'fat_burning')
+                        (r'Sympathetic/Parasympathetic.*?-\s*(\d+)%', 'symp_parasym'),
+                        (r'Ventilation efficiency.*?-\s*(\d+)%', 'ventilation_eff'),
+                        (r'Breathing coordination.*?-\s*(\d+)%', 'breathing_coord'),
+                        (r'Lung utilization.*?-\s*(\d+)%', 'lung_util'),
+                        (r'Heart Rate Variability.*?-\s*(\d+)%', 'hrv'),
+                        (r'Metabolic rate.*?-\s*(\d+)%', 'metabolic_rate'),
+                        (r'Fat-burning Efficiency.*?-\s*(\d+)%', 'fat_burning')
                     ]
 
                     for pattern, key in score_patterns:
