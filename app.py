@@ -19,6 +19,7 @@ import stripe
 from weasyprint import HTML
 from utils.beautiful_report import generate_beautiful_report
 from utils.calculate_scores import calculate_biological_age as calculate_bio_age_proper
+from utils.ergometry_calculator import detect_pdf_type, process_pnoe_pdf, calculate_all_scores
 from ai_recommendations import UniversalRecommendationAI
 from blog_posts import get_all_posts, get_post_by_slug, get_recent_posts
 import db  # Database module for RDS PostgreSQL
@@ -253,7 +254,7 @@ def use_ai_credit(user_id):
     return False
 
 def extract_pnoe_data(pdf_path):
-    """Extract data from metabolic test PDF - simplified version"""
+    """Extract data from metabolic test PDF - handles both raw ergometry and performance reports"""
     data = {
         'patient_info': {},
         'core_scores': {},
@@ -262,6 +263,39 @@ def extract_pnoe_data(pdf_path):
         'heart_rate_data': {},
         'all_text': []
     }
+
+    # First, detect PDF type and use appropriate extraction method
+    try:
+        pdf_type = detect_pdf_type(pdf_path)
+
+        if pdf_type == 'raw_ergometry':
+            # Use the calculation engine for raw ergometry data
+            calc_result = calculate_all_scores(pdf_path)
+
+            # Map calculated results to expected data structure
+            data['patient_info'] = calc_result.get('patient_info', {})
+            data['core_scores'] = calc_result.get('core_scores', {})
+            data['patient_info']['test_source'] = 'PNOE'
+            data['patient_info']['data_quality'] = calc_result.get('data_quality', 'estimated')
+
+            # Copy raw metrics to appropriate sections
+            raw_metrics = calc_result.get('raw_metrics', {})
+            if 'measured_rmr_kcal' in raw_metrics:
+                data['caloric_data']['rmr'] = raw_metrics['measured_rmr_kcal']
+                data['metabolic_data']['rmr'] = raw_metrics['measured_rmr_kcal']
+            if 'rer' in raw_metrics:
+                data['metabolic_data']['rer'] = raw_metrics['rer']
+            if 'mean_hr' in raw_metrics:
+                data['heart_rate_data']['resting_hr'] = raw_metrics['mean_hr']
+
+            # Add a note that this was calculated from raw data
+            data['calculation_details'] = calc_result.get('calculation_details', {})
+            data['all_text'] = ['Raw PNOE Ergometry data - scores calculated from measurements']
+
+            return data
+    except Exception as e:
+        # If ergometry calculation fails, fall back to standard extraction
+        print(f"Ergometry calculation failed, using standard extraction: {e}")
 
     try:
         with pdfplumber.open(pdf_path) as pdf:
