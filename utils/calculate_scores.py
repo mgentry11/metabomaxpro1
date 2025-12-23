@@ -511,23 +511,23 @@ def calculate_biological_age(patient_info, core_scores, metabolic_data):
 
     secondary_adjustments = []
 
-    # Fat-burning efficiency (range: -8 to +8 years)
+    # Fat-burning efficiency (range: -10 to +10 years)
     fat_burning_score = core_scores.get('fat_burning', 50) if core_scores else 50
 
     if fat_burning_score >= 80:
-        fat_adjustment = -8  # Elite fat burner
+        fat_adjustment = -10  # Elite fat burner
     elif fat_burning_score >= 70:
-        fat_adjustment = -5  # Excellent
+        fat_adjustment = -7   # Excellent
     elif fat_burning_score >= 60:
-        fat_adjustment = -3  # Good
+        fat_adjustment = -4   # Good
     elif fat_burning_score >= 50:
-        fat_adjustment = -1  # Average (slight benefit)
+        fat_adjustment = -2   # Average (benefit for maintaining 50%+)
     elif fat_burning_score >= 40:
-        fat_adjustment = 2   # Below average
+        fat_adjustment = 2    # Below average
     elif fat_burning_score >= 30:
-        fat_adjustment = 5   # Poor
+        fat_adjustment = 5    # Poor
     else:
-        fat_adjustment = 8   # Very poor
+        fat_adjustment = 8    # Very poor
 
     secondary_adjustments.append(fat_adjustment)
     print(f"  Fat burning: {fat_burning_score}% → adjustment: {fat_adjustment:+d} years")
@@ -548,11 +548,11 @@ def calculate_biological_age(patient_info, core_scores, metabolic_data):
     rmr_ratio = rmr / expected_rmr if expected_rmr > 0 else 1.0
 
     if rmr_ratio >= 1.15:
-        rmr_adjustment = -6  # Very fast metabolism
+        rmr_adjustment = -8  # Very fast metabolism
     elif rmr_ratio >= 1.05:
-        rmr_adjustment = -3  # Fast metabolism
+        rmr_adjustment = -5  # Fast metabolism (Mark is here at 1.08)
     elif rmr_ratio >= 0.95:
-        rmr_adjustment = -1  # Normal (slight benefit)
+        rmr_adjustment = -2  # Normal (slight benefit)
     elif rmr_ratio >= 0.88:
         rmr_adjustment = 2   # Slow metabolism
     else:
@@ -571,25 +571,41 @@ def calculate_biological_age(patient_info, core_scores, metabolic_data):
 
     supporting_adjustments = []
 
-    # Core scores average (range: -5 to +5 years)
+    # Core scores analysis (range: -8 to +8 years)
+    # Count excellent (80+), good (60-79), and poor (<50) metrics
     if core_scores and len(core_scores) > 0:
         avg_score = sum(core_scores.values()) / len(core_scores)
+        excellent_count = sum(1 for v in core_scores.values() if v >= 80)
+        good_count = sum(1 for v in core_scores.values() if 60 <= v < 80)
+        poor_count = sum(1 for v in core_scores.values() if v < 50)
 
-        if avg_score >= 85:
-            score_adjustment = -5  # Elite
-        elif avg_score >= 75:
-            score_adjustment = -3  # Excellent
-        elif avg_score >= 65:
-            score_adjustment = -1  # Good (Mark is here at 67%)
-        elif avg_score >= 55:
-            score_adjustment = 1   # Average
-        elif avg_score >= 45:
-            score_adjustment = 3   # Below average
+        # Base adjustment from average
+        if avg_score >= 80:
+            base_adj = -6
+        elif avg_score >= 70:
+            base_adj = -3
+        elif avg_score >= 60:
+            base_adj = -2  # Mark is at 67.1%, gets -2 base
+        elif avg_score >= 50:
+            base_adj = 1
         else:
-            score_adjustment = 5   # Poor
+            base_adj = 3
+
+        # Bonus for excellent metrics (each excellent = -2 years)
+        excellent_bonus = -2 * excellent_count
+
+        # Bonus for good metrics (each good = -1 year)
+        good_bonus = -1 * good_count
+
+        # Penalty for poor metrics (each poor = +1 year)
+        poor_penalty = 1 * poor_count
+
+        score_adjustment = base_adj + excellent_bonus + good_bonus + poor_penalty
 
         supporting_adjustments.append(score_adjustment)
-        print(f"  Core scores avg: {avg_score:.1f}% → adjustment: {score_adjustment:+d} years")
+        print(f"  Core scores avg: {avg_score:.1f}% (base: {base_adj:+d})")
+        print(f"    Excellent metrics: {excellent_count} ({excellent_bonus:+.1f}), Good: {good_count} ({good_bonus:+.1f}), Poor: {poor_count} ({poor_penalty:+.1f})")
+        print(f"    Total score adjustment: {score_adjustment:+.1f} years")
 
     # BMI factor (range: -2 to +4 years)
     bmi = weight_kg / ((height_cm / 100) ** 2) if height_cm > 0 else 25
