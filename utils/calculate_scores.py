@@ -1,8 +1,189 @@
 """
 Calculate core performance scores from available metabolic data
 Since PNOE PDFs don't include these scores, we calculate them from raw metabolic data
+
+Biological Age Algorithm aligned with PNOE methodology:
+- Primary factor: VO2 max (the best predictor of longevity per American Heart Association)
+- Secondary factors: Fat-burning efficiency, Metabolic rate
+- Supporting factors: Core scores, BMI, cardiovascular health
 """
 import math
+
+# VO2 max percentile reference tables (ACSM Guidelines, 10th Edition)
+# Values represent 50th percentile VO2 max (ml/kg/min) by age and gender
+# Used to calculate "what age would have this VO2 max as average?"
+
+VO2MAX_PERCENTILES_MALE = {
+    # age: {percentile: vo2max}
+    20: {10: 32.2, 25: 38.1, 50: 44.2, 75: 50.2, 90: 55.1},
+    25: {10: 31.0, 25: 36.8, 50: 42.8, 75: 48.5, 90: 53.2},
+    30: {10: 29.4, 25: 35.0, 50: 40.8, 75: 46.3, 90: 50.8},
+    35: {10: 27.9, 25: 33.4, 50: 38.9, 75: 44.2, 90: 48.5},
+    40: {10: 26.5, 25: 31.8, 50: 37.0, 75: 42.1, 90: 46.2},
+    45: {10: 25.1, 25: 30.2, 50: 35.2, 75: 40.1, 90: 44.0},
+    50: {10: 23.8, 25: 28.7, 50: 33.5, 75: 38.1, 90: 41.8},
+    55: {10: 22.5, 25: 27.2, 50: 31.8, 75: 36.2, 90: 39.7},
+    60: {10: 21.3, 25: 25.8, 50: 30.2, 75: 34.3, 90: 37.6},
+    65: {10: 20.1, 25: 24.4, 50: 28.6, 75: 32.5, 90: 35.6},
+    70: {10: 19.0, 25: 23.1, 50: 27.0, 75: 30.7, 90: 33.6},
+    75: {10: 17.9, 25: 21.8, 50: 25.5, 75: 29.0, 90: 31.7},
+    80: {10: 16.9, 25: 20.5, 50: 24.1, 75: 27.3, 90: 29.9},
+}
+
+VO2MAX_PERCENTILES_FEMALE = {
+    # age: {percentile: vo2max}
+    20: {10: 27.6, 25: 32.3, 50: 37.6, 75: 42.4, 90: 46.8},
+    25: {10: 26.6, 25: 31.1, 50: 36.2, 75: 40.8, 90: 44.9},
+    30: {10: 25.3, 25: 29.6, 50: 34.5, 75: 38.8, 90: 42.7},
+    35: {10: 24.0, 25: 28.1, 50: 32.8, 75: 36.9, 90: 40.5},
+    40: {10: 22.8, 25: 26.7, 50: 31.1, 75: 35.0, 90: 38.4},
+    45: {10: 21.6, 25: 25.3, 50: 29.5, 75: 33.2, 90: 36.4},
+    50: {10: 20.5, 25: 24.0, 50: 28.0, 75: 31.4, 90: 34.4},
+    55: {10: 19.4, 25: 22.7, 50: 26.5, 75: 29.7, 90: 32.5},
+    60: {10: 18.4, 25: 21.5, 50: 25.1, 75: 28.1, 90: 30.7},
+    65: {10: 17.4, 25: 20.3, 50: 23.7, 75: 26.5, 90: 29.0},
+    70: {10: 16.4, 25: 19.2, 50: 22.4, 75: 25.0, 90: 27.3},
+    75: {10: 15.5, 25: 18.1, 50: 21.1, 75: 23.6, 90: 25.7},
+    80: {10: 14.6, 25: 17.1, 50: 19.9, 75: 22.2, 90: 24.2},
+}
+
+
+def get_vo2max_biological_age(vo2max, gender, chronological_age):
+    """
+    Calculate biological age based on VO2 max using ACSM percentile tables.
+
+    This is the PRIMARY factor in biological age calculation, aligned with
+    American Heart Association research showing VO2 max is the best predictor
+    of longevity and all-cause mortality.
+
+    Algorithm: Find what age would have this VO2 max as the 50th percentile.
+
+    Args:
+        vo2max: VO2 max in ml/kg/min (relative)
+        gender: 'male' or 'female'
+        chronological_age: Current age in years
+
+    Returns:
+        tuple: (vo2max_bio_age, percentile_for_age, adjustment_years)
+    """
+    if not vo2max or vo2max <= 0:
+        return chronological_age, 50, 0
+
+    # Select appropriate table
+    if 'male' in gender.lower():
+        table = VO2MAX_PERCENTILES_MALE
+    else:
+        table = VO2MAX_PERCENTILES_FEMALE
+
+    # Find the age where this VO2 max would be the 50th percentile
+    vo2max_bio_age = chronological_age
+
+    # Search through ages to find where this VO2 max matches 50th percentile
+    ages = sorted(table.keys())
+
+    for age in ages:
+        p50 = table[age][50]
+        if vo2max >= p50:
+            vo2max_bio_age = age
+            break
+    else:
+        # VO2 max is below all 50th percentiles - use oldest age + adjustment
+        vo2max_bio_age = ages[-1] + 5
+
+    # Also calculate what percentile this person is at for their actual age
+    # Find closest age bracket
+    closest_age = min(ages, key=lambda x: abs(x - chronological_age))
+    age_data = table[closest_age]
+
+    # Determine percentile for their age
+    percentile = 50  # default
+    if vo2max >= age_data[90]:
+        percentile = 95
+    elif vo2max >= age_data[75]:
+        percentile = 82  # midpoint 75-90
+    elif vo2max >= age_data[50]:
+        percentile = 62  # midpoint 50-75
+    elif vo2max >= age_data[25]:
+        percentile = 37  # midpoint 25-50
+    elif vo2max >= age_data[10]:
+        percentile = 17  # midpoint 10-25
+    else:
+        percentile = 5
+
+    adjustment = chronological_age - vo2max_bio_age
+
+    print(f"  VO2 max: {vo2max:.1f} ml/kg/min")
+    print(f"  VO2 max percentile for age {chronological_age}: {percentile}th")
+    print(f"  VO2 max biological age: {vo2max_bio_age} (adjustment: {adjustment:+d} years)")
+
+    return vo2max_bio_age, percentile, adjustment
+
+
+def estimate_vo2max_from_metrics(patient_info, core_scores, metabolic_data):
+    """
+    Estimate VO2 max when not directly available from test data.
+
+    Uses validated estimation formulas based on:
+    - Age, gender, weight, height
+    - Resting heart rate (if available)
+    - Activity level indicators from core scores
+
+    Args:
+        patient_info: dict with age, gender, weight_kg, height_cm
+        core_scores: dict with performance scores
+        metabolic_data: dict with any available metabolic data
+
+    Returns:
+        float: Estimated VO2 max in ml/kg/min
+    """
+    age = patient_info.get('age', 35)
+    gender = patient_info.get('gender', 'Male').lower()
+    weight_kg = patient_info.get('weight_kg', 77)
+    height_cm = patient_info.get('height_cm', 180)
+
+    # Check if we have actual VO2 max data
+    vo2max = metabolic_data.get('vo2max_rel') or metabolic_data.get('vo2max')
+    if vo2max and vo2max > 10:  # Sanity check - valid VO2 max is > 10
+        print(f"  Using extracted VO2 max: {vo2max} ml/kg/min")
+        return vo2max
+
+    # Check for absolute VO2 max and convert to relative
+    vo2max_abs = metabolic_data.get('vo2max_abs')
+    if vo2max_abs and weight_kg > 0:
+        vo2max = (vo2max_abs * 1000) / weight_kg  # Convert L/min to ml/kg/min
+        if 10 < vo2max < 80:  # Sanity check
+            print(f"  Converted absolute VO2 max: {vo2max:.1f} ml/kg/min")
+            return vo2max
+
+    # Estimate VO2 max using modified Jackson formula
+    # Base formula: VO2 max = 56.363 - (0.381 × age) - (0.754 × BMI) + (1.921 × PA)
+    # PA (physical activity) estimated from core scores
+
+    bmi = weight_kg / ((height_cm / 100) ** 2) if height_cm > 0 else 25
+
+    # Estimate physical activity level from core scores (0-7 scale)
+    if core_scores:
+        avg_score = sum(core_scores.values()) / len(core_scores)
+        # Map average score (0-100) to PA level (0-7)
+        pa_level = (avg_score / 100) * 7
+    else:
+        pa_level = 3.5  # Assume moderate activity
+
+    # Gender adjustment
+    if 'male' in gender:
+        base_vo2 = 56.363
+    else:
+        base_vo2 = 50.513  # Women have ~10% lower base
+
+    estimated_vo2max = base_vo2 - (0.381 * age) - (0.754 * bmi) + (1.921 * pa_level)
+
+    # Ensure reasonable bounds (15-70 ml/kg/min)
+    estimated_vo2max = max(15, min(70, estimated_vo2max))
+
+    print(f"  Estimated VO2 max (no test data): {estimated_vo2max:.1f} ml/kg/min")
+    print(f"    (Based on age={age}, BMI={bmi:.1f}, PA={pa_level:.1f})")
+
+    return estimated_vo2max
 
 def calculate_fuel_percentages_from_rer(rer):
     """
@@ -261,7 +442,12 @@ def enhance_extracted_data_with_calculated_scores(extracted_data):
 
 def calculate_biological_age(patient_info, core_scores, metabolic_data):
     """
-    Calculate biological age from metabolic data and core performance scores
+    Calculate biological age from metabolic data and core performance scores.
+
+    ALIGNED WITH PNOE METHODOLOGY:
+    - PRIMARY factor (50% weight): VO2 max - the best predictor of longevity
+    - SECONDARY factors (30% weight): Fat-burning efficiency + Metabolic rate
+    - SUPPORTING factors (20% weight): Core scores, BMI, cardiovascular health
 
     Args:
         patient_info: dict with age, weight_kg, height_cm, gender
@@ -276,203 +462,164 @@ def calculate_biological_age(patient_info, core_scores, metabolic_data):
     if not chronological_age:
         return None
 
-    print(f"\n[CALCULATE_BIO_AGE] Calculating biological age...")
-    print(f"  Chronological age: {chronological_age}")
-
-    age_adjustments = []
-
-    # Component 1: Overall core scores average
-    # Higher scores = better health = younger biological age (wider range: -10 to +10)
-    if core_scores and len(core_scores) > 0:
-        avg_score = sum(core_scores.values()) / len(core_scores)
-
-        if avg_score >= 90:
-            score_adjustment = -10  # Elite: 10 years younger
-        elif avg_score >= 85:
-            score_adjustment = -7  # Excellent: 7 years younger
-        elif avg_score >= 75:
-            score_adjustment = -4  # Very good: 4 years younger
-        elif avg_score >= 65:
-            score_adjustment = -2  # Good: 2 years younger
-        elif avg_score >= 55:
-            score_adjustment = 0   # Fair: no change
-        elif avg_score >= 45:
-            score_adjustment = 3   # Below average: 3 years older
-        elif avg_score >= 35:
-            score_adjustment = 6   # Poor: 6 years older
-        else:
-            score_adjustment = 10  # Very poor: 10 years older
-
-        age_adjustments.append(score_adjustment)
-        print(f"  Core scores avg: {avg_score:.1f}% → adjustment: {score_adjustment:+d} years")
-
-    # Component 2: Metabolic rate (RMR efficiency)
     weight_kg = patient_info.get('weight_kg', 77)
     height_cm = patient_info.get('height_cm', 180)
     gender = patient_info.get('gender', 'Male').lower()
 
-    # Calculate expected RMR using Mifflin-St Jeor equation
+    print(f"\n[CALCULATE_BIO_AGE] Calculating biological age (PNOE-aligned algorithm)...")
+    print(f"  Chronological age: {chronological_age}")
+    print(f"  Gender: {gender}, Weight: {weight_kg}kg, Height: {height_cm}cm")
+
+    # ========================================================================
+    # PRIMARY FACTOR (50% weight): VO2 MAX
+    # Per American Heart Association: VO2 max is the best predictor of longevity
+    # ========================================================================
+    print(f"\n  === PRIMARY FACTOR: VO2 MAX (50% weight) ===")
+
+    # Get or estimate VO2 max
+    vo2max = estimate_vo2max_from_metrics(patient_info, core_scores, metabolic_data)
+
+    # Calculate VO2 max biological age
+    vo2max_bio_age, vo2max_percentile, vo2max_adjustment = get_vo2max_biological_age(
+        vo2max, gender, chronological_age
+    )
+
+    # ========================================================================
+    # SECONDARY FACTORS (30% weight): Fat-burning + Metabolic Rate
+    # These are the other two factors PNOE emphasizes
+    # ========================================================================
+    print(f"\n  === SECONDARY FACTORS: FAT-BURNING + METABOLIC RATE (30% weight) ===")
+
+    secondary_adjustments = []
+
+    # Fat-burning efficiency (range: -8 to +8 years)
+    fat_burning_score = core_scores.get('fat_burning', 50) if core_scores else 50
+
+    if fat_burning_score >= 80:
+        fat_adjustment = -8  # Elite fat burner
+    elif fat_burning_score >= 70:
+        fat_adjustment = -5  # Excellent
+    elif fat_burning_score >= 60:
+        fat_adjustment = -2  # Good
+    elif fat_burning_score >= 50:
+        fat_adjustment = 0   # Average
+    elif fat_burning_score >= 40:
+        fat_adjustment = 3   # Below average
+    elif fat_burning_score >= 30:
+        fat_adjustment = 6   # Poor
+    else:
+        fat_adjustment = 8   # Very poor
+
+    secondary_adjustments.append(fat_adjustment)
+    print(f"  Fat burning: {fat_burning_score}% → adjustment: {fat_adjustment:+d} years")
+
+    # Metabolic rate (RMR efficiency) - range: -6 to +6 years
     if 'male' in gender:
         expected_rmr = (10 * weight_kg) + (6.25 * height_cm) - (5 * chronological_age) + 5
     else:
         expected_rmr = (10 * weight_kg) + (6.25 * height_cm) - (5 * chronological_age) - 161
 
-    # Get RMR - DON'T trust extracted value, calculate proper one
-    extracted_rmr = metabolic_data.get('rmr')
+    extracted_rmr = metabolic_data.get('rmr') if metabolic_data else None
 
-    # Validate extracted RMR (must be within 50% of expected)
     if extracted_rmr and 0.5 < (extracted_rmr / expected_rmr) < 1.5:
         rmr = extracted_rmr
-        print(f"  Using validated extracted RMR: {rmr} kcal")
     else:
         rmr = expected_rmr
-        if extracted_rmr:
-            print(f"  Rejected invalid extracted RMR ({extracted_rmr}) - using calculated: {rmr:.0f} kcal")
 
     rmr_ratio = rmr / expected_rmr if expected_rmr > 0 else 1.0
 
-    # Higher metabolic rate = younger biological age (wider range: -8 to +8 years)
-    if rmr_ratio >= 1.20:
-        rmr_adjustment = -8  # Exceptionally fast metabolism
-    elif rmr_ratio >= 1.15:
+    if rmr_ratio >= 1.15:
         rmr_adjustment = -6  # Very fast metabolism
-    elif rmr_ratio >= 1.10:
-        rmr_adjustment = -4  # Fast metabolism
-    elif rmr_ratio >= 1.05:
-        rmr_adjustment = -2  # Above average
+    elif rmr_ratio >= 1.08:
+        rmr_adjustment = -3  # Fast metabolism
     elif rmr_ratio >= 0.95:
-        rmr_adjustment = 0   # Average: no change
-    elif rmr_ratio >= 0.90:
-        rmr_adjustment = 2   # Below average
-    elif rmr_ratio >= 0.85:
-        rmr_adjustment = 4   # Slow metabolism
-    elif rmr_ratio >= 0.80:
+        rmr_adjustment = 0   # Average
+    elif rmr_ratio >= 0.88:
+        rmr_adjustment = 3   # Slow metabolism
+    else:
         rmr_adjustment = 6   # Very slow
-    else:
-        rmr_adjustment = 8   # Exceptionally slow
 
-    age_adjustments.append(rmr_adjustment)
-    print(f"  RMR ratio: {rmr_ratio:.2f} → adjustment: {rmr_adjustment:+d} years")
+    secondary_adjustments.append(rmr_adjustment)
+    print(f"  Metabolic rate ratio: {rmr_ratio:.2f} → adjustment: {rmr_adjustment:+d} years")
 
-    # Component 3: Fat-burning efficiency (wider range: -6 to +6)
-    fat_burning_score = core_scores.get('fat_burning', 50)
+    secondary_avg = sum(secondary_adjustments) / len(secondary_adjustments)
+    print(f"  Secondary factors avg adjustment: {secondary_avg:+.1f} years")
 
-    if fat_burning_score >= 85:
-        fat_adjustment = -6  # Elite fat burner: 6 years younger
-    elif fat_burning_score >= 75:
-        fat_adjustment = -4  # Excellent fat burner: 4 years younger
-    elif fat_burning_score >= 65:
-        fat_adjustment = -2  # Good fat burner: 2 years younger
-    elif fat_burning_score >= 50:
-        fat_adjustment = 0   # Average: no change
-    elif fat_burning_score >= 40:
-        fat_adjustment = 2   # Below average: 2 years older
-    else:
-        fat_adjustment = 4   # Poor fat burner: 4 years older
+    # ========================================================================
+    # SUPPORTING FACTORS (20% weight): Core scores average, BMI
+    # ========================================================================
+    print(f"\n  === SUPPORTING FACTORS (20% weight) ===")
 
-    age_adjustments.append(fat_adjustment)
-    print(f"  Fat burning: {fat_burning_score}% → adjustment: {fat_adjustment:+d} years")
+    supporting_adjustments = []
 
-    # Component 4: Cardiovascular health (HRV + Lung utilization) (wider range: -6 to +6)
-    hrv_score = core_scores.get('hrv', 60)
-    lung_score = core_scores.get('lung_util', 70)
-    cardio_avg = (hrv_score + lung_score) / 2
+    # Core scores average (range: -4 to +4 years)
+    if core_scores and len(core_scores) > 0:
+        avg_score = sum(core_scores.values()) / len(core_scores)
 
-    if cardio_avg >= 85:
-        cardio_adjustment = -6  # Elite cardio: 6 years younger
-    elif cardio_avg >= 75:
-        cardio_adjustment = -4  # Excellent cardio: 4 years younger
-    elif cardio_avg >= 65:
-        cardio_adjustment = -2  # Good cardio: 2 years younger
-    elif cardio_avg >= 50:
-        cardio_adjustment = 0   # Average: no change
-    elif cardio_avg >= 40:
-        cardio_adjustment = 2   # Below average: 2 years older
-    else:
-        cardio_adjustment = 4   # Poor cardio: 4 years older
-
-    age_adjustments.append(cardio_adjustment)
-    print(f"  Cardiovascular avg: {cardio_avg:.1f}% → adjustment: {cardio_adjustment:+d} years")
-
-    # Component 5: Age-based metabolic decline factor
-    # Older age = naturally slower metabolism, but this varies by individual fitness
-    # Add variance based on how well they're doing RELATIVE to their age
-    age_factor = 0
-    if chronological_age >= 60:
-        # For 60+, if they have good scores, they're doing exceptionally well
-        if avg_score >= 75 if core_scores else False:
-            age_factor = -5  # Exceptional for age: 5 years younger
-        elif avg_score >= 65 if core_scores else False:
-            age_factor = -2  # Good for age: 2 years younger
+        if avg_score >= 85:
+            score_adjustment = -4
+        elif avg_score >= 75:
+            score_adjustment = -2
+        elif avg_score >= 60:
+            score_adjustment = 0
+        elif avg_score >= 45:
+            score_adjustment = 2
         else:
-            age_factor = 2   # Average decline with age
-    elif chronological_age >= 50:
-        if avg_score >= 75 if core_scores else False:
-            age_factor = -3  # Very good for age
-        elif avg_score >= 65 if core_scores else False:
-            age_factor = -1
-        else:
-            age_factor = 1
-    elif chronological_age >= 40:
-        if avg_score >= 80 if core_scores else False:
-            age_factor = -2
-        else:
-            age_factor = 0
-    else:
-        # Younger people should naturally have better metrics
-        if avg_score < 60 if core_scores else False:
-            age_factor = 3   # Poor for young age
-        else:
-            age_factor = 0
+            score_adjustment = 4
 
-    if age_factor != 0:
-        age_adjustments.append(age_factor)
-        print(f"  Age-relative performance: adjustment: {age_factor:+d} years")
+        supporting_adjustments.append(score_adjustment)
+        print(f"  Core scores avg: {avg_score:.1f}% → adjustment: {score_adjustment:+d} years")
 
-    # Component 6: Body composition (BMI) - optimal is 22-25
-    bmi = weight_kg / ((height_cm / 100) ** 2) if height_cm > 0 else 22
-    bmi_factor = 0
+    # BMI factor (range: -2 to +4 years)
+    bmi = weight_kg / ((height_cm / 100) ** 2) if height_cm > 0 else 25
 
     if bmi < 18.5:
-        bmi_factor = 2   # Underweight: 2 years older
-    elif bmi < 22:
-        bmi_factor = -1  # Lean: 1 year younger
+        bmi_factor = 1   # Underweight
     elif bmi < 25:
-        bmi_factor = -2  # Optimal: 2 years younger
-    elif bmi < 27:
-        bmi_factor = 0   # Slightly overweight: no change
+        bmi_factor = -2  # Optimal
     elif bmi < 30:
-        bmi_factor = 2   # Overweight: 2 years older
+        bmi_factor = 1   # Overweight
     elif bmi < 35:
-        bmi_factor = 4   # Obese: 4 years older
+        bmi_factor = 3   # Obese
     else:
-        bmi_factor = 6   # Severely obese: 6 years older
+        bmi_factor = 4   # Severely obese
 
-    age_adjustments.append(bmi_factor)
+    supporting_adjustments.append(bmi_factor)
     print(f"  BMI: {bmi:.1f} → adjustment: {bmi_factor:+d} years")
 
-    # Component 7: Add variance based on individual patient characteristics
-    # Use patient-specific factors to ensure uniqueness
-    # Weight variation: very light or very heavy affects bio age differently
-    weight_variance = 0
-    if weight_kg < 60:
-        weight_variance = -1  # Very light, may age slower
-    elif weight_kg > 100:
-        weight_variance = 2   # Very heavy, additional aging stress
+    supporting_avg = sum(supporting_adjustments) / len(supporting_adjustments) if supporting_adjustments else 0
+    print(f"  Supporting factors avg adjustment: {supporting_avg:+.1f} years")
 
-    if weight_variance != 0:
-        age_adjustments.append(weight_variance)
-        print(f"  Weight factor ({weight_kg}kg): adjustment: {weight_variance:+d} years")
+    # ========================================================================
+    # WEIGHTED FINAL CALCULATION
+    # ========================================================================
+    print(f"\n  === FINAL WEIGHTED CALCULATION ===")
+
+    # Weights aligned with PNOE methodology
+    vo2max_weight = 0.50  # 50% - Primary factor
+    secondary_weight = 0.30  # 30% - Fat-burning + Metabolic rate
+    supporting_weight = 0.20  # 20% - Core scores + BMI
+
+    # Calculate weighted adjustment
+    weighted_adjustment = (
+        (vo2max_adjustment * vo2max_weight) +
+        (secondary_avg * secondary_weight) +
+        (supporting_avg * supporting_weight)
+    )
+
+    print(f"  VO2 max contribution: {vo2max_adjustment:+d} × {vo2max_weight:.0%} = {vo2max_adjustment * vo2max_weight:+.1f}")
+    print(f"  Secondary contribution: {secondary_avg:+.1f} × {secondary_weight:.0%} = {secondary_avg * secondary_weight:+.1f}")
+    print(f"  Supporting contribution: {supporting_avg:+.1f} × {supporting_weight:.0%} = {supporting_avg * supporting_weight:+.1f}")
+    print(f"  Total weighted adjustment: {weighted_adjustment:+.1f} years")
 
     # Calculate final biological age
-    total_adjustment = sum(age_adjustments)
-    biological_age = chronological_age + total_adjustment
+    biological_age = chronological_age - weighted_adjustment
 
     # Ensure reasonable bounds (18-90 years)
     biological_age = max(18, min(90, round(biological_age)))
 
-    print(f"  Total adjustment: {total_adjustment:+d} years")
-    print(f"  BIOLOGICAL AGE: {biological_age} (vs chronological: {chronological_age})")
+    print(f"\n  ✓ BIOLOGICAL AGE: {biological_age} (vs chronological: {chronological_age})")
+    print(f"  ✓ You are {chronological_age - biological_age:+d} years {'younger' if biological_age < chronological_age else 'older'} than your chronological age")
     print()
 
     return biological_age
