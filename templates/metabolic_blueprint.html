@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metabolic Blueprint - {{ patient.name }}</title>
+    <style>
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+    --primary: #0F766E;
+    --secondary: #4338CA;
+    --accent: #0D9488;
+    --bg-light: #F8FAFC;
+    --text-dark: #1E293B;
+    --text-light: #64748B;
+    --border: #E2E8F0;
+    --white: #FFFFFF;
+    --red-subtle: #FEF2F2;
+    --red-dark: #B91C1C;
+}
+
+* { box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+body {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+    line-height: 1.6;
+    background: var(--white);
+    font-size: 15px;
+    color: var(--text-dark);
+}
+
+@page { margin: 0.75in; size: letter; }
+.page-break { page-break-before: always; }
+.no-break { page-break-inside: avoid; }
+
+.container { padding: 40px; }
+.card {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 30px;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+    border: 1px solid var(--border);
+}
+
+.header {
+    background: linear-gradient(135deg, #0F766E 0%, #115E59 100%);
+    color: white;
+    padding: 50px 40px;
+    border-radius: 0 0 20px 20px;
+    margin-bottom: 50px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+.header-top { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 25px; margin-bottom: 25px; }
+.brand { font-size: 1.6em; font-weight: 800; letter-spacing: -0.02em; display: flex; align-items: center; gap: 10px; }
+.report-meta { text-align: right; font-size: 0.95em; opacity: 0.9; }
+.main-title { font-size: 2.8em; font-weight: 800; margin: 0; line-height: 1.1; letter-spacing: -0.03em; }
+.subtitle { font-size: 1.2em; opacity: 0.9; margin-top: 15px; font-weight: 300; }
+
+h2 {
+    color: var(--primary);
+    font-size: 1.8em;
+    margin: 40px 0 20px 0;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+h2 svg { width: 28px; height: 28px; stroke: currentColor; }
+
+h3 { color: var(--secondary); font-size: 1.2em; margin: 0 0 12px 0; font-weight: 600; }
+
+.patient-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin-bottom: 40px;
+}
+.info-item {
+    background: var(--white);
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    border-left: 5px solid var(--primary);
+}
+.info-label { font-size: 0.8em; text-transform: uppercase; color: var(--text-light); letter-spacing: 0.08em; font-weight: 600; margin-bottom: 5px; }
+.info-value { font-size: 1.2em; font-weight: 700; color: var(--text-dark); }
+
+.score-container { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 40px; }
+.score-box {
+    background: var(--white);
+    border-radius: 16px;
+    padding: 35px;
+    text-align: center;
+    border: 1px solid var(--border);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    position: relative;
+    overflow: hidden;
+}
+.score-box.perf { border-top: 6px solid #4F46E5; }
+.score-box.long { border-top: 6px solid #0F766E; }
+
+.css-pie {
+    width: 150px; height: 150px;
+    border-radius: 50%;
+    background: conic-gradient(var(--c) calc(var(--p)*1%), #F1F5F9 0);
+    margin: 0 auto 20px;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+}
+.css-pie::before {
+    content: ''; position: absolute;
+    width: 120px; height: 120px;
+    background: white; border-radius: 50%;
+}
+.pie-value { position: relative; font-size: 3.2em; font-weight: 800; line-height: 1; z-index: 10; }
+.pie-label { font-size: 0.95em; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--text-light); }
+
+.bio-age-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+}
+.bio-timeline {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 25px 0;
+    position: relative;
+    padding: 0 40px;
+}
+.bio-timeline::before {
+    content: ''; position: absolute; left: 50px; right: 50px; top: 50%; height: 2px;
+    background: var(--border); z-index: 0;
+}
+.bio-point {
+    position: relative;
+    z-index: 1;
+    background: var(--white);
+    padding: 12px 22px;
+    border-radius: 30px;
+    border: 2px solid var(--border);
+    text-align: center;
+    min-width: 130px;
+}
+.bio-point.current { border-color: #DC2626; box-shadow: 0 4px 12px rgba(220, 38, 38, 0.15); }
+.bio-num { font-size: 2em; font-weight: 800; display: block; line-height: 1; }
+.bio-txt { font-size: 0.85em; font-weight: 600; text-transform: uppercase; color: var(--text-light); margin-top: 4px; }
+.bio-arrow { font-size: 1.8em; color: #DC2626; z-index: 1; background: var(--white); padding: 0 10px; }
+
+.summary-squares { display: flex; gap: 10px; margin-top: 20px; }
+.sq-box {
+    flex: 1;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 1.3em;
+    border-radius: 8px;
+    position: relative;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.sq-label {
+    position: absolute; bottom: -22px; left: 0; right: 0;
+    text-align: center; font-size: 0.75em; color: var(--text-light); font-weight: 500;
+}
+
+.metric-item { margin-bottom: 20px; }
+.metric-top { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 1em; font-weight: 600; color: var(--text-dark); }
+.bar-bg { height: 12px; background: #F1F5F9; border-radius: 6px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 6px; }
+
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.grid-4 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+
+.icon-card {
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: 12px; padding: 25px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+    transition: transform 0.2s;
+}
+.icon-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; color: var(--primary); font-weight: 700; font-size: 1.2em; }
+.icon-body { font-size: 0.95em; color: var(--text-light); line-height: 1.5; }
+
+.zone-box { text-align: center; padding: 20px; border-radius: 12px; background: white; border: 1px solid var(--border); box-shadow: 0 2px 4px rgba(0,0,0,0.04); }
+.zone-box.primary { border: 2px solid #10B981; background: #ECFDF5; box-shadow: 0 4px 8px rgba(16, 185, 129, 0.1); }
+.zone-bpm { font-size: 1.5em; font-weight: 800; color: var(--text-dark); margin: 8px 0; }
+.zone-name { font-size: 0.85em; text-transform: uppercase; font-weight: 700; color: var(--text-light); }
+
+.caloric-visual { display: flex; align-items: flex-end; gap: 25px; height: 180px; padding-bottom: 25px; border-bottom: 1px solid var(--border); }
+.c-bar-group { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; gap: 8px; height: 100%; }
+.c-bar { width: 100%; border-radius: 5px 5px 0 0; position: relative; min-height: 25px; transition: height 0.5s; }
+.c-val { position: absolute; top: -30px; left: 0; right: 0; text-align: center; font-weight: 700; font-size: 1em; color: var(--text-dark); }
+.c-label { text-align: center; font-size: 0.85em; font-weight: 600; margin-top: 12px; color: var(--text-light); }
+
+.fuel-donut {
+    width: 140px; height: 140px; border-radius: 50%; margin: 0 auto;
+    background: conic-gradient(#10B981 0% var(--fat), #3B82F6 var(--fat) 100%);
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+.fuel-donut::before { content: ''; position: absolute; width: 90px; height: 90px; background: white; border-radius: 50%; }
+.fuel-legend { display: flex; justify-content: center; gap: 25px; margin-top: 20px; font-size: 0.9em; }
+.dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; margin-right: 6px; }
+
+.roadmap { position: relative; padding-left: 35px; border-left: 2px solid var(--border); margin-left: 20px; }
+.road-item { position: relative; margin-bottom: 35px; }
+.road-dot {
+    position: absolute; left: -42px; top: 0;
+    width: 18px; height: 18px;
+    background: var(--primary); border: 5px solid white;
+    border-radius: 50%; box-shadow: 0 0 0 1px var(--border);
+}
+.road-content { background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.04); }
+.tag { font-size: 0.75em; padding: 4px 10px; border-radius: 15px; font-weight: 700; text-transform: uppercase; float: right; margin-left: 10px; }
+.tag.high { background: #FEE2E2; color: #BE123C; }
+.tag.med { background: #FEF3C7; color: #B45309; }
+
+.disclaimer { font-size:0.85em; color:var(--text-light); text-align:center; padding:25px; border-top:1px solid var(--border); margin-top:50px; }
+.disclaimer strong { color: var(--text-dark); }
+
+.peptide-section {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 30px;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+}
+.peptide-header {
+    background: linear-gradient(90deg, #4F46E5 0%, #6366F1 100%);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-weight: 700;
+    font-size: 1.1em;
+}
+.peptide-card {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    background: #F8FAFC;
+}
+.peptide-card h5 { color: #1E293B; font-size: 1.1em; margin-bottom: 5px; }
+.peptide-category { font-size: 0.8em; background: #E0E7FF; color: #4F46E5; padding: 3px 8px; border-radius: 12px; font-weight: 600; }
+.peptide-dosing p { margin: 5px 0; font-size: 0.9em; color: var(--text-light); }
+.peptide-dosing strong { color: var(--text-dark); }
+.peptide-rationale { margin-top: 15px; border-top: 1px dashed var(--border); padding-top: 15px; }
+.peptide-rationale p { font-size: 0.9em; line-height: 1.5; }
+
+.text-center { text-align: center; }
+.mb-20 { margin-bottom: 20px; }
+.text-primary { color: var(--primary); }
+
+.bio-age-card .bio-point.current {
+    border-color: var(--red-dark);
+    box-shadow: 0 4px 12px rgba(var(--red-dark-rgb), 0.15);
+    background-color: var(--red-subtle);
+}
+.bio-age-card .bio-arrow { color: var(--red-dark); background: var(--white); }
+.bio-age-card { background: var(--red-subtle); border-color: var(--red-subtle); border-left-color: var(--red-dark); }
+.bio-age-card h2 { color: var(--red-dark); }
+.bio-age-card .text-center { color: var(--red-dark); }
+
+.card, .header, .patient-grid, .score-container, .bio-age-card, .summary-bar, .metric-item, .pillars-grid, .zone-box, .caloric-visual, .interventions-grid, .roadmap-box, .peptide-section {
+    page-break-inside: avoid;
+}
+.header { margin-top: 0; padding-top: 40px; }
+
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="header-top">
+        <div class="brand">
+            <span style="font-size:1.8em;">⚡</span>
+            <div>{{ facility_name|default('METABOMAX PRO') }}<br><span style="font-size:0.6em;font-weight:400;opacity:0.8;letter-spacing:1px;">PERFORMANCE MEDICINE</span></div>
+        </div>
+        <div class="report-meta">
+            DATE: {{ report_date }}<br>
+            ID: {{ patient.id }}
+        </div>
+    </div>
+    <h1 class="main-title">Complete Metabolic Blueprint</h1>
+    <div class="subtitle">Advanced Physiology & Longevity Analysis</div>
+</div>
+
+
+<div class="patient-grid">
+    <div class="info-item">
+        <div class="info-label">Patient Name</div>
+        <div class="info-value">{{ patient.name }}</div>
+    </div>
+    <div class="info-item">
+        <div class="info-label">Age / Gender</div>
+        <div class="info-value">{{ patient.age }} / {{ patient.gender }}</div>
+    </div>
+    <div class="info-item">
+        <div class="info-label">Body Metrics</div>
+        <div class="info-value">{{ patient.weight }} lbs / {{ patient.height }}</div>
+    </div>
+    <div class="info-item">
+        <div class="info-label">Facility</div>
+        <div class="info-value">{{ facility_name|default('MetaboMax Pro') }}</div>
+    </div>
+</div>
+
+
+<div class="score-container">
+    <div class="score-box perf">
+        <h3>Performance Score</h3>
+        <div class="css-pie" style="--p:{{ scores.performance }}; --c:#4F46E5">
+            <span class="pie-value" style="color:#4F46E5">{{ scores.performance }}</span>
+        </div>
+        <div class="pie-label" style="color:#4F46E5">{{ scores.performance_label }}</div>
+    </div>
+    <div class="score-box long">
+        <h3>Longevity Score</h3>
+        <div class="css-pie" style="--p:{{ scores.longevity }}; --c:#0F766E">
+            <span class="pie-value" style="color:#0F766E">{{ scores.longevity }}</span>
+        </div>
+        <div class="pie-label" style="color:#0F766E">{{ scores.longevity_label }}</div>
+    </div>
+</div>
+
+<!-- Educational Section: Understanding Metrics -->
+<div class="card no-break">
+    <h2>📘 Deep Dive: Decoding Your Physiology</h2>
+    <p style="color:#64748B; margin-bottom:30px; font-size:1.05em; line-height:1.6;">
+        This report is not just a collection of numbers; it is a blueprint of your biological function. To help you truly understand your body, we have broken down the three pillars of human performance into detailed explanations below.
+    </p>
+
+    <div style="display:flex; flex-direction:column; gap:35px;">
+
+        <!-- VO2max Section -->
+        <div style="background:#F0FDF4; padding:30px; border-radius:16px; border:1px solid #BBF7D0; border-left:8px solid #059669;">
+            <h3 style="color:#059669; font-size:1.5em; margin-bottom:20px; display:flex; align-items:center; gap:12px;">
+                <span style="font-size:1.2em; background:white; padding:8px; border-radius:50%; box-shadow:0 2px 5px rgba(0,0,0,0.05);">🫁</span>
+                The Engine: VO2max
+            </h3>
+
+            <div style="display:grid; grid-template-columns: 1fr; gap:20px;">
+                <div>
+                    <strong style="color:#064E3B; display:block; margin-bottom:8px; font-size:1.1em;">🔬 The Physiology</strong>
+                    <p style="font-size:0.95em; line-height:1.7; margin:0; color:#374151;">
+                        VO2max stands for "Volume of Oxygen Maximum." It measures the maximum amount of oxygen your heart can pump and your muscles can use during intense exercise. It reflects the health of your lungs (intake), heart (delivery), and muscles (utilization) working in unison.
+                    </p>
+                </div>
+
+                <div style="background:rgba(255,255,255,0.7); padding:20px; border-radius:10px; border:1px solid #DCFCE7;">
+                    <strong style="color:#064E3B; display:block; margin-bottom:8px; font-size:1.1em;">🏎️ The Real-World Analogy</strong>
+                    <p style="font-size:0.95em; line-height:1.7; margin:0; color:#374151;">
+                        Think of VO2max as the <strong>size of your car's engine (horsepower)</strong>. A high VO2max means daily life requires a smaller percentage of your total capacity, reducing strain on your heart.
+                    </p>
+                </div>
+
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
+                    <div>
+                        <strong style="color:#064E3B; display:block; margin-bottom:5px;">🏥 Longevity Impact</strong>
+                        <p style="font-size:0.9em; line-height:1.6; color:#4B5563;">
+                            VO2max is the <strong>#1 strongest predictor of all-cause mortality</strong>. Moving from "Low" to "Above Average" cardio fitness reduces mortality risk more than quitting smoking.
+                        </p>
+                    </div>
+                    <div>
+                        <strong style="color:#064E3B; display:block; margin-bottom:5px;">⚡ Daily Life Feel</strong>
+                        <p style="font-size:0.9em; line-height:1.6; color:#4B5563;">
+                            High VO2max feels like "endless energy." You don't get winded climbing stairs. You recover instantly from stress.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Metabolic Efficiency Section -->
+        <div style="background:#EEF2FF; padding:30px; border-radius:16px; border:1px solid #C7D2FE; border-left:8px solid #4338CA;">
+            <h3 style="color:#4338CA; font-size:1.5em; margin-bottom:20px; display:flex; align-items:center; gap:12px;">
+                <span style="font-size:1.2em; background:white; padding:8px; border-radius:50%; box-shadow:0 2px 5px rgba(0,0,0,0.05);">🔥</span>
+                The Fuel System: Metabolic Efficiency
+            </h3>
+
+            <div style="display:grid; grid-template-columns: 1fr; gap:20px;">
+                <div>
+                    <strong style="color:#312E81; display:block; margin-bottom:8px; font-size:1.1em;">🔬 The Physiology</strong>
+                    <p style="font-size:0.95em; line-height:1.7; margin:0; color:#374151;">
+                        This measures "Metabolic Flexibility"—your body's ability to switch between fuel sources. A healthy metabolism burns almost exclusively fat at rest, saving carbohydrates for high-intensity moments.
+                    </p>
+                </div>
+
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
+                    <div>
+                        <strong style="color:#312E81; display:block; margin-bottom:5px;">🏥 Longevity Impact</strong>
+                        <p style="font-size:0.9em; line-height:1.6; color:#4B5563;">
+                            Inability to burn fat is the precursor to Type 2 Diabetes, weight gain, and metabolic syndrome.
+                        </p>
+                    </div>
+                    <div>
+                        <strong style="color:#312E81; display:block; margin-bottom:5px;">⚡ Daily Life Feel</strong>
+                        <p style="font-size:0.9em; line-height:1.6; color:#4B5563;">
+                            Metabolic flexibility means steady energy all day. No "3 PM crash." No "hangry" mood swings.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cellular Health Section -->
+        <div style="background:#F0FDFA; padding:30px; border-radius:16px; border:1px solid #CCFBF1; border-left:8px solid #0D9488;">
+            <h3 style="color:#0F766E; font-size:1.5em; margin-bottom:20px; display:flex; align-items:center; gap:12px;">
+                <span style="font-size:1.2em; background:white; padding:8px; border-radius:50%; box-shadow:0 2px 5px rgba(0,0,0,0.05);">🧬</span>
+                The Power Plant: Cellular Health
+            </h3>
+
+            <div style="display:grid; grid-template-columns: 1fr; gap:20px;">
+                <div>
+                    <strong style="color:#115E59; display:block; margin-bottom:8px; font-size:1.1em;">🔬 The Physiology</strong>
+                    <p style="font-size:0.95em; line-height:1.7; margin:0; color:#374151;">
+                        We are analyzing your <strong>Mitochondria</strong>—the microscopic power plants inside every cell that turn oxygen and food into energy (ATP).
+                    </p>
+                </div>
+
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
+                    <div>
+                        <strong style="color:#115E59; display:block; margin-bottom:5px;">🏥 Longevity Impact</strong>
+                        <p style="font-size:0.9em; line-height:1.6; color:#4B5563;">
+                            Mitochondrial dysfunction is one of the nine "Hallmarks of Aging." Healthy mitochondria keep your tissues youthful.
+                        </p>
+                    </div>
+                    <div>
+                        <strong style="color:#115E59; display:block; margin-bottom:5px;">⚡ Daily Life Feel</strong>
+                        <p style="font-size:0.9em; line-height:1.6; color:#4B5563;">
+                            "Stamina." You don't get tired easily. Your brain feels sharp. You wake up refreshed.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<div class="card bio-age-card no-break">
+    <h2 style="margin-top:0; color:#BE123C">🧬 Biological Age Analysis</h2>
+    <div class="bio-timeline">
+        <div class="bio-point">
+            <span class="bio-num" style="color:#64748B">{{ patient.age }}</span>
+            <span class="bio-txt">Chronological</span>
+        </div>
+        <div class="bio-arrow">→</div>
+        <div class="bio-point current" style="border-color:#10B981">
+            <span class="bio-num" style="color:#10B981">{{ biological_age.value }}</span>
+            <span class="bio-txt">Biological Age</span>
+        </div>
+    </div>
+    <div class="text-center" style="font-weight:600; color:#10B981; margin-bottom:25px;">
+        {{ biological_age.difference }} years {{ 'younger' if biological_age.value < patient.age else 'older' }} than your calendar age.
+    </div>
+
+    <div style="background:var(--white); border:1px solid #FECDD3; border-radius:10px; padding:20px;">
+        <h3 style="color:#BE123C; font-size:1.1em; margin-bottom:10px;">🧪 How We Determined This</h3>
+        <p style="font-size:0.95em; color:#4B5563; line-height:1.6; margin-bottom:15px;">
+            Your Biological Age is a composite score derived from comparing your cellular function against a clinical database of healthy individuals.
+        </p>
+
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
+            <div>
+                <strong style="color:#15803D; font-size:0.9em; text-transform:uppercase;">✅ Age Reversers (Bonuses)</strong>
+                <ul style="font-size:0.9em; color:#374151; padding-left:20px; margin-top:5px;">
+                    {% for item in biological_age.reversers %}
+                    <li><strong>{{ item.name }}:</strong> {{ item.description }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div>
+                <strong style="color:#B91C1C; font-size:0.9em; text-transform:uppercase;">⚠️ Age Accelerators (Penalties)</strong>
+                <ul style="font-size:0.9em; color:#374151; padding-left:20px; margin-top:5px;">
+                    {% for item in biological_age.accelerators %}
+                    <li><strong>{{ item.name }}:</strong> {{ item.description }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="card no-break">
+    <h2>📊 System Analysis & Limitations</h2>
+
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:30px; margin-bottom:30px;">
+        <!-- Limitations -->
+        <div style="background:#FEF2F2; padding:20px; border-radius:10px; border:1px solid #FECACA;">
+            <h3 style="color:#B91C1C; font-size:1.2em; margin-bottom:15px; display:flex; align-items:center; gap:8px;">
+                ⚠️ Key Areas for Improvement
+            </h3>
+            <ul style="margin:0; padding-left:20px; color:#7F1D1D;">
+                {% for limitation in analysis.limitations %}
+                <li style="margin-bottom:10px;">
+                    <strong>{{ limitation.name }} ({{ limitation.value }}%):</strong> {{ limitation.description }}
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!-- Strengths -->
+        <div style="background:#F0FDF4; padding:20px; border-radius:10px; border:1px solid #BBF7D0;">
+            <h3 style="color:#15803D; font-size:1.2em; margin-bottom:15px; display:flex; align-items:center; gap:8px;">
+                ✅ System Strengths
+            </h3>
+            <ul style="margin:0; padding-left:20px; color:#14532D;">
+                {% for strength in analysis.strengths %}
+                <li style="margin-bottom:10px;">
+                    <strong>{{ strength.name }} ({{ strength.value }}%):</strong> {{ strength.description }}
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <div style="border-top:1px solid #E2E8F0; padding-top:20px;">
+        <p style="font-size:0.9em; color:#64748B; margin-bottom:15px; font-weight:600;">Overall Limitation Distribution:</p>
+        <div class="summary-squares">
+            <div class="sq-box" style="background:#EF4444; {% if summary.severe == 0 %}opacity:0.3;{% endif %}">{{ summary.severe }}<div class="sq-label">Severe</div></div>
+            <div class="sq-box" style="background:#F97316; {% if summary.poor == 0 %}opacity:0.3;{% endif %}">{{ summary.poor }}<div class="sq-label">Poor</div></div>
+            <div class="sq-box" style="background:#F59E0B; {% if summary.limited > 0 %}border:2px solid #B45309; transform:scale(1.05);{% else %}opacity:0.3;{% endif %}">{{ summary.limited }}<div class="sq-label" {% if summary.limited > 0 %}style="font-weight:700; color:#B45309;"{% endif %}>Limited</div></div>
+            <div class="sq-box" style="background:#3B82F6">{{ summary.good }}<div class="sq-label">Good</div></div>
+            <div class="sq-box" style="background:#10B981">{{ summary.excellent }}<div class="sq-label">Excellent</div></div>
+        </div>
+    </div>
+</div>
+
+
+<div class="card no-break">
+    <h2>📈 Core Metrics Deep Dive</h2>
+    <p style="color:#64748B; margin-bottom:25px;">A detailed breakdown of the seven key physiological markers driving your performance and longevity scores.</p>
+
+    <div style="display:flex; flex-direction:column; gap:20px;">
+        {% for metric in metrics %}
+        <div style="background:{{ metric.bg_color }}; border:1px solid {{ metric.border_color }}; border-left:5px solid {{ metric.accent_color }}; padding:20px; border-radius:8px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                <h3 style="margin:0; color:{{ metric.text_color }}; font-size:1.1em;">{{ metric.name }}</h3>
+                <span style="font-weight:800; color:{{ metric.accent_color }}; font-size:1.2em;">{{ metric.value }}%</span>
+            </div>
+            <div class="bar-bg" style="background:{{ metric.bar_bg }}; margin-bottom:12px;">
+                <div class="bar-fill" style="width:{{ metric.value }}%; background:{{ metric.accent_color }};"></div>
+            </div>
+            <p style="font-size:0.9em; color:#374151; margin:0; line-height:1.5;">
+                <strong>Status: {{ metric.status }}.</strong> {{ metric.description }}
+            </p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="card no-break">
+    <h2>🏛️ The 4 Pillars of Longevity</h2>
+    <p style="color:#64748B; margin-bottom:25px;">Medical science identifies four critical physiological systems that determine your "Healthspan"—the number of years you live in good health.</p>
+
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:25px;">
+        {% for pillar in pillars %}
+        <div style="background:var(--white); border:1px solid #E2E8F0; border-left:4px solid {{ pillar.color }}; border-radius:10px; padding:20px;">
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+                <span style="font-size:1.5em;">{{ pillar.icon }}</span>
+                <h3 style="margin:0; color:#1E293B; font-size:1.1em;">{{ pillar.name }}</h3>
+            </div>
+            <p style="font-size:0.9em; color:#475569; line-height:1.6; margin:0;">
+                <strong>Why it matters:</strong> {{ pillar.why }}
+                <br><br>
+                <strong>Your Status:</strong> {{ pillar.status }}
+            </p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="page-break"></div>
+
+<div class="card no-break">
+    <h2>🏃 Your Personalized Training Zones</h2>
+    <p style="color:#64748B; margin-bottom:25px;">
+        Training zones represent distinct metabolic states where your body switches fuel sources and recruits different muscle fibers.
+    </p>
+
+    <div style="display:flex; flex-direction:column; gap:15px;">
+        {% for zone in zones %}
+        <div style="background:{{ zone.bg_color }}; border:{% if zone.is_primary %}2px{% else %}1px{% endif %} solid {{ zone.border_color }}; padding:{% if zone.is_primary %}20px{% else %}15px{% endif %}; border-radius:10px; display:flex; align-items:center; gap:20px; position:relative;">
+            {% if zone.is_primary %}
+            <div style="position:absolute; top:-12px; right:20px; background:#10B981; color:white; font-size:0.75em; font-weight:700; padding:2px 10px; border-radius:12px;">★ PRIMARY FOCUS</div>
+            {% endif %}
+            <div style="min-width:100px; text-align:center;">
+                <div style="font-weight:700; color:{{ zone.label_color }}; font-size:1.1em;">ZONE {{ zone.number }}</div>
+                <div style="font-weight:800; color:{{ zone.value_color }}; font-size:{% if zone.is_primary %}1.6em{% else %}1.4em{% endif %};">{{ zone.hr_low }}-{{ zone.hr_high }}</div>
+                <div style="font-size:0.75em; color:{{ zone.subtext_color }};">BPM</div>
+            </div>
+            <div style="border-left:2px solid {{ zone.divider_color }}; padding-left:20px;">
+                <strong style="color:{{ zone.title_color }}; {% if zone.is_primary %}font-size:1.1em;{% endif %}">{{ zone.name }}</strong>
+                <p style="font-size:{% if zone.is_primary %}0.95em{% else %}0.9em{% endif %}; margin:5px 0 0 0; color:{{ zone.desc_color }};">
+                    <strong>The Feeling:</strong> {{ zone.feeling }}
+                    <br><strong>The Benefit:</strong> {{ zone.benefit }}
+                </p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="card no-break">
+    <h2>🔥 Metabolism & Fuel Analysis</h2>
+    <div class="grid-2" style="margin-bottom:30px;">
+        <div>
+            <h3 style="text-align:center; color:#475569; font-size:1em; margin-bottom:15px;">Daily Energy Balance (kcal)</h3>
+            <div class="caloric-visual">
+                <div class="c-bar-group">
+                    <div class="c-val" style="color:#F97316">{{ metabolism.rmr }}</div>
+                    <div class="c-bar" style="height:{{ (metabolism.rmr / metabolism.eat_workout * 100)|int }}%; background:#F97316"></div>
+                    <div class="c-label">Burn<br>(Rest)</div>
+                </div>
+                <div class="c-bar-group">
+                    <div class="c-val" style="color:#F59E0B">{{ metabolism.eat_rest }}</div>
+                    <div class="c-bar" style="height:{{ (metabolism.eat_rest / metabolism.eat_workout * 100)|int }}%; background:#F59E0B"></div>
+                    <div class="c-label">Eat<br>(Rest)</div>
+                </div>
+                <div class="c-bar-group">
+                    <div class="c-val" style="color:#10B981">{{ metabolism.eat_workout }}</div>
+                    <div class="c-bar" style="height:91%; background:#10B981"></div>
+                    <div class="c-label">Eat<br>(Workout)</div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <h3 style="text-align:center; color:#475569; font-size:1em; margin-bottom:15px;">Fuel Source Efficiency</h3>
+            <div class="fuel-donut" style="--fat:{{ metabolism.fat_burn }}%;">
+                <div class="text-center">
+                    <div style="font-size:0.8em; color:#64748B">FAT BURN</div>
+                    <div style="font-size:1.8em; font-weight:800; color:#10B981">{{ metabolism.fat_burn }}%</div>
+                </div>
+            </div>
+            <div class="fuel-legend">
+                <div><span class="dot" style="background:#10B981"></span>Fats ({{ metabolism.fat_burn }}%)</div>
+                <div><span class="dot" style="background:#3B82F6"></span>Carbs ({{ 100 - metabolism.fat_burn }}%)</div>
+            </div>
+        </div>
+    </div>
+
+    <div style="background:#F8FAFC; padding:25px; border-radius:12px; border:1px solid #E2E8F0;">
+        <h3 style="color:#0F766E; margin-bottom:15px; display:flex; align-items:center; gap:8px;">
+            🔎 Metabolic Interpretation
+        </h3>
+
+        <div style="margin-bottom:20px;">
+            <strong style="color:#1E293B; font-size:1.05em;">1. Resting Metabolic Rate (RMR): {{ metabolism.rmr }} kcal/day</strong>
+            <p style="font-size:0.95em; color:#475569; margin:5px 0 0 0; line-height:1.6;">
+                <span style="color:{{ '#10B981' if metabolism.rmr_status == 'Excellent' else '#F97316' }}; font-weight:700;">Status: {{ metabolism.rmr_status }}.</span> {{ metabolism.rmr_description }}
+            </p>
+        </div>
+
+        <div>
+            <strong style="color:#1E293B; font-size:1.05em;">2. Metabolic Flexibility (Fat Burning): {{ metabolism.fat_burn }}%</strong>
+            <p style="font-size:0.95em; color:#475569; margin:5px 0 0 0; line-height:1.6;">
+                <span style="color:{{ '#10B981' if metabolism.fat_burn >= 60 else '#EF4444' }}; font-weight:700;">Status: {{ 'Excellent' if metabolism.fat_burn >= 60 else 'Limited' }}.</span> {{ metabolism.fat_burn_description }}
+            </p>
+        </div>
+    </div>
+</div>
+
+
+<div class="card no-break page-break">
+    <h2>💪 Recommended Interventions</h2>
+    <div class="grid-3">
+        {% for intervention in interventions %}
+        <div class="int-card">
+            <img src="{{ intervention.image }}" class="int-img" style="width:100%; height:120px; object-fit:cover; border-radius:8px; margin-bottom:10px;">
+            <div style="font-weight:700; color:#0F766E">{{ intervention.name }}</div>
+            <div style="font-size:0.85em">{{ intervention.frequency }}</div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+<div class="card no-break">
+    <h2>✅ 90-Day Action Roadmap</h2>
+    <div class="roadmap">
+        {% for action in roadmap %}
+        <div class="road-item">
+            <div class="road-dot"></div>
+            <div class="road-content">
+                <span class="tag {{ action.priority }}">{{ action.priority_label }}</span>
+                <h3>{{ action.title }}</h3>
+                <p style="font-size:0.9em; color:#4B5563">{{ action.description }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% if peptides %}
+{% if peptides.primary %}
+<div class="peptide-section priority-high">
+<h4 style="color: #d32f2f; margin-bottom: 15px;">🎯 PRIMARY RECOMMENDATIONS</h4>
+{% for peptide in peptides.primary %}
+    <div class="peptide-card">
+        <div class="peptide-header">
+            <h5 style="margin: 0; color: #1a237e;">{{ peptide.name }}</h5>
+            <span class="peptide-category">{{ peptide.category }}</span>
+        </div>
+        <div class="peptide-dosing">
+            <p><strong>Dosage:</strong> {{ peptide.dosage }}</p>
+            <p><strong>Frequency:</strong> {{ peptide.frequency }}</p>
+            <p><strong>Duration:</strong> {{ peptide.duration }}</p>
+        </div>
+        <div class="peptide-rationale">
+            <p><strong>Why This Recommendation:</strong></p>
+            <p>{{ peptide.rationale }}</p>
+        </div>
+        <div class="peptide-mechanism">
+            <p><strong>Mechanism:</strong> {{ peptide.mechanism }}</p>
+        </div>
+    </div>
+{% endfor %}
+</div>
+{% endif %}
+
+{% if peptides.secondary %}
+<div class="peptide-section priority-medium">
+<h4 style="color: #f57c00; margin-bottom: 15px;">⭐ SECONDARY RECOMMENDATIONS</h4>
+{% for peptide in peptides.secondary %}
+    <div class="peptide-card">
+        <div class="peptide-header">
+            <h5 style="margin: 0; color: #1a237e;">{{ peptide.name }}</h5>
+            <span class="peptide-category">{{ peptide.category }}</span>
+        </div>
+        <div class="peptide-dosing">
+            <p><strong>Dosage:</strong> {{ peptide.dosage }}</p>
+            <p><strong>Frequency:</strong> {{ peptide.frequency }}</p>
+            <p><strong>Duration:</strong> {{ peptide.duration }}</p>
+        </div>
+        <div class="peptide-rationale">
+            <p><strong>Why This Recommendation:</strong></p>
+            <p>{{ peptide.rationale }}</p>
+        </div>
+        <div class="peptide-mechanism">
+            <p><strong>Mechanism:</strong> {{ peptide.mechanism }}</p>
+        </div>
+    </div>
+{% endfor %}
+</div>
+{% endif %}
+
+{% if peptides.supporting %}
+<div class="peptide-section priority-low">
+<h4 style="color: #388e3c; margin-bottom: 15px;">💡 SUPPORTING RECOMMENDATIONS</h4>
+{% for peptide in peptides.supporting %}
+    <div class="peptide-card">
+        <div class="peptide-header">
+            <h5 style="margin: 0; color: #1a237e;">{{ peptide.name }}</h5>
+            <span class="peptide-category">{{ peptide.category }}</span>
+        </div>
+        <div class="peptide-dosing">
+            <p><strong>Dosage:</strong> {{ peptide.dosage }}</p>
+            <p><strong>Frequency:</strong> {{ peptide.frequency }}</p>
+            <p><strong>Duration:</strong> {{ peptide.duration }}</p>
+        </div>
+        <div class="peptide-rationale">
+            <p><strong>Why This Recommendation:</strong></p>
+            <p>{{ peptide.rationale }}</p>
+        </div>
+        <div class="peptide-mechanism">
+            <p><strong>Mechanism:</strong> {{ peptide.mechanism }}</p>
+        </div>
+    </div>
+{% endfor %}
+</div>
+{% endif %}
+{% endif %}
+
+
+<div style="font-size:0.8em; color:#94A3B8; text-align:center; padding:20px; border-top:1px solid #E2E8F0; margin-top:40px;">
+    <strong>MEDICAL DISCLAIMER:</strong> This report is for informational purposes only and does not constitute medical advice, diagnosis, or treatment.
+    Always consult with a qualified healthcare provider before initiating any new exercise or nutrition program.
+    <br><br>
+    © 2025 {{ facility_name|default('MetaboMax Pro') }}. Powered by MetaboMax Pro.
+</div>
+
+</body>
+</html>
