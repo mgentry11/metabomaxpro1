@@ -134,7 +134,7 @@ def estimate_vo2max_from_metrics(patient_info, core_scores, metabolic_data):
         metabolic_data: dict with any available metabolic data
 
     Returns:
-        float: Estimated VO2 max in ml/kg/min
+        tuple: (vo2max, is_measured) - VO2 max in ml/kg/min and whether it was measured
     """
     age = patient_info.get('age', 35)
     gender = patient_info.get('gender', 'Male').lower()
@@ -142,18 +142,18 @@ def estimate_vo2max_from_metrics(patient_info, core_scores, metabolic_data):
     height_cm = patient_info.get('height_cm', 180)
 
     # Check if we have actual VO2 max data
-    vo2max = metabolic_data.get('vo2max_rel') or metabolic_data.get('vo2max')
+    vo2max = metabolic_data.get('vo2max_rel') or metabolic_data.get('vo2max') if metabolic_data else None
     if vo2max and vo2max > 10:  # Sanity check - valid VO2 max is > 10
-        print(f"  Using extracted VO2 max: {vo2max} ml/kg/min")
-        return vo2max
+        print(f"  Using MEASURED VO2 max: {vo2max} ml/kg/min")
+        return vo2max, True  # Return True = measured
 
     # Check for absolute VO2 max and convert to relative
-    vo2max_abs = metabolic_data.get('vo2max_abs')
+    vo2max_abs = metabolic_data.get('vo2max_abs') if metabolic_data else None
     if vo2max_abs and weight_kg > 0:
         vo2max = (vo2max_abs * 1000) / weight_kg  # Convert L/min to ml/kg/min
         if 10 < vo2max < 80:  # Sanity check
-            print(f"  Converted absolute VO2 max: {vo2max:.1f} ml/kg/min")
-            return vo2max
+            print(f"  Using MEASURED VO2 max (converted): {vo2max:.1f} ml/kg/min")
+            return vo2max, True  # Return True = measured
 
     # Estimate VO2 max using modified Jackson formula
     # Base formula: VO2 max = 56.363 - (0.381 × age) - (0.754 × BMI) + (1.921 × PA)
@@ -180,10 +180,10 @@ def estimate_vo2max_from_metrics(patient_info, core_scores, metabolic_data):
     # Ensure reasonable bounds (15-70 ml/kg/min)
     estimated_vo2max = max(15, min(70, estimated_vo2max))
 
-    print(f"  Estimated VO2 max (no test data): {estimated_vo2max:.1f} ml/kg/min")
+    print(f"  ESTIMATED VO2 max (no test data): {estimated_vo2max:.1f} ml/kg/min")
     print(f"    (Based on age={age}, BMI={bmi:.1f}, PA={pa_level:.1f})")
 
-    return estimated_vo2max
+    return estimated_vo2max, False  # Return False = estimated
 
 def calculate_fuel_percentages_from_rer(rer):
     """
@@ -471,13 +471,26 @@ def calculate_biological_age(patient_info, core_scores, metabolic_data):
     print(f"  Gender: {gender}, Weight: {weight_kg}kg, Height: {height_cm}cm")
 
     # ========================================================================
-    # PRIMARY FACTOR (50% weight): VO2 MAX
+    # PRIMARY FACTOR: VO2 MAX
     # Per American Heart Association: VO2 max is the best predictor of longevity
+    # Weight depends on whether VO2 max is MEASURED (50%) or ESTIMATED (20%)
     # ========================================================================
-    print(f"\n  === PRIMARY FACTOR: VO2 MAX (50% weight) ===")
 
     # Get or estimate VO2 max
-    vo2max = estimate_vo2max_from_metrics(patient_info, core_scores, metabolic_data)
+    vo2max, vo2max_is_measured = estimate_vo2max_from_metrics(patient_info, core_scores, metabolic_data)
+
+    # Determine weights based on whether VO2 max is measured
+    if vo2max_is_measured:
+        vo2max_weight = 0.50  # 50% - Full weight when measured
+        secondary_weight = 0.30  # 30%
+        supporting_weight = 0.20  # 20%
+        print(f"\n  === PRIMARY FACTOR: VO2 MAX (50% weight - MEASURED) ===")
+    else:
+        # When estimated, reduce VO2 max weight and increase others
+        vo2max_weight = 0.20  # 20% - Reduced weight when estimated
+        secondary_weight = 0.45  # 45% - Increased
+        supporting_weight = 0.35  # 35% - Increased
+        print(f"\n  === VO2 MAX (20% weight - ESTIMATED, using core scores for balance) ===")
 
     # Calculate VO2 max biological age
     vo2max_bio_age, vo2max_percentile, vo2max_adjustment = get_vo2max_biological_age(
@@ -594,13 +607,9 @@ def calculate_biological_age(patient_info, core_scores, metabolic_data):
     # WEIGHTED FINAL CALCULATION
     # ========================================================================
     print(f"\n  === FINAL WEIGHTED CALCULATION ===")
+    print(f"  Weights: VO2={vo2max_weight:.0%}, Secondary={secondary_weight:.0%}, Supporting={supporting_weight:.0%}")
 
-    # Weights aligned with PNOE methodology
-    vo2max_weight = 0.50  # 50% - Primary factor
-    secondary_weight = 0.30  # 30% - Fat-burning + Metabolic rate
-    supporting_weight = 0.20  # 20% - Core scores + BMI
-
-    # Calculate weighted adjustment
+    # Calculate weighted adjustment (weights were set earlier based on measured vs estimated)
     weighted_adjustment = (
         (vo2max_adjustment * vo2max_weight) +
         (secondary_avg * secondary_weight) +
