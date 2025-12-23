@@ -473,7 +473,7 @@ def calculate_biological_age(patient_info, core_scores, metabolic_data):
     # ========================================================================
     # PRIMARY FACTOR: VO2 MAX
     # Per American Heart Association: VO2 max is the best predictor of longevity
-    # Weight depends on whether VO2 max is MEASURED (50%) or ESTIMATED (20%)
+    # ONLY used when MEASURED - estimated VO2 max is too unreliable
     # ========================================================================
 
     # Get or estimate VO2 max
@@ -481,21 +481,27 @@ def calculate_biological_age(patient_info, core_scores, metabolic_data):
 
     # Determine weights based on whether VO2 max is measured
     if vo2max_is_measured:
+        # When measured, VO2 max is the primary factor
         vo2max_weight = 0.50  # 50% - Full weight when measured
         secondary_weight = 0.30  # 30%
         supporting_weight = 0.20  # 20%
         print(f"\n  === PRIMARY FACTOR: VO2 MAX (50% weight - MEASURED) ===")
-    else:
-        # When estimated, reduce VO2 max weight and increase others
-        vo2max_weight = 0.20  # 20% - Reduced weight when estimated
-        secondary_weight = 0.45  # 45% - Increased
-        supporting_weight = 0.35  # 35% - Increased
-        print(f"\n  === VO2 MAX (20% weight - ESTIMATED, using core scores for balance) ===")
 
-    # Calculate VO2 max biological age
-    vo2max_bio_age, vo2max_percentile, vo2max_adjustment = get_vo2max_biological_age(
-        vo2max, gender, chronological_age
-    )
+        # Calculate VO2 max biological age
+        vo2max_bio_age, vo2max_percentile, vo2max_adjustment = get_vo2max_biological_age(
+            vo2max, gender, chronological_age
+        )
+    else:
+        # When NOT measured, VO2 max is NEUTRAL (no adjustment)
+        # Let core scores, fat burning, and metabolic rate determine biological age
+        vo2max_weight = 0.00  # 0% - Don't use estimated VO2 max
+        secondary_weight = 0.50  # 50% - Fat-burning + Metabolic rate
+        supporting_weight = 0.50  # 50% - Core scores + BMI
+        vo2max_adjustment = 0  # Neutral - no effect
+        vo2max_percentile = 50  # Assume average
+        print(f"\n  === VO2 MAX: Not measured (using core scores instead) ===")
+        print(f"  VO2 max: {vo2max:.1f} ml/kg/min (estimated - NOT used for biological age)")
+        print(f"  Note: Get a VO2 max exercise test for accurate biological age based on cardio fitness")
 
     # ========================================================================
     # SECONDARY FACTORS (30% weight): Fat-burning + Metabolic Rate
@@ -513,13 +519,13 @@ def calculate_biological_age(patient_info, core_scores, metabolic_data):
     elif fat_burning_score >= 70:
         fat_adjustment = -5  # Excellent
     elif fat_burning_score >= 60:
-        fat_adjustment = -2  # Good
+        fat_adjustment = -3  # Good
     elif fat_burning_score >= 50:
-        fat_adjustment = 0   # Average
+        fat_adjustment = -1  # Average (slight benefit)
     elif fat_burning_score >= 40:
-        fat_adjustment = 3   # Below average
+        fat_adjustment = 2   # Below average
     elif fat_burning_score >= 30:
-        fat_adjustment = 6   # Poor
+        fat_adjustment = 5   # Poor
     else:
         fat_adjustment = 8   # Very poor
 
@@ -543,14 +549,14 @@ def calculate_biological_age(patient_info, core_scores, metabolic_data):
 
     if rmr_ratio >= 1.15:
         rmr_adjustment = -6  # Very fast metabolism
-    elif rmr_ratio >= 1.08:
+    elif rmr_ratio >= 1.05:
         rmr_adjustment = -3  # Fast metabolism
     elif rmr_ratio >= 0.95:
-        rmr_adjustment = 0   # Average
+        rmr_adjustment = -1  # Normal (slight benefit)
     elif rmr_ratio >= 0.88:
-        rmr_adjustment = 3   # Slow metabolism
+        rmr_adjustment = 2   # Slow metabolism
     else:
-        rmr_adjustment = 6   # Very slow
+        rmr_adjustment = 5   # Very slow
 
     secondary_adjustments.append(rmr_adjustment)
     print(f"  Metabolic rate ratio: {rmr_ratio:.2f} → adjustment: {rmr_adjustment:+d} years")
@@ -565,20 +571,22 @@ def calculate_biological_age(patient_info, core_scores, metabolic_data):
 
     supporting_adjustments = []
 
-    # Core scores average (range: -4 to +4 years)
+    # Core scores average (range: -5 to +5 years)
     if core_scores and len(core_scores) > 0:
         avg_score = sum(core_scores.values()) / len(core_scores)
 
         if avg_score >= 85:
-            score_adjustment = -4
+            score_adjustment = -5  # Elite
         elif avg_score >= 75:
-            score_adjustment = -2
-        elif avg_score >= 60:
-            score_adjustment = 0
+            score_adjustment = -3  # Excellent
+        elif avg_score >= 65:
+            score_adjustment = -1  # Good (Mark is here at 67%)
+        elif avg_score >= 55:
+            score_adjustment = 1   # Average
         elif avg_score >= 45:
-            score_adjustment = 2
+            score_adjustment = 3   # Below average
         else:
-            score_adjustment = 4
+            score_adjustment = 5   # Poor
 
         supporting_adjustments.append(score_adjustment)
         print(f"  Core scores avg: {avg_score:.1f}% → adjustment: {score_adjustment:+d} years")
@@ -622,13 +630,16 @@ def calculate_biological_age(patient_info, core_scores, metabolic_data):
     print(f"  Total weighted adjustment: {weighted_adjustment:+.1f} years")
 
     # Calculate final biological age
-    biological_age = chronological_age - weighted_adjustment
+    # Negative adjustment = factors suggest younger, so ADD to get lower bio age
+    # Positive adjustment = factors suggest older, so ADD to get higher bio age
+    biological_age = chronological_age + weighted_adjustment
 
     # Ensure reasonable bounds (18-90 years)
     biological_age = max(18, min(90, round(biological_age)))
 
+    age_diff = chronological_age - biological_age
     print(f"\n  ✓ BIOLOGICAL AGE: {biological_age} (vs chronological: {chronological_age})")
-    print(f"  ✓ You are {chronological_age - biological_age:+d} years {'younger' if biological_age < chronological_age else 'older'} than your chronological age")
+    print(f"  ✓ You are {abs(age_diff)} years {'younger' if age_diff > 0 else 'older'} than your chronological age")
     print()
 
     return biological_age
